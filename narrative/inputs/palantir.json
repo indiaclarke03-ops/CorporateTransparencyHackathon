@@ -1,0 +1,74 @@
+{
+  "_about": "Narrative inputs for the Palantir control case. Every value is taken from a source in research/sources.json. composite_score and confidence_grade are copied from fixtures/palantir_control.json and are owned by the scoring engine. Award figures are contracts (award types A-D) for UEI FSY4LVSBGWB7, 2007-10-01 to 2026-09-30, as returned by the USAspending API on 25 September 2026; dates are period-of-performance start dates.",
+  "entity_name": "PALANTIR TECHNOLOGIES INC.",
+  "subject_role": "recipient",
+  "as_of_date": "2026-09-25",
+  "generated_at": "2026-09-25",
+  "report_id": "DRAFT-PALANTIR-20260925",
+  "config_version": "narrative_templates.yaml v1",
+  "identifier_list": ["UEI FSY4LVSBGWB7", "CAGE 470F5", "SEC CIK 0001321655", "LEI 549300UVN46B3BBDHO85"],
+  "screening_reason": "an analyst selected it as a control case: a large federal contractor with public ownership disclosure",
+
+  "award_count": 427,
+  "award_type_plural": "contracts",
+  "total_obligated": "5335261774.62",
+  "agency_list": ["the Department of Defense", "the Department of Homeland Security", "the Department of Health and Human Services", "15 other agencies"],
+  "first_award_date": "2008-07-03",
+  "last_award_date": "2026-09-30",
+  "sources_checked": ["USAspending.gov"],
+
+  "match_level": "Confirmed",
+  "match_basis": "a shared UEI (FSY4LVSBGWB7)",
+
+  "composite_score": 8,
+  "confidence_grade": "A",
+
+  "not_assessable_count": 2,
+  "not_assessable_reasons": [
+    "the Tradeverifyd connection returned an authorization error (HTTP 401)",
+    "the Sayari two-link matches carry an unnamed 'sanctioned_other' flag that could not be tied to a specific list"
+  ],
+
+  "citations": {
+    "money": ["S15", "S33", "S31", "S32"],
+    "identity": ["S16", "S26"],
+    "awards": ["S15", "S33"]
+  },
+
+  "identity_rows": [
+    {"field": "Canonical name", "value": "PALANTIR TECHNOLOGIES INC.", "sources": ["S16"]},
+    {"field": "Other names", "value": "Palantir Technologies; Palantir Technologies Inc. Class A", "sources": ["S26"]},
+    {"field": "UEI", "value": "FSY4LVSBGWB7", "sources": ["S16", "S26"]},
+    {"field": "CAGE", "value": "470F5", "sources": ["S26"]},
+    {"field": "SEC CIK", "value": "0001321655 (ticker PLTR, listed on Nasdaq)", "sources": ["S18"]},
+    {"field": "LEI", "value": "549300UVN46B3BBDHO85", "sources": ["S26"]},
+    {"field": "Registration date", "value": "6 May 2003", "sources": ["S26"]},
+    {"field": "Related recipient (separate UEI)", "value": "PALANTIR USG INC, UEI HNN4F9JZWDY8, recipient of Department of State IDV 19AQMM25A1228", "sources": ["S17"]},
+    {"field": "Matched records", "value": "USAspending recipient 1ea8a9a4-3726-3491-9040-66950bb67606-P (Confirmed, shared UEI); Sayari entity PFV8cEKdaVI5H9Tme97ZvA (Confirmed, shared UEI and CAGE)", "sources": ["S16", "S26"]}
+  ],
+
+  "awards": [
+    {"program": "Contract (earliest start in window)", "award_id": "N0024408C0025", "amount": "139695.00", "date": "2008-07-03", "agency": "Department of Defense", "sources": ["S31"]},
+    {"program": "Contract (order under BPA 19AQMM25A1228)", "award_id": "19AQMM26F7166", "amount": "20439958.00", "date": "2026-09-30", "agency": "Department of State", "sources": ["S32"]}
+  ],
+
+  "signals_found": [],
+
+  "signals_not_found": [
+    {"signal_name": "Listed party", "source_name": "Sayari (OFAC SDN screening)", "as_of_date": "2026-09-25", "sources": ["S26"]}
+  ],
+  "signals_not_assessable": [
+    {"signal_name": "Trade lanes (Tradeverifyd)", "reason": "the Tradeverifyd connection returned an authorization error (HTTP 401) when queried on 25 September 2026"},
+    {"signal_name": "Proximity to a listed party", "reason": "the nine two-link paths Sayari returned run through a shared institutional shareholder, a shared registered agent, or a trade counterparty, to parties carrying an unnamed 'sanctioned_other' flag that could not be tied to a specific list", "sources": ["S26"]}
+  ],
+
+  "graphs": {
+    "money_trail": {"not_run": true, "reason": "the proximity check that feeds it could not be assessed (see section 6)"},
+    "ownership_chain": {"not_run": true, "reason": "ownership of a listed company is reported in SEC filings, which were not parsed in this pass"},
+    "network": {"not_run": true, "reason": "the network view was not generated in this pass"},
+    "supply_chain": {"not_run": true, "reason": "Sayari's 23 received and 4 sent shipment records have not been reviewed, and Tradeverifyd was unavailable", "sources": ["S26"]},
+    "signal_summary": {}
+  },
+
+  "analyst_review": null
+}

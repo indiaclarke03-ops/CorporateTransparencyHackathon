@@ -197,3 +197,68 @@ run_limits:
   max_runtime_minutes: 180
   stop_on_budget: true
   resume: true
+
+# ---------------------------------------------------------------------------------------
+# Replay seeds (Task 2f step 1): the spec appendix A entities, run in REPLAY_MODE against
+# fixtures/recorded/. `tv_query` matches the recorded Tradeverifyd search exactly.
+#   REPLAY_MODE=true python -m apps.api.jobs.datasets build all --seed-source fixtures --run-id replay-appendix-a
+# ---------------------------------------------------------------------------------------
+replay_seeds:
+  - seed_id: appendix-a1-az-gold
+    typology: sudan_uae_arms_gold
+    name: "AL ZUMOROUD AND AL YAQOOT GOLD & JEWELLERS TRADING L.L.C."
+    sayari_id: RoWARA0BHg-GoWvDJFBOSg
+    tv_query: "Al Zumoroud and Al Yaqoot Gold & Jewellers Trading"
+    country: AE
+    match_grade: A
+    match_basis: "replay seed: OFAC SDN record (spec appendix A.1)"
+  - seed_id: appendix-a1-capital-tap-general-trading
+    typology: sudan_uae_arms_gold
+    name: "Capital Tap General Trading L.L.C."
+    sayari_id: XtartWzEze9a18ZDKVad8A
+    tv_query: "Capital Tap General Trading"
+    country: AE
+    match_grade: A
+    match_basis: "replay seed (spec appendix A.1)"
+  - seed_id: appendix-a1-prodigious
+    typology: sudan_uae_arms_gold
+    name: "Prodigious Real Estate Management Supervision Services"
+    sayari_id: dFB7YowXog_6EwiEur43RQ
+    match_grade: A
+    match_basis: "replay seed: unconfirmed-lead test (spec appendix A.1)"
+  - seed_id: appendix-a2-feeding-our-future
+    typology: pandemic_loan_fraud
+    name: "Feeding Our Future"
+    sayari_id: S2sKpLjtsHqnJMTy6mwuTw
+    match_grade: A
+    match_basis: "replay seed (spec appendix A.2)"
+  - seed_id: appendix-a2-empire-cuisine
+    typology: pandemic_loan_fraud
+    name: "Empire Cuisine And Market LLC"
+    sayari_id: DtI-nSSPD00ZgUxoSFxKuA
+    match_grade: A
+    match_basis: "replay seed (spec appendix A.2)"
+  - seed_id: control-palantir
+    typology: control
+    name: "PALANTIR TECHNOLOGIES INC."
+    tv_query: "Palantir Technologies"
+    country: US
+    recipient_uei: FSY4LVSBGWB7
+
+# ---------------------------------------------------------------------------------------
+# News feed (spec §8.2). Only Federal Register agency slugs seen in a live response are
+# listed; add others once confirmed (B13). Media queries are one per typology.
+# ---------------------------------------------------------------------------------------
+news:
+  federal_register_agencies: ["industry-and-security-bureau"]
+  media_queries:
+    - "Russia export controls sanctions evasion indictment"
+    - "PPP loan fraud indictment"
+    - "RSF UAE gold sanctions"
+    - "fentanyl precursor chemical sanctions"
+    - "sham charity OFAC designation"
+    - "UFLPA Entity List critical minerals"
+    - "OFAC gold sector sanctions"
+
+false_positive_sample:
+  target: 50                 # spec §12.3: 50 to 100

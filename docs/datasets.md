@@ -132,7 +132,7 @@ Rules used:
 
 - **Needed by:** spec §8.3 "4. **Ownership.**"; spec §9.1 ST1, ST2, PX3; `docs/tracing_methodology.md` §1 (50% rule propagation); narrative `listed_share.px3` (`combined_share`).
 - **Built from:** Sayari `GET /v1/ubo/{id}` and `GET /v1/downstream/{id}` with `psa=false` (map Q2, Confirmed).
-- **Fields:** `source`, `target`, `path` (hops), relationship type (`has_shareholder`, `shareholder_of`, `has_beneficial_owner`, `beneficial_owner_of`, `has_owner`, `owner_of`, `subsidiary_of`, `has_subsidiary`), `former`, share percentage from the `shares` attribute (position inside a hop `UNCONFIRMED` until a REST response is recorded), `hop`, `ends_at_legal_person`.
+- **Fields:** `source`, `target`, `path` (hops), relationship type (`has_shareholder`, `shareholder_of`, `has_beneficial_owner`, `beneficial_owner_of`, `has_owner`, `owner_of`, `subsidiary_of`, `has_subsidiary`), `former`, share percentage from `relationships[<type>].values[].attributes.shares[].percentage` (confirmed in the Sayari spec), `hop`, `ends_at_legal_person`.
 - **Grain:** one ownership link between two entities.
 - **Refresh:** per build run.
 - **Status:** partly blocked on B25.

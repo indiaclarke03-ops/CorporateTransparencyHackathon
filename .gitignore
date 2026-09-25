@@ -12,3 +12,6 @@ reports/
 __pycache__/
 *.pyc
 .venv/
+
+# Dataset builds and raw source records: vendor data, licensing unconfirmed (Task 2e)
+data/

@@ -68,3 +68,35 @@ def test_grade_c_is_reachable():
     result = calculate_composite_score(mid_input)
     assert result.risk_grade in ("B", "C")
     assert result.composite_score > 0
+
+
+def test_china_countermeasure_listing_is_not_scored():
+    """A US defense contractor listed only by China's countermeasure lists
+    (Sayari `sanctioned_other`) must not score as a sanctioned party."""
+    contractor = ScoringInput(
+        entity_id="ctl_northrop_grumman_systems_corporation",
+        sayari_data=SayariPassThrough(
+            sanctioned=True,
+            risk_factors=["sanctioned", "sanctioned_other", "sanctioned_adjacent", "soe_adjacent"],
+        ),
+        tradeverifyd_score=0.0,
+        public_presence_score=40.0,
+    )
+    result = calculate_composite_score(contractor)
+    assert result.composite_score == 8.0
+    assert result.risk_grade == "A"
+    assert "Directly or parent-level designated under sanctions" not in result.flags
+    assert "Listed only on sanctions lists outside US/UN/EU/UK (context, not scored)" in result.flags
+
+
+def test_ofac_listing_is_scored_when_risk_factors_given():
+    listed = ScoringInput(
+        entity_id="entity_ofac_listed",
+        sayari_data=SayariPassThrough(
+            sanctioned=True,
+            risk_factors=["sanctioned", "sanctioned_other", "sanctioned_usa_ofac_sdn"],
+        ),
+    )
+    result = calculate_composite_score(listed)
+    assert result.breakdown.sayari_raw == 65.0
+    assert "Directly or parent-level designated under sanctions" in result.flags

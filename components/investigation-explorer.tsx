@@ -4,7 +4,7 @@ import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import useSWR from 'swr'
 import Link from 'next/link'
-import { Leaf, Route, ScrollText } from 'lucide-react'
+import { Landmark, Loader2, MousePointerClick, Route, ScrollText } from 'lucide-react'
 import {
   INVESTIGATION_OPTIONS,
   fetchInvestigation,
@@ -20,7 +20,7 @@ import { GraphLegend } from './graph-legend'
 
 const InvestigationGraph = dynamic(() => import('./investigation-graph').then((m) => m.InvestigationGraph), {
   ssr: false,
-  loading: () => <GraphPlaceholder text="Raking up the graph..." />,
+  loading: () => <GraphPlaceholder text="Building network…" />,
 })
 
 type Selection = { kind: 'node'; id: string } | { kind: 'edge'; edge: InvestigationEdge } | null
@@ -40,11 +40,11 @@ export function InvestigationExplorer() {
       <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-3">
           <span className="flex size-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
-            <Leaf className="leaf-sway size-6" aria-hidden="true" />
+            <Landmark className="size-6" aria-hidden="true" />
           </span>
           <div>
             <h1 className="font-heading text-2xl font-semibold text-balance">Follow the Public Dollar</h1>
-            <p className="text-sm text-muted-foreground">A cozy little sanctions sleuth for the Corporate Transparency Hackathon</p>
+            <p className="text-sm text-muted-foreground">Tracing public funds through ownership, trade, and payment networks</p>
           </div>
         </div>
 
@@ -88,7 +88,7 @@ export function InvestigationExplorer() {
 
       {error && (
         <p role="alert" className="rounded-2xl border border-sev-critical bg-card p-4 text-sm">
-          {'Oh no, a gust blew this investigation away: '}
+          {'The case file could not be loaded: '}
           {error.message}
         </p>
       )}
@@ -101,7 +101,7 @@ export function InvestigationExplorer() {
           className="relative flex min-h-[420px] flex-1 flex-col overflow-hidden rounded-3xl border border-border bg-card"
         >
           {isLoading || !data ? (
-            <GraphPlaceholder text="Raking up the graph..." />
+            <GraphPlaceholder text="Building network…" />
           ) : (
             <InvestigationGraph
               key={investigationId}
@@ -126,10 +126,10 @@ export function InvestigationExplorer() {
             <EdgePanel edge={selection.edge} nodeLabel={nodeLabel} onClose={() => setSelection(null)} />
           ) : (
             <div className="flex flex-1 flex-col items-center justify-center gap-3 p-8 text-center">
-              <Leaf className="leaf-sway size-10 text-accent" aria-hidden="true" />
-              <p className="font-heading text-lg">Pick a leaf, any leaf</p>
+              <MousePointerClick className="size-8 text-muted-foreground" aria-hidden="true" />
+              <p className="font-heading text-base font-semibold">Nothing selected</p>
               <p className="text-sm leading-relaxed text-muted-foreground">
-                Click a node to see its risk signals and Sayari data, or click a connection to see how two entities are linked.
+                Select an entity or connection to view its evidence.
               </p>
             </div>
           )}
@@ -144,7 +144,7 @@ export function InvestigationExplorer() {
 function GraphPlaceholder({ text }: { text: string }) {
   return (
     <div className="flex flex-1 items-center justify-center gap-2 text-sm text-muted-foreground">
-      <Leaf className="leaf-sway size-5 text-primary" aria-hidden="true" />
+      <Loader2 className="size-5 animate-spin text-primary motion-reduce:animate-none" aria-hidden="true" />
       {text}
     </div>
   )

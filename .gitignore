@@ -31,3 +31,6 @@ __v0_jsx-dev-runtime.ts
 node_modules
 .next/
 .DS_Store
+
+# GitHub Pages static export
+/out/

@@ -4,6 +4,12 @@ Trace public federal contract dollars from a recipient (SAM.gov UEI / Award ID) 
 registry, UBO, and trade data to surface phoenix entities, nominee directors, and sanctions-adjacent
 shell networks. Outputs a strictly typed JSON graph contract for a force-directed visualization in v0/Lovable.
 
+## Live demo
+- **[Traceability showcase](https://indiaclarke03-ops.github.io/CorporateTransparencyHackathon/traceability/)**: every claim traced back to its primary government or registry record (source registry, evidence ledger, citation audit, name traps, data-source map, dataset pipeline, lead dossiers, backlog)
+- **[Investigation graph](https://indiaclarke03-ops.github.io/CorporateTransparencyHackathon/)**: the Serniya (high-risk) and Palantir (clean control) case files
+
+Published to GitHub Pages by `.github/workflows/pages.yml` on every push to `main`. The page data comes from `lib/generated/showcase.json`; regenerate it with `python3 scripts/build_showcase.py` after changing research, fixtures or the backlog.
+
 ## Team
 - Technical execution: Maria Ashby (@mashby2022)
 - Domain & evidence curation: TBD

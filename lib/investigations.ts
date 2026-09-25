@@ -9,7 +9,7 @@ export type InvestigationId = (typeof INVESTIGATION_OPTIONS)[number]['id']
 
 // Swap this resolver for a real API endpoint later; UI components only consume the Investigation contract.
 export function resolveInvestigationUrl(id: InvestigationId) {
-  return `/fixtures/${id}.json`
+  return `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/fixtures/${id}.json`
 }
 
 export async function fetchInvestigation(url: string): Promise<Investigation> {

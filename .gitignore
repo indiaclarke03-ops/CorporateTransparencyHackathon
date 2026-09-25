@@ -1,2 +1,14 @@
+# Secrets — never commit (spec §10)
+.env
+.env.*
+!.env.example
+.mcp.json
+.claude/
+
+# Generated output (spec §3.2)
+reports/
+
+# Python
 __pycache__/
 *.pyc
+.venv/

@@ -12,6 +12,8 @@ import { NodePanel } from './node-panel'
 import { EdgePanel } from './edge-panel'
 import { AuditDrawer } from './audit-drawer'
 import { GraphLegend } from './graph-legend'
+import { CaseInsightsPanel } from './case-insights'
+import { MONEY_STATUS } from '@/lib/graph-style'
 
 const InvestigationGraph = dynamic(() => import('./investigation-graph').then((m) => m.InvestigationGraph), {
   ssr: false,
@@ -133,6 +135,7 @@ export function InvestigationExplorer() {
               Score {c.score} · Grade {c.grade} · {c.nodes} entities · {c.edges} links
             </span>
             <span className="text-[11px] text-muted-foreground">{c.tools.join(' · ')}</span>
+            <span className="flex items-center gap-1 text-[11px] font-bold" style={{ color: MONEY_STATUS[c.money_status]?.color }}>$ {MONEY_STATUS[c.money_status]?.label}</span>
           </button>
         ))}
       </nav>
@@ -180,6 +183,8 @@ export function InvestigationExplorer() {
           )}
         </aside>
       </main>
+
+      {data?.case?.insights && <CaseInsightsPanel insights={data.case.insights} typology={data.investigation_summary.primary_typology} />}
 
       {data && <AuditDrawer open={auditOpen} onClose={() => setAuditOpen(false)} steps={data.audit_trail} />}
     </div>

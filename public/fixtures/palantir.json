@@ -10,6 +10,20 @@
  },
  "nodes": [
   {
+   "id": "public-money",
+   "label": "US federal contracts: 427 awards, $5.34B (USAspending)",
+   "type": "public_money",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": null,
+   "details": {
+    "money_status": "paid",
+    "money_text": "427 contracts, 3 Jul 2008 – 30 Sep 2026",
+    "sayari_url": "https://www.usaspending.gov/recipient/1ea8a9a4-3726-3491-9040-66950bb67606-P/all"
+   }
+  },
+  {
    "id": "ent_palantir",
    "label": "Palantir Technologies Inc.",
    "type": "public_recipient",
@@ -58,7 +72,19 @@
    }
   }
  ],
- "edges": [],
+ "edges": [
+  {
+   "source": "public-money",
+   "target": "ent_palantir",
+   "relationship_type": "PUBLIC_MONEY",
+   "ownership_percentage": null,
+   "provenance_ref": "https://www.usaspending.gov/recipient/1ea8a9a4-3726-3491-9040-66950bb67606-P/all",
+   "label": "427 contracts, 3 Jul 2008 – 30 Sep 2026",
+   "money_status": "paid",
+   "source_id": "S16",
+   "source_authority": "USAspending / SAM.gov"
+  }
+ ],
  "audit_trail": [
   {
    "step": 1,
@@ -103,6 +129,17 @@
     "url": "https://graph.sayari.com/resource/entity/PFV8cEKdaVI5H9Tme97ZvA",
     "publisher": "Sayari"
    }
-  ]
+  ],
+  "insights": {
+   "headline": "Clean control: $5.34B in federal contracts, fully disclosed ownership, no risk paths",
+   "findings": [
+    "427 contracts matched at grade B by UEI; listed company with SEC filings."
+   ],
+   "implications": [
+    "Shows the score doesn't produce false positives on a large, transparent contractor."
+   ],
+   "next_steps": []
+  },
+  "money_status": "paid"
  }
 }

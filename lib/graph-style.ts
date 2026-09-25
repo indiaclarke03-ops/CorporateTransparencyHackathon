@@ -10,6 +10,7 @@ export const NODE_TYPE_META: Record<NodeType, { label: string; color: string }> 
   facilitator: { label: 'Facilitator', color: '#7f9bbd' },
   associated_person: { label: 'Linked person', color: '#e9c4a0' },
   related_company: { label: 'Linked company', color: '#b9a88f' },
+  public_money: { label: 'Public money ($)', color: '#5fbf7a' },
 }
 
 export const SEVERITY_COLOR: Record<Severity, string> = {
@@ -49,6 +50,14 @@ export const RELATIONSHIP_META: Record<RelationshipType, { label: string; color:
   ACTING_ON_BEHALF_OF: { label: 'Acting on behalf of', color: '#c97b63', dashed: false },
   OWNS_OR_CONTROLS: { label: 'Owns or controls', color: '#e0a15c', dashed: false },
   LINKED_TO: { label: 'Linked to', color: '#b5a48e', dashed: true },
+  PUBLIC_MONEY: { label: 'Public money', color: '#5fbf7a', dashed: false },
+}
+
+export const MONEY_STATUS: Record<string, { label: string; color: string; dashed: boolean }> = {
+  paid: { label: 'Money paid', color: '#5fbf7a', dashed: false },
+  blocked: { label: 'Blocked (SAM.gov exclusion)', color: '#d64545', dashed: false },
+  potential: { label: 'Potential exposure (supplier tier)', color: '#f2b544', dashed: true },
+  none: { label: 'Screened: no awards found', color: '#8a7d70', dashed: true },
 }
 
 export function formatMatchKey(k: string | { key: string; normalized: string; original: string }) {

@@ -34,9 +34,41 @@
    "Sayari",
    "Tavily"
   ],
-  "public_money": "None: foreign mining company. Used as a validation case for gold-sector designations."
+  "public_money": "None: foreign mining company. Used as a validation case for gold-sector designations.",
+  "insights": {
+   "headline": "Two ownership hops from a Sudanese gold mine to Prigozhin, with Russian trading partners who supplied it",
+   "findings": [
+    "Upstream: Meroe Gold → M Invest (parent, OFAC SDN) → shareholders Andrey Mandel (OFAC SDN), AO Perspektiva (Ukraine-sanctioned), AO Delta and Lyubov Vashkevich.",
+    "Sayari links Yevgeniy Prigozhin directly to M Invest, which completes the chain from the mine to the Wagner financier.",
+    "Director Mikhail Potepkin is OFAC-sanctioned and sits on both Meroe Gold and M Invest.",
+    "Downstream: former trading partners Broker Expert and OOO DM are both OFAC-sanctioned. Treasury says Broker Expert supplied Meroe Gold and moved cash for Prigozhin's enterprise."
+   ],
+   "implications": [
+    "Gold is portable and hard to trace: Meroe's output can fund Wagner operations without passing through a sanctioned bank.",
+    "Under the OFAC 50% rule, any entity that M Invest's sanctioned shareholders together own 50% or more of is blocked, even if it is not listed. Screen owners, not just names.",
+    "Refiners and bullion buyers in the UAE and Russia are the choke point. Buyer-side trade data is the next pull."
+   ],
+   "next_steps": [
+    "Trace AO Delta and Megaline's other holdings",
+    "Search gold (HS 7108) shipments from Sudan to the UAE and Russia"
+   ]
+  },
+  "money_status": "none"
  },
  "nodes": [
+  {
+   "id": "public-money",
+   "label": "USAspending / SAM.gov screen",
+   "type": "public_money",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": null,
+   "details": {
+    "money_status": "none",
+    "money_text": "Screened: no federal awards; foreign mining company (validation case)"
+   }
+  },
   {
    "id": "QHJrvNcC2wwsmBUZi45D2A",
    "label": "Meroe Gold",
@@ -443,9 +475,190 @@
     ],
     "risk_flag_count": 1
    }
+  },
+  {
+   "id": "MPnKxkRGFIhcfTrsgIMfGQ",
+   "label": "AO Perspektiva",
+   "type": "sanctioned_entity",
+   "jurisdiction": "RUS",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On Ukraine's sanctions list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/MPnKxkRGFIhcfTrsgIMfGQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/MPnKxkRGFIhcfTrsgIMfGQ",
+    "entity_kind": "company",
+    "countries": [
+     "RUS"
+    ],
+    "risk_flag_count": 1
+   }
+  },
+  {
+   "id": "QMUjkE7szzIkOJVDrURsLA",
+   "label": "AO Delta (St Petersburg)",
+   "type": "related_company",
+   "jurisdiction": "RUS",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/QMUjkE7szzIkOJVDrURsLA",
+    "entity_kind": "company",
+    "countries": [
+     "RUS"
+    ],
+    "risk_flag_count": 0
+   }
+  },
+  {
+   "id": "uAFXDF4B1z4-7D5MSpJDuQ",
+   "label": "Lyubov Dmitriyevna Vashkevich",
+   "type": "associated_person",
+   "jurisdiction": "RUS",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/uAFXDF4B1z4-7D5MSpJDuQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/uAFXDF4B1z4-7D5MSpJDuQ",
+    "entity_kind": "person",
+    "countries": [
+     "RUS"
+    ],
+    "risk_flag_count": 1
+   }
+  },
+  {
+   "id": "jFarO0pByL57QWjF8AE_xw",
+   "label": "Yevgeniy Viktorovich Prigozhin",
+   "type": "sanctioned_entity",
+   "jurisdiction": "RUS",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/jFarO0pByL57QWjF8AE_xw",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On an export-control list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/jFarO0pByL57QWjF8AE_xw",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/jFarO0pByL57QWjF8AE_xw",
+    "entity_kind": "person",
+    "countries": [
+     "RUS"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "PBkhb3K3ywLrajHG6tFesw",
+   "label": "Megaline, JSC Delta",
+   "type": "related_company",
+   "jurisdiction": null,
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/PBkhb3K3ywLrajHG6tFesw",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/PBkhb3K3ywLrajHG6tFesw",
+    "entity_kind": "company",
+    "risk_flag_count": 1
+   }
   }
  ],
  "edges": [
+  {
+   "source": "public-money",
+   "target": "QHJrvNcC2wwsmBUZi45D2A",
+   "relationship_type": "PUBLIC_MONEY",
+   "ownership_percentage": null,
+   "provenance_ref": null,
+   "label": "Screened: no federal awards; foreign mining company (validation case)",
+   "money_status": "none",
+   "source_authority": "USAspending / SAM.gov"
+  },
   {
    "source": "_YvD5i5TDV4_YJ7y4d8soQ",
    "target": "QHJrvNcC2wwsmBUZi45D2A",
@@ -521,6 +734,72 @@
    "label": "Former trading partner of Meroe Gold",
    "sayari_relationship": "linked_to",
    "former": true,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "YiVasIW7ik0tQ5wRaP9d3g",
+   "target": "_YvD5i5TDV4_YJ7y4d8soQ",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/_YvD5i5TDV4_YJ7y4d8soQ",
+   "label": "Andrey Sergeyevich Mandel is a shareholder of M Invest, OOO",
+   "sayari_relationship": "has_shareholder",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "MPnKxkRGFIhcfTrsgIMfGQ",
+   "target": "_YvD5i5TDV4_YJ7y4d8soQ",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/_YvD5i5TDV4_YJ7y4d8soQ",
+   "label": "AO Perspektiva is a shareholder of M Invest, OOO",
+   "sayari_relationship": "has_shareholder",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "QMUjkE7szzIkOJVDrURsLA",
+   "target": "_YvD5i5TDV4_YJ7y4d8soQ",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/_YvD5i5TDV4_YJ7y4d8soQ",
+   "label": "AO Delta (St Petersburg) is a shareholder of M Invest, OOO",
+   "sayari_relationship": "has_shareholder",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "uAFXDF4B1z4-7D5MSpJDuQ",
+   "target": "_YvD5i5TDV4_YJ7y4d8soQ",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/_YvD5i5TDV4_YJ7y4d8soQ",
+   "label": "Lyubov Dmitriyevna Vashkevich is a shareholder of M Invest, OOO",
+   "sayari_relationship": "has_shareholder",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "jFarO0pByL57QWjF8AE_xw",
+   "target": "_YvD5i5TDV4_YJ7y4d8soQ",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/_YvD5i5TDV4_YJ7y4d8soQ",
+   "label": "Yevgeniy Prigozhin is linked to M Invest",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "PBkhb3K3ywLrajHG6tFesw",
+   "target": "_YvD5i5TDV4_YJ7y4d8soQ",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/_YvD5i5TDV4_YJ7y4d8soQ",
+   "label": "Megaline, JSC Delta is the parent of M Invest, OOO",
+   "sayari_relationship": "subsidiary_of",
+   "former": false,
    "source_authority": "Sayari"
   }
  ],

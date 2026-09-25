@@ -8,7 +8,7 @@
  },
  "case": {
   "id": "samidoun",
-  "title": "Samidoun (sham charity for the PFLP)",
+  "title": "Samidoun and Addameer (sham charities for the PFLP)",
   "root_id": "OUoSxNzYidNtzc0gtXxRMQ",
   "sources": [
    {
@@ -28,9 +28,41 @@
    "Sayari",
    "Tavily"
   ],
-  "public_money": "No USAspending awards; nonprofit (Canada CRA account 774927545RC0001)."
+  "public_money": "No USAspending awards; nonprofit (Canada CRA account 774927545RC0001).",
+  "insights": {
+   "headline": "A registered not-for-profit whose leadership and affiliations run to three designated terrorist organisations",
+   "findings": [
+    "Registered as a Canadian not-for-profit (CRA account 774927545RC0001) and at UK Companies House (13885242). The UK entity closed on 27 Mar 2026.",
+    "Sayari records the PFLP as its parent and Hamas as an affiliate. Manager Khaled Barakat is OFAC-sanctioned.",
+    "It is linked to Masar Badil and to SDGT-listed individuals in Spain and Belgium: a fundraising network across four jurisdictions.",
+    "It is flagged for a mass-registration address, the same shell signal we see in commercial fronts.",
+    "Cross-network link: Addameer (OFAC SDN 53920, designated in Treasury SB0162) is linked to the same PFLP record Sayari lists as Samidoun's parent. Two 'human rights' charities feed one designated organisation."
+   ],
+   "implications": [
+    "FATF Recommendation 8: charity registration gives legitimacy and banking access. Grantmakers and payment platforms need owner and officer screening, not just a charity-number check.",
+    "Closing a registry entity (UK, 2026) doesn't end the network. Watch for new registrations with the same officers (the phoenix pattern)."
+   ],
+   "next_steps": [
+    "Search registries for new entities with the same officers",
+    "Check IRS 990 filings for US-registered affiliates"
+   ]
+  },
+  "money_status": "none"
  },
  "nodes": [
+  {
+   "id": "public-money",
+   "label": "USAspending / SAM.gov screen",
+   "type": "public_money",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": null,
+   "details": {
+    "money_status": "none",
+    "money_text": "Screened: no federal awards to Samidoun or Addameer. Next: foreign-assistance grants to partner NGOs (USAID) and IRS 990 filings of US donors"
+   }
+  },
   {
    "id": "OUoSxNzYidNtzc0gtXxRMQ",
    "label": "Samidoun Palestinian Prisoner Solidarity Network",
@@ -624,9 +656,127 @@
     ],
     "risk_flag_count": 2
    }
+  },
+  {
+   "id": "DLqaU0QbIEQTxDN8AWShiw",
+   "label": "Addameer Prisoner Support and Human Rights Association",
+   "type": "sanctioned_entity",
+   "jurisdiction": "PSE",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Designated by Treasury for acting for or on behalf of the PFLP (sham charity network)",
+     "severity": "CRITICAL",
+     "provenance_source": "Treasury press release SB0162 (found with Tavily)",
+     "evidence_record": "https://home.treasury.gov/news/press-releases/sb0162",
+     "source_id": "S35",
+     "source_authority": "U.S. Department of the Treasury"
+    },
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/DLqaU0QbIEQTxDN8AWShiw",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "OFAC Specially Designated Global Terrorist",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/DLqaU0QbIEQTxDN8AWShiw",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On Israel's counter-terror financing list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/DLqaU0QbIEQTxDN8AWShiw",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/DLqaU0QbIEQTxDN8AWShiw",
+    "entity_kind": "company",
+    "countries": [
+     "PSE",
+     "ISR"
+    ],
+    "identifiers": [
+     {
+      "type": "usa_ofac_sdn_number",
+      "value": "53920"
+     }
+    ],
+    "risk_flag_count": 3
+   }
+  },
+  {
+   "id": "OYqciTpswLiD79NGaYl-Ug",
+   "label": "POPULAR FRONT FOR THE LIBERATION OF PALESTINE",
+   "type": "sanctioned_entity",
+   "jurisdiction": "SYR",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/OYqciTpswLiD79NGaYl-Ug",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "US Foreign Terrorist Organization",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/OYqciTpswLiD79NGaYl-Ug",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/OYqciTpswLiD79NGaYl-Ug",
+    "entity_kind": "company",
+    "countries": [
+     "SYR",
+     "LBN",
+     "PSE"
+    ],
+    "risk_flag_count": 2
+   }
   }
  ],
  "edges": [
+  {
+   "source": "public-money",
+   "target": "OUoSxNzYidNtzc0gtXxRMQ",
+   "relationship_type": "PUBLIC_MONEY",
+   "ownership_percentage": null,
+   "provenance_ref": null,
+   "label": "Screened: no federal awards to Samidoun or Addameer. Next: foreign-assistance grants to partner NGOs (USAID) and IRS 990 filings of US donors",
+   "money_status": "none",
+   "source_authority": "USAspending / SAM.gov"
+  },
   {
    "source": "jMzsf620xw_EUsPl44BrOA",
    "target": "OUoSxNzYidNtzc0gtXxRMQ",
@@ -744,6 +894,28 @@
    "ownership_percentage": null,
    "provenance_ref": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
    "label": "Jaldia Abubakra Aueda is Linked to Samidoun",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "jMzsf620xw_EUsPl44BrOA",
+   "target": "DLqaU0QbIEQTxDN8AWShiw",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/DLqaU0QbIEQTxDN8AWShiw",
+   "label": "Addameer is linked to the PFLP (same Sayari record as Samidoun's parent)",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "OYqciTpswLiD79NGaYl-Ug",
+   "target": "DLqaU0QbIEQTxDN8AWShiw",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/DLqaU0QbIEQTxDN8AWShiw",
+   "label": "Addameer is linked to the PFLP",
    "sayari_relationship": "linked_to",
    "former": false,
    "source_authority": "Sayari"

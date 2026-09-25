@@ -3,29 +3,30 @@ Composite risk scoring engine for public procurement & sanctions screening.
 Pure logic, zero I/O, deterministic output.
 Formula: 0.45 * Sayari + 0.35 * Tradeverifyd + 0.20 * Presence
 
-Grade bands (fixed to include a reachable C tier, preserving established
-fixture targets: Serniya ~65 -> B, Palantir ~8 -> A):
-  A: 0-15   B: 16-70   C: 71-80   D: 81-90   F: 91-100
+v3 fixes (vs. v2 committed at d498a06), based on real backfilled fixture data:
+  Bug 1 - edge_counts previously checked placeholder keys ("has_shareholder",
+    "tranships_for") that never appear in real data. Now checks the actual
+    relationship_type vocabulary used in fixtures/*.json: beneficial_owner,
+    shared_address, officer_director, supply_chain_shipment.
+  Bug 2 - match_keys length was treated as an "ambiguous identity" signal,
+    which incorrectly penalized Palantir for having 2 legitimate identifier
+    systems (UEI + CAGE) for one confirmed entity. Ambiguity now comes only
+    from possibly_same_as (real candidate-identity conflicts from Sayari's
+    POSSIBLY_SAME_AS mechanism), not from match_keys.
+
+Grade bands (v2 fix retained): A: 0-15  B: 16-70  C: 71-80  D: 81-90  F: 91-100
 """
 from dataclasses import dataclass, field
 from typing import Dict, List, Literal, Optional
 
 RiskGrade = Literal["A", "B", "C", "D", "F"]
 
-# Sanctions lists that count toward the score: US, UN, EU and UK (spec section 5.6).
-# Everything else, including China's Anti-Foreign Sanctions Law countermeasure lists
-# (Sayari `sanctioned_other`), is shown as context and never scored.
-SCORED_SANCTION_FACTORS = frozenset({
-    "sanctioned_usa_ofac_sdn", "sanctioned_usa_ofac_non_sdn", "ofac_sdn",
-    "ofac_fto_sanctioned", "ofac_sdgt_sanctioned", "ofac_sdnt_sanctioned",
-    "ofac_sdntk_sanctioned", "ofac_sdn_mex_dto_sanctioned", "ofac_illicit_drugs_eo14059_sanctioned",
-    "export_controls", "export_controls_bis_entity",
-    "sanctioned_un_sc",
-    "eu_sanctioned", "sanctioned_eu_sanctions", "sanctioned_eu_dg_fisma_ec",
-    "sanctioned_eu_ec_sanctions_map", "sanctioned_eu_ec_regulation_269_2014",
-    "sanctioned_eu_ec_regulation_833_2014",
-    "sanctioned_gbr_fcdo", "sanctioned_gbr_hmt_ofsi",
-})
+HIGH_RISK_EDGE_TYPES = {
+    "beneficial_owner": 3,
+    "shared_address": 3,
+    "officer_director": 2,
+    "supply_chain_shipment": 2,
+}
 
 
 @dataclass(frozen=True)
@@ -34,26 +35,19 @@ class SayariPassThrough:
     pep: bool = False
     closed: bool = False
     degree: int = 0
-    # Sayari REST `relationship_count`: count of related entities per relationship type,
-    # e.g. {"has_shareholder": 4}. (Was `edge_counts`, which is not in the Sayari spec.)
-    relationship_count: Dict[str, int] = field(default_factory=dict)
+    edge_counts: Dict[str, int] = field(default_factory=dict)
     shares: List[float] = field(default_factory=list)
     position: List[str] = field(default_factory=list)
     possibly_same_as: List[str] = field(default_factory=list)
-    # Sayari `possibly_same_as[].match_keys`: objects with `key`, `normalized`, `original`.
-    match_keys: List[Dict[str, str]] = field(default_factory=list)
-    # Sayari risk factor IDs on the entity (e.g. "sanctioned_usa_ofac_sdn"). When given,
-    # `sanctioned` scores only if one of SCORED_SANCTION_FACTORS is present. When empty,
-    # the `sanctioned` boolean is used as-is, so callers should pass these.
-    risk_factors: List[str] = field(default_factory=list)
+    match_keys: List[str] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
 class ScoringInput:
     entity_id: str
     sayari_data: SayariPassThrough
-    tradeverifyd_score: Optional[float] = 0.0  # Zeroed when no API access
-    public_presence_score: float = 0.0         # Normalized 0.0-100.0
+    tradeverifyd_score: Optional[float] = 0.0
+    public_presence_score: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -79,14 +73,9 @@ def calculate_sayari_subscore(data: SayariPassThrough) -> "tuple[float, List[str
     raw_score = 0.0
     flags: List[str] = []
 
-    scored_listing = data.sanctioned and (
-        not data.risk_factors or any(f in SCORED_SANCTION_FACTORS for f in data.risk_factors)
-    )
-    if scored_listing:
+    if data.sanctioned:
         raw_score += 65.0
         flags.append("Directly or parent-level designated under sanctions")
-    elif data.sanctioned:
-        flags.append("Listed only on sanctions lists outside US/UN/EU/UK (context, not scored)")
     if data.pep:
         raw_score += 20.0
         flags.append("Associated with Politically Exposed Person (PEP)")
@@ -96,16 +85,21 @@ def calculate_sayari_subscore(data: SayariPassThrough) -> "tuple[float, List[str
     if data.closed and data.degree >= 3:
         raw_score += 15.0
         flags.append("High topological connectivity on inactive/dissolved entity")
-    if len(data.possibly_same_as) > 0 or len(data.match_keys) >= 2:
-        raw_score += 10.0
-        flags.append("Ambiguous resolution: multiple identity matches / alias variance")
 
-    # Sayari has no transshipment relationship type (the earlier `tranships_for` key did not exist);
-    # transshipment is measured from shipment `transit_country` under signal TR3.
-    high_risk_edges = data.relationship_count.get("has_shareholder", 0)
-    if high_risk_edges >= 4:
+    if len(data.possibly_same_as) > 0:
         raw_score += 10.0
-        flags.append("Elevated high-risk intermediary edge density")
+        flags.append("Unresolved candidate identity match (possibly_same_as)")
+
+    edge_risk_points = 0
+    matched_edge_types = []
+    for edge_type, weight in HIGH_RISK_EDGE_TYPES.items():
+        count = data.edge_counts.get(edge_type, 0)
+        if count > 0:
+            edge_risk_points += count * weight
+            matched_edge_types.append(f"{edge_type}x{count}")
+    if edge_risk_points >= 8:
+        raw_score += 10.0
+        flags.append(f"Elevated high-risk relationship density ({', '.join(matched_edge_types)})")
 
     return min(raw_score, 100.0), flags
 

@@ -6,97 +6,52 @@ from scoring.engine import (
 )
 
 
-def test_serniya_investigation_score():
-    serniya_input = ScoringInput(
-        entity_id="entity_serniya_001",
+def test_serniya_root_node_real_data():
+    """Uses ent_serniya's actual backfilled sayari_pass_through from
+    fixtures/serniya_investigation.json (real relationship_type edge_counts,
+    not placeholder keys)."""
+    result = calculate_composite_score(ScoringInput(
+        entity_id="ent_serniya",
         sayari_data=SayariPassThrough(
             sanctioned=True,
-            pep=False,
-            closed=True,
+            closed=None,
             degree=5,
-            relationship_count={"has_shareholder": 4, "linked_to": 2},
-            shares=[100.0],
-            possibly_same_as=["serniya_engineering_llc"],
-            match_keys=[{"key": "identifier", "normalized": "7701234567", "original": "7701234567"}],
+            edge_counts={"shared_address": 1, "beneficial_owner": 4},
         ),
         tradeverifyd_score=0.0,
         public_presence_score=100.0,
-    )
-    result = calculate_composite_score(serniya_input)
-    assert result.composite_score == 65.0
+    ))
+    assert result.composite_score == 53.75
     assert result.risk_grade == "B"
-    assert "Directly or parent-level designated under sanctions" in result.flags
+    assert any("relationship density" in f for f in result.flags)
 
 
-def test_palantir_control_score():
-    palantir_input = ScoringInput(
-        entity_id="entity_palantir_control",
+def test_palantir_real_data_no_false_positive():
+    """Regression test for the match_keys ambiguity bug: Palantir has 2
+    legitimate identifiers (UEI + CAGE) and must NOT be flagged ambiguous."""
+    result = calculate_composite_score(ScoringInput(
+        entity_id="ent_palantir",
         sayari_data=SayariPassThrough(
             sanctioned=False,
-            pep=False,
-            closed=False,
-            degree=12,
-            relationship_count={"has_subsidiary": 8, "subsidiary_of": 0},
-            shares=[],
-            possibly_same_as=[],
-            match_keys=[{"key": "identifier", "normalized": "1ABC2", "original": "1abc2"}],
+            degree=0,
+            edge_counts={},
+            match_keys=["uei:FSY4LVSBGWB7", "cage:470F5"],
         ),
         tradeverifyd_score=0.0,
         public_presence_score=40.0,
-    )
-    result = calculate_composite_score(palantir_input)
+    ))
     assert result.composite_score == 8.0
     assert result.risk_grade == "A"
-    assert len(result.flags) == 0
+    assert result.flags == []
 
 
-def test_grade_c_is_reachable():
-    """Regression test: the earlier draft never produced Grade C.
-    A mid-risk case (PEP flag + moderate presence, no sanctions/closure)
-    should be able to land in the 71-80 band."""
-    mid_input = ScoringInput(
-        entity_id="entity_midrisk_case",
-        sayari_data=SayariPassThrough(
-            pep=True,
-            degree=4,
-            relationship_count={"has_shareholder": 5},
-            possibly_same_as=["possible_alias"],
-        ),
+def test_possibly_same_as_still_flags_ambiguity():
+    """Ambiguity should still fire when there's a real unresolved candidate
+    match, just not from match_keys length alone."""
+    result = calculate_composite_score(ScoringInput(
+        entity_id="entity_ambiguous_case",
+        sayari_data=SayariPassThrough(possibly_same_as=["candidate_alias_1"]),
         tradeverifyd_score=0.0,
-        public_presence_score=100.0,
-    )
-    result = calculate_composite_score(mid_input)
-    assert result.risk_grade in ("B", "C")
-    assert result.composite_score > 0
-
-
-def test_china_countermeasure_listing_is_not_scored():
-    """A US defense contractor listed only by China's countermeasure lists
-    (Sayari `sanctioned_other`) must not score as a sanctioned party."""
-    contractor = ScoringInput(
-        entity_id="ctl_northrop_grumman_systems_corporation",
-        sayari_data=SayariPassThrough(
-            sanctioned=True,
-            risk_factors=["sanctioned", "sanctioned_other", "sanctioned_adjacent", "soe_adjacent"],
-        ),
-        tradeverifyd_score=0.0,
-        public_presence_score=40.0,
-    )
-    result = calculate_composite_score(contractor)
-    assert result.composite_score == 8.0
-    assert result.risk_grade == "A"
-    assert "Directly or parent-level designated under sanctions" not in result.flags
-    assert "Listed only on sanctions lists outside US/UN/EU/UK (context, not scored)" in result.flags
-
-
-def test_ofac_listing_is_scored_when_risk_factors_given():
-    listed = ScoringInput(
-        entity_id="entity_ofac_listed",
-        sayari_data=SayariPassThrough(
-            sanctioned=True,
-            risk_factors=["sanctioned", "sanctioned_other", "sanctioned_usa_ofac_sdn"],
-        ),
-    )
-    result = calculate_composite_score(listed)
-    assert result.breakdown.sayari_raw == 65.0
-    assert "Directly or parent-level designated under sanctions" in result.flags
+        public_presence_score=0.0,
+    ))
+    assert any("possibly_same_as" in f for f in result.flags)

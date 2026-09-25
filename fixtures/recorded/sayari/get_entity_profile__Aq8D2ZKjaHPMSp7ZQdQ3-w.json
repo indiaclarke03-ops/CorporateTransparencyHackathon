@@ -1,0 +1,322 @@
+{
+  "source_name": "sayari",
+  "via": "claude.ai Sayari connector (MCP)",
+  "operation": "get_entity_profile",
+  "request_params": {
+    "entity_id": "Aq8D2ZKjaHPMSp7ZQdQ3-w",
+    "relationships_limit": 50
+  },
+  "retrieved_at": "2026-09-25T18:17:08.543Z",
+  "response_hash": "sha256:8b5cc67eca74b46dd600e2fb6c709c75335dc634df3ecceb8f570a7ec3eedb42",
+  "vendor_record_ids": [
+    "Aq8D2ZKjaHPMSp7ZQdQ3-w"
+  ],
+  "license_tag": "UNCONFIRMED: vendor licence (spec §2.10)",
+  "raw_response": {
+    "entity_id": "Aq8D2ZKjaHPMSp7ZQdQ3-w",
+    "label": "AL JIL ALQADEM GENERAL TRADING L.L.C.",
+    "type": "company",
+    "closed": false,
+    "attributes": {
+      "names": [
+        "الجيل القادم للتجارة العامة ش.ذ.م.م",
+        "AL JIL ALQADEM GENERAL TRADING L.L.C.",
+        "الجيل القادم للتجارة العامة ش.ذ.م.م"
+      ],
+      "addresses": [
+        "Dubai, United Arab Emirates",
+        "No. 76, Khalid Mohammed Abdullah Al Zahid Property, Deira, Hor al Anz, Dubai, AE",
+        "No. 76, Khalid Mohammed Abdullah Al Zahid Property, Deira, Hor al Anz, Dubai, United Arab Emirates",
+        "Dubai, ARE"
+      ],
+      "identifiers": [
+        {
+          "type": "unknown",
+          "value": "10946303"
+        },
+        {
+          "type": "unknown",
+          "value": "767427"
+        },
+        {
+          "type": "usa_ofac_sdn_number",
+          "value": "49142"
+        },
+        {
+          "type": "xxx_cedar_rose_uid",
+          "value": "AEC74877506"
+        },
+        {
+          "type": "unknown_chamber_of_commerce_id",
+          "value": "276588"
+        }
+      ],
+      "countries": [
+        "ARE"
+      ],
+      "registration_date": "2016-10-05",
+      "company_type": "LLC",
+      "business_purpose": [
+        "Wholesale and retail trade"
+      ]
+    },
+    "risk": {
+      "sanctioned": true,
+      "pep": false,
+      "risk_levels": [
+        "basel_aml",
+        "cpi_score",
+        "export_controls",
+        "owned_by_entity_in_export_controls",
+        "owned_by_sanctioned_entity",
+        "owned_by_sanctioned_gbr_fcdo_entity",
+        "owned_by_sanctioned_usa_ofac_sdn_entity",
+        "psa_owned_by_entity_in_export_controls",
+        "psa_owned_by_sanctioned_entity",
+        "psa_owned_by_sanctioned_gbr_fcdo_entity",
+        "psa_owned_by_sanctioned_usa_ofac_sdn_entity",
+        "psa_regulatory_action",
+        "sanctioned_usa_ofac_sdn"
+      ]
+    },
+    "relationships": {
+      "has_manager": [
+        {
+          "entity_id": "yvDibAVXyeKqdv6I9JFczA",
+          "label": "Abdulraheem Hamdan Mossa",
+          "type": "person",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls_adjacent",
+              "sanctioned_adjacent"
+            ]
+          },
+          "former": false,
+          "position": "Manager",
+          "entity_url": "https://graph.sayari.com/resource/entity/yvDibAVXyeKqdv6I9JFczA"
+        }
+      ],
+      "has_shareholder": [
+        {
+          "entity_id": "sAgA0QVKr-gjEAqoJvf0zg",
+          "label": "Abu Dharr Abdul Nabi Habiballa AHMMED",
+          "type": "person",
+          "countries": [
+            "SDN",
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "owner_of_export_controls_entity",
+              "owner_of_regulatory_action_entity",
+              "owner_of_sanctioned_entity",
+              "owner_of_sanctioned_usa_ofac_sdn_entity",
+              "psa_owner_of_export_controls_entity",
+              "psa_owner_of_regulatory_action_entity",
+              "psa_owner_of_sanctioned_entity",
+              "psa_owner_of_sanctioned_usa_ofac_sdn_entity",
+              "sanctioned_gbr_fcdo",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Al Jil Alqadem General Trading L.L.C.",
+          "entity_url": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg"
+        }
+      ],
+      "linked_to": [
+        {
+          "entity_id": "sAgA0QVKr-gjEAqoJvf0zg",
+          "label": "Abu Dharr Abdul Nabi Habiballa AHMMED",
+          "type": "person",
+          "countries": [
+            "SDN",
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "owner_of_export_controls_entity",
+              "owner_of_regulatory_action_entity",
+              "owner_of_sanctioned_entity",
+              "owner_of_sanctioned_usa_ofac_sdn_entity",
+              "psa_owner_of_export_controls_entity",
+              "psa_owner_of_regulatory_action_entity",
+              "psa_owner_of_sanctioned_entity",
+              "psa_owner_of_sanctioned_usa_ofac_sdn_entity",
+              "sanctioned_gbr_fcdo",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Al Jil Alqadem General Trading L.L.C.",
+          "entity_url": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg"
+        },
+        {
+          "entity_id": "g2MeK6gX0AUG_gONaxlSqA",
+          "label": "Mazin Gamareldin Mohamed Fadlalla",
+          "type": "person",
+          "countries": [
+            "LBY",
+            "SDN"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls_adjacent",
+              "sanctioned_adjacent"
+            ]
+          },
+          "former": false,
+          "position": "Mazin Gamareldin Mohamed Fadlalla is Linked to Al Jil Alqadem General Trading L.L.C.",
+          "entity_url": "https://graph.sayari.com/resource/entity/g2MeK6gX0AUG_gONaxlSqA"
+        },
+        {
+          "entity_id": "5S9-R7b7IiVKkCwLMwEBVA",
+          "label": "Abdelrahim Hamdan Dagalo",
+          "type": "person",
+          "countries": [
+            "SDN"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "export_controls_other",
+              "formerly_sanctioned",
+              "formerly_sanctioned_fra_dgt_mefids",
+              "owner_of_export_controls_entity",
+              "owner_of_regulatory_action_entity",
+              "owner_of_sanctioned_can_gac_entity",
+              "owner_of_sanctioned_che_seco_entity",
+              "owner_of_sanctioned_entity",
+              "owner_of_sanctioned_eu_dg_fisma_ec_entity",
+              "owner_of_sanctioned_eu_ec_sanctions_map_entity",
+              "owner_of_sanctioned_eu_sanctions_entity",
+              "owner_of_sanctioned_fra_dgt_mefids_entity",
+              "owner_of_sanctioned_gbr_fcdo_entity",
+              "owner_of_sanctioned_usa_ofac_sdn_entity",
+              "pep_adjacent",
+              "psa_owner_of_export_controls_entity",
+              "psa_owner_of_regulatory_action_entity",
+              "psa_owner_of_sanctioned_can_gac_entity",
+              "psa_owner_of_sanctioned_che_seco_entity",
+              "psa_owner_of_sanctioned_entity",
+              "psa_owner_of_sanctioned_eu_dg_fisma_ec_entity",
+              "psa_owner_of_sanctioned_eu_ec_sanctions_map_entity",
+              "psa_owner_of_sanctioned_eu_sanctions_entity",
+              "psa_owner_of_sanctioned_fra_dgt_mefids_entity",
+              "psa_owner_of_sanctioned_gbr_fcdo_entity",
+              "psa_owner_of_sanctioned_usa_ofac_sdn_entity",
+              "reputational_risk_terrorism",
+              "reputational_risk_terrorism_breaking",
+              "sanctioned_aus_dfat",
+              "sanctioned_can_gac",
+              "sanctioned_che_seco",
+              "sanctioned_eu_dg_fisma_ec",
+              "sanctioned_eu_ec_sanctions_map",
+              "sanctioned_eu_sanctions",
+              "sanctioned_fra_dgt_mefids",
+              "sanctioned_gbr_fcdo",
+              "sanctioned_jpn_mof",
+              "sanctioned_ukr_sfms",
+              "sanctioned_un_sc",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Abdul Rahim Hamdan Dagalo is Linked to Al Jil Alqadem General Trading L.L.C.",
+          "entity_url": "https://graph.sayari.com/resource/entity/5S9-R7b7IiVKkCwLMwEBVA"
+        },
+        {
+          "entity_id": "0G1FdPA_2rGv5Q1fw_grvQ",
+          "label": "Alkhaleej Bank Co Ltd",
+          "type": "company",
+          "countries": [
+            "SDN"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "controlled_by_eu_sanctioned",
+              "controlled_by_uk_sanctioned",
+              "cpi_score",
+              "export_controls",
+              "psa_regulatory_action",
+              "reputational_risk_organized_crime_recent",
+              "reputational_risk_terrorism_recent",
+              "sanctioned_can_gac",
+              "sanctioned_che_seco",
+              "sanctioned_eu_dg_fisma_ec",
+              "sanctioned_eu_ec_sanctions_map",
+              "sanctioned_eu_sanctions",
+              "sanctioned_fra_dgt_mefids",
+              "sanctioned_gbr_fcdo",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Alkhaleej Bank Co Ltd is linked to Al Jil Alqadem General Trading L.L.C.",
+          "entity_url": "https://graph.sayari.com/resource/entity/0G1FdPA_2rGv5Q1fw_grvQ"
+        }
+      ],
+      "summary": {
+        "has_manager": 1,
+        "linked_to": 4,
+        "has_shareholder": 1
+      }
+    },
+    "sources": [
+      "Acuris Risk Intelligence - Entities & Relationships (3rd Party Data)",
+      "Acuris Risk Intelligence - Risk Information and Articles (3rd Party Data)",
+      "UAE Cedar Rose Company Database (3rd Party Data)",
+      "USA Treasury OFAC Specially Designated Nationals (SDN) List",
+      "OpenSanctions - Global Sanctions List"
+    ],
+    "trade_count": {
+      "sent": 0,
+      "received": 0
+    },
+    "investigation_notes": [
+      "Try multiple Romanizations when resolving Russian entities — Sayari may index entities under different transliterations.",
+      "Since 2022, live EGRUL access may be restricted — Sayari's pre-2022 historical data is valuable for Russian entity research. Use the Sayari API to access this data.",
+      "Russian sanctions evasion often involves restructuring ownership through intermediaries in CIS countries (Kazakhstan, Armenia, Georgia, Kyrgyzstan) or through Turkish, UAE, and Chinese entities."
+    ],
+    "_hints": [
+      "For full risk factor details including scoring methodology, use the lookup_risk_factors tool."
+    ],
+    "entity_url": "https://graph.sayari.com/resource/entity/Aq8D2ZKjaHPMSp7ZQdQ3-w",
+    "_guidance": {
+      "entity_links": "IMPORTANT: When presenting these results to the user, display every entity_url in this response as a clickable markdown link using the entity's name as link text, e.g. [Acme Corp](https://graph.sayari.com/resource/entity/abc123). Every entity, owner, trade partner, and relationship you mention must link to Sayari Graph so the user can verify the data.",
+      "follow_up": "After presenting findings, if there are unexplored leads listed in suggested_next_steps below, ask the user which they'd like to investigate. When multiple options exist, briefly describe each and let the user choose.",
+      "suggested_next_steps": [
+        "Entities with risk flags found: Abu Dharr Abdul Nabi Habiballa AHMMED, Abdelrahim Hamdan Dagalo, Alkhaleej Bank Co Ltd — offer to profile or ownership-trace these entities."
+      ],
+      "entity_quality": "Treat entity resolution as a same-legal-entity judgment, not just name matching. Validate identifiers, countries, source quality, relationships, and the user's seed facts. If a result looks conflated across jurisdictions or critical-risk flags are involved, surface the ambiguity explicitly instead of silently merging or normalizing records."
+    }
+  }
+}

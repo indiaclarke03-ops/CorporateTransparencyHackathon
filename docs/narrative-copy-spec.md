@@ -20,7 +20,7 @@ Defines the plain-English text in the app and reports: the `executive_rationale`
 | listed on {list name} | sanctioned entity (unless quoting the list type), bad actor |
 | linked to, owned by, officer of (as the source states) | controlled by, fronting for, behind (unless the source states control) |
 | company with {signals} | shell company, front company |
-| possible match (unconfirmed) | same as, identical to (unless Confirmed) |
+| possible match (unconfirmed) | same as, identical to (unless grade A) |
 | no record found in {source} as of {date} | clean, no risk, cleared |
 
 The words "shell" and "front" appear only in methodology text describing what the signals are designed to detect, never about a named entity.
@@ -43,7 +43,8 @@ Sentences render in this order. Bracketed conditions control whether each appear
 
 1. **Money.** `{entity_name} received {award_count} federal {award_type_plural} totaling {total_obligated} from {agency_list} between {first_award_date} and {last_award_date}.`
    - [No public-money records] → `No federal contract or loan records were found for {entity_name} in {sources_checked} as of {as_of_date}.`
-2. **Identity confidence.** `The recipient was matched to corporate records at the {match_level} level using {match_basis}.`
+2. **Identity confidence.** `The recipient was matched to corporate records at grade {match_grade} using {match_basis}.`
+   - Grades A–D are defined in spec §7.1.
    - Example `match_basis`: "a shared UEI", "a shared registration number".
 3. **Result.** `The screen found signals in {families_fired_count} of 7 signal families: {families_fired_list}. Overall tier: {tier}.`
 4. **Strongest finding** [only if a Proximity signal fired]. `A party listed on {list_name} appears {hop_count} {link_or_links} away, through {path_summary}.`
@@ -54,7 +55,7 @@ Sentences render in this order. Bracketed conditions control whether each appear
 
 ### Example (illustrative fields only, not real data)
 
-> Example Corp LLC received 3 federal contracts totaling $1,250,000.00 from the Department of Energy between 3 March 2025 and 14 January 2026. The recipient was matched to corporate records at the Confirmed level using a shared UEI. The screen found signals in 3 of 7 signal families: Public money, Structure, Proximity. Overall tier: High. A party listed on the OFAC SDN List appears 2 links away, through its majority owner. 2 signals could not be assessed because no trade records were available. This is a risk lead for human review, not a finding of wrongdoing.
+> Example Corp LLC received 3 federal contracts totaling $1,250,000.00 from the Department of Energy between 3 March 2025 and 14 January 2026. The recipient was matched to corporate records at grade A using a shared registration number. The screen found signals in 3 of 7 signal families: Public money, Structure, Proximity. Overall tier: High. A party listed on the OFAC SDN List appears 2 links away, through its majority owner. 2 signals could not be assessed because no trade records were available. This is a risk lead for human review, not a finding of wrongdoing.
 
 ---
 
@@ -146,7 +147,7 @@ Each OIG has its own hotline and referral process. The dossier supplies the evid
 - Example reasons: "it received a federal contract in a watched sector", "an analyst requested it".
 - `Intended use: to help an oversight body decide whether further review is warranted.`
 
-**3. Identity** — canonical name, other and prior names, identifiers, addresses, registration date and status, and the matched records with match level and basis. Caption: `How this entity was identified, and how confident the match is.`
+**3. Identity** — canonical name, other and prior names, identifiers, addresses, registration date and status, and the matched records with match grade and match keys. Caption: `How this entity was identified, and how confident the match is.`
 
 **4. Federal awards and loans** — a table of each record: program, award ID, amount, date, awarding agency, source. Caption: `Federal money received by this entity, as recorded in {sources_checked}.`
 

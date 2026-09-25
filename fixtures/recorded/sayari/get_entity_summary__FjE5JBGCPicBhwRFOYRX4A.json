@@ -1,0 +1,73 @@
+{
+  "source_name": "sayari",
+  "via": "claude.ai Sayari connector (MCP)",
+  "operation": "get_entity_summary",
+  "request_params": {
+    "entity_id": "FjE5JBGCPicBhwRFOYRX4A"
+  },
+  "retrieved_at": "2026-09-25T18:17:21.980Z",
+  "response_hash": "sha256:dd8668b3762a4ab908ac5c582a9cd0fb26540195790ff20614ab7b189d9c59dd",
+  "vendor_record_ids": [
+    "FjE5JBGCPicBhwRFOYRX4A"
+  ],
+  "license_tag": "UNCONFIRMED: vendor licence (spec §2.10)",
+  "raw_response": {
+    "entity_id": "FjE5JBGCPicBhwRFOYRX4A",
+    "label": "Feeding Our Future",
+    "type": "company",
+    "closed": true,
+    "attributes": {
+      "names": [
+        "Feeding Our Future"
+      ],
+      "addresses": [
+        "600 WILCREST DR APT 44, HOUSTON TX 77042-1042, USA",
+        "1510 ELDRIDGE PKWY STE 110-229, HOUSTON TX 77077, USA"
+      ],
+      "identifiers": [
+        {
+          "type": "tx_corp_file_num",
+          "value": "0801805622"
+        },
+        {
+          "type": "tx_tax_id",
+          "value": "32051332768"
+        }
+      ],
+      "countries": [
+        "USA"
+      ],
+      "status": "status='closed' date=None",
+      "registration_date": "2013-06-23",
+      "company_type": "Domestic Nonprofit Corporation"
+    },
+    "risk": {
+      "sanctioned": false,
+      "pep": false,
+      "risk_levels": [
+        "basel_aml",
+        "cpi_score"
+      ]
+    },
+    "sources": [
+      "USA Texas Secretary of State"
+    ],
+    "trade_count": {
+      "sent": 0,
+      "received": 0
+    },
+    "investigation_notes": [
+      "Try multiple Romanizations when resolving Russian entities — Sayari may index entities under different transliterations.",
+      "Since 2022, live EGRUL access may be restricted — Sayari's pre-2022 historical data is valuable for Russian entity research. Use the Sayari API to access this data.",
+      "Russian sanctions evasion often involves restructuring ownership through intermediaries in CIS countries (Kazakhstan, Armenia, Georgia, Kyrgyzstan) or through Turkish, UAE, and Chinese entities."
+    ],
+    "_hints": [
+      "For full risk factor details including scoring methodology, use the lookup_risk_factors tool."
+    ],
+    "entity_url": "https://graph.sayari.com/resource/entity/FjE5JBGCPicBhwRFOYRX4A",
+    "_guidance": {
+      "entity_links": "IMPORTANT: When presenting these results to the user, display every entity_url in this response as a clickable markdown link using the entity's name as link text, e.g. [Acme Corp](https://graph.sayari.com/resource/entity/abc123). Every entity, owner, trade partner, and relationship you mention must link to Sayari Graph so the user can verify the data.",
+      "entity_quality": "Treat entity resolution as a same-legal-entity judgment, not just name matching. Validate identifiers, countries, source quality, relationships, and the user's seed facts. If a result looks conflated across jurisdictions or critical-risk flags are involved, surface the ambiguity explicitly instead of silently merging or normalizing records."
+    }
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "source_name": "sayari",
+  "via": "claude.ai Sayari connector (MCP)",
+  "operation": "get_entity_profile",
+  "request_params": {
+    "entity_id": "S2sKpLjtsHqnJMTy6mwuTw",
+    "relationships_limit": 50
+  },
+  "retrieved_at": "2026-09-25T18:17:10.324Z",
+  "response_hash": "sha256:7072ccc0d798888da548b38f63ddcfaea16582048854b78e28e09e6c96a9e20a",
+  "vendor_record_ids": [
+    "S2sKpLjtsHqnJMTy6mwuTw"
+  ],
+  "license_tag": "UNCONFIRMED: vendor licence (spec §2.10)",
+  "raw_response": {
+    "entity_id": "S2sKpLjtsHqnJMTy6mwuTw",
+    "label": "Feeding Our Future",
+    "type": "company",
+    "closed": false,
+    "attributes": {
+      "names": [
+        "Feeding Our Future"
+      ],
+      "addresses": [
+        "c/o Legal for Good PLLC, 5353 Gamble Dr., Suite 320, St. Louis Park, MN, 55416, USA"
+      ],
+      "identifiers": [
+        {
+          "type": "usa_mn_master_id",
+          "value": "81d2eea8-0aa5-e611-816f-00155d01c56d"
+        },
+        {
+          "type": "usa_mn_filing_number",
+          "value": "913838800020"
+        }
+      ],
+      "countries": [
+        "USA"
+      ],
+      "status": "status='active' date='2026-01-01'",
+      "registration_date": "2016-11-07",
+      "company_type": "Nonprofit Corporation (Domestic)"
+    },
+    "risk": {
+      "sanctioned": false,
+      "pep": false,
+      "risk_levels": [
+        "basel_aml",
+        "cpi_score"
+      ]
+    },
+    "relationships": {
+      "has_officer": [
+        {
+          "entity_id": "vK0aiIhJJwVd08t_CQU5Kw",
+          "label": "Ali Egal",
+          "type": "person",
+          "countries": [
+            "USA"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score"
+            ]
+          },
+          "former": false,
+          "position": "President",
+          "entity_url": "https://graph.sayari.com/resource/entity/vK0aiIhJJwVd08t_CQU5Kw"
+        },
+        {
+          "entity_id": "iLE7boLmAt5eNqOtX-iFtg",
+          "label": "Aimee Marie Bock",
+          "type": "person",
+          "countries": [
+            "USA"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score"
+            ]
+          },
+          "former": true,
+          "position": "President",
+          "entity_url": "https://graph.sayari.com/resource/entity/iLE7boLmAt5eNqOtX-iFtg"
+        }
+      ],
+      "linked_to": [
+        {
+          "entity_id": "YsMyTsIKOgiALhcYin5haw",
+          "label": "Kara Lomen",
+          "type": "person",
+          "countries": [
+            "USA"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score"
+            ]
+          },
+          "former": false,
+          "position": "Incorporator",
+          "entity_url": "https://graph.sayari.com/resource/entity/YsMyTsIKOgiALhcYin5haw"
+        },
+        {
+          "entity_id": "Qt_vpBymWPnfA8gGc8nWcQ",
+          "label": "Aimee Bock",
+          "type": "person",
+          "countries": [
+            "USA"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score"
+            ]
+          },
+          "former": false,
+          "position": "Incorporator",
+          "entity_url": "https://graph.sayari.com/resource/entity/Qt_vpBymWPnfA8gGc8nWcQ"
+        },
+        {
+          "entity_id": "5egGszBscNflAQWGp1S6NA",
+          "label": "Christine Twait",
+          "type": "person",
+          "countries": [
+            "USA"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score"
+            ]
+          },
+          "former": false,
+          "position": "Incorporator",
+          "entity_url": "https://graph.sayari.com/resource/entity/5egGszBscNflAQWGp1S6NA"
+        }
+      ],
+      "summary": {
+        "linked_to": 3,
+        "has_officer": 2
+      }
+    },
+    "sources": [
+      "USA Minnesota Secretary of State"
+    ],
+    "trade_count": {
+      "sent": 0,
+      "received": 0
+    },
+    "investigation_notes": [
+      "Try multiple Romanizations when resolving Russian entities — Sayari may index entities under different transliterations.",
+      "Since 2022, live EGRUL access may be restricted — Sayari's pre-2022 historical data is valuable for Russian entity research. Use the Sayari API to access this data.",
+      "Russian sanctions evasion often involves restructuring ownership through intermediaries in CIS countries (Kazakhstan, Armenia, Georgia, Kyrgyzstan) or through Turkish, UAE, and Chinese entities."
+    ],
+    "_hints": [
+      "For full risk factor details including scoring methodology, use the lookup_risk_factors tool."
+    ],
+    "entity_url": "https://graph.sayari.com/resource/entity/S2sKpLjtsHqnJMTy6mwuTw",
+    "_guidance": {
+      "entity_links": "IMPORTANT: When presenting these results to the user, display every entity_url in this response as a clickable markdown link using the entity's name as link text, e.g. [Acme Corp](https://graph.sayari.com/resource/entity/abc123). Every entity, owner, trade partner, and relationship you mention must link to Sayari Graph so the user can verify the data.",
+      "entity_quality": "Treat entity resolution as a same-legal-entity judgment, not just name matching. Validate identifiers, countries, source quality, relationships, and the user's seed facts. If a result looks conflated across jurisdictions or critical-risk flags are involved, surface the ambiguity explicitly instead of silently merging or normalizing records."
+    }
+  }
+}

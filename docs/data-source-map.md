@@ -67,7 +67,7 @@ Sayari REST calls authenticate with `POST /oauth/token` (`client_id`, `client_se
 
 | Need | Tool / dataset | Fields | Status |
 |---|---|---|---|
-| Many companies at one address | Tradeverifyd find companies in radius; Sayari entity search `GET /v1/search/entity` (`q`, `fields`, `facets`) | Count of entities at or near the address. Sayari has **no `address` entity type** (`Entities` enum), so an address cluster must be counted from search results, not read from an address node | Tradeverifyd **Blocked** (B1); Sayari search **Confirmed**, but the searchable `fields` value for address is `UNCONFIRMED` (B12) |
+| Many companies at one address | Tradeverifyd find companies in radius; Sayari entity search `GET /v1/search/entity` (`q`, `fields`, `facets`) | Count of entities at or near the address. Sayari has **no `address` entity type** (`Entities` enum), so an address cluster must be counted from search results, not read from an address node | Tradeverifyd **Blocked** (B1); Sayari search **Confirmed**, but the searchable `fields` value for address is `UNCONFIRMED` (B21) |
 | Mailbox or coworking address | Tavily search on the address: `POST /search`, `topic: general` | `results[].url`, `title`, `content`, `score`; reviewed by an analyst | **Confirmed** (`tavily/search.md`) |
 | Registered agent or formation firm behind many companies *(new row; `docs/tracing_methodology.md` §3 "Addresses, Registered Agents and Formation Law Firms")* | Sayari relationship types `has_registered_agent` / `registered_agent_of`; fan-out from `degree` or `relationship_count` on the agent entity | `degree`, `relationship_count` | **Confirmed** (`Relationships` enum, `EntityDetails`) |
 
@@ -194,16 +194,23 @@ The agent plans which of these to call. It cannot call anything else.
 | `find_subawards` | USAspending `POST /api/v2/search/spending_by_award/` with `subawards: true` | Subawards under one prime award, with `Sub-Recipient UEI` | Confirmed |
 | `spending_over_time` *(new)* | USAspending `POST /api/v2/search/spending_over_time/` | Aggregated amounts by period | Confirmed |
 | `sam_exclusions` *(new)* | SAM.gov `GET /entity-information/v4/exclusions` | Exclusion records by UEI or name | Confirmed (key needed) |
-| `resolve_entity` | Sayari `/v1/resolution` or `/v1/search/entity`, plus identifier lookups | Candidate entities with match levels | Confirmed |
+| `resolve_entity` | Sayari `/v1/resolution` or `/v1/search/entity`, plus identifier lookups | Candidate entities with match grades (A–D, spec §7.1) | Confirmed |
+| `entity_facets` *(new)* | Sayari `GET /v1/search/entity` with `facets` / `geo_facets` | Counts by country, type and other buckets before pulling rows | Confirmed |
+| `screen_by_name` *(new)* | Sayari `GET /v1/screen` (`name`, `type`) | Name screening against Sayari's risk data | Confirmed |
 | `entity_profile` | Sayari `GET /v1/entity/{id}` | Identity, status, dates, risk flags, sources, possibly-same-as with match keys | Confirmed |
+| `entity_summary` *(new)* | Sayari `GET /v1/entity_summary/{id}` | Profile without relationships; used for connected companies (`docs/call-budget.md`) | Confirmed |
 | `ownership` | Sayari `GET /v1/ubo/{id}`, `GET /v1/downstream/{id}` | Owner chains with percentages | Confirmed |
 | `network` | Sayari `GET /v1/traversal/{id}` | Officers and linked entities within N hops | Confirmed |
 | `listed_party_paths` | Sayari `GET /v1/watchlist/{id}` (explicit `psa` setting on every call) | Paths to listed parties | Confirmed |
 | `shortest_path` *(new)* | Sayari `GET /v1/shortest_path` | Path between two entities | Confirmed |
 | `trade` | Sayari shipments, suppliers, buyers, upstream traversal | Trade records with HS codes | Confirmed |
+| `trade_facets` *(new)* | Sayari `POST /v1/trade/search/{shipments,suppliers,buyers}` with `facets` in the body | Counts by country, counterparty and HS code before pulling rows | Confirmed |
+| `hs_code_lookup` *(new)* | Sayari `GET /v1/hs_codes` | HS code descriptions | Confirmed |
+| `ontology_lookup` *(new)* | Sayari `GET /v1/ontology/{entity_types,relationships,identifiers,countries,attributes,enums,source_types,…}` | Valid values for filters and the meaning of enum fields | Confirmed |
 | `source_record` *(new)* | Sayari `GET /v1/record/{id}` | Original record for a cited fact | Confirmed |
 | `risk_factor_definitions` *(new)* | Sayari `GET /v1/ontology/risk_factors` | Definition of each risk flag | Confirmed |
 | `negative_news` *(new)* | Sayari `GET /v1/negative_news` | Sayari adverse-media results | Confirmed |
+| `sayari_usage` *(new)* | Sayari `GET /v1/usage` | Calls used against the account quota; checked before each run to enforce budgets | Confirmed |
 | `screen_official_lists` | Consolidated Screening List downloads (daily file) or search API | Official list matches | Downloads confirmed; API path unconfirmed (B7) |
 | `federal_register_documents` *(new)* | Federal Register `GET /api/v1/documents.json` | Official notices | Pilot |
 | `lei_record` *(new)* | GLEIF `GET /api/v1/lei-records/{lei}` | LEI record and parent links | Pilot |
@@ -212,6 +219,37 @@ The agent plans which of these to call. It cannot call anything else.
 | `tradeverifyd_*` | Tradeverifyd | Disabled until B1 | Blocked |
 
 Every call goes through the adapters, so each result is stored as a source record with provenance.
+
+### Sayari coverage check
+
+Every capability of the Sayari connector used in the pilot, with its REST equivalent in `sayari/openapi.yml` and the agent tool that exposes it. The REST API also has project, notification, attribute and resource endpoints. Those write data or manage Sayari projects, so they are left out of the read-only registry.
+
+| Sayari connector tool | REST operation | Agent tool |
+|---|---|---|
+| `search_entities` | `GET`/`POST /v1/search/entity` | `resolve_entity` |
+| `search_entity_facets` | `GET /v1/search/entity` with `facets` | `entity_facets` |
+| `get_entity_profile` | `GET /v1/entity/{id}` | `entity_profile` |
+| `get_entity_summary` | `GET /v1/entity_summary/{id}` | `entity_summary` |
+| `find_beneficial_owners` | `GET /v1/ubo/{id}` | `ownership` |
+| `find_downstream_entities` | `GET /v1/downstream/{id}` | `ownership` |
+| `traverse_network` | `GET /v1/traversal/{id}` | `network` |
+| `check_watchlist` | `GET /v1/watchlist/{id}` | `listed_party_paths` |
+| `find_shortest_path` | `GET /v1/shortest_path` | `shortest_path` |
+| `get_record` | `GET /v1/record/{id}` | `source_record` |
+| `search_shipments` | `POST /v1/trade/search/shipments` | `trade` |
+| `search_suppliers` | `POST /v1/trade/search/suppliers` | `trade` |
+| `search_buyers` | `POST /v1/trade/search/buyers` | `trade` |
+| `search_trade_facets` | trade search endpoints with `facets` | `trade_facets` |
+| `get_upstream_supply_chain` | `GET /v1/supply_chain/upstream/{id}` | `trade` |
+| `lookup_hs_codes` | `GET /v1/hs_codes` | `hs_code_lookup` |
+| `lookup_ontology` | `GET /v1/ontology/*` | `ontology_lookup` |
+| `lookup_risk_factors` | `GET /v1/ontology/risk_factors` | `risk_factor_definitions` |
+| `lookup_data_sources` | `GET /v1/ontology/sources` | `source_record` (catalogue lookup) |
+| `get_investigation_guidance` | **None**: connector-only tradecraft notes, not in the REST spec | Not available to the app (B20) |
+| *(REST only)* | `GET /v1/resolution` | `resolve_entity` |
+| *(REST only)* | `GET /v1/screen` | `screen_by_name` |
+| *(REST only)* | `GET /v1/negative_news` | `negative_news` |
+| *(REST only)* | `GET /v1/usage` | `sayari_usage` |
 
 ---
 
@@ -227,12 +265,16 @@ Every call goes through the adapters, so each result is stored as a source recor
 | B6 | Confirm ProPublica Nonprofit Explorer API terms and fields | Partly resolved: fields and endpoints confirmed; "Data Terms of Use" not yet read |
 | B7 | Register for a free trade.gov API key for the Consolidated Screening List | Narrowed: needed only for the search API. The daily downloads need no key |
 | B8 | Define the mission-mismatch signal for nonprofits | Open |
-| B9 | Sayari lists `cage` and `usa_sam_uei_number` under both `IdentifierType` and `WeakIdentifierType` ("weak (non-unique) identifiers"). Spec §7.1 treats UEI and CAGE as strong identifiers for Confirmed merges. Ask Sayari which applies | New |
+| B9 | Sayari lists `cage` and `usa_sam_uei_number` under both `IdentifierType` and `WeakIdentifierType` ("weak (non-unique) identifiers"). Ask Sayari whether UEI and CAGE can support a grade A merge | Open. Interim rule in spec §7.1: UEI/CAGE support grade A only when both records come from the SAM.gov or DLA CAGE source; otherwise they count toward grade B |
 | B10 | Sayari rate limits and pagination limits: `429` is documented, the limits are not (spec §5.1 [VERIFY]) | New |
 | B11 | PM5 needs the identities of competing bidders. USAspending publishes only `number_of_offers_received`. Redefine PM5 (e.g. shared principals among recipients in the same NAICS and agency) or mark it not assessable | New |
-| B12 | `docs/tracing_methodology.md` uses Sayari fields `edge_counts` and `label_en` and an address-entity node. None appear in the Sayari spec (use `degree` / `relationship_count`, `label` / `translated_label`; there is no `address` entity type). Also confirm which `fields` value searches addresses | New |
+| B12 | `docs/tracing_methodology.md` and `schema/investigation_schema.json` used Sayari fields `edge_counts` and `label_en` and an address-entity node | **Resolved** 25 Sep 2026: replaced with `relationship_count`, `translated_label` and `id`; `match_keys` typed as `{key, normalized, original}`; address counts computed by the application. Still open: which `fields` value in `/v1/search/entity` searches addresses (B21) |
 | B13 | Federal Register API documentation page blocks automated download. Save it manually into `docs/vendor/federal_register/` | New |
 | B14 | How Sayari exposes PPP, SBA and USAspending record values (amount, lender, date, award ID) on an entity. Record a fixture response | New |
 | B15 | Tavily returns no publisher field, and `published_date` is an estimate. Spec §5.3 and §8.2 ("publisher, title, date") need a domain-to-publisher rule and a "date as estimated by Tavily" label | New |
 | B16 | Companies House API base URL, auth header and free key registration | New |
 | B17 | OpenSanctions API docs and licence terms for this use | New |
+| B18 | Re-record the 17 Appendix A fixtures through the Sayari REST API (`/v1/entity`, `/v1/entity_summary`), plus watchlist runs with `psa=false` and `psa=true`, once credentials are issued. The connector recordings in `fixtures/recorded/sayari/` have a different response shape | New |
+| B19 | Calibrate the combined-score weights (0.45 / 0.35 / 0.20) and per-category points (spec §9.4, §12.4) on the backtest and false-positive sets | New |
+| B20 | Sayari's `get_investigation_guidance` connector tool has no REST equivalent. Ask Sayari whether the guidance is available through the API; if not, the app does without it | New |
+| B21 | Confirm the `fields` value for address search in Sayari `GET /v1/search/entity` (needed to count companies at one address, LO1) | New |

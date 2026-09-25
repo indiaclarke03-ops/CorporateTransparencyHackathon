@@ -52,7 +52,7 @@ These exist because the users are regulators and researchers who will not accept
 
 1. **Provenance on every fact.** Every value shown in the UI or a report links to a stored source record containing: source name, source record ID, request parameters, retrieval timestamp, and a hash of the raw response.
 2. **No generated facts.** The application never writes factual claims that are not a direct rendering of source data. All report prose is built from templates filled with sourced fields. No LLM-generated summaries in v1. If an LLM feature is added later, it must be extractive, cite source records inline, be labeled as machine-generated, and be off by default.
-3. **Show uncertainty explicitly.** Entity matches carry a confidence level (section 7). Vendor "possibly same as" flags are displayed as unconfirmed, never as findings.
+3. **Show uncertainty explicitly.** Entity matches carry a match grade, A to D (section 7). Vendor "possibly same as" flags are displayed as unconfirmed, never as findings.
 4. **Timestamps everywhere.** Every panel, profile, and report shows "Data as of" for each source used.
 5. **Risk leads, not accusations.** The interface and every report state that outputs are leads for human review, not findings of wrongdoing. Small legitimate firms often look thin online, register in Delaware, or use registered agents.
 6. **Multiple signals required.** No single signal can place an entity in the High tier (section 9.3).
@@ -301,11 +301,11 @@ Core tables (PostgreSQL). Field lists are the minimum.
 | `source_records` | As in section 5.1 |
 | `entities` | id, canonical_name, type (company, person, vessel), jurisdiction, created_at |
 | `entity_identifiers` | entity_id, scheme (UEI, CAGE, LEI, OFAC SDN number, state filing number, vendor ID), value, source_record_id |
-| `entity_members` | entity_id, vendor, vendor_entity_id, match_level, match_reasons, source_record_id |
+| `entity_members` | entity_id, vendor, vendor_entity_id, match_grade (A–D), match_keys (json), source_record_id |
 | `relationships` | from_entity, to_entity, type (owner, officer, linked, supplier, customer, affiliate), is_former, percentage, hs_codes, source_record_id |
 | `public_money_records` | entity_id, program (contract, PPP, SBA loan), amount, date, awarding_agency, award_id, source_record_id |
 | `signals` | entity_id, signal_code, fired (bool, or null if data unavailable), evidence (json), source_record_ids, computed_at |
-| `assessments` | entity_id, tier, signal_families_fired, config_version, computed_at |
+| `assessments` | entity_id, tier, signal_families_fired, combined_score, score_lower, score_upper, component_scores (json), config_version, computed_at |
 | `analyst_reviews` | assessment_id, analyst, decision (confirmed, dismissed, needs_info), note, created_at |
 | `news_items` | lane (official, media), source, publisher, title, url, published_at, retrieved_at, matched_rules, source_record_id |
 | `reports` | id, entity_id, created_by, created_at, content_hash, config_version, source_record_ids |
@@ -318,25 +318,29 @@ A signal with no data available stores `fired = null` and is shown as "not asses
 
 The pilot showed that fragmented and look-alike records are the main way these tools produce wrong answers. Resolution rules:
 
-### 7.1 Match levels
+### 7.1 Match grades (A–D)
 
-| Level | Rule | Behavior |
+Matches are graded A to D, following the grading in `docs/tracing_methodology.md` §2. The grade is driven by the number and kind of **match keys** that agree. For Sayari's own `possibly_same_as` links, those are the `match_keys` Sayari returns (`key`, `normalized`, `original`); for the application's own matching, they are the attributes compared below.
+
+| Grade | Rule | Behavior |
 |---|---|---|
-| Confirmed | Share at least one strong identifier: UEI, CAGE, LEI, OFAC SDN number, or official registration number in the same jurisdiction | Auto-merge into one entity |
-| Probable | Normalized name and full address match, same jurisdiction, no conflicting identifiers | Shown grouped, merge requires analyst confirmation |
-| Possible | Normalized name and jurisdiction match only | Shown as a separate candidate, never merged automatically |
-| Unmatched | Anything else | Not linked |
+| **A** | Shares at least one **strong identifier** in the same jurisdiction: official registration or company number, LEI, OFAC SDN number, or tax ID. No conflicting strong identifier | Auto-merge into one entity |
+| **B** | No shared strong identifier, but at least two independent corroborating keys agree (for example normalized name plus full address, or name plus shared officer plus incorporation date), same jurisdiction, no conflicts | Shown grouped; merge requires analyst confirmation |
+| **C** | Normalized name plus one weak key (jurisdiction, city, or a partial address) | Shown as a separate candidate, never merged automatically |
+| **D** | Name only | Shown only as "possible match (unconfirmed)". Never merged, and never used as evidence for a signal |
 
-- Name normalization handles legal suffixes (L.L.C., LLC, Ltd), punctuation, "&" versus "and", and transliteration variants. It never lowers the match level on its own.
-- Conflicting strong identifiers block a merge, whatever the name similarity.
-- Every merge records its reasons and the source records behind them, visible in the UI.
+- **UEI and CAGE:** Sayari lists both as weak (non-unique) identifiers as well as ordinary identifiers (backlog B9 in `docs/data-source-map.md`). Until Sayari confirms how to treat them, a shared UEI or CAGE supports grade A only when both records come from the SAM.gov or DLA CAGE source itself; otherwise it counts as one corroborating key toward B.
+- Name normalization handles legal suffixes (L.L.C., LLC, Ltd), punctuation, "&" versus "and", and transliteration variants. It never raises a grade on its own.
+- Conflicting strong identifiers block a merge, whatever the name similarity, and cap the grade at D.
+- Every merge records its grade, its match keys, and the source records behind them, visible in the UI.
 - Vendor confidence values (such as Tradeverifyd's) are shown but not used as the sole merge basis. Any cutoff is set by testing on the fixtures in appendix A.
+- A `possibly_same_as` link is never upgraded to grade A on name similarity alone.
 
 ### 7.2 Search flow
 
 1. User enters a name, UEI, CAGE, LEI, or registration number.
 2. Identifier searches go straight to exact lookup.
-3. Name searches return a candidate list with jurisdiction, identifiers, address, and match level, grouped by probable entity.
+3. Name searches return a candidate list with jurisdiction, identifiers, address, and match grade, grouped where the grade is A or B.
 4. The user picks the entity. The app never auto-selects the first name hit.
 
 ---
@@ -380,14 +384,14 @@ Shared behavior:
 
 - Items are tagged by typology using deterministic keyword rules in config. The UI shows which rule matched.
 - Deduplication by canonical URL and title similarity.
-- If an item mentions an entity the team has screened, it links to that entity, but only when the mention matches at the Confirmed or Probable level.
+- If an item mentions an entity the team has screened, it links to that entity, but only when the mention matches at grade A or B.
 - Refresh runs on a schedule. "Live" in the UI means "refreshed at [time]", shown on the page.
 
 ### 8.3 Company search and supply chain view
 
 Entity page sections, in this order:
 
-1. **Identity.** Canonical name, all names and prior names, identifiers, jurisdictions, addresses, registration date, status, and the list of merged source records with match levels.
+1. **Identity.** Canonical name, all names and prior names, identifiers, jurisdictions, addresses, registration date, status, and the list of merged source records with match grades and match keys.
 2. **Public money.** Contract awards, SAM registration (with dataset clearly labeled: registration or exclusion), PPP and SBA loans. Amounts, dates, agencies, award IDs, each linked to the official record.
 3. **Risk summary.** Tier, signal families fired, each signal with evidence and sources, plus signals not assessable and why. The "risk lead, not accusation" notice sits here.
 4. **Ownership.** Beneficial-owner chains with percentages where reported. Chains ending at a legal person are marked.
@@ -443,7 +447,7 @@ Every signal stores: fired, not fired, or not assessable, plus its evidence and 
 | PM3 Non-competitive award | Sole-source award to a young or thin company | USAspending |
 | PM4 Pass-through | Prime passes most of the award to subawardees | USAspending subawards |
 | PM5 Shared principals across bidders | Same officers or addresses behind competing firms | Sayari, Companies House |
-| PM6 Excluded party | Entity or a Confirmed match appears in SAM.gov Exclusions | SAM.gov |
+| PM6 Excluded party | Entity or a grade A match appears in SAM.gov Exclusions | SAM.gov |
 
 **Structure**
 
@@ -492,14 +496,14 @@ The "shells close within about two years" figure from the brainstorm is not used
 
 | Code | Red flag | Data |
 |---|---|---|
-| PX1 Listed entity | Entity is itself on an official list (Confirmed match only) | Sayari, OFAC, BIS, UFLPA |
+| PX1 Listed entity | Entity is itself on an official list (grade A match only) | Sayari, OFAC, BIS, UFLPA |
 | PX2 Sanctions proximity | Listed party within 1 to 3 hops, weighted by distance | Sayari, Tradeverifyd |
 | PX3 OFAC 50% rule | Listed parties together own 50% or more | Sayari ownership percentages |
 
 ### 9.2 Evidence requirements
 
 - A signal can fire only with at least one stored source record as evidence.
-- PX1 and PX2 require the listed party to match at the Confirmed level. "Possibly same as" flags produce a separate, visible note, not a firing signal.
+- PX1 and PX2 require the listed party to match at grade A. "Possibly same as" flags produce a separate, visible note, not a firing signal.
 - PR1 requires that the Tavily search was actually run and returned results. A failed search makes PR1 not assessable.
 
 ### 9.3 Tiers
@@ -509,19 +513,46 @@ The "shells close within about two years" figure from the brainstorm is not used
 | High | Signals fired in at least two different families, and at least one is in Proximity or PM6 |
 | Elevated | Signals fired in at least two different families, none in Proximity |
 | Low | Zero or one family fired |
-| Not assessable | Resolution below Probable, or core sources unavailable |
+| Not assessable | Resolution below grade B, or core sources unavailable |
 
 - Proximity and trade mismatch carry the highest weights, because they are the hardest to explain innocently.
 - The display always lists the signals that fired. The tier never appears without them.
 - Config changes create a new config version. Assessments record the version used.
 
-### 9.4 Cross-vendor risk index
+### 9.4 Combined risk score
 
-The brainstorm proposed an index combining Sayari risk and Tradeverifyd. Approach for v1:
+The product shows a single **combined risk score** (0–100) next to the tier. It is the team's composite index:
 
-- Show Sayari risk flags and the Tradeverifyd Score side by side, each labeled with its source and method.
-- The application's own tier comes only from the transparent signals above.
-- A combined numeric index is deferred until both vendors' scoring methods and scales are documented **[VERIFY]**, and until it has been calibrated on the backtest set.
+```
+Combined score = 0.45 × S_Sayari + 0.35 × T_Tradeverifyd + 0.20 × P_Presence
+```
+
+The weights are **provisional** until calibrated (section 12.4). Each version of the weights is stored with the config version.
+
+**How each component is built.** No vendor's own score is rescaled or averaged in. Each component is built from the application's transparent signals, grouped into shared indicator categories:
+
+| Component | Built from | Indicator categories |
+|---|---|---|
+| `S_Sayari` (0–100) | Sayari entity, ownership, network, watchlist and trade data | Listed or majority-owned by listed (PX1, PX3); proximity (PX2); nominee or formation patterns (ST1–ST3, LO1); lifecycle (LC1–LC4); trade controls (TR1–TR4 from Sayari shipments); enforcement and adverse media from Sayari risk factors |
+| `T_Tradeverifyd` (0–100) | Tradeverifyd annotations, trade relationships, annotated paths, companies in radius | Flagged-entity annotations; supply-chain paths to flagged parties; address clusters; trade relationships with HS codes |
+| `P_Presence` (0–100) | Tavily results (and Sayari negative news for the media part) | No footprint (PR1); adverse media (PR2); virtual office (LO2) |
+
+Within each component, a category contributes once. Each fired signal adds points by its strength (strong, moderate or weak, set in `config/signals.yaml`), capped per category so correlated signals are not double counted. Sayari "possibly same as" (`psa_`) factors count at half weight and are labeled "unconfirmed identity match". Tradeverifyd annotations can be displayed as reported, but the Tradeverifyd Score itself stays out of the formula until its scale and method are documented **[VERIFY]**.
+
+**Agreement across vendors.** For each category the report shows whether providers agree: *corroborated* (two or more providers report it), *single-source*, or *conflicting* (one reports it and another reports it clear). Corroboration raises confidence; it does not multiply the score. Conflicts are shown to the reviewer, never silently resolved.
+
+**Uncertainty range.** A component that cannot be computed (source unavailable, not assessable) is not set to zero. The score is shown as a point estimate plus a range:
+
+- **Lower bound:** every unassessed category treated as clear.
+- **Upper bound:** every unassessed category treated as fired.
+
+While Tradeverifyd is blocked (backlog B1), `T_Tradeverifyd` is unassessed for every entity. The score therefore always shows a range, and the report says "Tradeverifyd component not available" rather than implying a clean result.
+
+**Display rules.**
+
+- The score never appears without the signals that fired, its range, and the tier.
+- The tier rules in 9.3 still govern the High tier: a high score with only one family fired stays below High.
+- Scores and tiers record the config version used.
 
 ---
 
@@ -611,7 +642,7 @@ Primary typology: federal contractors and sanctions.
 
 ### 12.4 Calibration
 
-Signal weights and the vendor match cutoff are tuned on the backtest and false-positive sets, never on intuition. The calibration results are recorded with the config version.
+Signal weights, combined-score weights, and the vendor match cutoff are tuned on the backtest and false-positive sets, never on intuition. The calibration results are recorded with the config version.
 
 ---
 
@@ -641,6 +672,8 @@ Demo path for judging: pick one federal contractor, show its award, resolve it, 
 | Map each vendor capability in section 5.2 to its REST endpoint, auth method, rate limits, and pagination | M1 |
 | Confirm the current SAM.gov Entity Management API version and OFAC list download formats | M1 |
 | Confirm the Tradeverifyd Score scale and method, and the meaning of each Sayari risk flag prefix | M4 |
+| Calibrate the combined-score weights (0.45 / 0.35 / 0.20) and category points on the backtest and false-positive sets | M8 |
+| Confirm with Sayari whether UEI and CAGE are strong or weak identifiers (map backlog B9) | M2 |
 | Confirm vendor licensing terms for caching and for including data in exported reports | M5 |
 | Confirm the current Common High Priority List HS codes | M4 |
 | Select backtest cases from official enforcement records | M8 |
@@ -652,7 +685,7 @@ Demo path for judging: pick one federal contractor, show its award, resolve it, 
 
 ## Appendix A: pilot fixtures
 
-These IDs come from the pilot runs through the Sayari and Tradeverifyd connectors on 25 September 2026. Record fresh API responses for them in `/fixtures` at M1, since data may have changed.
+These IDs come from the pilot runs through the Sayari and Tradeverifyd connectors on 25 September 2026. Sayari responses for all 17 IDs were recorded through the Sayari connector the same day, in `fixtures/recorded/sayari/` (see `fixtures/recorded/README.md`). The connector's response shape differs from the REST API's, so REST responses must be recorded again at M1 once API credentials are issued. Tradeverifyd responses are not yet recorded (B1).
 
 ### A.1 AZ Gold network (Sayari entity IDs)
 
@@ -660,16 +693,22 @@ These IDs come from the pilot runs through the Sayari and Tradeverifyd connector
 |---|---|---|
 | Al Zumoroud and Al Yaqoot Gold & Jewellers Trading L.L.C. | `RoWARA0BHg-GoWvDJFBOSg` | OFAC SDN; registration date 2020-02-20; no trade records |
 | Same name, SAM.gov record | `5_HddMOMZhSHxWUT05LMKA` | Source: SAM.gov Exclusions; carries "possibly same as" flags only |
-| Same name, SAM.gov record | `_SIwEh3f1L3ez2dHdtMADQ` | SAM UEI identifier; "possibly same as" flags only |
+| Same name, SAM.gov record | `_SIwEh3f1L3ez2dHdtMADQ` | Source: SAM.gov Exclusions (recorded 25 Sep 2026); UEI identifier; "possibly same as" flags only |
 | Same name, UAE registry record | `JpVf25RrEuLqHVqxnsWSig` | Shares registration number 1708681 with the sanctioned record |
 | Abu Dharr Abdul Nabi Habiballa Ahmmed | `sAgA0QVKr-gjEAqoJvf0zg` | OFAC SDN; one hop to the sibling companies below |
 | Capital Tap Holding L.L.C. | `l-hTG9hSLd7dA4za2B7CRw` | OFAC SDN |
-| Capital Tap General Trading L.L.C. | `XtartWzEze9a18ZDKVad8A` | OFAC SDN; two prior names in Tradeverifyd |
+| Capital Tap General Trading L.L.C. | `XtartWzEze9a18ZDKVad8A` | OFAC SDN; two prior names in Tradeverifyd; Sayari also records former names "M I N S General Trading L.L.C." and "Elrakiza General Trading L.L.C." |
 | Creative Python L.L.C. | `GpzoSlwJiKSXyY0Rl51-6w` | OFAC SDN |
 | Al Jil Alqadem General Trading L.L.C. | `Aq8D2ZKjaHPMSp7ZQdQ3-w` | OFAC SDN |
 | Prodigious Real Estate Management Supervision Services | `dFB7YowXog_6EwiEur43RQ` | Not on US SDN list; single third-party source; "possibly same as" UK-listed record; use as the unconfirmed-lead test |
 
-Expected resolution result: `RoWARA0BHg-GoWvDJFBOSg` and `JpVf25RrEuLqHVqxnsWSig` merge at Confirmed (shared registration number). The two SAM records remain Probable unless a shared strong identifier is found.
+Expected resolution result, checked against the responses recorded in `fixtures/recorded/sayari/` on 25 September 2026:
+
+| Record | Grade against `RoWARA0BHg-GoWvDJFBOSg` | Why |
+|---|---|---|
+| `JpVf25RrEuLqHVqxnsWSig` (UAE registry) | **A**: merge | Shares commercial register number 1708681 and licence number 880169 |
+| `5_HddMOMZhSHxWUT05LMKA` (SAM.gov Exclusions, UEI QV4ZZMJBEQ93) | **B**: group, analyst confirms | Same normalized name and the same full Dubai address (Office M-10…, PO Box 90928); no shared strong identifier |
+| `_SIwEh3f1L3ez2dHdtMADQ` (SAM.gov Exclusions, UEI K9AEAB4HFRH1) | **C**: separate candidate | Same normalized name; address is only "Dubai". Its UEI differs from the other SAM record's |
 
 ### A.2 Feeding Our Future (Sayari entity IDs)
 
@@ -677,7 +716,7 @@ Expected resolution result: `RoWARA0BHg-GoWvDJFBOSg` and `JpVf25RrEuLqHVqxnsWSig
 |---|---|---|
 | Feeding Our Future (Minnesota nonprofit) | `S2sKpLjtsHqnJMTy6mwuTw` | Only Minnesota registry data; no enforcement flag; status active |
 | Empire Cuisine And Market LLC | `DtI-nSSPD00ZgUxoSFxKuA` | Registered 2020-04-01; inactive; law-enforcement flag |
-| Unrelated same-name organizations | `EIO1Rxgq6ezyZVW2-sxPhw`, `D-bTb1c6BNxP7FQ5o7lEkw`, `AWuTtca4O_lvFemdqKteeA`, `FjE5JBGCPicBhwRFOYRX4A`, `g4t3FFj3iCHXClnYPY-tiA` | Must never merge with the Minnesota entity |
+| Unrelated same-name organizations | `EIO1Rxgq6ezyZVW2-sxPhw` (Texas), `D-bTb1c6BNxP7FQ5o7lEkw` (California), `AWuTtca4O_lvFemdqKteeA` (South Africa), `FjE5JBGCPicBhwRFOYRX4A` (Texas), `g4t3FFj3iCHXClnYPY-tiA` (Wisconsin) | Grade **D** (name only, different registries and filing numbers). Must never merge with the Minnesota entity |
 
 This case is out of scope for public-money detection (pass-through grant) and serves as a resolution and false-positive fixture.
 

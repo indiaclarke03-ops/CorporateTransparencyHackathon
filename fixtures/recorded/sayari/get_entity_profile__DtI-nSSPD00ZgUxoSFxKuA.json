@@ -1,0 +1,159 @@
+{
+  "source_name": "sayari",
+  "via": "claude.ai Sayari connector (MCP)",
+  "operation": "get_entity_profile",
+  "request_params": {
+    "entity_id": "DtI-nSSPD00ZgUxoSFxKuA",
+    "relationships_limit": 50
+  },
+  "retrieved_at": "2026-09-25T18:17:10.693Z",
+  "response_hash": "sha256:6d6a5958068c71664e1cbbd8769898779e7fd1c5161fa507a32b03bbac1fe2b5",
+  "vendor_record_ids": [
+    "DtI-nSSPD00ZgUxoSFxKuA"
+  ],
+  "license_tag": "UNCONFIRMED: vendor licence (spec §2.10)",
+  "raw_response": {
+    "entity_id": "DtI-nSSPD00ZgUxoSFxKuA",
+    "label": "Empire Cuisine And Market LLC",
+    "type": "company",
+    "closed": true,
+    "attributes": {
+      "names": [
+        "Empire Cuisine And Market LLC",
+        "Empire Cuisine & Market LLC"
+      ],
+      "addresses": [
+        "13825 Edgewood Ave S, Savage, MN, 55378, USA"
+      ],
+      "identifiers": [
+        {
+          "type": "xxx_acuris_id",
+          "value": "C1576133"
+        },
+        {
+          "type": "usa_mn_filing_number",
+          "value": "1151747200022"
+        },
+        {
+          "type": "usa_mn_master_id",
+          "value": "523fe7f6-5474-ea11-9197-00155d32b905"
+        },
+        {
+          "type": "unknown",
+          "value": "1151747200022"
+        },
+        {
+          "type": "unknown",
+          "value": "523fe7f6-5474-ea11-9197-00155d32b905"
+        }
+      ],
+      "countries": [
+        "USA"
+      ],
+      "status": "status='inactive' date=None",
+      "registration_date": "2020-04-01",
+      "company_type": "LLC"
+    },
+    "risk": {
+      "sanctioned": false,
+      "pep": false,
+      "risk_levels": [
+        "basel_aml",
+        "cpi_score",
+        "law_enforcement_action",
+        "law_enforcement_action_historic"
+      ]
+    },
+    "relationships": {
+      "linked_to": [
+        {
+          "entity_id": "z2hpWM3nOio_DPmvVPhARA",
+          "label": "Abdiaziz Farah",
+          "type": "person",
+          "countries": [
+            "USA"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score"
+            ]
+          },
+          "former": true,
+          "position": "Organizer",
+          "entity_url": "https://graph.sayari.com/resource/entity/z2hpWM3nOio_DPmvVPhARA"
+        },
+        {
+          "entity_id": "K6oyk8iuv60HWijlZoO2-A",
+          "label": "Mohamed I Ismail",
+          "type": "person",
+          "countries": [
+            "USA"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score"
+            ]
+          },
+          "former": true,
+          "position": "Organizer",
+          "entity_url": "https://graph.sayari.com/resource/entity/K6oyk8iuv60HWijlZoO2-A"
+        }
+      ],
+      "has_shareholder": [
+        {
+          "entity_id": "-IjrK5KmW3Xjsi_599Sung",
+          "label": "Mohamed Jama Ismail",
+          "type": "person",
+          "countries": [
+            "USA"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "law_enforcement_action",
+              "law_enforcement_action_historic"
+            ]
+          },
+          "former": true,
+          "position": "Mohamed Jama Ismail is a co-owner of Empire Cuisine & Market LLC",
+          "entity_url": "https://graph.sayari.com/resource/entity/-IjrK5KmW3Xjsi_599Sung"
+        }
+      ],
+      "summary": {
+        "has_shareholder": 1,
+        "linked_to": 2
+      }
+    },
+    "sources": [
+      "USA Minnesota Secretary of State",
+      "Acuris Risk Intelligence - Entities & Relationships (3rd Party Data)",
+      "Acuris Risk Intelligence - Risk Information and Articles (3rd Party Data)"
+    ],
+    "trade_count": {
+      "sent": 0,
+      "received": 0
+    },
+    "investigation_notes": [
+      "Try multiple Romanizations when resolving Russian entities — Sayari may index entities under different transliterations.",
+      "Since 2022, live EGRUL access may be restricted — Sayari's pre-2022 historical data is valuable for Russian entity research. Use the Sayari API to access this data.",
+      "Russian sanctions evasion often involves restructuring ownership through intermediaries in CIS countries (Kazakhstan, Armenia, Georgia, Kyrgyzstan) or through Turkish, UAE, and Chinese entities."
+    ],
+    "_hints": [
+      "For full risk factor details including scoring methodology, use the lookup_risk_factors tool."
+    ],
+    "entity_url": "https://graph.sayari.com/resource/entity/DtI-nSSPD00ZgUxoSFxKuA",
+    "_guidance": {
+      "entity_links": "IMPORTANT: When presenting these results to the user, display every entity_url in this response as a clickable markdown link using the entity's name as link text, e.g. [Acme Corp](https://graph.sayari.com/resource/entity/abc123). Every entity, owner, trade partner, and relationship you mention must link to Sayari Graph so the user can verify the data.",
+      "entity_quality": "Treat entity resolution as a same-legal-entity judgment, not just name matching. Validate identifiers, countries, source quality, relationships, and the user's seed facts. If a result looks conflated across jurisdictions or critical-risk flags are involved, surface the ambiguity explicitly instead of silently merging or normalizing records."
+    }
+  }
+}

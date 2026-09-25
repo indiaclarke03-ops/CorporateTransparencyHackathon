@@ -1,0 +1,146 @@
+{
+  "source_name": "sayari",
+  "via": "claude.ai Sayari connector (MCP)",
+  "operation": "get_entity_profile",
+  "request_params": {
+    "entity_id": "dFB7YowXog_6EwiEur43RQ",
+    "relationships_limit": 50
+  },
+  "retrieved_at": "2026-09-25T18:17:09.732Z",
+  "response_hash": "sha256:290cf90c3a00eb037df19dc68a2886cb4fbc4f531127572f59792d868caefbfb",
+  "vendor_record_ids": [
+    "dFB7YowXog_6EwiEur43RQ"
+  ],
+  "license_tag": "UNCONFIRMED: vendor licence (spec §2.10)",
+  "raw_response": {
+    "entity_id": "dFB7YowXog_6EwiEur43RQ",
+    "label": "Prodigious Real Estate Management Supervision Services",
+    "type": "company",
+    "closed": false,
+    "attributes": {
+      "names": [
+        "Prodigious Real Estate Management Supervision Services",
+        "Prodiqis Real Estate Administrative Supervision Service"
+      ],
+      "addresses": [
+        "Dubai, AE",
+        "SD"
+      ],
+      "identifiers": [
+        {
+          "type": "xxx_acuris_id",
+          "value": "C2291109"
+        }
+      ],
+      "countries": [
+        "ARE",
+        "SDN"
+      ]
+    },
+    "risk": {
+      "sanctioned": false,
+      "pep": false,
+      "risk_levels": [
+        "basel_aml",
+        "cpi_score",
+        "export_controls_adjacent",
+        "psa_sanctioned",
+        "psa_sanctioned_gbr_fcdo",
+        "sanctioned_adjacent"
+      ]
+    },
+    "relationships": {
+      "linked_to": [
+        {
+          "entity_id": "sAgA0QVKr-gjEAqoJvf0zg",
+          "label": "Abu Dharr Abdul Nabi Habiballa AHMMED",
+          "type": "person",
+          "countries": [
+            "SDN",
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "owner_of_export_controls_entity",
+              "owner_of_regulatory_action_entity",
+              "owner_of_sanctioned_entity",
+              "owner_of_sanctioned_usa_ofac_sdn_entity",
+              "psa_owner_of_export_controls_entity",
+              "psa_owner_of_regulatory_action_entity",
+              "psa_owner_of_sanctioned_entity",
+              "psa_owner_of_sanctioned_usa_ofac_sdn_entity",
+              "sanctioned_gbr_fcdo",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Prodigious Real Estate Management Supervision Services",
+          "entity_url": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg"
+        },
+        {
+          "entity_id": "l-hTG9hSLd7dA4za2B7CRw",
+          "label": "Capital Tap Holding L.L.C.",
+          "type": "company",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "owner_of_export_controls_entity",
+              "owner_of_regulatory_action_entity",
+              "owner_of_sanctioned_entity",
+              "owner_of_sanctioned_usa_ofac_sdn_entity",
+              "psa_owner_of_export_controls_entity",
+              "psa_owner_of_regulatory_action_entity",
+              "psa_owner_of_sanctioned_entity",
+              "psa_owner_of_sanctioned_usa_ofac_sdn_entity",
+              "regulatory_action",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Capital Tap Holding L.L.C. is linked to Prodigious Real Estate Management Supervision Services",
+          "entity_url": "https://graph.sayari.com/resource/entity/l-hTG9hSLd7dA4za2B7CRw"
+        }
+      ],
+      "summary": {
+        "linked_to": 2
+      }
+    },
+    "sources": [
+      "Acuris Risk Intelligence - Entities & Relationships (3rd Party Data)",
+      "Acuris Risk Intelligence - Risk Information and Articles (3rd Party Data)"
+    ],
+    "trade_count": {
+      "sent": 0,
+      "received": 0
+    },
+    "investigation_notes": [
+      "Try multiple Romanizations when resolving Russian entities — Sayari may index entities under different transliterations.",
+      "Since 2022, live EGRUL access may be restricted — Sayari's pre-2022 historical data is valuable for Russian entity research. Use the Sayari API to access this data.",
+      "Russian sanctions evasion often involves restructuring ownership through intermediaries in CIS countries (Kazakhstan, Armenia, Georgia, Kyrgyzstan) or through Turkish, UAE, and Chinese entities."
+    ],
+    "_hints": [
+      "For full risk factor details including scoring methodology, use the lookup_risk_factors tool."
+    ],
+    "entity_url": "https://graph.sayari.com/resource/entity/dFB7YowXog_6EwiEur43RQ",
+    "_guidance": {
+      "entity_links": "IMPORTANT: When presenting these results to the user, display every entity_url in this response as a clickable markdown link using the entity's name as link text, e.g. [Acme Corp](https://graph.sayari.com/resource/entity/abc123). Every entity, owner, trade partner, and relationship you mention must link to Sayari Graph so the user can verify the data.",
+      "follow_up": "After presenting findings, if there are unexplored leads listed in suggested_next_steps below, ask the user which they'd like to investigate. When multiple options exist, briefly describe each and let the user choose.",
+      "suggested_next_steps": [
+        "Entities with risk flags found: Abu Dharr Abdul Nabi Habiballa AHMMED, Capital Tap Holding L.L.C. — offer to profile or ownership-trace these entities."
+      ],
+      "entity_quality": "Treat entity resolution as a same-legal-entity judgment, not just name matching. Validate identifiers, countries, source quality, relationships, and the user's seed facts. If a result looks conflated across jurisdictions or critical-risk flags are involved, surface the ambiguity explicitly instead of silently merging or normalizing records."
+    }
+  }
+}

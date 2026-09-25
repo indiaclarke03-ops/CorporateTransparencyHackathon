@@ -1,0 +1,58 @@
+{
+  "source_name": "sayari",
+  "via": "claude.ai Sayari connector (MCP)",
+  "operation": "get_entity_summary",
+  "request_params": {
+    "entity_id": "g4t3FFj3iCHXClnYPY-tiA"
+  },
+  "retrieved_at": "2026-09-25T18:17:22.578Z",
+  "response_hash": "sha256:81b9aed6dfaa9a6dc2c24313d28cc63b3b6fc94c3721e6aaf9e5bb33eb81d8e7",
+  "vendor_record_ids": [
+    "g4t3FFj3iCHXClnYPY-tiA"
+  ],
+  "license_tag": "UNCONFIRMED: vendor licence (spec §2.10)",
+  "raw_response": {
+    "entity_id": "g4t3FFj3iCHXClnYPY-tiA",
+    "label": "FEEDING OUR FUTURE, INC.",
+    "type": "company",
+    "closed": true,
+    "attributes": {
+      "names": [
+        "FEEDING OUR FUTURE, INC."
+      ],
+      "identifiers": [
+        {
+          "type": "usa_wi_dfi_id",
+          "value": "F062271"
+        }
+      ],
+      "countries": [
+        "USA"
+      ],
+      "status": "status='closed' date='2022-12-14'",
+      "registration_date": "2019-10-16",
+      "company_type": "INC"
+    },
+    "risk": {
+      "sanctioned": false,
+      "pep": false
+    },
+    "sources": [
+      "USA Wisconsin Department of Financial Institutions"
+    ],
+    "trade_count": {
+      "sent": 0,
+      "received": 0
+    },
+    "investigation_notes": [
+      "Try multiple Romanizations when resolving Russian entities — Sayari may index entities under different transliterations.",
+      "Since 2022, live EGRUL access may be restricted — Sayari's pre-2022 historical data is valuable for Russian entity research. Use the Sayari API to access this data.",
+      "Russian sanctions evasion often involves restructuring ownership through intermediaries in CIS countries (Kazakhstan, Armenia, Georgia, Kyrgyzstan) or through Turkish, UAE, and Chinese entities."
+    ],
+    "entity_url": "https://graph.sayari.com/resource/entity/g4t3FFj3iCHXClnYPY-tiA",
+    "_guidance": {
+      "entity_links": "IMPORTANT: When presenting these results to the user, display every entity_url in this response as a clickable markdown link using the entity's name as link text, e.g. [Acme Corp](https://graph.sayari.com/resource/entity/abc123). Every entity, owner, trade partner, and relationship you mention must link to Sayari Graph so the user can verify the data.",
+      "entity_quality": "Treat entity resolution as a same-legal-entity judgment, not just name matching. Validate identifiers, countries, source quality, relationships, and the user's seed facts. If a result looks conflated across jurisdictions or critical-risk flags are involved, surface the ambiguity explicitly instead of silently merging or normalizing records."
+    }
+  }
+}

@@ -70,8 +70,8 @@ executive_rationale:
         cite: money
     identity:
       - id: identity.match
-        requires: [subject_role, match_level, match_basis]
-        text: "The {subject_role} was matched to corporate records at the {match_level} level using {match_basis}."
+        requires: [subject_role, match_grade, match_basis]
+        text: "The {subject_role} was matched to corporate records at grade {match_grade} using {match_basis}."
         cite: identity
     result:
       - id: result.families
@@ -194,7 +194,7 @@ lead_dossier:
   methodology:
     # Fixed text. The only section where "shell" and "front" may appear.
     - "How signals and tiers work: the screen checks a fixed set of signals grouped into seven families. A tier reflects how many families have at least one signal, not the weight of any single signal. Some signals are designed to detect patterns associated with shell or front companies, such as mass-registration addresses or ownership chains that end at a company; a signal firing does not mean an entity is one."
-    - "Identity matching: a record is linked to the entity only when it shares an identifier (UEI, CAGE, company number, registration number or tax ID) or when an analyst confirms the link. Name-only matches are shown as possible matches (unconfirmed) and never drive a signal on their own."
+    - "Identity matching: a record is linked to the entity only when it shares an identifier (UEI, CAGE, company number, registration number or tax ID) or when an analyst confirms the link. Matches are graded A to D by the match keys that agree; only grade A merges automatically. Name-only matches (grade D) are shown as possible matches (unconfirmed) and never drive a signal."
     - "Proximity: paths through registered agents, company-formation agents, and institutional asset managers are excluded, because they connect unrelated companies at scale."
     - "Federal grants passed through state agencies to sub-recipients are not covered."
     - "Trade not recorded in customs data would not appear."

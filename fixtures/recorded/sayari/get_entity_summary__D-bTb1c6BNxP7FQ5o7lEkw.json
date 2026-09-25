@@ -1,0 +1,68 @@
+{
+  "source_name": "sayari",
+  "via": "claude.ai Sayari connector (MCP)",
+  "operation": "get_entity_summary",
+  "request_params": {
+    "entity_id": "D-bTb1c6BNxP7FQ5o7lEkw"
+  },
+  "retrieved_at": "2026-09-25T18:17:20.801Z",
+  "response_hash": "sha256:121d40a7d252f9d4dd3b2d193d35ceb9c2abeca0da9ba6ffbbb2596b8c609147",
+  "vendor_record_ids": [
+    "D-bTb1c6BNxP7FQ5o7lEkw"
+  ],
+  "license_tag": "UNCONFIRMED: vendor licence (spec §2.10)",
+  "raw_response": {
+    "entity_id": "D-bTb1c6BNxP7FQ5o7lEkw",
+    "label": "FEEDING OUR FUTURE INC",
+    "type": "company",
+    "closed": false,
+    "attributes": {
+      "names": [
+        "FEEDING OUR FUTURE INC"
+      ],
+      "addresses": [
+        "725 EUREKA ST BAKERSFIELD CA United States 93305"
+      ],
+      "identifiers": [
+        {
+          "type": "ca_corporate_id_num",
+          "value": "04629446"
+        }
+      ],
+      "countries": [
+        "USA"
+      ],
+      "status": "status='inactive' date='2024-11-01'",
+      "registration_date": "2020-08-10",
+      "company_type": "INC"
+    },
+    "risk": {
+      "sanctioned": false,
+      "pep": false,
+      "risk_levels": [
+        "basel_aml",
+        "cpi_score"
+      ]
+    },
+    "sources": [
+      "USA California Secretary of State"
+    ],
+    "trade_count": {
+      "sent": 0,
+      "received": 0
+    },
+    "investigation_notes": [
+      "Try multiple Romanizations when resolving Russian entities — Sayari may index entities under different transliterations.",
+      "Since 2022, live EGRUL access may be restricted — Sayari's pre-2022 historical data is valuable for Russian entity research. Use the Sayari API to access this data.",
+      "Russian sanctions evasion often involves restructuring ownership through intermediaries in CIS countries (Kazakhstan, Armenia, Georgia, Kyrgyzstan) or through Turkish, UAE, and Chinese entities."
+    ],
+    "_hints": [
+      "For full risk factor details including scoring methodology, use the lookup_risk_factors tool."
+    ],
+    "entity_url": "https://graph.sayari.com/resource/entity/D-bTb1c6BNxP7FQ5o7lEkw",
+    "_guidance": {
+      "entity_links": "IMPORTANT: When presenting these results to the user, display every entity_url in this response as a clickable markdown link using the entity's name as link text, e.g. [Acme Corp](https://graph.sayari.com/resource/entity/abc123). Every entity, owner, trade partner, and relationship you mention must link to Sayari Graph so the user can verify the data.",
+      "entity_quality": "Treat entity resolution as a same-legal-entity judgment, not just name matching. Validate identifiers, countries, source quality, relationships, and the user's seed facts. If a result looks conflated across jurisdictions or critical-risk flags are involved, surface the ambiguity explicitly instead of silently merging or normalizing records."
+    }
+  }
+}

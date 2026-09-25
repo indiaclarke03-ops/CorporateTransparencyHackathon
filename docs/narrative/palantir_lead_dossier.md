@@ -3,13 +3,13 @@
 Identifiers: UEI FSY4LVSBGWB7; CAGE 470F5; SEC CIK 0001321655; LEI 549300UVN46B3BBDHO85  
 Report ID: DRAFT-PALANTIR-20260925  
 Generated: 25 September 2026  
-Content hash: sha256:bee036baf5cd5db3  
+Content hash: sha256:8c25648c0e55b122  
 
 > This dossier presents a risk lead for human review. It is not a finding of wrongdoing. Every statement is sourced; see the sources appendix.
 
 ## 1. Executive rationale
 
-PALANTIR TECHNOLOGIES INC. received 427 federal contracts totaling $5,335,261,774.62 from the Department of Defense, the Department of Homeland Security, the Department of Health and Human Services, and 15 other agencies between 3 July 2008 and 30 September 2026.[^S15][^S33][^S31][^S32] The recipient was matched to corporate records at the Confirmed level using a shared UEI (FSY4LVSBGWB7).[^S16][^S26] The screen produced a composite score of 8 out of 100, with a confidence grade of A. 2 signals could not be assessed because the Tradeverifyd connection returned an authorization error (HTTP 401) and the Sayari two-link matches carry an unnamed 'sanctioned_other' flag that could not be tied to a specific list. This is a risk lead for human review, not a finding of wrongdoing.
+PALANTIR TECHNOLOGIES INC. received 427 federal contracts totaling $5,335,261,774.62 from the Department of Defense, the Department of Homeland Security, the Department of Health and Human Services, and 15 other agencies between 3 July 2008 and 30 September 2026.[^S15][^S33][^S31][^S32] The recipient was matched to corporate records at grade B using a shared UEI (FSY4LVSBGWB7) and a matching name.[^S16][^S26] The screen produced a composite score of 8 out of 100, with a confidence grade of A. 2 signals could not be assessed because the Tradeverifyd connection returned an authorization error (HTTP 401) and the Sayari two-link matches carry an unnamed 'sanctioned_other' flag that could not be tied to a specific list. This is a risk lead for human review, not a finding of wrongdoing.
 
 ## 2. Why this dossier was prepared
 
@@ -31,7 +31,7 @@ Intended use: to help an oversight body decide whether further review is warrant
 | LEI | 549300UVN46B3BBDHO85 | [^S26] |
 | Registration date | 6 May 2003 | [^S26] |
 | Related recipient (separate UEI) | PALANTIR USG INC, UEI HNN4F9JZWDY8, recipient of Department of State IDV 19AQMM25A1228 | [^S17] |
-| Matched records | USAspending recipient 1ea8a9a4-3726-3491-9040-66950bb67606-P (Confirmed, shared UEI); Sayari entity PFV8cEKdaVI5H9Tme97ZvA (Confirmed, shared UEI and CAGE) | [^S16][^S26] |
+| Matched records | USAspending recipient 1ea8a9a4-3726-3491-9040-66950bb67606-P (grade B, shared UEI and name); Sayari entity PFV8cEKdaVI5H9Tme97ZvA (grade B, shared UEI, CAGE and name) | [^S16][^S26] |
 
 ## 4. Federal awards and loans
 
@@ -84,7 +84,7 @@ This view was not produced for this dossier because Sayari's 23 received and 4 s
 ## 9. Methodology and limitations
 
 - How signals and tiers work: the screen checks a fixed set of signals grouped into seven families. A tier reflects how many families have at least one signal, not the weight of any single signal. Some signals are designed to detect patterns associated with shell or front companies, such as mass-registration addresses or ownership chains that end at a company; a signal firing does not mean an entity is one.
-- Identity matching: a record is linked to the entity only when it shares an identifier (UEI, CAGE, company number, registration number or tax ID) or when an analyst confirms the link. Name-only matches are shown as possible matches (unconfirmed) and never drive a signal on their own.
+- Identity matching: a record is linked to the entity only when it shares an identifier (UEI, CAGE, company number, registration number or tax ID) or when an analyst confirms the link. Matches are graded A to D by the match keys that agree; only grade A merges automatically. Name-only matches (grade D) are shown as possible matches (unconfirmed) and never drive a signal.
 - Proximity: paths through registered agents, company-formation agents, and institutional asset managers are excluded, because they connect unrelated companies at scale.
 - Federal grants passed through state agencies to sub-recipients are not covered.
 - Trade not recorded in customs data would not appear.

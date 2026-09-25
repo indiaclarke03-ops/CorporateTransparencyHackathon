@@ -17,7 +17,7 @@ import { MONEY_STATUS } from '@/lib/graph-style'
 
 const InvestigationGraph = dynamic(() => import('./investigation-graph').then((m) => m.InvestigationGraph), {
   ssr: false,
-  loading: () => <GraphPlaceholder text="Raking up the graph..." />,
+  loading: () => <GraphPlaceholder text="Building network…" />,
 })
 
 type Selection = { kind: 'node'; id: string } | { kind: 'edge'; edge: InvestigationEdge } | null
@@ -66,7 +66,7 @@ export function InvestigationExplorer() {
           </span>
           <div>
             <h1 className="font-heading text-2xl font-semibold text-balance">Follow the Public Dollar</h1>
-            <p className="text-sm text-muted-foreground">A cozy little sanctions sleuth for the Corporate Transparency Hackathon</p>
+            <p className="text-sm text-muted-foreground">Tracing public funds through ownership, trade, and payment networks</p>
           </div>
         </div>
 
@@ -120,7 +120,7 @@ export function InvestigationExplorer() {
 
       {error && (
         <p role="alert" className="rounded-2xl border border-sev-critical bg-card p-4 text-sm">
-          {'Oh no, a gust blew this investigation away: '}
+          {'The case file could not be loaded: '}
           {error.message}
         </p>
       )}
@@ -148,7 +148,7 @@ export function InvestigationExplorer() {
           className="relative flex min-h-[640px] flex-1 flex-col overflow-hidden rounded-3xl border border-border bg-card"
         >
           {isLoading || !data ? (
-            <GraphPlaceholder text="Raking up the graph..." />
+            <GraphPlaceholder text="Building network…" />
           ) : (
             <InvestigationGraph
               key={investigationId}
@@ -174,7 +174,7 @@ export function InvestigationExplorer() {
           ) : (
             <div className="flex flex-1 flex-col items-center justify-center gap-3 p-8 text-center">
               <Leaf className="leaf-sway size-10 text-accent" aria-hidden="true" />
-              <p className="font-heading text-lg">Pick a leaf, any leaf</p>
+              <p className="font-heading text-lg">Nothing selected</p>
               <p className="text-sm leading-relaxed text-muted-foreground">
                 Click a node to see its identifiers, addresses, risk signals and sources, or click a connection to see how two entities are
                 linked, in the source&apos;s own words.

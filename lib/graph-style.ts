@@ -21,7 +21,7 @@ export const SEVERITY_COLOR: Record<Severity, string> = {
 }
 
 export const SEVERITY_CLASS: Record<Severity, string> = {
-  CRITICAL: 'bg-sev-critical text-foreground',
+  CRITICAL: 'bg-sev-critical text-on-color',
   HIGH: 'bg-sev-high text-primary-foreground',
   MEDIUM: 'bg-sev-medium text-accent-foreground',
   LOW: 'bg-sev-low text-accent-foreground',
@@ -70,7 +70,7 @@ export function confidenceClass(grade: string) {
   if (g === 'B') return 'bg-[#a3b18a] text-accent-foreground'
   if (g === 'C') return 'bg-sev-medium text-accent-foreground'
   if (g === 'D') return 'bg-sev-high text-primary-foreground'
-  return 'bg-sev-critical text-foreground'
+  return 'bg-sev-critical text-on-color'
 }
 
 export function scoreColor(score: number) {

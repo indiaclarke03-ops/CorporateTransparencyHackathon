@@ -1,1 +1,50 @@
-{"investigation_summary":{"root_recipient":"Palantir Technologies Inc.","award_id":"Multiple - 309+ prime awards incl. Enterprise BPA 19AQMM25A1228 (awarded 2025-09-19)","composite_risk_score":8,"confidence_rating":"A","primary_typology":"None Detected - Clean Control Case (schema gap, see README)","executive_rationale":"Palantir Technologies Inc. is a NYSE-listed, SEC-disclosed federal contractor with a directly matchable UEI (FSY4LVSBGWB7) and CAGE code (470F5), holding 309+ prime federal awards totaling approximately $2.49B in obligations against a $10.52B ceiling. No OFAC/BIS/EU sanctions hits, no secrecy-jurisdiction UBO terminus, and extensive verifiable public/media footprint. Used as a low-risk control fixture to confirm the scoring engine does not false-positive on transparent, high-dollar contractors. This fixture is NOT an investigative lead and asserts no wrongdoing."},"nodes":[{"id":"ent_palantir","label":"Palantir Technologies Inc.","type":"public_recipient","jurisdiction":"US","risk_signals":[{"signal_name":"Exact UEI/CAGE identifier match, SAM.gov active registration","severity":"LOW","provenance_source":"Tavily","evidence_record":"https://www.highergov.com/awardee/palantir-technologies-inc-10000294/"},{"signal_name":"NYSE-listed, SEC-disclosed ownership and financials (PLTR) - no structural opacity","severity":"LOW","provenance_source":"Tavily","evidence_record":"https://sam.gov/opp/153fdf20f4fa4160be0d1180622da861/view"}],"entity_confidence":"A"}],"edges":[],"audit_trail":[{"step":1,"source":"Tavily","query_executed":"Palantir Technologies SAM.gov federal award UEI","records_matched":15}]}
+{
+  "investigation_summary": {
+    "root_recipient": "Palantir Technologies Inc.",
+    "award_id": "Multiple - 309+ prime awards incl. Enterprise BPA 19AQMM25A1228 (awarded 2025-09-19)",
+    "composite_risk_score": 8,
+    "confidence_rating": "A",
+    "primary_typology": "None Detected - Clean Control Case (schema gap, see README)",
+    "executive_rationale": "Palantir Technologies Inc. is a NYSE-listed, SEC-disclosed federal contractor with a directly matchable UEI (FSY4LVSBGWB7) and CAGE code (470F5), holding 309+ prime federal awards totaling approximately $2.49B in obligations against a $10.52B ceiling. No OFAC/BIS/EU sanctions hits, no secrecy-jurisdiction UBO terminus, and extensive verifiable public/media footprint. Used as a low-risk control fixture to confirm the scoring engine does not false-positive on transparent, high-dollar contractors. This fixture is NOT an investigative lead and asserts no wrongdoing."
+  },
+  "nodes": [
+    {
+      "id": "ent_palantir",
+      "label": "Palantir Technologies Inc.",
+      "type": "public_recipient",
+      "jurisdiction": "US",
+      "risk_signals": [
+        {
+          "signal_name": "Exact UEI/CAGE identifier match, SAM.gov active registration",
+          "severity": "LOW",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://www.highergov.com/awardee/palantir-technologies-inc-10000294/"
+        },
+        {
+          "signal_name": "NYSE-listed, SEC-disclosed ownership and financials (PLTR) - no structural opacity",
+          "severity": "LOW",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://sam.gov/opp/153fdf20f4fa4160be0d1180622da861/view"
+        }
+      ],
+      "entity_confidence": "A",
+      "sayari_pass_through": {
+        "data_source": "public_record_derived_not_live_sayari_api",
+        "sanctioned": false,
+        "pep": false,
+        "closed": false,
+        "degree": 0,
+        "edge_counts": {},
+        "shares": [],
+        "position": [],
+        "possibly_same_as": [],
+        "match_keys": ["uei:FSY4LVSBGWB7", "cage:470F5"]
+      }
+    }
+  ],
+  "edges": [],
+  "audit_trail": [
+    {"step": 1, "source": "Tavily", "query_executed": "Palantir Technologies SAM.gov federal award UEI", "records_matched": 15}
+  ],
+  "schema_version": "v2"
+}

@@ -8,7 +8,7 @@ All files were downloaded on **25 September 2026** (UTC). `sha256` shows the fir
 
 | File | Source URL | Size | sha256 | Notes |
 |---|---|---|---|---|
-| `openapi.yml` | https://fern-doc-assets.s3.amazonaws.com/openapi.yml | 1,167,232 B | c7dfaf99155c | **Primary spec.** The download link on the "API Clients → OpenAPI" page. OpenAPI 3.0.1, 65 paths, server `https://api.sayari.com` |
+| `openapi.yml` | https://fern-doc-assets.s3.amazonaws.com/openapi.yml | 1,167,200 B | 5866bbe896e0 | **Primary spec.** Two example values shaped like Stripe test API keys were replaced with `sk_test_REDACTED` so GitHub push protection accepts the file (original download: 1,167,232 B, sha256 c7dfaf99155c). The download link on the "API Clients → OpenAPI" page. OpenAPI 3.0.1, 65 paths, server `https://api.sayari.com` |
 | `openapi-site.yaml` | https://documentation.sayari.com/openapi.yaml | 573,371 B | a2077914a11d | Same 65 paths in OpenAPI 3.1.0, linked from the site's `llms.txt`. Kept for comparison only; if the two disagree, `openapi.yml` wins until checked |
 | `api-clients-open-api.md` | https://documentation.sayari.com/api/api-clients/open-api.md | 510 B | 10cfb4151bf9 | The API Clients page that gives the download link |
 | `llms.txt` | https://documentation.sayari.com/llms.txt | 16,066 B | 0e28fe977814 | Documentation index |

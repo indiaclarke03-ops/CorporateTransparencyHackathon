@@ -8,7 +8,7 @@ from scoring.engine import (
 
 def test_serniya_root_node_real_data():
     """Uses ent_serniya's actual backfilled sayari_pass_through from
-    fixtures/serniya_investigation.json (real relationship_type edge_counts,
+    fixtures/serniya_investigation.json (real relationship_type relationship_count,
     not placeholder keys)."""
     result = calculate_composite_score(ScoringInput(
         entity_id="ent_serniya",
@@ -16,7 +16,7 @@ def test_serniya_root_node_real_data():
             sanctioned=True,
             closed=None,
             degree=5,
-            edge_counts={"shared_address": 1, "beneficial_owner": 4},
+            relationship_count={"shared_address": 1, "beneficial_owner": 4},
         ),
         tradeverifyd_score=0.0,
         public_presence_score=100.0,
@@ -34,8 +34,11 @@ def test_palantir_real_data_no_false_positive():
         sayari_data=SayariPassThrough(
             sanctioned=False,
             degree=0,
-            edge_counts={},
-            match_keys=["uei:FSY4LVSBGWB7", "cage:470F5"],
+            relationship_count={},
+            match_keys=[
+                {"key": "uei", "normalized": "FSY4LVSBGWB7", "original": "FSY4LVSBGWB7"},
+                {"key": "cage", "normalized": "470F5", "original": "470F5"},
+            ],
         ),
         tradeverifyd_score=0.0,
         public_presence_score=40.0,

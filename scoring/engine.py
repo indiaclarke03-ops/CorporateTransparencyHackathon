@@ -14,6 +14,11 @@ v3 fixes (vs. v2 committed at d498a06), based on real backfilled fixture data:
     from possibly_same_as (real candidate-identity conflicts from Sayari's
     POSSIBLY_SAME_AS mechanism), not from match_keys.
 
+Field names (merge, 25 Sep): `edge_counts` is renamed `relationship_count` (the Sayari REST name,
+  docs/vendor/sayari/openapi.yml) and `match_keys` holds Sayari's {key, normalized, original}
+  objects. Scoring logic is unchanged. The keys counted below are this repo's graph-contract
+  relationship types, not Sayari's own relationship names (backlog B29).
+
 Grade bands (v2 fix retained): A: 0-15  B: 16-70  C: 71-80  D: 81-90  F: 91-100
 """
 from dataclasses import dataclass, field
@@ -35,11 +40,13 @@ class SayariPassThrough:
     pep: bool = False
     closed: bool = False
     degree: int = 0
-    edge_counts: Dict[str, int] = field(default_factory=dict)
+    # Count of related entities per relationship type (Sayari REST `relationship_count`).
+    relationship_count: Dict[str, int] = field(default_factory=dict)
     shares: List[float] = field(default_factory=list)
     position: List[str] = field(default_factory=list)
     possibly_same_as: List[str] = field(default_factory=list)
-    match_keys: List[str] = field(default_factory=list)
+    # Sayari `possibly_same_as[].match_keys`: objects with `key`, `normalized`, `original`.
+    match_keys: List[Dict[str, str]] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -93,7 +100,7 @@ def calculate_sayari_subscore(data: SayariPassThrough) -> "tuple[float, List[str
     edge_risk_points = 0
     matched_edge_types = []
     for edge_type, weight in HIGH_RISK_EDGE_TYPES.items():
-        count = data.edge_counts.get(edge_type, 0)
+        count = data.relationship_count.get(edge_type, 0)
         if count > 0:
             edge_risk_points += count * weight
             matched_edge_types.append(f"{edge_type}x{count}")

@@ -171,13 +171,6 @@ export interface CaseIndexEntry {
 // Terms follow docs/follow-the-public-dollar-spec.md section 9.
 // ---------------------------------------------------------------------------
 
-/**
- * How a number, link or flag is known (regulator prompts Part C):
- * documented = read from a record; derived = computed from documented values;
- * estimated = modelled or declared (e.g. trade values, weighted exposure); unknown = not visible.
- */
-export type Certainty = 'documented' | 'derived' | 'estimated' | 'unknown'
-
 /** Risk tier (spec 9.3). `null` on an entity means it has not been assessed. */
 export type Tier = 'high' | 'elevated' | 'low' | 'not_assessable'
 
@@ -290,9 +283,7 @@ export interface Award {
   agency: string
   recipientId: string
   obligated: number
-  date: string | null
   url: string | null
-  certainty: Certainty
   demo: boolean
 }
 
@@ -304,7 +295,6 @@ export interface Subaward {
   amount: number
   date: string | null
   url: string | null
-  certainty: Certainty
   demo: boolean
 }
 
@@ -315,7 +305,6 @@ export interface Purchase {
   amount: number
   date: string | null
   hsCode: string | null
-  certainty: Certainty
   demo: boolean
 }
 
@@ -388,30 +377,6 @@ export interface RegulatoryCallout {
   reviewBy: string
 }
 
-export interface TimelineEvent {
-  id: string
-  entityId: string
-  date: string
-  kind: 'incorporation' | 'sam_registration' | 'award' | 'subaward' | 'shipment' | 'designation' | 'dissolution' | 'officer_change' | 'removal'
-  label: string
-  certainty: Certainty
-  sourceUrl: string | null
-  sourceId?: string
-}
-
-export interface Nonprofit {
-  entityId: string
-  statedMission: string | null
-  publicMoney: number | null
-  foreignGrants: { region: string; amount: number; recipientType: string }[]
-  programShare: number | null
-  filingYear: number | null
-  /** Regions the stated mission covers; grants elsewhere count against mission fit */
-  missionRegions: string[]
-  certainty: Certainty
-  demo: boolean
-}
-
 export interface CaseFile {
   id: string
   title: string
@@ -421,9 +386,6 @@ export interface CaseFile {
   typology: string | null
   /** Case-level summary from the fixture, when there is one */
   summary: InvestigationSummary | null
-  /** Entity the case is built around; the layout starts here */
-  rootId: string | null
-  /** Federal award recipient, when there is one; money trails start here */
   recipientId: string | null
   award: Award | null
   /** Plain statement shown when no award is on record, e.g. "No federal award located" */
@@ -435,16 +397,6 @@ export interface CaseFile {
   shipments: Shipment[]
   audit: AuditEntry[]
   manifest: RunManifest | null
-  /** Typology ids (lib/typologies.ts) this case is filed under */
-  typologyIds: string[]
-  /** Primary sources for the case, from the fixture's case block */
-  sources: { id: string; name: string; url: string; publisher?: string | null }[]
-  /** Public-money statement from the fixture (plain text) */
-  publicMoneyNote: string | null
-  timeline: TimelineEvent[]
-  nonprofits: Nonprofit[]
-  /** Case-level composite score from the fixture, when recorded */
-  compositeScore: number | null
 }
 
 // --- Attribution (who operates a shell) ------------------------------------

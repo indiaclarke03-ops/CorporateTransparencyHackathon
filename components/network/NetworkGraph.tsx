@@ -178,7 +178,7 @@ export function NetworkGraph({ caseFile }: { caseFile: CaseFile }) {
         </div>
       </div>
       <aside className="border-t border-border p-4 lg:w-72 lg:border-l lg:border-t-0">
-        <Legend />
+        <Legend kinds={presentKinds} />
       </aside>
     </div>
   )

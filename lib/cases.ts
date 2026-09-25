@@ -1,20 +1,13 @@
 /**
- * Case registry and the adapter from the citation-audited Investigation fixtures
- * (public/fixtures/*.json, written by scripts/build_cases.py) to the workspace view model.
- * Pure functions except `useCaseFile` (lib/use-case.ts). The adapter only restates what a
- * fixture contains; it adds no facts.
+ * Case registry and the adapter from the citation-audited Investigation fixtures to the
+ * workspace view model. Pure functions except `useCaseFile`, the client hook.
+ * The adapter only restates what a fixture contains; it adds no facts.
  */
-import caseIndex from './generated/cases.json'
-import { computeFlows } from './exposure'
-import { demoCase } from './mock/case'
-import { typologyIdsForLabel } from './typologies'
 import type {
   CaseFile,
-  CaseIndexEntry,
   Edge,
   EdgeKind,
   Entity,
-  Identifier,
   Indicator,
   Investigation,
   InvestigationEdge,
@@ -23,63 +16,59 @@ import type {
   ListedStatus,
   MatchGrade,
   MatchKey,
-  Nonprofit,
   RiskSignal,
   SignalFamily,
-  TimelineEvent,
 } from './types'
+import { demoCase } from './mock/case'
+import { computeFlows } from './exposure'
 
-const REAL_CASES = caseIndex as CaseIndexEntry[]
+export const CASE_OPTIONS = [
+  { id: 'demo', label: 'Demo scenario (hypothetical)' },
+  { id: 'serniya', label: 'Serniya Engineering network (real records)' },
+  { id: 'palantir', label: 'Palantir Technologies (real records, control)' },
+] as const
 
-export const CASE_OPTIONS: { id: string; label: string; typology: string | null; kind: 'demo' | 'real' }[] = [
-  { id: 'demo', label: 'Demo scenario (hypothetical)', typology: 'Russia sanctions evasion', kind: 'demo' },
-  ...REAL_CASES.map((c) => ({ id: c.id, label: c.title, typology: /none detected/i.test(c.typology) ? 'Clean control' : c.typology, kind: 'real' as const })),
-]
+export type CaseId = (typeof CASE_OPTIONS)[number]['id']
 
-export type CaseId = string
-
-export function resolveFixtureUrl(id: CaseId) {
-  return `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/fixtures/${id}.json`
-}
-
-/** Award facts restated from a fixture's executive rationale, where it states them. */
-const AWARDS: Record<string, CaseFile['award']> = {
+/** Case-level facts restated from each fixture's investigation_summary. */
+const REAL_CASE_META: Record<Exclude<CaseId, 'demo'>, Pick<CaseFile, 'title' | 'note' | 'recipientId' | 'award' | 'awardNote'>> = {
+  serniya: {
+    title: 'Serniya Engineering network',
+    note: 'Real records from OFAC, DOJ, BIS and Companies House. No federal award was located for this network, so it is a sanctions-network case, not a traced award.',
+    recipientId: null,
+    award: null,
+    awardNote: 'No federal contract or loan record found in USAspending.gov as of 25 Sep 2026.',
+  },
   palantir: {
-    id: '427 contracts, FY2008–FY2026',
-    agency: 'Department of Defense, Department of Homeland Security, Department of Health and Human Services and 15 other agencies',
+    title: 'Palantir Technologies (control)',
+    note: 'Real records. A transparent, high-dollar federal contractor used to check that the screen does not produce false positives.',
     recipientId: 'ent_palantir',
-    obligated: 5_335_261_774.62,
-    date: null,
-    url: 'https://www.usaspending.gov/recipient/1ea8a9a4-3726-3491-9040-66950bb67606-P/all',
-    certainty: 'documented',
-    demo: false,
+    award: {
+      id: '427 contracts, FY2008–FY2026',
+      agency: 'Department of Defense, Department of Homeland Security, Department of Health and Human Services and 15 other agencies',
+      recipientId: 'ent_palantir',
+      obligated: 5_335_261_774.62,
+      url: 'https://www.usaspending.gov/recipient/1ea8a9a4-3726-3491-9040-66950bb67606-P/all',
+      demo: false,
+    },
+    awardNote: null,
   },
 }
 
-// --- countries ---------------------------------------------------------------
-
-const ISO3: Record<string, string> = { USA: 'US', GBR: 'GB', ARE: 'AE', RUS: 'RU', CHN: 'CN', ESP: 'ES', SGP: 'SG', SDN: 'SD', CAN: 'CA', HKG: 'HK', TUR: 'TR', DEU: 'DE', NLD: 'NL', KAZ: 'KZ', CAF: 'CF', PSE: 'PS', LBN: 'LB', IND: 'IN', MEX: 'MX' }
-
-export function normalizeJurisdiction(j: string | null | undefined) {
-  if (!j) return null
-  const u = j.trim().toUpperCase()
-  return ISO3[u] ?? u
+export function resolveFixtureUrl(id: Exclude<CaseId, 'demo'>) {
+  return `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/fixtures/${id}.json`
 }
 
-// --- signal and list mapping -------------------------------------------------
+// --- signal and edge mapping ------------------------------------------------
 
 const RULES: { test: RegExp; family: SignalFamily; key: string }[] = [
   { test: /removed from the OFAC SDN/i, family: 'proximity', key: 'PX1' },
-  { test: /OFAC|SDN|Specially Designated|E\.O\. \d+|designat/i, family: 'proximity', key: 'PX1' },
-  { test: /UFLPA/i, family: 'trade', key: 'TR7' },
+  { test: /OFAC SDN|SDN listing|E\.O\. 14024/i, family: 'proximity', key: 'PX1' },
   { test: /Temporary Denial Order|Entity List/i, family: 'proximity', key: 'PX1' },
-  { test: /export-related restrictions|sanction/i, family: 'proximity', key: 'PX1' },
-  { test: /registration-to-award|within days or weeks of forming/i, family: 'lifecycle', key: 'LC1' },
-  { test: /indict|defendant|plea|sentenced|convicted|charged/i, family: 'presence', key: 'PR2' },
-  { test: /Companies House|strike-off|confirmation statement|dissolv/i, family: 'lifecycle', key: 'LC' },
+  { test: /export-related restrictions/i, family: 'proximity', key: 'PX1' },
+  { test: /indict|defendant|plea|sentenced/i, family: 'presence', key: 'PR2' },
+  { test: /Companies House|strike-off|confirmation statement/i, family: 'lifecycle', key: 'LC' },
   { test: /SAM\.gov exclusion/i, family: 'public_money', key: 'PM6' },
-  { test: /sham charity|charit|nonprofit/i, family: 'nonprofit', key: 'NP1' },
-  { test: /shipment|export|import/i, family: 'trade', key: 'TR' },
   { test: /Nasdaq|NYSE|SEC-disclosed/i, family: 'presence', key: 'PR1' },
 ]
 
@@ -103,26 +92,13 @@ export function signalToIndicator(s: RiskSignal, index: number): Indicator {
   }
 }
 
-/** Which list a signal names, and whether it counts toward the score (spec 9.2). */
-function listFor(signal: string): { list: string; counted: boolean } | null {
-  if (/removed from|no .*(sdn|ofac).*found/i.test(signal)) return null
-  if (/China|countermeasure|Unreliable Entit/i.test(signal)) return { list: 'Chinese countermeasure list', counted: false }
-  if (/UFLPA/i.test(signal)) return { list: 'UFLPA Entity List', counted: true }
-  if (/Temporary Denial Order/i.test(signal)) return { list: 'BIS Temporary Denial Order', counted: true }
-  if (/Entity List/i.test(signal)) return { list: 'BIS Entity List', counted: true }
-  if (/UK sanction|UK Sanctions List|OFSI/i.test(signal)) return { list: 'UK Sanctions List', counted: true }
-  if (/\bUN\b.*sanction|Security Council/i.test(signal)) return { list: 'UN Security Council list', counted: true }
-  if (/EU sanction|EU restrictive/i.test(signal)) return { list: 'EU sanctions list', counted: true }
-  if (/OFAC|SDN|Specially Designated|E\.O\. \d+|SDGT/i.test(signal)) return { list: 'OFAC SDN List', counted: true }
-  return null
-}
-
 export function listedStatusFor(node: InvestigationNode): ListedStatus {
   const entries: ListEntry[] = []
   for (const s of node.risk_signals) {
-    const hit = listFor(s.signal_name)
-    if (!hit || entries.some((e) => e.list === hit.list)) continue
-    entries.push({ ...hit, authority: s.source_authority ?? s.provenance_source, sourceUrl: s.evidence_record, sourceId: s.source_id, date: null })
+    if (/removed from/i.test(s.signal_name)) continue
+    const base = { authority: s.source_authority ?? s.provenance_source, sourceUrl: s.evidence_record, sourceId: s.source_id, date: null }
+    if (/OFAC SDN|SDN listing/i.test(s.signal_name)) entries.push({ ...base, list: 'OFAC SDN List', counted: true })
+    else if (/Temporary Denial Order/i.test(s.signal_name)) entries.push({ ...base, list: 'BIS Temporary Denial Order', counted: true })
   }
   if (entries.length) return { kind: 'listed', entries }
   if (node.risk_signals.some((s) => /removed from the OFAC SDN/i.test(s.signal_name))) return { kind: 'not_listed', entries: [] }
@@ -152,27 +128,23 @@ const RELATIONSHIP_LABEL: Record<string, string> = {
   LINKED_TO: 'Linked to',
 }
 
-function matchKeyValue(k: MatchKey): Identifier {
+function matchKeyValue(k: MatchKey) {
   return typeof k === 'string' ? { type: 'Match key', value: k } : { type: k.key.toUpperCase(), value: k.original }
 }
-
-const PERSON_TYPES = new Set(['nominee_person', 'associated_person'])
 
 export function adaptNode(node: InvestigationNode): Entity {
   const identity = node.risk_signals.filter((s) => IDENTITY.test(s.signal_name))
   const grade = node.entity_confidence?.trim().toUpperCase()
-  const d = node.details ?? {}
-  const ids: Identifier[] = [...(d.identifiers ?? []), ...(node.sayari_pass_through?.match_keys ?? []).map(matchKeyValue)]
   return {
     id: node.id,
     name: node.label,
-    kind: d.entity_kind === 'person' || PERSON_TYPES.has(node.type) ? 'person' : 'company',
-    entityType: d.company_type ?? node.type,
-    jurisdiction: normalizeJurisdiction(node.jurisdiction),
-    incorporated: d.registration_date ?? null,
+    kind: node.type === 'nominee_person' ? 'person' : 'company',
+    entityType: node.type,
+    jurisdiction: node.jurisdiction,
+    incorporated: null,
     dissolved: null,
-    address: d.addresses?.[0] ?? null,
-    identifiers: ids.filter((x, i) => ids.findIndex((y) => y.type === x.type && y.value === x.value) === i),
+    address: null,
+    identifiers: (node.sayari_pass_through?.match_keys ?? []).map(matchKeyValue),
     listedStatus: listedStatusFor(node),
     tier: null,
     score: null,
@@ -192,13 +164,13 @@ export function adaptEdge(e: InvestigationEdge, i: number): Edge {
     source: e.source,
     target: e.target,
     kind: EDGE_KIND[e.relationship_type] ?? 'association',
-    relationship: e.label ?? RELATIONSHIP_LABEL[e.relationship_type] ?? e.relationship_type,
+    relationship: RELATIONSHIP_LABEL[e.relationship_type] ?? e.relationship_type,
     share: e.ownership_percentage,
     amount: null,
     activeFrom: null,
     activeTo: null,
-    strength: e.source_id || e.source_authority ? 'strong' : 'weak',
-    strengthFactors: [e.source_authority ? `Recorded by ${e.source_authority}` : null, e.former ? 'Former relationship' : null].filter((x): x is string => !!x),
+    strength: e.source_id ? 'strong' : 'weak',
+    strengthFactors: e.source_authority ? [`Recorded by ${e.source_authority}`] : [],
     sourceUrls: e.provenance_ref ? [e.provenance_ref] : [],
     sourceId: e.source_id,
     sourceAuthority: e.source_authority,
@@ -206,28 +178,7 @@ export function adaptEdge(e: InvestigationEdge, i: number): Edge {
   }
 }
 
-/** Nonprofits in a real case: only what the registry states; everything else unknown. */
-function nonprofitsFrom(inv: Investigation): Nonprofit[] {
-  return inv.nodes
-    .filter((n) => /nonprofit|non-profit|charit/i.test(n.details?.company_type ?? ''))
-    .map((n) => ({ entityId: n.id, statedMission: null, publicMoney: null, foreignGrants: [], programShare: null, filingYear: null, missionRegions: [], certainty: 'unknown', demo: false }))
-}
-
-function timelineFrom(inv: Investigation): TimelineEvent[] {
-  return inv.nodes
-    .filter((n) => n.details?.registration_date)
-    .map((n) => ({
-      id: `reg_${n.id}`,
-      entityId: n.id,
-      date: n.details!.registration_date!,
-      kind: 'incorporation' as const,
-      label: 'Registered',
-      certainty: 'documented' as const,
-      sourceUrl: n.details?.sayari_url ?? null,
-    }))
-}
-
-/** Hops from a root over undirected edges; null when unreachable or there is no root. */
+/** Hops from the recipient over undirected edges; null when unreachable or there is no recipient. */
 export function hopsFrom(rootId: string | null, entityIds: string[], edges: Pick<Edge, 'source' | 'target'>[]) {
   const hops: Record<string, number | null> = Object.fromEntries(entityIds.map((id) => [id, null]))
   if (!rootId || !(rootId in hops)) return hops
@@ -250,50 +201,34 @@ export function hopsFrom(rootId: string | null, entityIds: string[], edges: Pick
   return hops
 }
 
-export function adaptInvestigation(id: CaseId, inv: Investigation): CaseFile {
-  const s = inv.investigation_summary
-  // Public-money entry nodes are the explorer's way of drawing the award; the shell shows the
-  // award itself (overview, money trail), so they are not entities here.
+export function adaptInvestigation(id: Exclude<CaseId, 'demo'>, inv: Investigation): CaseFile {
+  const meta = REAL_CASE_META[id]
+  // The explorer draws the award as a "public money" node; this view shows the award in the
+  // overview instead, so that node and its links are not entities here.
   const moneyNodes = new Set(inv.nodes.filter((n) => (n.type as string) === 'public_money').map((n) => n.id))
   inv = { ...inv, nodes: inv.nodes.filter((n) => !moneyNodes.has(n.id)), edges: inv.edges.filter((e) => !moneyNodes.has(e.source) && !moneyNodes.has(e.target)) }
   const entities = inv.nodes.map(adaptNode)
-  const rootId = inv.case?.root_id && entities.some((e) => e.id === inv.case!.root_id) ? inv.case.root_id : null
-  const root = inv.nodes.find((n) => n.id === rootId)
-  const award = AWARDS[id] ?? null
-  const clean = /none detected/i.test(s.primary_typology)
+  const edges = inv.edges.map(adaptEdge)
   return withDerived({
     id,
-    title: inv.case?.title ?? REAL_CASES.find((c) => c.id === id)?.title ?? id,
     kind: 'real',
-    note: clean
-      ? 'Real records. A transparent, high-dollar federal contractor used to check that the screen does not produce false positives.'
-      : 'Real records from government and registry sources, gathered with Sayari, Tradeverifyd and Tavily. Every item links to its source.',
-    typology: clean ? null : s.primary_typology,
-    typologyIds: typologyIdsForLabel(s.primary_typology),
-    summary: s,
-    rootId,
-    recipientId: award?.recipientId ?? (root?.type === 'public_recipient' ? root.id : null),
-    award,
-    awardNote: award ? null : inv.case?.public_money ?? 'No federal award on record for this case.',
-    publicMoneyNote: inv.case?.public_money ?? null,
+    typology: /none detected/i.test(inv.investigation_summary.primary_typology) ? null : inv.investigation_summary.primary_typology,
+    summary: inv.investigation_summary,
     subawards: [],
     purchases: [],
     shipments: [],
     entities,
-    edges: inv.edges.map(adaptEdge),
-    audit: inv.audit_trail.map((a) => ({ seq: a.step, timestamp: null, provider: a.source, query: a.query_executed, recordsReturned: a.records_matched, responseHash: null, cache: null })),
+    edges,
+    audit: inv.audit_trail.map((s) => ({ seq: s.step, timestamp: null, provider: s.source, query: s.query_executed, recordsReturned: s.records_matched, responseHash: null, cache: null })),
     manifest: null,
-    sources: inv.case?.sources ?? [],
-    timeline: timelineFrom(inv),
-    nonprofits: nonprofitsFrom(inv),
-    compositeScore: s.composite_risk_score ?? null,
+    ...meta,
   })
 }
 
 /** Fill observedDollarsIn and hopsFromRecipient from the flows and edges. */
 export function withDerived(c: CaseFile): CaseFile {
   const { inflow } = computeFlows(c)
-  const hops = hopsFrom(c.recipientId ?? c.rootId, c.entities.map((e) => e.id), c.edges)
+  const hops = hopsFrom(c.recipientId, c.entities.map((e) => e.id), c.edges)
   return {
     ...c,
     entities: c.entities.map((e) => ({

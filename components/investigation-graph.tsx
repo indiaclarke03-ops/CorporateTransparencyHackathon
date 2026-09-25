@@ -24,12 +24,14 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
   const [hoverEdge, setHoverEdge] = useState<InvestigationEdge | null>(null)
   const [fontFamily, setFontFamily] = useState('sans-serif')
   const [textColor, setTextColor] = useState('#1b2a41')
+  const [haloColor, setHaloColor] = useState('#ffffff')
 
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
     setFontFamily(getComputedStyle(document.body).fontFamily)
     setTextColor(getComputedStyle(document.body).color)
+    setHaloColor(getComputedStyle(document.body).backgroundColor || '#ffffff')
     const observer = new ResizeObserver(([entry]) => {
       setSize({ width: entry.contentRect.width, height: entry.contentRect.height })
     })
@@ -41,8 +43,8 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
   useEffect(() => {
     const g = graphRef.current
     if (!g) return
-    g.d3Force('charge')?.strength(-420)
-    ;(g.d3Force('link') as unknown as { distance?: (d: number) => void } | undefined)?.distance?.(110)
+    g.d3Force('charge')?.strength(-650)
+    ;(g.d3Force('link') as unknown as { distance?: (d: number) => void } | undefined)?.distance?.(140)
     g.d3ReheatSimulation()
   }, [size.width > 0, investigation])
 
@@ -66,7 +68,7 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
           backgroundColor="rgba(0,0,0,0)"
           cooldownTicks={120}
           d3VelocityDecay={0.3}
-          onEngineStop={() => graphRef.current?.zoomToFit(400, 80)}
+          onEngineStop={() => graphRef.current?.zoomToFit(400, 40)}
           nodeRelSize={6}
           nodeLabel={(n) => n.label}
           nodeCanvasObject={(node, ctx, scale) => {
@@ -107,7 +109,7 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
               ctx.textBaseline = 'top'
               ctx.fillStyle = st.color
               ctx.fillText(st.label.toUpperCase(), x, y + R + 4)
-              ctx.fillStyle = '#f7e9d7'
+              ctx.fillStyle = textColor
               ctx.fillText(node.label.length > 44 ? node.label.slice(0, 42) + '…' : node.label, x, y + R + 4 + Math.max(13 / scale, 3.5))
               return
             }
@@ -126,8 +128,13 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
             ctx.font = `700 ${fontSize}px ${fontFamily}`
             ctx.textAlign = 'center'
             ctx.textBaseline = 'top'
+            // Light halo behind the name so link lines never cut through it.
+            const label = node.label.length > 26 ? node.label.slice(0, 24) + '…' : node.label
+            ctx.lineWidth = Math.max(3 / scale, 1)
+            ctx.strokeStyle = haloColor
+            ctx.lineJoin = 'round'
+            ctx.strokeText(label, x, y + r + 6)
             ctx.fillStyle = textColor
-            const label = node.label.length > 30 ? node.label.slice(0, 28) + '…' : node.label
             ctx.fillText(label, x, y + r + 6)
           }}
           nodePointerAreaPaint={(node, color, ctx) => {
@@ -146,22 +153,28 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
           linkDirectionalArrowRelPos={0.9}
           linkCanvasObjectMode={() => 'after'}
           linkCanvasObject={(link, ctx, scale) => {
-            // Label every link with its relationship type, so connections read without hovering.
+            // Label links when zoomed in, or the hovered / selected link, so dense networks stay readable.
             const s = link.source as GNode
             const t = link.target as GNode
-            if (typeof s !== 'object' || typeof t !== 'object' || scale < 0.6) return
+            const focused = link.edge === hoverEdge || link.edge === selectedEdge
+            if (typeof s !== 'object' || typeof t !== 'object' || (!focused && scale < 1.6)) return
             const meta = link.money_status ? MONEY_STATUS[link.money_status] : RELATIONSHIP_META[link.relationship_type]
             const text = link.shipments ? `${link.shipments} shipments` : link.ownership_percentage != null ? `${meta?.label ?? ''} ${Math.round(link.ownership_percentage)}%` : meta?.label ?? ''
             const x = ((s.x ?? 0) + (t.x ?? 0)) / 2
             const y = ((s.y ?? 0) + (t.y ?? 0)) / 2
-            const fontSize = Math.max(8 / scale, 2)
+            const fontSize = Math.max(10 / scale, 2.5)
             ctx.font = `600 ${fontSize}px ${fontFamily}`
             const w = ctx.measureText(text).width
-            ctx.fillStyle = 'rgba(34, 24, 20, 0.85)'
-            ctx.fillRect(x - w / 2 - 2, y - fontSize / 2 - 1, w + 4, fontSize + 2)
+            ctx.fillStyle = haloColor
+            ctx.strokeStyle = meta?.color ?? '#c9ad93'
+            ctx.lineWidth = Math.max(1 / scale, 0.4)
+            ctx.beginPath()
+            ctx.roundRect(x - w / 2 - 3, y - fontSize / 2 - 2, w + 6, fontSize + 4, 2)
+            ctx.fill()
+            ctx.stroke()
             ctx.textAlign = 'center'
             ctx.textBaseline = 'middle'
-            ctx.fillStyle = meta?.color ?? '#c9ad93'
+            ctx.fillStyle = textColor
             ctx.fillText(text, x, y)
           }}
           linkHoverPrecision={8}
@@ -170,6 +183,10 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
           onLinkHover={(l) => setHoverEdge(l ? l.edge : null)}
         />
       )}
+
+      <p className="pointer-events-none absolute right-3 top-3 rounded-md bg-background/90 px-2 py-1 text-xs text-muted-foreground">
+        Scroll to zoom · hover a link to name it · click for details
+      </p>
 
       {hoverEdge && (
         <div className="pointer-events-none absolute left-4 top-4 max-w-xs rounded-2xl border border-border bg-background/95 p-3 text-xs shadow-lg">

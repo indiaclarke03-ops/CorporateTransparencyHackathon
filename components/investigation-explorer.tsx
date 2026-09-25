@@ -142,6 +142,8 @@ export function InvestigationExplorer() {
 
       {data && <SummaryBar summary={data.investigation_summary} caseMeta={data.case} />}
 
+      {data?.case?.insights && <CaseInsightsPanel insights={data.case.insights} typology={data.investigation_summary.primary_typology} />}
+
       <main className="flex flex-1 flex-col gap-4 lg:flex-row">
         <section
           aria-label="Investigation graph"
@@ -160,7 +162,7 @@ export function InvestigationExplorer() {
               nodeLabel={nodeLabel}
             />
           )}
-          <GraphLegend />
+          <GraphLegend investigation={data} />
         </section>
 
         <aside
@@ -184,7 +186,6 @@ export function InvestigationExplorer() {
         </aside>
       </main>
 
-      {data?.case?.insights && <CaseInsightsPanel insights={data.case.insights} typology={data.investigation_summary.primary_typology} />}
 
       {data && <AuditDrawer open={auditOpen} onClose={() => setAuditOpen(false)} steps={data.audit_trail} />}
     </div>

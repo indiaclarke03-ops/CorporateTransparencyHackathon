@@ -32,9 +32,9 @@ export function SummaryBar({ summary, caseMeta }: { summary: InvestigationSummar
           </h2>
           <span className="rounded-full bg-muted px-3 py-1 text-xs font-bold text-accent">{summary.primary_typology}</span>
         </div>
-        <details className="group rounded-2xl bg-muted px-4 py-2" open>
+        <details className="group rounded-2xl bg-muted px-4 py-2">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-sm font-semibold">
-            Executive rationale
+            Executive rationale (full text)
             <ChevronDown className="size-4 transition group-open:rotate-180" aria-hidden="true" />
           </summary>
           <p className="pt-2 text-sm leading-relaxed text-muted-foreground text-pretty"><Inline text={summary.executive_rationale} /></p>

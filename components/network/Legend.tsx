@@ -4,7 +4,7 @@ import { EDGE_KIND_META } from '@/lib/copy'
 import { EDGE_KINDS } from '@/lib/graph'
 import { EDGE_STYLE } from './edge-style'
 
-export function Legend() {
+export function Legend({ kinds = EDGE_KINDS }: { kinds?: typeof EDGE_KINDS }) {
   return (
     <div className="flex flex-col gap-3 text-xs" aria-label="Graph legend">
       <div className="flex flex-col gap-1.5">
@@ -38,8 +38,9 @@ export function Legend() {
       </div>
       <div className="flex flex-col gap-1.5">
         <h3 className="font-semibold">Connections</h3>
+        {kinds.length === 0 && <p className="text-muted-foreground">No connections are recorded for this case.</p>}
         <ul className="flex flex-col gap-1">
-          {EDGE_KINDS.map((k) => {
+          {kinds.map((k) => {
             const s = EDGE_STYLE[k]
             return (
               <li key={k} className="flex items-center gap-2">

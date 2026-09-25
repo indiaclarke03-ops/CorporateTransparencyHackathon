@@ -8,10 +8,11 @@ describe('adaptInvestigation', () => {
   const s = adaptInvestigation('serniya', serniya as unknown as Investigation)
   const p = adaptInvestigation('palantir', palantir as unknown as Investigation)
 
-  it('keeps every node and edge from the fixture', () => {
+  it('keeps every node and edge from the fixture, except the public-money entry node', () => {
     const money = new Set(serniya.nodes.filter((n) => n.type === 'public_money').map((n) => n.id))
     expect(s.entities).toHaveLength(serniya.nodes.length - money.size)
     expect(s.edges).toHaveLength(serniya.edges.filter((e) => !money.has(e.source) && !money.has(e.target)).length)
+    expect(p.entities.some((e) => e.id === 'public-money')).toBe(false)
   })
 
   it('adds no award or scores to a real case', () => {

@@ -39,9 +39,9 @@ export interface ExposureSummary {
 
 /**
  * Attributable inflow per entity. A payer can never pass on more, in total, than it received:
- * payments are taken in date order and each is capped at what the payer still has. Iterates
- * to a fixed point so payers with several sources are settled with their full inflow.
- * Flows that never connect to the award (or only circulate in a cycle) are left out.
+ * payments are taken in date order and each is capped at what the payer still has. Iterates to a
+ * fixed point so payers with several sources are settled with their full inflow. Flows that never
+ * connect to the award (or only circulate in a cycle) are left out: they are not public money.
  */
 export function computeFlows(c: Pick<CaseFile, 'award' | 'recipientId' | 'subawards' | 'purchases'>): { flows: Flow[]; inflow: Record<string, number> } {
   const all = [
@@ -59,8 +59,7 @@ export function computeFlows(c: Pick<CaseFile, 'award' | 'recipientId' | 'subawa
     flows = []
     for (const f of all) {
       if (!(f.payerId in inflow)) continue
-      const available = Math.max(0, inflow[f.payerId] - (spent[f.payerId] ?? 0))
-      const attributable = Math.min(f.amount, available)
+      const attributable = Math.min(f.amount, Math.max(0, inflow[f.payerId] - (spent[f.payerId] ?? 0)))
       spent[f.payerId] = (spent[f.payerId] ?? 0) + attributable
       next[f.payeeId] = (next[f.payeeId] ?? 0) + attributable
       flows.push({ id: f.id, payerId: f.payerId, payeeId: f.payeeId, amount: f.amount, kind: f.kind, attributable, capped: attributable < f.amount })
@@ -69,7 +68,7 @@ export function computeFlows(c: Pick<CaseFile, 'award' | 'recipientId' | 'subawa
     inflow = next
     if (stable) break
   }
-  return { flows: flows.filter((f) => f.attributable > 0 || !f.capped), inflow }
+  return { flows, inflow }
 }
 
 function weights(e: Entity | undefined): { point: number | null; lower: number; upper: number } {

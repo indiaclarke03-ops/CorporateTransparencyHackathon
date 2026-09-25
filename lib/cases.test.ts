@@ -9,8 +9,9 @@ describe('adaptInvestigation', () => {
   const p = adaptInvestigation('palantir', palantir as unknown as Investigation)
 
   it('keeps every node and edge from the fixture', () => {
-    expect(s.entities).toHaveLength(serniya.nodes.length)
-    expect(s.edges).toHaveLength(serniya.edges.length)
+    const money = new Set(serniya.nodes.filter((n) => n.type === 'public_money').map((n) => n.id))
+    expect(s.entities).toHaveLength(serniya.nodes.length - money.size)
+    expect(s.edges).toHaveLength(serniya.edges.filter((e) => !money.has(e.source) && !money.has(e.target)).length)
   })
 
   it('adds no award or scores to a real case', () => {
@@ -26,7 +27,7 @@ describe('adaptInvestigation', () => {
   })
 
   it('treats the Palantir UEI match as identity evidence, not a risk signal', () => {
-    const e = p.entities[0]
+    const e = p.entities.find((x) => x.id === 'ent_palantir')!
     expect(e.matchGrade).toBe('B')
     expect(e.matchedAttributes).toContain('UEI')
     expect(e.indicators.some((i) => /UEI/.test(i.label))).toBe(false)

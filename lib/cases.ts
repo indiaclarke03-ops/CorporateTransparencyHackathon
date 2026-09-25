@@ -252,6 +252,10 @@ export function hopsFrom(rootId: string | null, entityIds: string[], edges: Pick
 
 export function adaptInvestigation(id: CaseId, inv: Investigation): CaseFile {
   const s = inv.investigation_summary
+  // Public-money entry nodes are the explorer's way of drawing the award; the shell shows the
+  // award itself (overview, money trail), so they are not entities here.
+  const moneyNodes = new Set(inv.nodes.filter((n) => (n.type as string) === 'public_money').map((n) => n.id))
+  inv = { ...inv, nodes: inv.nodes.filter((n) => !moneyNodes.has(n.id)), edges: inv.edges.filter((e) => !moneyNodes.has(e.source) && !moneyNodes.has(e.target)) }
   const entities = inv.nodes.map(adaptNode)
   const rootId = inv.case?.root_id && entities.some((e) => e.id === inv.case!.root_id) ? inv.case.root_id : null
   const root = inv.nodes.find((n) => n.id === rootId)

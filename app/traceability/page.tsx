@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowLeft, Leaf } from 'lucide-react'
+import { ArrowLeft, Landmark } from 'lucide-react'
 import { showcase } from '@/lib/showcase'
 import { Backlog } from '@/components/traceability/backlog'
 import { CitationAudit } from '@/components/traceability/citation-audit'
@@ -36,7 +36,7 @@ export default function TraceabilityPage() {
     <div className="mx-auto flex max-w-6xl min-w-0 flex-col gap-5 overflow-x-clip p-4 md:p-6">
       <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-3">
-          <span className="flex size-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground"><Leaf className="leaf-sway size-6" aria-hidden="true" /></span>
+          <span className="flex size-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground"><Landmark className="size-6" aria-hidden="true" /></span>
           <div>
             <p className="font-heading text-2xl font-semibold">Follow the Public Dollar</p>
             <p className="text-sm text-muted-foreground">Traceability: how every fact gets back to its source</p>

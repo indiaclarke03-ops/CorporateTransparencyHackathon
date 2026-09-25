@@ -23,11 +23,13 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
   const [size, setSize] = useState({ width: 0, height: 0 })
   const [hoverEdge, setHoverEdge] = useState<InvestigationEdge | null>(null)
   const [fontFamily, setFontFamily] = useState('sans-serif')
+  const [textColor, setTextColor] = useState('#1b2a41')
 
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
     setFontFamily(getComputedStyle(document.body).fontFamily)
+    setTextColor(getComputedStyle(document.body).color)
     const observer = new ResizeObserver(([entry]) => {
       setSize({ width: entry.contentRect.width, height: entry.contentRect.height })
     })
@@ -124,7 +126,7 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
             ctx.font = `700 ${fontSize}px ${fontFamily}`
             ctx.textAlign = 'center'
             ctx.textBaseline = 'top'
-            ctx.fillStyle = '#f7e9d7'
+            ctx.fillStyle = textColor
             const label = node.label.length > 30 ? node.label.slice(0, 28) + '…' : node.label
             ctx.fillText(label, x, y + r + 6)
           }}

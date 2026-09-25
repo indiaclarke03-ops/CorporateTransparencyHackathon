@@ -22,7 +22,7 @@ export function Pill({ children, tone = 'muted', className }: { children: ReactN
     muted: 'bg-muted text-muted-foreground',
     good: 'bg-sev-low text-accent-foreground',
     warn: 'bg-sev-medium text-accent-foreground',
-    bad: 'bg-sev-critical text-foreground',
+    bad: 'bg-sev-critical text-on-color',
     accent: 'bg-accent text-accent-foreground',
   }
   return <span className={cn('inline-flex w-fit items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-bold', tones[tone], className)}>{children}</span>

@@ -1,62 +1,133 @@
 @import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
 
+/* Dark mode follows the operating system setting. */
+@custom-variant dark (@media (prefers-color-scheme: dark));
+
+/*
+ * Design tokens from docs/follow-the-public-dollar-spec.md section 10.2.
+ * Color is reserved for meaning: ledger = public money and primary actions,
+ * elevated / high = risk tiers, unconfirmed = "possibly same as" and not assessable.
+ * Semantic names (background, card, muted, accent, sev-*) are kept so existing
+ * components, including the traceability page, pick up the palette.
+ */
 :root {
-  --background: #221814;
-  --foreground: #f7e9d7;
-  --card: #2f221c;
-  --card-foreground: #f7e9d7;
-  --muted: #3a2a22;
-  --muted-foreground: #c9ad93;
-  --primary: #e8772e;
-  --primary-foreground: #221814;
-  --accent: #f2b544;
-  --accent-foreground: #221814;
-  --border: #4a352b;
-  --ring: #f2b544;
-  --sev-critical: #d64545;
-  --sev-high: #e8772e;
-  --sev-medium: #f2b544;
-  --sev-low: #8fa35a;
-  --radius: 1.25rem;
+  --ink: #1b2a41;
+  --slate: #51607a;
+  --paper: #ffffff;
+  --rule: #d5dbe3;
+  --ledger: #1e5b4f;
+  --elevated: #9a6a12;
+  --high: #8e2a2a;
+  --unconfirmed: #6b6f76;
+  --surface: #f8fafc;
+  --on-color: #ffffff;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--paper);
+  --card-foreground: var(--ink);
+  --popover: var(--paper);
+  --popover-foreground: var(--ink);
+  --muted: var(--surface);
+  --muted-foreground: var(--slate);
+  --primary: var(--ledger);
+  --primary-foreground: var(--on-color);
+  --secondary: var(--surface);
+  --secondary-foreground: var(--ink);
+  --accent: var(--ledger);
+  --accent-foreground: var(--on-color);
+  --destructive: var(--high);
+  --border: var(--rule);
+  --input: var(--rule);
+  --ring: var(--ledger);
+
+  --tier-high: var(--high);
+  --tier-elevated: var(--elevated);
+  --tier-low: var(--slate);
+  --tier-na: var(--unconfirmed);
+
+  --sev-critical: var(--high);
+  --sev-high: var(--elevated);
+  --sev-medium: var(--slate);
+  --sev-low: var(--ledger);
+
+  --radius: 0.375rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #e6ebf2;
+    --slate: #a7b3c5;
+    --paper: #0f1724;
+    --rule: #2c3a52;
+    --ledger: #5fb3a0;
+    --elevated: #deaa47;
+    --high: #ee8a8a;
+    --unconfirmed: #a2a7ae;
+    --surface: #182234;
+    --on-color: #0f1724;
+  }
 }
 
 @theme inline {
+  --color-ink: var(--ink);
+  --color-slate: var(--slate);
+  --color-paper: var(--paper);
+  --color-rule: var(--rule);
+  --color-ledger: var(--ledger);
+  --color-elevated: var(--elevated);
+  --color-high: var(--high);
+  --color-unconfirmed: var(--unconfirmed);
+  --color-surface: var(--surface);
+  --color-on-color: var(--on-color);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
   --color-border: var(--border);
+  --color-input: var(--input);
   --color-ring: var(--ring);
+
+  --color-tier-high: var(--tier-high);
+  --color-tier-elevated: var(--tier-elevated);
+  --color-tier-low: var(--tier-low);
+  --color-tier-na: var(--tier-na);
+
   --color-sev-critical: var(--sev-critical);
   --color-sev-high: var(--sev-high);
   --color-sev-medium: var(--sev-medium);
   --color-sev-low: var(--sev-low);
-  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-fredoka), ui-rounded, system-ui, sans-serif;
-  --radius-lg: var(--radius);
+
+  --font-sans: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
+
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-}
-
-@keyframes leaf-sway {
-  0%, 100% { transform: rotate(-8deg); }
-  50% { transform: rotate(10deg); }
-}
-
-.leaf-sway {
-  animation: leaf-sway 3.2s ease-in-out infinite;
-  transform-origin: 50% 90%;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .leaf-sway { animation: none; }
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-variant-numeric: tabular-nums;
+  }
 }

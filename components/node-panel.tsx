@@ -58,7 +58,7 @@ export function NodePanel({ node, onClose }: { node: InvestigationNode; onClose:
       <section className="flex flex-col gap-2">
         <h3 className="font-heading text-sm font-semibold">Risk signals ({node.risk_signals.length})</h3>
         {node.risk_signals.length === 0 ? (
-          <p className="rounded-2xl bg-muted p-3 text-sm text-muted-foreground">No risk signals. Clear skies here.</p>
+          <p className="rounded-2xl bg-muted p-3 text-sm text-muted-foreground">No risk signals in the record.</p>
         ) : (
           <ul className="flex flex-col gap-2">
             {node.risk_signals.map((s, i) => (

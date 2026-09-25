@@ -1,0 +1,18 @@
+# Local services (spec §4.1, build plan M0). Only the database for now.
+# Untested: Docker is not installed on the machine that wrote this (backlog B33).
+#   docker compose up -d db
+#   export DATABASE_URL=postgresql://pfd:pfd@localhost:5432/pfd
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: pfd
+      POSTGRES_PASSWORD: pfd          # local development only
+      POSTGRES_DB: pfd
+    ports:
+      - "5432:5432"
+    volumes:
+      - pfd-db:/var/lib/postgresql/data
+      - ./apps/api/storage/schema.sql:/docker-entrypoint-initdb.d/001_schema.sql:ro
+volumes:
+  pfd-db:

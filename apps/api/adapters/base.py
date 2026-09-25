@@ -23,7 +23,14 @@ from apps.api.core.runstate import RunState
 
 
 class SourceUnavailable(Exception):
-    """The source could not supply this record. The message is stored as the null reason."""
+    """The source could not supply this record. The message is stored as the null reason.
+
+    `record_id` is set when the error response itself was stored (e.g. HTTP 4xx/5xx), so the
+    resulting null row still points at a source record."""
+
+    def __init__(self, message, record_id=None):
+        super().__init__(message)
+        self.record_id = record_id
 
 
 def replay_mode() -> bool:
@@ -86,7 +93,8 @@ class Adapter:
         self.store.save(rec)                          # stored before anyone parses it
         self.state.charge(self.budget_name, key, rec.id)
         if status is None or status >= 400:
-            raise SourceUnavailable("source unavailable: %s HTTP %s at %s" % (self.source_name, status, rec.retrieved_at))
+            raise SourceUnavailable("source unavailable: %s HTTP %s at %s" % (self.source_name, status, rec.retrieved_at),
+                                    record_id=rec.id)
         return rec
 
     # ---- transport helpers ------------------------------------------------------------

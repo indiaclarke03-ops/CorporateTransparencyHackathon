@@ -44,6 +44,11 @@ def excluded_ueis(ctx):
 class SeedAwardsJob(DatasetJob):
     name = "seed_awards"
 
+    def blocked(self, ctx):
+        if ctx.seed_source == "fixtures":
+            return "not used: seeds come from config/datasets.yaml replay_seeds (spec appendix A), not a USAspending draw"
+        return None
+
     def plan(self, ctx):
         calls = []
         seed = ctx.config["seed"]

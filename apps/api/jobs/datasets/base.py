@@ -85,6 +85,12 @@ class Context:
             return None
         return [json.loads(l) for l in p.read_text(encoding="utf-8").splitlines() if l.strip()]
 
+    def rows_partial(self, dataset: str) -> Optional[List[Dict[str, Any]]]:
+        p = self.out_dir(dataset) / "rows.partial.jsonl"
+        if not p.exists():
+            return None
+        return [json.loads(l) for l in p.read_text(encoding="utf-8").splitlines() if l.strip()]
+
     # ---- seeds -------------------------------------------------------------------------
     def seeds(self) -> Tuple[List[Dict[str, Any]], bool]:
         """(seeds, is_placeholder). Placeholders are only returned in a dry run."""
@@ -100,12 +106,13 @@ class Context:
         raise SourceUnavailable("seed_awards has not been built for run %s" % self.run_id)
 
     def seed_entities(self) -> Tuple[List[Dict[str, Any]], bool]:
-        """Seeds resolved to a Sayari entity (from the `entities` dataset)."""
-        if self.seed_source == "fixtures":
-            return [s for s in self.config.get("replay_seeds", []) if s.get("sayari_id")], False
+        """Seeds resolved to a Sayari entity: the `entities` rows once built (they carry addresses
+        and risk flags), otherwise the replay seeds' own Sayari IDs in fixture mode."""
         rows = self.rows("entities")
         if rows:
             return [r for r in rows if r.get("is_seed") and r.get("sayari_id")], False
+        if self.seed_source == "fixtures":
+            return [s for s in self.config.get("replay_seeds", []) if s.get("sayari_id")], False
         if self.dry_run:
             seeds, _ = self.seeds()
             return [dict(s, sayari_id="<sayari id %d>" % (i + 1), addresses=["<address %d>" % (i + 1)],
@@ -186,6 +193,7 @@ def run(job: DatasetJob, ctx: Context) -> Dict[str, Any]:
         (out / "run_summary.json").write_text(json.dumps(summary, indent=1))
         return summary
     status, stop_reason = "complete", None
+    failures: List[Dict[str, str]] = []
     while queue:
         call = queue.pop(0)
         try:
@@ -197,7 +205,13 @@ def run(job: DatasetJob, ctx: Context) -> Dict[str, Any]:
             queue.extend(followups)
         except SourceUnavailable as e:
             ctx.state.fail(call.source, call.operation, json.dumps(call.params, sort_keys=True)[:300], str(e))
-            rows.extend(job.handle_missing(ctx, call, str(e)))
+            failures.append({"source": call.source, "operation": call.operation, "reason": str(e)})
+            missing = job.handle_missing(ctx, call, str(e))
+            if getattr(e, "record_id", None):
+                for r in missing:
+                    r["source_record_id"] = e.record_id
+                    r.get("null_reasons", {}).pop("source_record_id", None)
+            rows.extend(missing)
         except BudgetExceeded as e:
             status, stop_reason = "stopped", str(e)
             break
@@ -216,6 +230,7 @@ def run(job: DatasetJob, ctx: Context) -> Dict[str, Any]:
     summary = {"dataset": job.name, "run_id": ctx.run_id, "status": status, "stop_reason": stop_reason,
                "replay_mode": ctx.replay, "rows": len(rows), "calls_made_this_invocation": made,
                "rows_with_nulls": sum(1 for r in rows if r.get("null_reasons")),
+               "failures": failures,
                "resume_with": ("python -m apps.api.jobs.datasets build %s --run-id %s" % (job.name, ctx.run_id)
                                if status == "stopped" else None)}
     (out / "run_summary.json").write_text(json.dumps(summary, indent=1))

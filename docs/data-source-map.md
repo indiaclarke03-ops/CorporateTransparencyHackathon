@@ -261,6 +261,8 @@ Every capability of the Sayari connector used in the pilot, with its REST equiva
 
 ## Backlog items raised by this map
 
+This table is the project backlog: anything not essential right now is parked here to revisit in the next iteration. **Last updated: 25 September 2026** (after Tasks 2c–2f step 1). Status values: *Open*, *New*, *Resolved*, *Partly resolved*, *Later* (deliberately deferred), and **Decision needed** (the team must choose before work continues).
+
 | ID | Item | Status (25 Sep 2026) |
 |---|---|---|
 | B1 | Obtain Tradeverifyd API docs: auth method, rate limits, score method, annotation categories, licensing, sample responses | **Mostly resolved** 25 Sep 2026. Tradeverifyd has no REST API; the MCP tool reference is in `docs/vendor/tradeverifyd/` and was checked against the live server (47 tools, matching the doc except the admin-only `tia_invite_member`). Sample responses recorded for 6 tools. Still open: rate limits and quotas; licensing; the Tradeverifyd Score scale (AZ Gold scored **258**, level "High", version 1.0.0, so it is not a 0–100 scale); annotation detail access (`annotations:read` scope) |
@@ -275,12 +277,12 @@ Every capability of the Sayari connector used in the pilot, with its REST equiva
 | B10 | Sayari rate limits and pagination limits: `429` is documented, the limits are not (spec §5.1 [VERIFY]) | New |
 | B11 | PM5 needs the identities of competing bidders. USAspending publishes only `number_of_offers_received`. Redefine PM5 (e.g. shared principals among recipients in the same NAICS and agency) or mark it not assessable | New |
 | B12 | `docs/tracing_methodology.md` and `schema/investigation_schema.json` used Sayari fields `edge_counts` and `label_en` and an address-entity node | **Resolved** 25 Sep 2026: replaced with `relationship_count`, `translated_label` and `id`; `match_keys` typed as `{key, normalized, original}`; address counts computed by the application. Still open: which `fields` value in `/v1/search/entity` searches addresses (B21) |
-| B13 | Federal Register API documentation page blocks automated download. Save it manually into `docs/vendor/federal_register/` | New |
+| B13 | Federal Register API documentation page blocks automated download. Save it manually into `docs/vendor/federal_register/`. Until then only `conditions[agencies][]` and `per_page` are used, and only the BIS agency slug (`industry-and-security-bureau`) is confirmed; OFAC and other agency slugs, date filters and paging must be confirmed from the docs | Open |
 | B14 | How Sayari exposes PPP, SBA and USAspending record values (amount, lender, date, award ID) on an entity. Record a fixture response | New |
 | B15 | Tavily returns no publisher field, and `published_date` is an estimate. Spec §5.3 and §8.2 ("publisher, title, date") need a domain-to-publisher rule and a "date as estimated by Tavily" label | New |
 | B16 | Companies House API base URL, auth header and free key registration | New |
 | B17 | OpenSanctions API docs and licence terms for this use | New |
-| B18 | Re-record the 17 Appendix A fixtures through the Sayari REST API (`/v1/entity`, `/v1/entity_summary`), plus watchlist runs with `psa=false` and `psa=true`, once credentials are issued. The connector recordings in `fixtures/recorded/sayari/` have a different response shape | New |
+| B18 | Re-record the 17 Appendix A fixtures through the Sayari REST API (`/v1/entity`, `/v1/entity_summary`), plus watchlist runs with `psa=false` and `psa=true`, once credentials are issued. The connector recordings in `fixtures/recorded/sayari/` have a different response shape. Also confirm the `possibly_same_as` match-key vocabulary, which `entity_members` needs before it can grade PSA members | Open (Tradeverifyd recordings done 25 Sep; Sayari REST blocked on B25) |
 | B19 | Calibrate the combined-score weights (0.45 / 0.35 / 0.20) and per-category points (spec §9.4, §12.4) on the backtest and false-positive sets | New |
 | B20 | Sayari's `get_investigation_guidance` connector tool has no REST equivalent. Ask Sayari whether the guidance is available through the API; if not, the app does without it | New |
 | B21 | Confirm the `fields` value for address search in Sayari `GET /v1/search/entity` (needed to count companies at one address, LO1) | New |
@@ -295,3 +297,17 @@ Every capability of the Sayari connector used in the pilot, with its REST equiva
 | B30 | Verify HS code lists for spec §9.1 TR6 (fentanyl precursors, against DEA and FinCEN sources) and TR7 (gallium and germanium). `config/typologies.yaml` leaves them empty until then, so TR6 and the gallium and germanium part of TR7 cannot fire | New |
 | B31 | Confirm which UAE-based companies Treasury press release JY2772 (`research/sources.json` S36) names, for the Sudan and UAE validation set in spec §9.5 | New |
 | B32 | Identify the IRS 990 fields that carry foreign grants and transfers (likely Schedule F), for spec §9.1 NP2. Check they are exposed by ProPublica Nonprofit Explorer | New |
+| B33 | PostgreSQL is not installed on the build machine, and Docker is not either. The loader (`apps/api/storage/db.py`) is tested on SQLite only, and `docker-compose.yml` is untested. Run `docker compose up -d db`, set `DATABASE_URL`, and load a run | Later |
+| B34 | Typed tables for datasets without a spec §6 table (seed_awards, award_competition, subawards, listed_party_paths, web_presence, official_list_entries, spending_trends, reference_lists, tradeverifyd_*, address_clusters, false_positive_sample). They are stored in `dataset_rows` as JSON for now | Later |
+| B35 | The CHPL parser finds 52 HS codes on the saved BIS page, which says 50. Check which two are extra (probably codes mentioned outside the tier tables) | Later |
+| B36 | The frontend's `public/fixtures/serniya.json` (PR #2) still uses `edge_counts`. Align it with the backend's `relationship_count` together with whoever owns the frontend | New |
+| B37 | Runtime: spec §4.1 says Python 3.12, but the build machine's usable Python is 3.9 (Xcode licence not accepted), so the code is kept 3.9-compatible and packages are installed with `pip --user` (`requirements.txt`). Move to a 3.12 virtual environment when available | Later |
+| B38 | Tradeverifyd candidate matching (`tradeverifyd_annotations`) uses name-or-alias word overlap of at least 0.8 plus country. Provisional: calibrate on Appendix A together with B28 | Later |
+| B39 | `web_presence` classifies results with a small provisional domain list. Spec §8.2 expects `config/news_topics.yaml` with typology keyword rules; news queries currently sit in `config/datasets.yaml` `news`. Move them and define the rules | Later |
+| B40 | Seeds whose Sayari candidates don't share the seed's UEI stay unresolved (all PPP seeds, because PPP rows carry no UEI). Spec §7.2 needs an analyst selection step before those seeds can get Sayari datasets | Later (needed before the live pilot covers pandemic seeds) |
+| B41 | SAM.gov Entity API and Exclusions responses have not been recorded yet, so `entity_identifiers` stores only the UEI queried. Record one of each (needs a SAM key; B22) | Open |
+| B42 | **The GitHub repository is public**, and `fixtures/recorded/` contains raw Sayari and Tradeverifyd responses whose licence is unconfirmed (spec §2.10). Options: make the repo private; or move the recordings to a git-ignored path and remove them from Git history; or confirm with the vendors that test fixtures may be published | **Decision needed** |
+| B43 | In USAspending subaward mode, which party `recipient_search_text` matches is unconfirmed. `subawards` keeps only rows whose `Prime Award Recipient UEI` equals the seed UEI | Later |
+| B44 | The CSL JSON download's envelope is unconfirmed (the parser accepts a list or a `results` list). Record one live download | Later |
+| B45 | Parquet exports store nested values (lists, objects) as JSON text so the schema stays stable. Decide on typed nested columns once the downstream readers are known | Later |
+| B46 | Credentials for the live pilot (Task 2f steps 2–3): Sayari REST (B25), `SAM_API_KEY`, `TAVILY_API_KEY`, and the Tradeverifyd variables in `.env.example`. None are set in the build environment | Open (needed for 2f step 2) |

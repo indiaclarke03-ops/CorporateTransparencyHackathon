@@ -27,7 +27,17 @@ def main(argv=None):
     b.add_argument("--seed-source", choices=["awards", "fixtures"], default="awards",
                    help="'fixtures' uses config/datasets.yaml replay_seeds (spec appendix A)")
     b.add_argument("--json", action="store_true", help="print full dry-run plan as JSON")
+    b.add_argument("--no-export", action="store_true", help="skip Parquet/manifest export and database load")
+    q = sub.add_parser("quality", help="write docs/datasets-quality/<run_id>.md")
+    q.add_argument("--run-id", required=True)
+    q.add_argument("--seed-source", choices=["awards", "fixtures"], default="awards")
     args = ap.parse_args(argv)
+
+    if args.cmd == "quality":
+        from apps.api.storage.quality import write_report
+        ctx = Context(args.run_id, seed_source=args.seed_source)
+        print(write_report(ctx, BUILD_ORDER))
+        return 0
 
     if args.cmd == "list":
         for name in BUILD_ORDER:
@@ -74,6 +84,10 @@ def main(argv=None):
     code = 0
     for name in names:
         summary = run(JOBS[name], ctx)
+        if not args.no_export and summary["status"] == "complete":
+            from apps.api.storage.export import export_run
+            m = export_run(ctx, name)
+            summary["export"] = {"parquet": m["parquet"], "postgres": m["postgres"]}
         print(json.dumps(summary, default=str))
         if summary["status"] == "stopped":
             return 2

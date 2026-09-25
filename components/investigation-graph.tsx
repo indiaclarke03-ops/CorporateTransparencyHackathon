@@ -1,0 +1,128 @@
+'use client'
+
+import { useEffect, useMemo, useRef, useState } from 'react'
+import ForceGraph2D, { type ForceGraphMethods, type LinkObject, type NodeObject } from 'react-force-graph-2d'
+import type { Investigation, InvestigationEdge, InvestigationNode } from '@/lib/types'
+import { NODE_TYPE_META, RELATIONSHIP_META, SEVERITY_COLOR, maxSeverity, severityRank } from '@/lib/graph-style'
+
+type GNode = NodeObject<InvestigationNode>
+type GLink = LinkObject<InvestigationNode, InvestigationEdge & { edge: InvestigationEdge }>
+
+interface Props {
+  investigation: Investigation
+  selectedNodeId: string | null
+  selectedEdge: InvestigationEdge | null
+  onNodeSelect: (id: string) => void
+  onEdgeSelect: (edge: InvestigationEdge) => void
+  nodeLabel: (id: string) => string
+}
+
+export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge, onNodeSelect, onEdgeSelect, nodeLabel }: Props) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const graphRef = useRef<ForceGraphMethods<GNode, GLink> | undefined>(undefined)
+  const [size, setSize] = useState({ width: 0, height: 0 })
+  const [hoverEdge, setHoverEdge] = useState<InvestigationEdge | null>(null)
+  const [fontFamily, setFontFamily] = useState('sans-serif')
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    setFontFamily(getComputedStyle(document.body).fontFamily)
+    const observer = new ResizeObserver(([entry]) => {
+      setSize({ width: entry.contentRect.width, height: entry.contentRect.height })
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  const graphData = useMemo(
+    () => ({
+      nodes: investigation.nodes.map((n) => ({ ...n })) as GNode[],
+      links: investigation.edges.map((e) => ({ ...e, edge: e })) as GLink[],
+    }),
+    [investigation],
+  )
+
+  return (
+    <div ref={containerRef} className="relative flex-1">
+      {size.width > 0 && (
+        <ForceGraph2D<InvestigationNode, InvestigationEdge & { edge: InvestigationEdge }>
+          ref={graphRef}
+          width={size.width}
+          height={size.height}
+          graphData={graphData}
+          backgroundColor="rgba(0,0,0,0)"
+          cooldownTicks={80}
+          onEngineStop={() => graphRef.current?.zoomToFit(400, 80)}
+          nodeRelSize={6}
+          nodeLabel={(n) => n.label}
+          nodeCanvasObject={(node, ctx, scale) => {
+            const sev = maxSeverity(node)
+            const sanctioned = node.type === 'sanctioned_entity' || node.sayari_pass_through?.sanctioned === true
+            const r = 7 + severityRank(sev) * 1.5
+            const x = node.x ?? 0
+            const y = node.y ?? 0
+
+            if (node.id === selectedNodeId) {
+              ctx.beginPath()
+              ctx.arc(x, y, r + 8, 0, Math.PI * 2)
+              ctx.fillStyle = 'rgba(242, 181, 68, 0.25)'
+              ctx.fill()
+            }
+            if (sanctioned) {
+              ctx.beginPath()
+              ctx.arc(x, y, r + 4, 0, Math.PI * 2)
+              ctx.strokeStyle = SEVERITY_COLOR.CRITICAL
+              ctx.lineWidth = 2.5
+              ctx.stroke()
+            }
+
+            ctx.beginPath()
+            ctx.arc(x, y, r, 0, Math.PI * 2)
+            ctx.fillStyle = NODE_TYPE_META[node.type]?.color ?? '#c9ad93'
+            ctx.fill()
+            if (sev) {
+              ctx.strokeStyle = SEVERITY_COLOR[sev]
+              ctx.lineWidth = 2
+              ctx.stroke()
+            }
+
+            const fontSize = Math.max(11 / scale, 3)
+            ctx.font = `700 ${fontSize}px ${fontFamily}`
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'top'
+            ctx.fillStyle = '#f7e9d7'
+            ctx.fillText(node.label, x, y + r + 6)
+          }}
+          nodePointerAreaPaint={(node, color, ctx) => {
+            ctx.beginPath()
+            ctx.arc(node.x ?? 0, node.y ?? 0, 14, 0, Math.PI * 2)
+            ctx.fillStyle = color
+            ctx.fill()
+          }}
+          linkColor={(l) => RELATIONSHIP_META[l.relationship_type]?.color ?? '#c9ad93'}
+          linkWidth={(l) => (l.edge === selectedEdge || l.edge === hoverEdge ? 4 : 2)}
+          linkLineDash={(l) => (RELATIONSHIP_META[l.relationship_type]?.dashed ? [4, 3] : null)}
+          linkDirectionalArrowLength={5}
+          linkDirectionalArrowRelPos={0.85}
+          linkHoverPrecision={8}
+          onNodeClick={(n) => onNodeSelect(String(n.id))}
+          onLinkClick={(l) => onEdgeSelect(l.edge)}
+          onLinkHover={(l) => setHoverEdge(l ? l.edge : null)}
+        />
+      )}
+
+      {hoverEdge && (
+        <div className="pointer-events-none absolute left-4 top-4 max-w-xs rounded-2xl border border-border bg-background/95 p-3 text-xs shadow-lg">
+          <p className="font-heading text-sm font-semibold text-accent">{RELATIONSHIP_META[hoverEdge.relationship_type]?.label ?? hoverEdge.relationship_type}</p>
+          <p className="text-muted-foreground">
+            {nodeLabel(hoverEdge.source)} {'→'} {nodeLabel(hoverEdge.target)}
+          </p>
+          {hoverEdge.ownership_percentage != null && <p>Ownership: {hoverEdge.ownership_percentage}%</p>}
+          {hoverEdge.provenance_ref && <p className="truncate text-muted-foreground">{hoverEdge.provenance_ref}</p>}
+          <p className="pt-1 text-muted-foreground">Click to pin details</p>
+        </div>
+      )}
+    </div>
+  )
+}

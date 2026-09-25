@@ -1,0 +1,62 @@
+@import 'tailwindcss';
+
+:root {
+  --background: #221814;
+  --foreground: #f7e9d7;
+  --card: #2f221c;
+  --card-foreground: #f7e9d7;
+  --muted: #3a2a22;
+  --muted-foreground: #c9ad93;
+  --primary: #e8772e;
+  --primary-foreground: #221814;
+  --accent: #f2b544;
+  --accent-foreground: #221814;
+  --border: #4a352b;
+  --ring: #f2b544;
+  --sev-critical: #d64545;
+  --sev-high: #e8772e;
+  --sev-medium: #f2b544;
+  --sev-low: #8fa35a;
+  --radius: 1.25rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-sev-critical: var(--sev-critical);
+  --color-sev-high: var(--sev-high);
+  --color-sev-medium: var(--sev-medium);
+  --color-sev-low: var(--sev-low);
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-fredoka), ui-rounded, system-ui, sans-serif;
+  --radius-lg: var(--radius);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+@keyframes leaf-sway {
+  0%, 100% { transform: rotate(-8deg); }
+  50% { transform: rotate(10deg); }
+}
+
+.leaf-sway {
+  animation: leaf-sway 3.2s ease-in-out infinite;
+  transform-origin: 50% 90%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leaf-sway { animation: none; }
+}

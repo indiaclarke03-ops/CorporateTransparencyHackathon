@@ -1,0 +1,58 @@
+{
+  "investigation_summary": {
+    "root_recipient": "OOO Serniya Engineering",
+    "composite_risk_score": 65,
+    "confidence_rating": "B",
+    "primary_typology": "Russia Sanctions Evasion",
+    "executive_rationale": "Serniya Engineering (Moscow) was designated by OFAC..."
+  },
+  "nodes": [
+    {
+      "id": "ent_serniya",
+      "label": "OOO Serniya Engineering",
+      "type": "sanctioned_entity",
+      "jurisdiction": "RU",
+      "entity_confidence": "A",
+      "risk_signals": [
+        {
+          "signal_name": "OFAC SDN Designation E.O. 14024",
+          "severity": "CRITICAL",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://home.treasury.gov/"
+        }
+      ],
+      "sayari_pass_through": {
+        "sanctioned": true,
+        "pep": false,
+        "closed": null,
+        "degree": 5,
+        "edge_counts": { "shared_address": 1, "beneficial_owner": 4 },
+        "shares": [],
+        "position": [],
+        "possibly_same_as": [],
+        "match_keys": []
+      }
+    },
+    {
+      "id": "ent_sertal",
+      "label": "ent_sertal",
+      "type": "address_hub",
+      "jurisdiction": null,
+      "entity_confidence": null,
+      "risk_signals": [],
+      "sayari_pass_through": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "ent_serniya",
+      "target": "ent_sertal",
+      "relationship_type": "SHARED_ADDRESS",
+      "ownership_percentage": null,
+      "provenance_ref": "https://home.treasury.gov/"
+    }
+  ],
+  "audit_trail": [
+    { "step": 1, "source": "Tavily", "query_executed": "...", "records_matched": 15 }
+  ]
+}

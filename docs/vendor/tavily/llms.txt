@@ -1,0 +1,213 @@
+# Tavily Docs
+
+> Tavily is the web layer for AI agents: real-time web search, content extraction, site crawling, site mapping, and cited research — returned as clean, LLM-ready content instead of raw HTML. This index helps agents and developers find the right Tavily doc fast.
+
+Use Tavily to find current web sources, read selected pages, explore a site's content, or produce a cited research report.
+
+## Start Here For Agents
+
+If you are an AI agent — or building one — start with the canonical setup guide:
+
+- [Agents: Tavily setup & tool-choice guide](https://docs.tavily.com/agents.md): Choose how to connect (SDK/API, MCP, or CLI + Skills), choose the right capability (Search, Extract, Map, Crawl, Research), and apply recommended defaults.
+- [Documentation MCP setup](https://docs.tavily.com/agents.md#documentation-mcp-server): Search and read Tavily's documentation. MCP endpoint: `https://docs.tavily.com/mcp` (Streamable HTTP).
+
+Then use this file ([llms.txt](https://docs.tavily.com/llms.txt)) to find a specific page, [llms-full.txt](https://docs.tavily.com/llms-full.txt) for the full text of all docs, or append `.md` to any docs URL to fetch that single page as Markdown.
+
+## Quick Start: CLI (fastest way to get started)
+
+Install the Tavily CLI and log in — two commands:
+
+```
+pip install tavily-cli
+tvly login
+```
+
+`tvly login` opens a browser for authentication. Then search, extract, crawl, and research from the terminal:
+
+```
+tvly search "latest AI news"
+tvly extract "https://example.com"
+tvly crawl "https://docs.example.com" --depth 2
+tvly research "compare React vs Svelte for production apps"
+```
+
+Installing the CLI also installs Agent Skills for coding agents like Claude Code, Cursor, and Codex — they remind the agent to use Tavily for search, extract, crawl, and research. Get a free API key at https://app.tavily.com (1,000 credits/month, no credit card required).
+
+## Alternative: Remote MCP Server
+
+Connect any MCP client to Tavily's remote server — no local install required:
+
+```
+https://mcp.tavily.com/mcp/?tavilyApiKey=<your-api-key>
+```
+
+OAuth 2.0 is supported, so no API key needs to be hardcoded. For example, in Claude Code:
+
+```
+claude mcp add tavily-remote-mcp --transport http https://mcp.tavily.com/mcp/
+```
+
+## Choose How To Connect
+
+Choose based on what Tavily must do, not only where you are running:
+
+- **SDK / API** — you are building Tavily into an application, backend, or agent runtime that will call it in production.
+- **MCP** — you need Tavily available to agents across an org, a managed environment, or multiple agent clients; governed and reusable.
+- **CLI + Skills** — you need Tavily during the local coding or research session you are in right now.
+
+Agent Toolkit is a developer resource for *building* production research agents, not a path for agents to configure Tavily autonomously.
+
+## Choose A Capability
+
+- **Search** — start here when sources are unknown or current web context is needed.
+- **Extract** — use when the URL is known or selected from Search.
+- **Map** — use before Crawl to understand a site's structure.
+- **Crawl** — use when many pages on a site need to be read.
+- **Research** — use when the output should be a cited synthesis: a report, comparison, or decision-ready answer.
+
+Recommended defaults for agents: prefer `search_depth="advanced"`, add `chunks_per_source=3` for stronger evidence per source, use `max_results=5` for focused answers (10 for broader research), and avoid `include_answer` unless you need a quick answer seed.
+
+## Getting Started
+
+- [About](https://docs.tavily.com/documentation/about.md): What Tavily is and why it exists.
+- [Quickstart](https://docs.tavily.com/documentation/quickstart.md): Start searching with Tavily in under 5 minutes.
+- [Credits & Pricing](https://docs.tavily.com/documentation/api-credits.md): How to get and manage your Tavily API credits.
+- [Rate Limits](https://docs.tavily.com/documentation/rate-limits.md): API rate limits for development and production.
+- [Try Tavily Without an API Key](https://docs.tavily.com/documentation/keyless.md): Use Search and Extract for free, with zero setup — no account or API key. Keyless is free and rate-limited; hit the cap and sign up for a free API key (1,000 credits/month, no credit card).
+- [Frequently Asked Questions](https://docs.tavily.com/faq/faq.md): Common questions about Tavily.
+- [Help Center](https://docs.tavily.com/documentation/help.md): Get help and support.
+
+## API Reference
+
+- [Introduction](https://docs.tavily.com/documentation/api-reference/introduction.md): Easily integrate our APIs with your services.
+- [Search](https://docs.tavily.com/documentation/api-reference/endpoint/search.md): Execute a real-time web search optimized for AI agents.
+- [Extract](https://docs.tavily.com/documentation/api-reference/endpoint/extract.md): Extract clean content from one or more URLs.
+- [Crawl](https://docs.tavily.com/documentation/api-reference/endpoint/crawl.md): Graph-based website traversal with built-in extraction and intelligent discovery.
+- [Map](https://docs.tavily.com/documentation/api-reference/endpoint/map.md): Traverse a site like a graph to generate a comprehensive site map.
+- [Create Research Task](https://docs.tavily.com/documentation/api-reference/endpoint/research.md): Run comprehensive research that searches, analyzes sources, and generates a cited report.
+- [Get Research Task Status](https://docs.tavily.com/documentation/api-reference/endpoint/research-get.md): Retrieve the status and results of a research task by request ID.
+- [Streaming](https://docs.tavily.com/documentation/api-reference/endpoint/research-streaming.md): Stream real-time research progress and results.
+- [Feedback](https://docs.tavily.com/documentation/api-reference/endpoint/feedback.md): Submit feedback on a search request or session to improve result quality (beta).
+- [Usage](https://docs.tavily.com/documentation/api-reference/endpoint/usage.md): Get API key and account usage details.
+- [Logs](https://docs.tavily.com/documentation/api-reference/endpoint/logs.md): Retrieve per-request usage logs for your API keys (paid plans).
+
+## Enterprise API
+
+- [Generate Keys](https://docs.tavily.com/documentation/enterprise/generate-keys.md): Generate one or more API keys with custom configuration.
+- [Deactivate Keys](https://docs.tavily.com/documentation/enterprise/deactivate-keys.md): Deactivate API keys in bulk by `request_id` or individually.
+- [Key Info](https://docs.tavily.com/documentation/enterprise/key-info.md): Get information about an API key.
+- [Organization Usage](https://docs.tavily.com/documentation/enterprise/org-usage.md): Retrieve usage, pay-as-you-go cost, and request counts for every API key under an organization you own.
+
+## SDKs
+
+- [Python Quickstart](https://docs.tavily.com/sdk/python/quick-start.md): Integrate Tavily natively in Python apps. Install with `pip install tavily-python`.
+- [Python SDK Reference](https://docs.tavily.com/sdk/python/reference.md): Full Python SDK reference.
+- [JavaScript Quickstart](https://docs.tavily.com/sdk/javascript/quick-start.md): Integrate Tavily natively in JavaScript/TypeScript. Install with `npm i @tavily/core`.
+- [JavaScript SDK Reference](https://docs.tavily.com/sdk/javascript/reference.md): Full JavaScript/TypeScript SDK reference.
+
+## Public repositories
+
+- [Python SDK](https://github.com/tavily-ai/tavily-python): Source code and examples for `tavily-python`.
+- [JavaScript SDK](https://github.com/tavily-ai/tavily-js): Source code and examples for `@tavily/core`.
+- [Agent Skills](https://github.com/tavily-ai/skills): Official skills for using Tavily in coding agents.
+
+## Best Practices
+
+- [Search](https://docs.tavily.com/documentation/best-practices/best-practices-search.md): Optimize queries, filters, and advanced parameters.
+- [Extract](https://docs.tavily.com/documentation/best-practices/best-practices-extract.md): Choose the right extraction approach and parameters.
+- [Crawl](https://docs.tavily.com/documentation/best-practices/best-practices-crawl.md): Focus crawls and extract content efficiently.
+- [Research](https://docs.tavily.com/documentation/best-practices/best-practices-research.md): Write effective prompts and configure output formats.
+- [API Key Management](https://docs.tavily.com/documentation/best-practices/api-key-management.md): Handle key leaks and rotation.
+
+## Ecosystem
+
+- [Tavily MCP Server](https://docs.tavily.com/documentation/mcp.md): Use the Tavily API from any MCP client (Claude, Cursor, and more).
+- [Tavily CLI](https://docs.tavily.com/documentation/tavily-cli.md): Search, extract, crawl, map, and research the web from your terminal.
+- [Tavily Agent Skills](https://docs.tavily.com/documentation/agent-skills.md): Skills that add Tavily's web capabilities to AI coding agents.
+- [Tavily x402](https://docs.tavily.com/documentation/machine-payments/x402.md): Agents pay per request for Advanced Search in USDC on Base — no API key, no account.
+
+## Integrations
+
+- [OpenAI Agent Builder](https://docs.tavily.com/documentation/integrations/agent-builder.md): Empower OpenAI's Agent Builder with real-time web access via Tavily MCP.
+- [Agno](https://docs.tavily.com/documentation/integrations/agno.md): Use Tavily with the Agno agent framework.
+- [Anthropic](https://docs.tavily.com/documentation/integrations/anthropic.md): Add real-time web search to Claude tool-calling agents.
+- [Arcade.dev](https://docs.tavily.com/documentation/integrations/arcade-dev.md): Governed Tavily access via the Arcade.dev MCP Gateway.
+- [Cartesia](https://docs.tavily.com/documentation/integrations/cartesia.md): Build real-time voice agents that search and extract with the Cartesia Line SDK.
+- [Claude](https://docs.tavily.com/documentation/integrations/claude.md): Use Tavily across the Claude ecosystem as a Connector or Plugin.
+- [Composio](https://docs.tavily.com/documentation/integrations/composio.md): Unified tool management across agent frameworks.
+- [Convex](https://docs.tavily.com/documentation/integrations/convex.md): Web search and content extraction in Convex apps via the `@tavily/convex-tavily` component.
+- [CrewAI](https://docs.tavily.com/documentation/integrations/crewai.md): Build multi-agent CrewAI workflows with web research.
+- [Devin](https://docs.tavily.com/documentation/integrations/devin.md): Connect Tavily to Devin via the MCP Marketplace.
+- [Dify](https://docs.tavily.com/documentation/integrations/dify.md): No-code LLM app building with Tavily.
+- [ElevenLabs](https://docs.tavily.com/documentation/integrations/elevenlabs.md): Give ElevenLabs agents live web search.
+- [FlowiseAI](https://docs.tavily.com/documentation/integrations/flowise.md): Visual LLM orchestration with Tavily.
+- [Google ADK](https://docs.tavily.com/documentation/integrations/google-adk.md): Use Tavily with Google's Agent Development Kit.
+- [Gradium](https://docs.tavily.com/documentation/integrations/gradium.md): Use Tavily web search with Gradium voice AI agents.
+- [Grok Build](https://docs.tavily.com/documentation/integrations/grok-build.md): Real-time web search and research in xAI's Grok Build coding agent.
+- [Haystack](https://docs.tavily.com/documentation/integrations/haystack.md): Use Tavily in Haystack pipelines via `tavily-haystack`.
+- [Hermes Agent](https://docs.tavily.com/documentation/integrations/hermes-agent.md): Built-in web search and extraction for Hermes Agent, with keyless access and no plugin required.
+- [LangChain](https://docs.tavily.com/documentation/integrations/langchain.md): LangChain's recommended search tool.
+- [Langflow](https://docs.tavily.com/documentation/integrations/langflow.md): Build multi-agent and RAG apps visually with Tavily.
+- [LibreChat](https://docs.tavily.com/documentation/integrations/librechat.md): Web search, extraction, and agent tools inside LibreChat.
+- [LlamaIndex](https://docs.tavily.com/documentation/integrations/llamaindex.md): Search the web from LlamaIndex RAG pipelines.
+- [Make](https://docs.tavily.com/documentation/integrations/make.md): No-code workflow automation with Tavily.
+- [Mastra](https://docs.tavily.com/documentation/integrations/mastra.md): First-class Mastra tools for search, extract, crawl, and map.
+- [Microsoft 365 Copilot](https://docs.tavily.com/documentation/integrations/microsoft.md): Use Tavily as a declarative agent in Microsoft 365 Copilot or as a Copilot Cowork plugin.
+- [n8n](https://docs.tavily.com/documentation/integrations/n8n.md): No-code workflow automation with Tavily.
+- [OpenAI](https://docs.tavily.com/documentation/integrations/openai.md): Grounded web search for OpenAI function-calling agents.
+- [OpenClaw](https://docs.tavily.com/documentation/integrations/openclaw.md): Add web search and extraction to agents across messaging apps.
+- [OpenCode](https://docs.tavily.com/documentation/integrations/opencode.md): Web search, extraction, crawling, and research in the OpenCode terminal agent.
+- [Pydantic AI](https://docs.tavily.com/documentation/integrations/pydantic-ai.md): Type-safe AI agents with Tavily.
+- [StackAI](https://docs.tavily.com/documentation/integrations/stackai.md): Enhance StackAI workflows with real-time web data.
+- [TrueFoundry](https://docs.tavily.com/documentation/integrations/truefoundry.md): Managed Tavily MCP access through the TrueFoundry MCP Gateway.
+- [Tines](https://docs.tavily.com/documentation/integrations/tines.md): Automated, no-code intelligence workflows.
+- [Vellum](https://docs.tavily.com/documentation/integrations/vellum.md): Built-in web search provider in the Vellum Assistant.
+- [Vercel AI SDK](https://docs.tavily.com/documentation/integrations/vercel.md): Add web search, extraction, crawling, and mapping to Vercel AI agents.
+- [Zapier](https://docs.tavily.com/documentation/integrations/zapier.md): Connect Tavily to thousands of apps, no code required.
+
+## Partnerships
+
+- [Amazon Bedrock AgentCore](https://docs.tavily.com/documentation/partnerships/amazon.md): Tavily MCP for scalable agent deployment on AWS.
+- [Microsoft Azure](https://docs.tavily.com/documentation/partnerships/azure.md): Tavily Remote MCP with Azure AI Foundry and MCP Center.
+- [Databricks](https://docs.tavily.com/documentation/partnerships/databricks.md): Tavily MCP for real-time web search and RAG on Databricks.
+- [IBM watsonx Orchestrate](https://docs.tavily.com/documentation/partnerships/ibm.md): Tavily research capabilities in IBM watsonx Orchestrate.
+- [Snowflake](https://docs.tavily.com/documentation/partnerships/snowflake.md): Tavily as a native app on the Snowflake Marketplace.
+
+## Examples
+
+- [Examples Hub](https://docs.tavily.com/examples/hub.md): Build with Tavily — from quick API recipes to production research agents.
+- [Agent Toolkit](https://docs.tavily.com/examples/agent-toolkit/overview.md): Production-grade research agents with battle-tested tools and patterns.
+- [Agent Toolkit: Tools Reference](https://docs.tavily.com/examples/agent-toolkit/tools.md): Optimized retrieval primitives for research agents.
+- [Agent Toolkit: Chatbot](https://docs.tavily.com/examples/agent-toolkit/chatbot.md): Route between quick search and deep research by query complexity.
+- [Agent Toolkit: Hybrid Research](https://docs.tavily.com/examples/agent-toolkit/hybrid-research.md): Combine an internal knowledge base with real-time web research.
+- [Agent Toolkit: Company Intelligence](https://docs.tavily.com/examples/agent-toolkit/company-intelligence.md): Crawl, extract, and search for company analysis.
+- [Agent Toolkit: Social Media Research](https://docs.tavily.com/examples/agent-toolkit/social-media-research.md): Research a topic across TikTok, Reddit, X, LinkedIn, and more.
+- [Web Search Essentials](https://docs.tavily.com/examples/quick-tutorials/search-api.md): Find real-time info, monitor news, and filter by domain.
+- [Clean Content Extraction](https://docs.tavily.com/examples/quick-tutorials/extract-api.md): Pull clean markdown or text from any webpage.
+- [Site Structure Discovery with Map](https://docs.tavily.com/examples/quick-tutorials/map-api.md): Discover all URLs on a domain, then extract targeted content.
+- [Website Crawling and Content Extraction](https://docs.tavily.com/examples/quick-tutorials/crawl-api.md): Extract content from entire websites and build retrieval pipelines.
+- [Deep Research with Streaming](https://docs.tavily.com/examples/quick-tutorials/research-streaming.md): Multi-source research with polling/streaming and structured output.
+- [Product News Tracker](https://docs.tavily.com/examples/quick-tutorials/product-news-tracker.md): Track real-time product news with Tavily's APIs.
+- [Cookbook](https://docs.tavily.com/examples/quick-tutorials/cookbook.md): Guided Jupyter notebooks covering Tavily's APIs.
+- [Chat](https://docs.tavily.com/examples/use-cases/chat.md): A conversational agent with search, crawl, and extract.
+- [Company Research](https://docs.tavily.com/examples/use-cases/company-research.md): In-depth company research with Search and Extract.
+- [Crawl to RAG](https://docs.tavily.com/examples/use-cases/crawl-to-rag.md): Turn any website into a searchable knowledge base.
+- [Data Enrichment](https://docs.tavily.com/examples/use-cases/data-enrichment.md): Enhance datasets with Tavily's APIs.
+- [Market Researcher](https://docs.tavily.com/examples/use-cases/market-researcher.md): Market insights and analysis for stocks in your portfolio.
+- [Meeting Prep](https://docs.tavily.com/examples/use-cases/meeting-prep.md): A meeting-prep agent with real-time research and calendar integration.
+- [RAG Evaluation](https://docs.tavily.com/examples/use-cases/web-eval.md): Web-based RAG evaluation with Tavily and LangGraph.
+- [Open Source Projects](https://docs.tavily.com/examples/open-sources/projects.md): Popular open-source projects showcasing Tavily.
+
+## Updates
+
+- [Changelog](https://docs.tavily.com/changelog.md): Latest changes to Tavily's APIs and docs.
+
+## OpenAPI Specs
+
+- [OpenAPI](https://docs.tavily.com/documentation/api-reference/openapi.json): Machine-readable OpenAPI specification.
+
+## Optional
+
+- [API Playground](https://app.tavily.com/playground): Try Tavily's APIs interactively.
+- [Community](https://discord.gg/TPu2gkaWp2): Join the Tavily Discord.
+- [Blog](https://tavily.com/blog): Product updates and technical content.

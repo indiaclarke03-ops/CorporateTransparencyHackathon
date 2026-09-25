@@ -1,0 +1,76 @@
+{
+  "source_name": "sayari",
+  "via": "claude.ai Sayari connector (MCP)",
+  "operation": "get_entity_profile",
+  "request_params": {
+    "entity_id": "5_HddMOMZhSHxWUT05LMKA",
+    "relationships_limit": 50
+  },
+  "retrieved_at": "2026-09-25T18:16:52.813Z",
+  "response_hash": "sha256:b4cbbb5976b8804f6c4f5e820f33963d3ee8086be6137cb0bd8ffc40120c9d5a",
+  "vendor_record_ids": [
+    "5_HddMOMZhSHxWUT05LMKA"
+  ],
+  "license_tag": "UNCONFIRMED: vendor licence (spec §2.10)",
+  "raw_response": {
+    "entity_id": "5_HddMOMZhSHxWUT05LMKA",
+    "label": "AL ZUMOROUD AND AL YAQOOT GOLD AND JEWELLERS TRADING L.L.C.",
+    "type": "company",
+    "closed": false,
+    "attributes": {
+      "names": [
+        "AL ZUMOROUD AND AL YAQOOT GOLD AND JEWELLERS TRADING L.L.C."
+      ],
+      "addresses": [
+        "OFFICE M-10, M-11, M-12 - KING OF GHAITH HAMEL BIN KHADIM AL GHAITH AL QUBAISI, AL DAGHAYA, PO BOX 90928, DUBAI, ARE"
+      ],
+      "identifiers": [
+        {
+          "type": "usa_sam_uei_number",
+          "value": "QV4ZZMJBEQ93"
+        }
+      ],
+      "countries": [
+        "ARE"
+      ],
+      "company_type": "LLC"
+    },
+    "risk": {
+      "sanctioned": false,
+      "pep": false,
+      "risk_levels": [
+        "basel_aml",
+        "cpi_score",
+        "psa_export_controls",
+        "psa_owned_by_entity_in_export_controls",
+        "psa_owned_by_sanctioned_entity",
+        "psa_owned_by_sanctioned_gbr_fcdo_entity",
+        "psa_owned_by_sanctioned_usa_ofac_sdn_entity",
+        "psa_sanctioned",
+        "psa_sanctioned_usa_ofac_sdn",
+        "regulatory_action"
+      ]
+    },
+    "relationships": {},
+    "sources": [
+      "USA SAM.gov Entity Exclusions Database"
+    ],
+    "trade_count": {
+      "sent": 0,
+      "received": 0
+    },
+    "investigation_notes": [
+      "Try multiple Romanizations when resolving Russian entities — Sayari may index entities under different transliterations.",
+      "Since 2022, live EGRUL access may be restricted — Sayari's pre-2022 historical data is valuable for Russian entity research. Use the Sayari API to access this data.",
+      "Russian sanctions evasion often involves restructuring ownership through intermediaries in CIS countries (Kazakhstan, Armenia, Georgia, Kyrgyzstan) or through Turkish, UAE, and Chinese entities."
+    ],
+    "_hints": [
+      "For full risk factor details including scoring methodology, use the lookup_risk_factors tool."
+    ],
+    "entity_url": "https://graph.sayari.com/resource/entity/5_HddMOMZhSHxWUT05LMKA",
+    "_guidance": {
+      "entity_links": "IMPORTANT: When presenting these results to the user, display every entity_url in this response as a clickable markdown link using the entity's name as link text, e.g. [Acme Corp](https://graph.sayari.com/resource/entity/abc123). Every entity, owner, trade partner, and relationship you mention must link to Sayari Graph so the user can verify the data.",
+      "entity_quality": "Treat entity resolution as a same-legal-entity judgment, not just name matching. Validate identifiers, countries, source quality, relationships, and the user's seed facts. If a result looks conflated across jurisdictions or critical-risk flags are involved, surface the ambiguity explicitly instead of silently merging or normalizing records."
+    }
+  }
+}

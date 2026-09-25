@@ -19,11 +19,14 @@ class SayariPassThrough:
     pep: bool = False
     closed: bool = False
     degree: int = 0
-    edge_counts: Dict[str, int] = field(default_factory=dict)
+    # Sayari REST `relationship_count`: count of related entities per relationship type,
+    # e.g. {"has_shareholder": 4}. (Was `edge_counts`, which is not in the Sayari spec.)
+    relationship_count: Dict[str, int] = field(default_factory=dict)
     shares: List[float] = field(default_factory=list)
     position: List[str] = field(default_factory=list)
     possibly_same_as: List[str] = field(default_factory=list)
-    match_keys: List[str] = field(default_factory=list)
+    # Sayari `possibly_same_as[].match_keys`: objects with `key`, `normalized`, `original`.
+    match_keys: List[Dict[str, str]] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -73,7 +76,9 @@ def calculate_sayari_subscore(data: SayariPassThrough) -> "tuple[float, List[str
         raw_score += 10.0
         flags.append("Ambiguous resolution: multiple identity matches / alias variance")
 
-    high_risk_edges = data.edge_counts.get("has_shareholder", 0) + data.edge_counts.get("tranships_for", 0)
+    # Sayari has no transshipment relationship type (the earlier `tranships_for` key did not exist);
+    # transshipment is measured from shipment `transit_country` under signal TR3.
+    high_risk_edges = data.relationship_count.get("has_shareholder", 0)
     if high_risk_edges >= 4:
         raw_score += 10.0
         flags.append("Elevated high-risk intermediary edge density")

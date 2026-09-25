@@ -14,7 +14,7 @@
   "exclusion_uei_list": ["LF8MULLSH397", "NYCYDYP1RNJ6"],
   "exclusion_source": "OpenSanctions",
 
-  "match_level": "Confirmed",
+  "match_grade": "A",
   "match_basis": "a shared registration number (OGRN 1177746132563)",
 
   "composite_score": 65,
@@ -46,7 +46,7 @@
     {"field": "Address (OFAC listing)", "value": "d. 57A etazh 2 pom. 211 kom. 211-13, ul. Vavilova, Moscow 117292, Russia", "sources": ["S02"]},
     {"field": "Registration date", "value": "10 February 2017", "sources": ["S20"]},
     {"field": "OFAC SDN UID", "value": "35076", "sources": ["S20"]},
-    {"field": "Matched records", "value": "Sayari entity 7-U98RGw67tUi01ILV4CCQ (Confirmed, shared OGRN); OpenSanctions NK-m5uxh7GMpRei95QkP8qEUA (Confirmed, shared OGRN)", "sources": ["S20", "S28"]}
+    {"field": "Matched records", "value": "Sayari entity 7-U98RGw67tUi01ILV4CCQ (grade A, shared OGRN); OpenSanctions NK-m5uxh7GMpRei95QkP8qEUA (grade A, shared OGRN)", "sources": ["S20", "S28"]}
   ],
 
   "awards": [],

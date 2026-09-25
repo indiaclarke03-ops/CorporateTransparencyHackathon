@@ -1,0 +1,429 @@
+{
+  "source_name": "sayari",
+  "via": "claude.ai Sayari connector (MCP)",
+  "operation": "get_entity_profile",
+  "request_params": {
+    "entity_id": "l-hTG9hSLd7dA4za2B7CRw",
+    "relationships_limit": 50
+  },
+  "retrieved_at": "2026-09-25T18:17:06.744Z",
+  "response_hash": "sha256:1f3056d59f833fe6f0d0975fa2da79ee3fcf0e4ac258cc3c7675193aeda0345f",
+  "vendor_record_ids": [
+    "l-hTG9hSLd7dA4za2B7CRw"
+  ],
+  "license_tag": "UNCONFIRMED: vendor licence (spec §2.10)",
+  "raw_response": {
+    "entity_id": "l-hTG9hSLd7dA4za2B7CRw",
+    "label": "Capital Tap Holding L.L.C.",
+    "type": "company",
+    "closed": false,
+    "attributes": {
+      "names": [
+        "كابيتال تاب القابضة ذ.م.م",
+        "كابيتال تاب القابضة ذ.م.م",
+        "Capital Tap",
+        "CTH",
+        "Capital Tap Holding L.L.C."
+      ],
+      "addresses": [
+        "P.O. Box, 54116, Dubai, AE",
+        "Office 2602, U-Bora Towers, Business Bay, Dubai, United Arab Emirates",
+        "PO Box 54116, 2602 UBora Commercial Tower, Dubai, ARE"
+      ],
+      "identifiers": [
+        {
+          "type": "unknown",
+          "value": "11651015"
+        },
+        {
+          "type": "unknown",
+          "value": "947727"
+        },
+        {
+          "type": "usa_ofac_sdn_number",
+          "value": "48960"
+        },
+        {
+          "type": "unknown_chamber_of_commerce_id",
+          "value": "359507"
+        },
+        {
+          "type": "xxx_cedar_rose_uid",
+          "value": "AEC119826994"
+        }
+      ],
+      "countries": [
+        "ARE"
+      ],
+      "registration_date": "2019",
+      "company_type": "LLC",
+      "business_purpose": [
+        "Financial and Insurance Activities",
+        "funds and similar financial entities",
+        "Trusts, funds and similar financial entities"
+      ]
+    },
+    "risk": {
+      "sanctioned": true,
+      "pep": false,
+      "risk_levels": [
+        "basel_aml",
+        "cpi_score",
+        "export_controls",
+        "owner_of_export_controls_entity",
+        "owner_of_regulatory_action_entity",
+        "owner_of_sanctioned_entity",
+        "owner_of_sanctioned_usa_ofac_sdn_entity",
+        "psa_owner_of_export_controls_entity",
+        "psa_owner_of_regulatory_action_entity",
+        "psa_owner_of_sanctioned_entity",
+        "psa_owner_of_sanctioned_usa_ofac_sdn_entity",
+        "regulatory_action",
+        "sanctioned_usa_ofac_sdn"
+      ]
+    },
+    "relationships": {
+      "has_officer": [
+        {
+          "entity_id": "vmtgCZaOQqwkhq1e3gOY4g",
+          "label": "Islam Mahmoud",
+          "type": "person",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls_adjacent",
+              "sanctioned_adjacent"
+            ]
+          },
+          "former": false,
+          "position": "Chief Executive Officer",
+          "entity_url": "https://graph.sayari.com/resource/entity/vmtgCZaOQqwkhq1e3gOY4g"
+        },
+        {
+          "entity_id": "O7r0g-q-FJSWi1jxsNaM0A",
+          "label": "Christy Hanna",
+          "type": "person",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls_adjacent",
+              "sanctioned_adjacent"
+            ]
+          },
+          "former": false,
+          "position": "Chief Operating Officer",
+          "entity_url": "https://graph.sayari.com/resource/entity/O7r0g-q-FJSWi1jxsNaM0A"
+        }
+      ],
+      "has_subsidiary": [
+        {
+          "entity_id": "v-5udvS12QLe4EwEid8oew",
+          "label": "CAPITAL TAB MANAGEMENT CONSULTANCY LIMITED LIABILITY COMPANY",
+          "type": "company",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "ofac_50_percent_rule",
+              "owned_by_entity_in_export_controls",
+              "owned_by_regulatory_action_entity",
+              "owned_by_sanctioned_entity",
+              "owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_ofac_50_percent_rule",
+              "psa_owned_by_entity_in_export_controls",
+              "psa_owned_by_regulatory_action_entity",
+              "psa_owned_by_sanctioned_entity",
+              "psa_owned_by_sanctioned_usa_ofac_sdn_entity",
+              "regulatory_action",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "entity_url": "https://graph.sayari.com/resource/entity/v-5udvS12QLe4EwEid8oew"
+        },
+        {
+          "entity_id": "XtartWzEze9a18ZDKVad8A",
+          "label": "Capital Tap General Trading L.L.C.",
+          "type": "company",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "ofac_50_percent_rule",
+              "owned_by_entity_in_export_controls",
+              "owned_by_regulatory_action_entity",
+              "owned_by_sanctioned_entity",
+              "owned_by_sanctioned_gbr_fcdo_entity",
+              "owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_ofac_50_percent_rule",
+              "psa_owned_by_entity_in_export_controls",
+              "psa_owned_by_regulatory_action_entity",
+              "psa_owned_by_sanctioned_entity",
+              "psa_owned_by_sanctioned_gbr_fcdo_entity",
+              "psa_owned_by_sanctioned_usa_ofac_sdn_entity",
+              "regulatory_action",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "entity_url": "https://graph.sayari.com/resource/entity/XtartWzEze9a18ZDKVad8A"
+        },
+        {
+          "entity_id": "VAVQ9aoHYG1lurLNt7K1tA",
+          "label": "HORIZON ADVANCED SOLUTIONS GENERAL TRADING - LLC SO",
+          "type": "company",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "ofac_50_percent_rule",
+              "owned_by_entity_in_export_controls",
+              "owned_by_regulatory_action_entity",
+              "owned_by_sanctioned_entity",
+              "owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_ofac_50_percent_rule",
+              "psa_owned_by_entity_in_export_controls",
+              "psa_owned_by_regulatory_action_entity",
+              "psa_owned_by_sanctioned_entity",
+              "psa_owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_regulatory_action",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "entity_url": "https://graph.sayari.com/resource/entity/VAVQ9aoHYG1lurLNt7K1tA"
+        }
+      ],
+      "linked_to": [
+        {
+          "entity_id": "v-5udvS12QLe4EwEid8oew",
+          "label": "CAPITAL TAB MANAGEMENT CONSULTANCY LIMITED LIABILITY COMPANY",
+          "type": "company",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "ofac_50_percent_rule",
+              "owned_by_entity_in_export_controls",
+              "owned_by_regulatory_action_entity",
+              "owned_by_sanctioned_entity",
+              "owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_ofac_50_percent_rule",
+              "psa_owned_by_entity_in_export_controls",
+              "psa_owned_by_regulatory_action_entity",
+              "psa_owned_by_sanctioned_entity",
+              "psa_owned_by_sanctioned_usa_ofac_sdn_entity",
+              "regulatory_action",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "entity_url": "https://graph.sayari.com/resource/entity/v-5udvS12QLe4EwEid8oew"
+        },
+        {
+          "entity_id": "sAgA0QVKr-gjEAqoJvf0zg",
+          "label": "Abu Dharr Abdul Nabi Habiballa AHMMED",
+          "type": "person",
+          "countries": [
+            "SDN",
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "owner_of_export_controls_entity",
+              "owner_of_regulatory_action_entity",
+              "owner_of_sanctioned_entity",
+              "owner_of_sanctioned_usa_ofac_sdn_entity",
+              "psa_owner_of_export_controls_entity",
+              "psa_owner_of_regulatory_action_entity",
+              "psa_owner_of_sanctioned_entity",
+              "psa_owner_of_sanctioned_usa_ofac_sdn_entity",
+              "sanctioned_gbr_fcdo",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Capital Tap Holding L.L.C.",
+          "entity_url": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg"
+        },
+        {
+          "entity_id": "dFB7YowXog_6EwiEur43RQ",
+          "label": "Prodigious Real Estate Management Supervision Services",
+          "type": "company",
+          "countries": [
+            "ARE",
+            "SDN"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls_adjacent",
+              "psa_sanctioned",
+              "psa_sanctioned_gbr_fcdo",
+              "sanctioned_adjacent"
+            ]
+          },
+          "former": false,
+          "position": "Capital Tap Holding L.L.C. is linked to Prodigious Real Estate Management Supervision Services",
+          "entity_url": "https://graph.sayari.com/resource/entity/dFB7YowXog_6EwiEur43RQ"
+        },
+        {
+          "entity_id": "VAVQ9aoHYG1lurLNt7K1tA",
+          "label": "HORIZON ADVANCED SOLUTIONS GENERAL TRADING - LLC SO",
+          "type": "company",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "ofac_50_percent_rule",
+              "owned_by_entity_in_export_controls",
+              "owned_by_regulatory_action_entity",
+              "owned_by_sanctioned_entity",
+              "owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_ofac_50_percent_rule",
+              "psa_owned_by_entity_in_export_controls",
+              "psa_owned_by_regulatory_action_entity",
+              "psa_owned_by_sanctioned_entity",
+              "psa_owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_regulatory_action",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "entity_url": "https://graph.sayari.com/resource/entity/VAVQ9aoHYG1lurLNt7K1tA"
+        }
+      ],
+      "has_manager": [
+        {
+          "entity_id": "NNmQGoINAI9uIqPK9gAjDA",
+          "label": "Anas Jannoud",
+          "type": "person",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls_adjacent",
+              "sanctioned_adjacent"
+            ]
+          },
+          "former": false,
+          "position": "Human Resources Manager",
+          "entity_url": "https://graph.sayari.com/resource/entity/NNmQGoINAI9uIqPK9gAjDA"
+        }
+      ],
+      "has_member_of_the_board": [
+        {
+          "entity_id": "Ba_RpmYMDqabZk_S6NLteA",
+          "label": "Islam Badredine Mohammed Abdullah",
+          "type": "person",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls_adjacent",
+              "sanctioned_adjacent"
+            ]
+          },
+          "former": false,
+          "position": "Chairman",
+          "entity_url": "https://graph.sayari.com/resource/entity/Ba_RpmYMDqabZk_S6NLteA"
+        }
+      ],
+      "summary": {
+        "linked_to": 4,
+        "has_officer": 2,
+        "has_manager": 1,
+        "has_member_of_the_board": 1,
+        "has_subsidiary": 3
+      }
+    },
+    "sources": [
+      "Acuris Risk Intelligence - Entities & Relationships (3rd Party Data)",
+      "Acuris Risk Intelligence - Risk Information and Articles (3rd Party Data)",
+      "UAE Cedar Rose Company Database (3rd Party Data)",
+      "USA Treasury OFAC Specially Designated Nationals (SDN) List",
+      "OpenSanctions - Global Sanctions List"
+    ],
+    "trade_count": {
+      "sent": 0,
+      "received": 0
+    },
+    "investigation_notes": [
+      "Try multiple Romanizations when resolving Russian entities — Sayari may index entities under different transliterations.",
+      "Since 2022, live EGRUL access may be restricted — Sayari's pre-2022 historical data is valuable for Russian entity research. Use the Sayari API to access this data.",
+      "Russian sanctions evasion often involves restructuring ownership through intermediaries in CIS countries (Kazakhstan, Armenia, Georgia, Kyrgyzstan) or through Turkish, UAE, and Chinese entities."
+    ],
+    "_hints": [
+      "For full risk factor details including scoring methodology, use the lookup_risk_factors tool."
+    ],
+    "entity_url": "https://graph.sayari.com/resource/entity/l-hTG9hSLd7dA4za2B7CRw",
+    "_guidance": {
+      "entity_links": "IMPORTANT: When presenting these results to the user, display every entity_url in this response as a clickable markdown link using the entity's name as link text, e.g. [Acme Corp](https://graph.sayari.com/resource/entity/abc123). Every entity, owner, trade partner, and relationship you mention must link to Sayari Graph so the user can verify the data.",
+      "follow_up": "After presenting findings, if there are unexplored leads listed in suggested_next_steps below, ask the user which they'd like to investigate. When multiple options exist, briefly describe each and let the user choose.",
+      "suggested_next_steps": [
+        "Entities with risk flags found: CAPITAL TAB MANAGEMENT CONSULTANCY LIMITED LIABILITY COMPANY, Capital Tap General Trading L.L.C., HORIZON ADVANCED SOLUTIONS GENERAL TRADING - LLC SO, Abu Dharr Abdul Nabi Habiballa AHMMED — offer to profile or ownership-trace these entities."
+      ],
+      "entity_quality": "Treat entity resolution as a same-legal-entity judgment, not just name matching. Validate identifiers, countries, source quality, relationships, and the user's seed facts. If a result looks conflated across jurisdictions or critical-risk flags are involved, surface the ambiguity explicitly instead of silently merging or normalizing records."
+    }
+  }
+}

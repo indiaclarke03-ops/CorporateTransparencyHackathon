@@ -1,0 +1,420 @@
+{
+  "source_name": "sayari",
+  "via": "claude.ai Sayari connector (MCP)",
+  "operation": "get_entity_profile",
+  "request_params": {
+    "entity_id": "sAgA0QVKr-gjEAqoJvf0zg",
+    "relationships_limit": 50
+  },
+  "retrieved_at": "2026-09-25T18:16:55.147Z",
+  "response_hash": "sha256:015ff90ddbff03dc3f8989a0033da43b539d7ea2c4be09d0490db1e7b29bcaef",
+  "vendor_record_ids": [
+    "sAgA0QVKr-gjEAqoJvf0zg"
+  ],
+  "license_tag": "UNCONFIRMED: vendor licence (spec §2.10)",
+  "raw_response": {
+    "entity_id": "sAgA0QVKr-gjEAqoJvf0zg",
+    "label": "Abu Dharr Abdul Nabi Habiballa AHMMED",
+    "type": "person",
+    "closed": false,
+    "attributes": {
+      "names": [
+        "Abo Zer Abdelnabi Habiballa Ahmmed",
+        "أبو ذر عبد النبي حبيب الله أحمد",
+        "Abozer Habib",
+        "Abu Dharr Abdul Nabi Habiballa AHMMED",
+        "Abo Zer Abdelnabi Habiballa Ahmmed"
+      ],
+      "addresses": [
+        "SD",
+        "AE",
+        "United Arab Emirates"
+      ],
+      "identifiers": [
+        {
+          "type": "usa_ofac_sdn_number",
+          "value": "52511"
+        },
+        {
+          "type": "unknown_passport",
+          "value": "P08160513"
+        },
+        {
+          "type": "gbr_uk_sanctions_id",
+          "value": "SUD0051"
+        },
+        {
+          "type": "xxx_acuris_id",
+          "value": "I12423313"
+        },
+        {
+          "type": "open_sanctions_internal_id",
+          "value": "NK-Bydyqjjn98xXMiXx8hmrdo"
+        }
+      ],
+      "countries": [
+        "SDN",
+        "ARE"
+      ]
+    },
+    "risk": {
+      "sanctioned": true,
+      "pep": false,
+      "risk_levels": [
+        "basel_aml",
+        "cpi_score",
+        "export_controls",
+        "owner_of_export_controls_entity",
+        "owner_of_regulatory_action_entity",
+        "owner_of_sanctioned_entity",
+        "owner_of_sanctioned_usa_ofac_sdn_entity",
+        "psa_owner_of_export_controls_entity",
+        "psa_owner_of_regulatory_action_entity",
+        "psa_owner_of_sanctioned_entity",
+        "psa_owner_of_sanctioned_usa_ofac_sdn_entity",
+        "sanctioned_gbr_fcdo",
+        "sanctioned_usa_ofac_sdn"
+      ]
+    },
+    "relationships": {
+      "linked_to": [
+        {
+          "entity_id": "l-hTG9hSLd7dA4za2B7CRw",
+          "label": "Capital Tap Holding L.L.C.",
+          "type": "company",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "owner_of_export_controls_entity",
+              "owner_of_regulatory_action_entity",
+              "owner_of_sanctioned_entity",
+              "owner_of_sanctioned_usa_ofac_sdn_entity",
+              "psa_owner_of_export_controls_entity",
+              "psa_owner_of_regulatory_action_entity",
+              "psa_owner_of_sanctioned_entity",
+              "psa_owner_of_sanctioned_usa_ofac_sdn_entity",
+              "regulatory_action",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Capital Tap Holding L.L.C.",
+          "entity_url": "https://graph.sayari.com/resource/entity/l-hTG9hSLd7dA4za2B7CRw"
+        },
+        {
+          "entity_id": "dFB7YowXog_6EwiEur43RQ",
+          "label": "Prodigious Real Estate Management Supervision Services",
+          "type": "company",
+          "countries": [
+            "ARE",
+            "SDN"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls_adjacent",
+              "psa_sanctioned",
+              "psa_sanctioned_gbr_fcdo",
+              "sanctioned_adjacent"
+            ]
+          },
+          "former": false,
+          "position": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Prodigious Real Estate Management Supervision Services",
+          "entity_url": "https://graph.sayari.com/resource/entity/dFB7YowXog_6EwiEur43RQ"
+        },
+        {
+          "entity_id": "XtartWzEze9a18ZDKVad8A",
+          "label": "Capital Tap General Trading L.L.C.",
+          "type": "company",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "ofac_50_percent_rule",
+              "owned_by_entity_in_export_controls",
+              "owned_by_regulatory_action_entity",
+              "owned_by_sanctioned_entity",
+              "owned_by_sanctioned_gbr_fcdo_entity",
+              "owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_ofac_50_percent_rule",
+              "psa_owned_by_entity_in_export_controls",
+              "psa_owned_by_regulatory_action_entity",
+              "psa_owned_by_sanctioned_entity",
+              "psa_owned_by_sanctioned_gbr_fcdo_entity",
+              "psa_owned_by_sanctioned_usa_ofac_sdn_entity",
+              "regulatory_action",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Capital Tap General Trading L.L.C.",
+          "entity_url": "https://graph.sayari.com/resource/entity/XtartWzEze9a18ZDKVad8A"
+        },
+        {
+          "entity_id": "RoWARA0BHg-GoWvDJFBOSg",
+          "label": "AL ZUMOROUD AND AL YAQOOT GOLD & JEWELLERS TRADING L.L.C.",
+          "type": "company",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "owned_by_entity_in_export_controls",
+              "owned_by_sanctioned_entity",
+              "owned_by_sanctioned_gbr_fcdo_entity",
+              "owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_owned_by_entity_in_export_controls",
+              "psa_owned_by_sanctioned_entity",
+              "psa_owned_by_sanctioned_gbr_fcdo_entity",
+              "psa_owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_regulatory_action",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Al Zumoroud And Al Yaqoot Gold and Jewellers Trading L.L.C.",
+          "entity_url": "https://graph.sayari.com/resource/entity/RoWARA0BHg-GoWvDJFBOSg"
+        },
+        {
+          "entity_id": "GpzoSlwJiKSXyY0Rl51-6w",
+          "label": "Creative Python L.L.C.",
+          "type": "company",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "owned_by_entity_in_export_controls",
+              "owned_by_sanctioned_entity",
+              "owned_by_sanctioned_gbr_fcdo_entity",
+              "owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_owned_by_entity_in_export_controls",
+              "psa_owned_by_sanctioned_entity",
+              "psa_owned_by_sanctioned_gbr_fcdo_entity",
+              "psa_owned_by_sanctioned_usa_ofac_sdn_entity",
+              "regulatory_action",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Creative Python L.L.C.",
+          "entity_url": "https://graph.sayari.com/resource/entity/GpzoSlwJiKSXyY0Rl51-6w"
+        },
+        {
+          "entity_id": "Aq8D2ZKjaHPMSp7ZQdQ3-w",
+          "label": "AL JIL ALQADEM GENERAL TRADING L.L.C.",
+          "type": "company",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "owned_by_entity_in_export_controls",
+              "owned_by_sanctioned_entity",
+              "owned_by_sanctioned_gbr_fcdo_entity",
+              "owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_owned_by_entity_in_export_controls",
+              "psa_owned_by_sanctioned_entity",
+              "psa_owned_by_sanctioned_gbr_fcdo_entity",
+              "psa_owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_regulatory_action",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Al Jil Alqadem General Trading L.L.C.",
+          "entity_url": "https://graph.sayari.com/resource/entity/Aq8D2ZKjaHPMSp7ZQdQ3-w"
+        }
+      ],
+      "shareholder_of": [
+        {
+          "entity_id": "XtartWzEze9a18ZDKVad8A",
+          "label": "Capital Tap General Trading L.L.C.",
+          "type": "company",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "ofac_50_percent_rule",
+              "owned_by_entity_in_export_controls",
+              "owned_by_regulatory_action_entity",
+              "owned_by_sanctioned_entity",
+              "owned_by_sanctioned_gbr_fcdo_entity",
+              "owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_ofac_50_percent_rule",
+              "psa_owned_by_entity_in_export_controls",
+              "psa_owned_by_regulatory_action_entity",
+              "psa_owned_by_sanctioned_entity",
+              "psa_owned_by_sanctioned_gbr_fcdo_entity",
+              "psa_owned_by_sanctioned_usa_ofac_sdn_entity",
+              "regulatory_action",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Capital Tap General Trading L.L.C.",
+          "entity_url": "https://graph.sayari.com/resource/entity/XtartWzEze9a18ZDKVad8A"
+        },
+        {
+          "entity_id": "RoWARA0BHg-GoWvDJFBOSg",
+          "label": "AL ZUMOROUD AND AL YAQOOT GOLD & JEWELLERS TRADING L.L.C.",
+          "type": "company",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "owned_by_entity_in_export_controls",
+              "owned_by_sanctioned_entity",
+              "owned_by_sanctioned_gbr_fcdo_entity",
+              "owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_owned_by_entity_in_export_controls",
+              "psa_owned_by_sanctioned_entity",
+              "psa_owned_by_sanctioned_gbr_fcdo_entity",
+              "psa_owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_regulatory_action",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Al Zumoroud And Al Yaqoot Gold and Jewellers Trading L.L.C.",
+          "entity_url": "https://graph.sayari.com/resource/entity/RoWARA0BHg-GoWvDJFBOSg"
+        },
+        {
+          "entity_id": "GpzoSlwJiKSXyY0Rl51-6w",
+          "label": "Creative Python L.L.C.",
+          "type": "company",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "owned_by_entity_in_export_controls",
+              "owned_by_sanctioned_entity",
+              "owned_by_sanctioned_gbr_fcdo_entity",
+              "owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_owned_by_entity_in_export_controls",
+              "psa_owned_by_sanctioned_entity",
+              "psa_owned_by_sanctioned_gbr_fcdo_entity",
+              "psa_owned_by_sanctioned_usa_ofac_sdn_entity",
+              "regulatory_action",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Creative Python L.L.C.",
+          "entity_url": "https://graph.sayari.com/resource/entity/GpzoSlwJiKSXyY0Rl51-6w"
+        },
+        {
+          "entity_id": "Aq8D2ZKjaHPMSp7ZQdQ3-w",
+          "label": "AL JIL ALQADEM GENERAL TRADING L.L.C.",
+          "type": "company",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "owned_by_entity_in_export_controls",
+              "owned_by_sanctioned_entity",
+              "owned_by_sanctioned_gbr_fcdo_entity",
+              "owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_owned_by_entity_in_export_controls",
+              "psa_owned_by_sanctioned_entity",
+              "psa_owned_by_sanctioned_gbr_fcdo_entity",
+              "psa_owned_by_sanctioned_usa_ofac_sdn_entity",
+              "psa_regulatory_action",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Al Jil Alqadem General Trading L.L.C.",
+          "entity_url": "https://graph.sayari.com/resource/entity/Aq8D2ZKjaHPMSp7ZQdQ3-w"
+        }
+      ],
+      "summary": {
+        "linked_to": 6,
+        "shareholder_of": 4
+      }
+    },
+    "sources": [
+      "Acuris Risk Intelligence - Entities & Relationships (3rd Party Data)",
+      "Acuris Risk Intelligence - Risk Information and Articles (3rd Party Data)",
+      "UK Consolidated Sanctions List",
+      "USA Treasury OFAC Specially Designated Nationals (SDN) List",
+      "OpenSanctions - Global Sanctions List"
+    ],
+    "trade_count": {
+      "sent": 0,
+      "received": 0
+    },
+    "investigation_notes": [
+      "Try multiple Romanizations when resolving Russian entities — Sayari may index entities under different transliterations.",
+      "Since 2022, live EGRUL access may be restricted — Sayari's pre-2022 historical data is valuable for Russian entity research. Use the Sayari API to access this data.",
+      "Russian sanctions evasion often involves restructuring ownership through intermediaries in CIS countries (Kazakhstan, Armenia, Georgia, Kyrgyzstan) or through Turkish, UAE, and Chinese entities."
+    ],
+    "_hints": [
+      "For full risk factor details including scoring methodology, use the lookup_risk_factors tool."
+    ],
+    "entity_url": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg",
+    "_guidance": {
+      "entity_links": "IMPORTANT: When presenting these results to the user, display every entity_url in this response as a clickable markdown link using the entity's name as link text, e.g. [Acme Corp](https://graph.sayari.com/resource/entity/abc123). Every entity, owner, trade partner, and relationship you mention must link to Sayari Graph so the user can verify the data.",
+      "follow_up": "After presenting findings, if there are unexplored leads listed in suggested_next_steps below, ask the user which they'd like to investigate. When multiple options exist, briefly describe each and let the user choose.",
+      "suggested_next_steps": [
+        "Entities with risk flags found: Capital Tap Holding L.L.C., Capital Tap General Trading L.L.C., AL ZUMOROUD AND AL YAQOOT GOLD & JEWELLERS TRADING L.L.C., Creative Python L.L.C., AL JIL ALQADEM GENERAL TRADING L.L.C. — offer to profile or ownership-trace these entities."
+      ],
+      "entity_quality": "Treat entity resolution as a same-legal-entity judgment, not just name matching. Validate identifiers, countries, source quality, relationships, and the user's seed facts. If a result looks conflated across jurisdictions or critical-risk flags are involved, surface the ambiguity explicitly instead of silently merging or normalizing records."
+    }
+  }
+}

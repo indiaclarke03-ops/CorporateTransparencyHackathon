@@ -1,0 +1,82 @@
+{
+  "source_name": "sayari",
+  "via": "claude.ai Sayari connector (MCP)",
+  "operation": "get_entity_profile",
+  "request_params": {
+    "entity_id": "JpVf25RrEuLqHVqxnsWSig",
+    "relationships_limit": 50
+  },
+  "retrieved_at": "2026-09-25T18:16:54.651Z",
+  "response_hash": "sha256:49a97b84ff35338fedfb08c816ec69f673fd37c9c44b0ba36d589d7a515b298a",
+  "vendor_record_ids": [
+    "JpVf25RrEuLqHVqxnsWSig"
+  ],
+  "license_tag": "UNCONFIRMED: vendor licence (spec §2.10)",
+  "raw_response": {
+    "entity_id": "JpVf25RrEuLqHVqxnsWSig",
+    "label": "AL ZUMOROUD AND AL YAQOOT GOLD & JEWELLERS TRADING L.L.C",
+    "type": "company",
+    "closed": false,
+    "attributes": {
+      "names": [
+        "AL ZUMOROUD AND AL YAQOOT GOLD & JEWELLERS TRADING L.L.C",
+        "الزمرد والياقوت لتجارة الذهب والمجوهرات ش.ذ.م.م"
+      ],
+      "addresses": [
+        "Dubai, ARE"
+      ],
+      "identifiers": [
+        {
+          "type": "unknown_commercial_register_id",
+          "value": "1708681"
+        },
+        {
+          "type": "unknown_chamber_of_commerce_id",
+          "value": "336311"
+        },
+        {
+          "type": "xxx_cedar_rose_uid",
+          "value": "AEC222413327"
+        },
+        {
+          "type": "unknown_license_num",
+          "value": "880169"
+        }
+      ],
+      "countries": [
+        "ARE"
+      ],
+      "registration_date": "2020-02-19",
+      "company_type": "LLC"
+    },
+    "risk": {
+      "sanctioned": false,
+      "pep": false,
+      "risk_levels": [
+        "basel_aml",
+        "cpi_score"
+      ]
+    },
+    "relationships": {},
+    "sources": [
+      "UAE Cedar Rose Company Database (3rd Party Data)"
+    ],
+    "trade_count": {
+      "sent": 0,
+      "received": 0
+    },
+    "investigation_notes": [
+      "Try multiple Romanizations when resolving Russian entities — Sayari may index entities under different transliterations.",
+      "Since 2022, live EGRUL access may be restricted — Sayari's pre-2022 historical data is valuable for Russian entity research. Use the Sayari API to access this data.",
+      "Russian sanctions evasion often involves restructuring ownership through intermediaries in CIS countries (Kazakhstan, Armenia, Georgia, Kyrgyzstan) or through Turkish, UAE, and Chinese entities."
+    ],
+    "_hints": [
+      "For full risk factor details including scoring methodology, use the lookup_risk_factors tool."
+    ],
+    "entity_url": "https://graph.sayari.com/resource/entity/JpVf25RrEuLqHVqxnsWSig",
+    "_guidance": {
+      "entity_links": "IMPORTANT: When presenting these results to the user, display every entity_url in this response as a clickable markdown link using the entity's name as link text, e.g. [Acme Corp](https://graph.sayari.com/resource/entity/abc123). Every entity, owner, trade partner, and relationship you mention must link to Sayari Graph so the user can verify the data.",
+      "entity_quality": "Treat entity resolution as a same-legal-entity judgment, not just name matching. Validate identifiers, countries, source quality, relationships, and the user's seed facts. If a result looks conflated across jurisdictions or critical-risk flags are involved, surface the ambiguity explicitly instead of silently merging or normalizing records."
+    }
+  }
+}

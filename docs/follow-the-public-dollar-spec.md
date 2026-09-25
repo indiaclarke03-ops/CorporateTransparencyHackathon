@@ -1,508 +1,736 @@
-# Follow the Public Dollar — Technical Design Specification
+# Follow the Public Dollar — build specification
 
-**Product:** Risk rating and exposure report on public money reaching shell-company networks through the supply chain
-**Audience for outputs:** Regulators, inspectors general, and audit staff
-**Build environment:** VS Code (Python)
-**Data providers:** Sayari, Tradeverifyd, Tavily, plus public spending data (USAspending.gov, SAM.gov)
-**Document status:** Draft v1.1 — prepared 25 September 2026; open items in Section 13 checked the same day
+Working title for a corporate-transparency platform that starts from US federal contract and loan recipients, maps their ownership and supply chains, and surfaces evidence-backed paths to sanctioned or high-risk parties.
+
+This document is the source of truth for the build. It is written so that a developer, or an AI coding assistant in VS Code, can implement it section by section. Where a fact has not been verified, it is marked **[VERIFY]** and must be confirmed against official documentation before code depends on it.
 
 ---
 
-## How to read this document
+## 0. How to use this document
 
-Every statement in this spec carries one of three tags, so reviewers can see exactly what is fact and what is a choice.
-
-| Tag | Meaning |
-|---|---|
-| **[V]** | **Verified.** Checked against a public source or the provider's own tool output. The source is listed in Section 14. |
-| **[D]** | **Design decision.** A choice made by the team. Not a factual claim. Can be changed. |
-| **[C]** | **To confirm.** Not yet verified. Must be checked before the product is shown to a regulator. |
-
-Numeric weights and thresholds in this document are **[D]** unless stated otherwise. They are starting values, not calibrated findings.
+- Build in the order given in section 13. Each milestone is independently demoable.
+- Treat section 2 (accuracy principles) as hard requirements. Any feature that cannot meet them ships disabled.
+- Never hard-code a vendor endpoint, field name, or score scale from memory. Every external call goes through an adapter (section 5) whose contract is confirmed against the vendor's current docs, with a recorded fixture.
+- Items marked **[VERIFY]** are tracked in section 14. Resolve them before the dependent milestone.
 
 ---
 
-## 1. Purpose and operating principles
+## 1. Product summary
 
-**Purpose [D].** Start from a public award (contract, grant, or loan). Trace the recipient's ownership, subawardees, and trade counterparties. Estimate how likely each entity is to show shell-company characteristics. Report how many public dollars are exposed, with a range, and show the evidence behind every number.
+### 1.1 The question it answers
 
-**Operating principles [D]:**
+"Did US federal money reach a company whose owners, officers, or trade partners connect to sanctioned, export-controlled, or otherwise high-risk parties?"
 
-1. **Predictive, not determinative.** The system estimates likelihood from external records. It does not have access to any company's internal books, bank records, or logs, so it cannot establish what a company actually did. Every output is a *risk lead for review*, never a finding of wrongdoing.
-2. **No hard labels.** The product never labels an entity "a shell company." It reports "indicators consistent with shell-company activity," a likelihood band, and a confidence level.
-3. **Official list status is reported separately.** Whether an entity appears on a sanctions or export-control list is a matter of public record, not a prediction. It is shown as a fact with its source, outside the likelihood score.
-4. **Missing data is not evidence.** If a signal cannot be checked, it does not raise or lower the score. It widens the uncertainty range instead.
-5. **Corroboration before escalation.** No single indicator, and no single data source, can place an entity in the highest band on its own.
-6. **Full provenance.** Every indicator links to the record that triggered it, with the retrieval time.
+Most due-diligence tools start from a known bad actor and look outward. This tool starts from public money and looks for risk.
 
-**Why this matters, in the providers' own terms [V].** Sayari's investigation guidance states that no single indicator proves an entity is a shell, and that shell companies are not inherently illegal, since many serve legitimate purposes such as holding property or acting as project-finance vehicles. Several Sayari risk-factor definitions (for example, TCSP ownership and mass business registration) explicitly note that the flag may reflect legitimate activity and should be verified.
+### 1.2 Primary users
 
----
-
-## 2. Regulatory context (all verified)
-
-| Development | Detail | Tag |
+| User | Their question | What they need |
 |---|---|---|
-| US beneficial-ownership reporting narrowed | FinCEN's interim final rule, announced 21 March 2025 and published 26 March 2025, exempts all entities created in the United States and their beneficial owners from BOI reporting. Only foreign companies registered to do business in a US state remain covered, and they need not report US-person beneficial owners. | [V] |
-| UK identity verification | Mandatory identity verification for directors and persons with significant control began 18 November 2025, with a 12-month transition for existing directors and PSCs. | [V] |
-| Definition of beneficial owner | Under the FATF standard, only a natural person can be an ultimate beneficial owner. A legal person or arrangement can never be the beneficial owner. | [V] |
-| OFAC 50 Percent Rule | Entities owned 50% or more, directly or indirectly and in the aggregate, by one or more blocked persons are themselves blocked, whether or not they appear on the SDN List. The rule covers ownership, not control. | [V] |
-| Common High Priority List (CHPL) | BIS, with the EU, Japan, and UK, maintains a list of 50 items identified by six-digit HS codes that Russia seeks for its weapons programs. The nine Tier 1 and Tier 2 codes (including integrated circuits and RF transceiver modules) are the highest priority. | [V] |
-| Transshipment points | BIS has identified common transshipment points for goods diverted to Russia or Belarus, including Armenia, Brazil, China, Georgia, India, Israel, Kazakhstan, Kyrgyzstan, Mexico, Nicaragua, Serbia, Singapore, South Africa, Taiwan, Tajikistan, Turkey, the UAE, and Uzbekistan. | [V] |
-| Phoenix activity | ASIC (Australia) defines illegal phoenix activity as a new company continuing the business of a liquidated or abandoned company, for little or no value, to avoid paying its debts. | [V] |
+| Regulators, inspectors general, auditors | Did an award recipient connect to risky parties? | An evidence trail where every claim links to a source record |
+| Researchers and investigative journalists | Where are the patterns in contract data? | Trends, ranked leads, exportable data |
 
-**Product implication [D].** Because US-formed companies no longer file beneficial ownership with FinCEN, external ownership data (Sayari) and behavioral indicators become more important for US recipients of public money.
+Secondary users (not in scope for v1): prime-contractor compliance teams, bank KYC teams.
 
----
+### 1.3 Core features
 
-## 3. System architecture
+1. **Dashboard** of trends in federal spending, sanctions and export-control actions, and commodity trade.
+2. **News feed** with official government actions and media coverage, each item linked to its source.
+3. **Company search** that resolves an entity and shows ownership, network, trade relationships, public-money records, and risk signals.
+4. **Report export** as a PDF with full provenance, plus machine-readable evidence files.
 
-### 3.1 Pipeline [D]
+### 1.4 Scope boundary for v1
 
-```
- ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐
- │ 1. Ingest    │──▶│ 2. Resolve   │──▶│ 3. Expand    │──▶│ 4. Score     │──▶│ 5. Quantify  │──▶│ 6. Report    │
- │ public award │   │ entity match │   │ network      │   │ indicators   │   │ exposure $   │   │ + audit pack │
- └──────────────┘   └──────────────┘   └──────────────┘   └──────────────┘   └──────────────┘   └──────────────┘
-   USAspending        Sayari search      Sayari UBO,        Sayari risk       Award, subaward    HTML/PDF report,
-   SAM.gov            + confidence       traversal,         factors,          and trade values   JSON evidence,
-                                         shipments;         Tradeverifyd,                        hash-chained log
-                                         Tradeverifyd       Tavily
-```
-
-### 3.2 Proposed repository layout [D]
-
-```
-public-dollar/
-├── .vscode/                 launch configs, recommended extensions
-├── .env.example             variable names only; never commit real keys
-├── config/
-│   ├── weights.yaml         signal weights and thresholds (versioned)
-│   └── lists.yaml           jurisdiction and HS-code reference lists (with source links)
-├── src/public_dollar/
-│   ├── sources/             usaspending.py, sam.py
-│   ├── providers/           sayari.py, tradeverifyd.py, tavily.py
-│   ├── resolve.py           entity resolution and confidence
-│   ├── graph.py             case graph (networkx)
-│   ├── signals/             one module per signal family
-│   ├── index.py             combined source index (Section 6)
-│   ├── scoring.py           likelihood model (Section 7)
-│   ├── exposure.py          dollar exposure (Section 8)
-│   ├── report/              templates for the regulator report
-│   ├── audit.py             hash-chained audit log
-│   └── cache.py             integrity-checked response cache
-├── tests/                   unit tests + one backtest fixture
-└── reports/                 generated output (git-ignored)
-```
+- **In scope:** direct federal money to companies — federal contract awards (USAspending), SAM.gov registrations, PPP and SBA loans.
+- **Out of scope:** federal grants passed through state agencies to sub-recipients. The pilot runs (section 3) showed these money paths are not visible in the available data. The UI must say so rather than imply coverage.
 
 ---
 
-## 4. Data sources and tool mapping
+## 2. Accuracy principles (non-negotiable)
 
-### 4.1 Public money (input layer)
+These exist because the users are regulators and researchers who will not accept errors.
 
-| Source | Use | Access | Tag |
-|---|---|---|---|
-| USAspending `POST /api/v2/search/spending_by_award/` | Find awards by recipient. Setting `subawards: true` searches subawards instead of prime awards. | Public REST API | [V] |
-| USAspending `POST /api/v2/subawards/` | List subawards for one prime award, filtered by `award_id` (generated award ID preferred). | Public REST API | [V] |
-| USAspending `GET /api/v2/awards/<award_id>/` | Award profile, including `subaward_count` and `total_subaward_amount`. | Public REST API | [V] |
-| SAM.gov Entity Management API `GET https://api.sam.gov/entity-information/v4/entities` | Registration dates (`registrationDate`), business types (`businessTypeCode`/`businessTypeDesc`), NAICS (`primaryNaics`, `naicsCode`). Key passed as `api_key` query parameter. | Free API key | [V] Public-level fields only. Parent/owner fields (`immediateParentEntity`, `ultimateParentEntity`) are **FOUO**, not available with a public key, so ownership must come from Sayari |
-| SAM.gov Exclusions API `GET https://api.sam.gov/entity-information/v4/exclusions` | Debarred and suspended parties. Filter by `ueiSAM`, `exclusionName`, `classification`. v1–v3 retired September 2024. | Free API key | [V] |
-
-**SAM.gov rate limit [V].** A personal key for a non-federal user **without a SAM.gov role allows 10 requests per day**; with a role, 1,000. The build must cache SAM.gov responses and query only the recipient and first-tier entities, or request a role before the demo.
-
-**Known gap [V].** Subaward data is self-reported by prime recipients and may be incomplete. Reporting applies only to first-tier subawards at or above the threshold: **$40,000 for contracts** (FAR 52.204-10, threshold set in FAR 4.1403(a)) and **$30,000 for grants and other assistance** (2 CFR 170, Appendix A). Smaller subawards and all second-tier subawards are not reported, so every report must state that subaward coverage is partial.
-
-**Competition fields [V].** The award profile (`GET /api/v2/awards/<award_id>/`) carries `latest_transaction_contract_data.extent_competed` and `extent_competed_description`, plus `number_of_offers_received` and `solicitation_procedures`. These are **null on some IDVs and BPAs** (checked on `CONT_IDV_19AQMM25A1228_1900`); for those, read the field on the individual orders, and treat null as "not checkable," never as "not competed."
-
-### 4.2 Sayari (ownership, network, risk factors, trade) — tool names verified from the connected tools
-
-| Tool | Use in this product |
-|---|---|
-| `search_entities` | Candidate matching for the award recipient. Sayari's own guidance says to compare identifiers, countries, and relationships, not names alone. |
-| `get_entity_summary` | Attributes and risk factors without relationships (cheaper). |
-| `get_entity_profile` | Full attributes, relationships, and risk factors. |
-| `find_beneficial_owners` | Ownership chain upward; detect chains that never reach a natural person. |
-| `traverse_network` | Network expansion with relationship, country, `sanctioned`, and `pep` filters. |
-| `check_watchlist` | Paths from the entity to sanctioned parties, PEPs, or regulatory actions. |
-| `search_shipments` | Shipment-level trade records (parties, goods, dates, risk flags). |
-| `get_upstream_supply_chain` | Supplier tiers, filterable by HS code, risk, country, and date. |
-| `lookup_risk_factors` | Definitions for Sayari risk-factor IDs (721 defined at the time of writing). |
-| `get_investigation_guidance` | Sayari's analyst tradecraft, including shell-company methodology. |
-
-**Production access [V].** The tools above are the MCP connector interface, which is suitable for the hackathon demo. A production application uses the REST API with OAuth 2.0 client credentials: `POST https://api.sayari.com/oauth/token` with `client_id`, `client_secret`, `audience: "sayari.com"`, `grant_type: "client_credentials"`; the bearer token lasts 24 hours. Endpoint mapping:
-
-| MCP tool | REST endpoint |
-|---|---|
-| `search_entities` | `POST /v1/search/entity` |
-| `get_entity_profile` | `GET /v1/entity/{id}` |
-| `get_entity_summary` | `GET /v1/entity_summary/{id}` |
-| `traverse_network` | `GET /v1/traversal/{id}` |
-| `find_beneficial_owners` | `GET /v1/ubo/{id}` |
-| `check_watchlist` | `GET /v1/watchlist/{id}` |
-| `find_shortest_path` | `GET /v1/shortest_path` |
-| `search_shipments` | `POST /v1/trade/search/shipments` |
-| `get_upstream_supply_chain` | `GET /v1/supply_chain/upstream/{id}` |
-| `get_record` | `GET /v1/record/{id}` |
-| (entity resolution) | `POST /v1/resolution` |
-
-**[D]** The demo uses the MCP connector; the Python build wraps both behind one client interface so the switch to REST is a configuration change.
-
-### 4.3 Tradeverifyd (trade exposure)
-
-Checked through the connected Tradeverifyd MCP tools on 25 September 2026. The HTTP 401 error recorded earlier that day in `research/README.md` no longer occurs.
-
-| Tool | Inputs | Output fields used | Planned use | Tag |
-|---|---|---|---|---|
-| `search_entities` | `name` or `external_id` (LEI, DUNS), optional `jurisdiction`, `has_annotations`, `annotation_categories` | `entity_id`, `external_ids`, `naics`, `annotations` (count per category, e.g. `"US OFAC": 3`), `annotation_count` | Resolve the recipient; read list annotations | [V] |
-| `entity_details` | `entity_id` | `legal_form`, `jurisdiction`, `naics`, `industry`, `external_ids` | Declared activity for the business–goods mismatch signal | [V] |
-| `entity_annotations` | `entity_id` | Full annotation details only for **monitored** entities with `annotations:read` scope; otherwise a count only | Annotation detail | [V] |
-| `annotated_relationship_paths` | `entity_id`, `direction` (`in` suppliers / `out` customers / `both`), `max_depth` 1–5, optional `hs_codes` | `paths[]` with `annotated_entity` (`annotation_count`, `annotation_badges`), `hops[]` (`tier`, `hs_codes`), `depth` | Proximity via trade links | [V] |
-| `entity_trade_relationships` | `entity_id`, `direction`, optional `hs_codes` | Counterparties with the HS codes on each edge | Trade counterparties | [V] |
-| `entity_addresses` | `entity_id`, filters | Address lines, city, postal code, `location_type`. **No coordinates** | Address evidence | [V] |
-| `find_companies_in_radius` | `latitude`, `longitude`, `radius_nm` (**nautical miles**), `limit` ≤ 1,000 | Entity IDs with distance | Not used; see note below | [V] |
-| Value-chain tools | `tia_create_value_chain`, `tia_get_value_chain_by_id`, `tia_get_value_chain_by_anchor`, `tia_value_chain_overview`, `tia_value_chain_briefing`, `tia_add_value_chain_node`, and related `tia_*` tools | Not yet exercised | Tier-by-tier supply chain | Names [V]; outputs [C] |
-
-**Findings that change the design:**
-
-- **[V] `annotated_relationship_paths` returns non-sanctions and zero-annotation endpoints.** For the Palantir control (depth 3, both directions) it returned 22 paths. They include entities with `annotation_count: 0`, badges such as "Forced Labor Research", "US GSA" and "Human Rights", and one path to an entity with 3 "US OFAC" annotations through three trade hops. **[D]** The Proximity category counts only paths whose endpoint carries a sanctions or export-control badge ("US OFAC", "US BIS", "Asset Freeze", "Natl Securty"), and only at depth 1–2. Deeper paths are shown for context but never scored. Without this filter the control case fails, the same risk `research/README.md` records for Sayari watchlist paths.
-- **[V] `find_companies_in_radius` is not usable for address clustering yet.** It takes a point, not an address, and `entity_addresses` returns no coordinates, so it needs a separate geocoding step. Its own description says it is intended for disaster and event linkage. Three test calls (radius 0.01–0.5 nm, New York and South Dakota) all failed with a server-side statement timeout. **[D]** The address signal uses Sayari `mass_address_usage` only until this works.
-
-### 4.4 Tavily (real-world presence and adverse media) — tool names verified
-
-| Tool | Use |
-|---|---|
-| `tavily_search` | Web presence check; adverse media and enforcement news |
-| `tavily_extract` | Pull text from a specific page for the evidence record |
-| `tavily_crawl`, `tavily_map` | Inspect a company website's depth (a one-page site vs. an operating business) |
-| `tavily_research` | Optional deeper background on high-band entities only |
+1. **Provenance on every fact.** Every value shown in the UI or a report links to a stored source record containing: source name, source record ID, request parameters, retrieval timestamp, and a hash of the raw response.
+2. **No generated facts.** The application never writes factual claims that are not a direct rendering of source data. All report prose is built from templates filled with sourced fields. No LLM-generated summaries in v1. If an LLM feature is added later, it must be extractive, cite source records inline, be labeled as machine-generated, and be off by default.
+3. **Show uncertainty explicitly.** Entity matches carry a match grade, A to D (section 7). Vendor "possibly same as" flags are displayed as unconfirmed, never as findings.
+4. **Timestamps everywhere.** Every panel, profile, and report shows "Data as of" for each source used.
+5. **Risk leads, not accusations.** The interface and every report state that outputs are leads for human review, not findings of wrongdoing. Small legitimate firms often look thin online, register in Delaware, or use registered agents.
+6. **Multiple signals required.** No single signal can place an entity in the High tier (section 9.3).
+7. **Absence is not innocence.** A missing flag is shown as "no record found in [source] as of [date]", never as "clean". The pilot showed a convicted organization carrying no enforcement flag.
+8. **Human in the loop.** Analysts can confirm or dismiss each lead with a note. Dismissals are logged, never deleted.
+9. **Reproducibility.** Any report can be regenerated from stored source records, and each report carries a content hash.
+10. **Licensing respected.** Exported reports include only data the vendor licenses permit redistributing **[VERIFY]**.
 
 ---
 
-## 5. Signal catalog
+## 3. What the pilot runs showed
 
-Each signal records: **what fired**, **the evidence**, **the source record**, and **known innocent explanations**. Where Sayari already publishes a risk factor for the pattern, the product uses Sayari's factor ID directly rather than re-deriving it. Factor IDs and definitions below were retrieved from Sayari's `lookup_risk_factors` tool [V].
+Two test runs through the actual Sayari, Tradeverifyd, and Tavily tools shaped this spec. Keep these as regression fixtures (appendix A).
 
-**Strength tiers [D]:** Strong, Moderate, Weak. Tiers map to likelihood ratios in Section 7.
+### 3.1 Sayari already holds public-money data
 
-### 5.1 Ownership and control
+Sayari's source catalog for the US includes USAspending.gov contract profiles, SAM.gov entity registrations, SAM.gov exclusions, PPP loan recipients, SBA 504/7(a) loans, the SBA Dynamic Small Business Database, IRS 990 filings, the DLA CAGE registry, OFAC SDN and non-SDN lists, the BIS Entity List, the UFLPA Entity List, and state company registries. This means much of the public-money layer can be reached through Sayari, cross-checked against the free government APIs in section 5.4.
 
-| Signal | Definition | Source | Sayari factor ID [V] | Strength [D] | Innocent explanations |
-|---|---|---|---|---|---|
-| UBO dead end | Ownership chain ends at a legal person with no natural person identified | Sayari `find_beneficial_owners` | — (derived) | Moderate | Data gaps in opaque registries; publicly listed parents |
-| Circular ownership | Ownership path loops back to an entity already in the chain | Sayari traversal | — (derived) | Strong | Rare; occasionally cross-holdings in corporate groups |
-| Mass business registration (officer) | An officer holds more than 20 control-type positions | Sayari | `mass_business_registration`, `controlled_by_mass_business_registration` | Moderate | Professional directors, holding-company operations (per Sayari's definition) |
-| TCSP ownership or control | Owned or controlled by a trust and corporate service provider | Sayari | `tcsp_keyword_risk`, `owned_by_tcsp_keyword_risk`, `controlled_by_tcsp_keyword_risk` | Moderate | Legitimate use of corporate services (per Sayari's definition) |
-| Implausible officer age | Officer's recorded birth date gives an age under 16 or over 100 | Sayari | `implausible_date_of_birth`, `controlled_by_implausible_date_of_birth` | Moderate | Registry data-quality errors (per Sayari's definition) |
+### 3.2 Case 1: AZ Gold (sanctioned UAE company, backward test)
 
-### 5.2 Location
+- One company appeared as **four separate Sayari records**. Only one carried the sanction. The others carried "possibly same as" flags. **Lesson:** entity resolution must merge on shared identifiers before scoring.
+- One hop from the shared manager returned five OFAC-designated sibling companies and one company not on the US SDN list. **Lesson:** officer and manager pivots are high-value.
+- Tradeverifyd did not index AZ Gold, but it did surface two prior names for a sibling company. **Lesson:** coverage differs by vendor, so query all of them.
+- Tradeverifyd name search returned many irrelevant low-relevance matches. **Lesson:** calibrate a confidence cutoff on labeled data rather than assuming one.
+- Neither vendor showed trade records, although the core allegation involved gold moving from Sudan to Dubai. **Lesson:** trade-based signals will be silent for informal flows, and the UI must say "no trade data available", not "no trade risk".
+- The SAM.gov record for AZ Gold came from the **Exclusions** database, not registrations. **Lesson:** always display which SAM dataset a record comes from.
 
-| Signal | Definition | Source | Sayari factor ID [V] | Strength [D] | Innocent explanations |
-|---|---|---|---|---|---|
-| Mass address usage | Registered at an address shared by more than 1,000 distinct entities | Sayari (Tradeverifyd `find_companies_in_radius` not usable yet; see 4.3) [V] | `mass_address_usage` | Weak | Registered-agent addresses are used by many legitimate companies |
+### 3.3 Case 2: Feeding Our Future (pandemic fraud, forward test)
 
-**Double-counting rule [D].** Sayari's `mass_address_usage` and Tradeverifyd's address clustering measure the same thing. They form **one** signal. Agreement between them raises *confidence*, not the score (see Section 6.3).
-
-### 5.3 Lifecycle
-
-| Signal | Definition | Source | Strength [D] | Innocent explanations |
-|---|---|---|---|---|
-| Registration-to-award gap | Entity registered in SAM.gov or incorporated shortly before a large award | SAM.gov `registrationDate` [V], Sayari, USAspending | Moderate | New legitimate firms, including small-business program entrants |
-| Shelf activation | Long dormancy after incorporation, then sudden activity or officer turnover | Sayari profile history | Moderate | Legitimate shelf-company purchase |
-| Phoenix linkage | A new entity shares two or more identifiers (officer, owner, address, phone, email domain, trade counterparty) with a previously dissolved entity that carried risk indicators | Sayari relationships and status | Strong | Legitimate business rescue (ASIC distinguishes this by intent) |
-
-**Phoenix matching rules [D]:**
-
-1. Require at least two shared identifiers.
-2. Weight rarer identifiers higher. An address with more than 1,000 registered entities counts as a weak identifier; a shared officer, phone number, or email domain counts as strong.
-3. Report the linked predecessor, the shared identifiers, and the dates.
-
-**Removed from earlier drafts [C].** The claim that shell companies "usually exist for about two years" has no verified source. The product will measure lifespans in its own data rather than assert a figure.
-
-### 5.4 Trade
-
-| Signal | Definition | Source | Sayari factor ID [V] | Strength [D] |
-|---|---|---|---|---|
-| Business–goods mismatch | Declared activity (e.g., NAICS services code) inconsistent with HS codes traded | Sayari shipments; SAM.gov `primaryNaics` or Tradeverifyd `naics` [V] | — (derived) | Strong |
-| CHPL goods | Entity trades HS codes on the Common High Priority List | Sayari shipments | `exports_bis_high_priority_items_direct`, `..._indirect`, `..._critical_components_direct`, `..._critical_components_indirect` | Moderate |
-| Transshipment routing | Shipments route through BIS-identified transshipment points | Sayari shipments (`transit_country` [V]); Tradeverifyd route tools (`tia_get_route`, `tia_trade_flow`) [C] | — (derived) | Weak alone; Moderate with CHPL goods |
-| Exports to sanctioned parties | Exports arriving after the counterparty's designation date | Sayari | `export_to_sanctioned` | Strong |
-| Price anomaly (misinvoicing) | Declared unit value far from a benchmark for the same HS code | Sayari shipments (value and weight, where present) [V]; UN Comtrade benchmark [D] | — (derived) | Moderate |
-| Counterparty churn | Rapid rotation of short-lived trading partners | Sayari shipments | — (derived) | Weak |
-
-**Notes on trade signals:**
-
-- **[V]** Sayari's definition of `export_to_sanctioned` states that such an export does not by definition indicate a violation, because it may be permitted under a general license or exemption. The report must repeat this caveat whenever the factor fires.
-- **[D]** Price-anomaly thresholds start at the values in Sayari's tradecraft guidance (unit price at least 30% above, or at or below 70% of, a benchmark). These are Sayari's guidance values, not a legal standard.
-- **[V] Value coverage depends on the trade dataset.** Checked on the Serniya receiver records (151 shipments, 24 Jan 2019 – 26 Mar 2022). Records from "Global Historical Imports & Exports (2019 - 2020)" carry `value` (USD) and `weight` (kg). Records from "Russia Imports & Exports (January 2022 - Present)" carry weight only. **Neither carries unit quantity.** The signal is therefore computed as **USD per kg**, only on shipments with both fields; shipments without a value are "not checkable," never "clear."
-- **[D] Benchmark: UN Comtrade.** For each shipment, compare its USD/kg with the Comtrade unit value (`primaryValue` / `netWgt`) for the same 6-digit HS code, reporter, partner and year. The public preview endpoint needs no key (`GET https://comtradeapi.un.org/public/v1/preview/C/A/HS?reporterCode=…&partnerCode=…&period=…&cmdCode=…&flowCode=M`). Example [V]: Russia's 2020 imports of HS 903090 from Germany were $2,433,701 over 3,283 kg, about $741/kg. Weight-based unit values are noisy for high-value instruments, so this signal stays Moderate and never fires on a single shipment. Tradeverifyd `tia_commodity_price` covers exchange-traded commodities (e.g. copper), not manufactured goods, so it is not used here.
-
-### 5.5 Real-world presence (Tavily)
-
-| Signal | Definition | Strength [D] | Innocent explanations |
-|---|---|---|---|
-| No operational footprint | No company-owned website; only registry or aggregator listings | Moderate | Small or new firms with little online presence |
-| Operating website present | A company-owned site with substantive content | **Exculpatory** (lowers likelihood) | — |
-| Adverse media | News or official sources describing enforcement, charges, or investigations naming the entity | Moderate | Name collisions; must match on more than name |
-
-Sayari also publishes adverse-media factors (`law_enforcement_action`, `reputational_risk_financial_crime`, `regulatory_action`) [V]. When both Sayari and Tavily report the same event, it is one signal with higher confidence (Section 6.3).
-
-### 5.6 Proximity to listed parties
-
-| Signal | Definition | Sayari factor ID [V] | Strength [D] |
-|---|---|---|---|
-| Listed party | Entity itself appears on a sanctions or export-control list | `sanctioned`, `sanctioned_usa_ofac_sdn`, `export_controls`, and related IDs | **Reported as fact, outside the score** |
-| Majority-owned by SDN | Possibly majority-owned by OFAC SDN entities, up to 6 hops, in aggregate (Sayari's implementation of the 50% rule) | `ofac_50_percent_rule` | **Reported as fact-pending-review, outside the score** |
-| One hop from sanctioned | Directly related to a sanctioned entity | `sanctioned_adjacent` | Strong |
-| Two to three hops | Found via `check_watchlist` path | — (derived from paths) | Moderate (2 hops), Weak (3 hops) |
-
-### 5.7 Public-money signals
-
-| Signal | Definition | Source | Strength [D] |
-|---|---|---|---|
-| Pass-through | Subawards total a large share of the prime award | USAspending subawards | Weak |
-| Award vs. entity profile | Award size far exceeds what the entity's age and footprint suggest | USAspending; SAM.gov `registrationDate` [V]; Sayari | Moderate |
-| Non-competitive award to young entity | Award not competed, and recipient recently formed | USAspending `extent_competed` [V] (null on some IDVs; see 4.1) | Weak |
+- The convicted nonprofit carried **no enforcement flag** and was listed as active in the state registry.
+- The federal money moved through a state agency, so no award record attached to the recipient.
+- The shell sites connected to the nonprofit through sponsorship agreements, which company registries do not record.
+- Person records were fragmented, so pivoting on individuals returned only one company each.
+- The name matched unrelated organizations in several states and countries. "Safari Restaurant" returned 296 matches. **Lesson:** never match on name alone.
+- One site company showed a clear lifecycle pattern: registered within weeks of the program waivers opening, now inactive.
 
 ---
 
-## 6. Combined Source Index (Sayari × Tradeverifyd × Tavily)
+## 4. Architecture
 
-### 6.1 Purpose [D]
+### 4.1 Stack
 
-Each provider sees part of the picture. The index combines their outputs into one comparable view **per entity**, shows where they agree or disagree, and prevents the same fact from being counted twice.
-
-### 6.2 Normalization [D]
-
-Map every provider output into shared **indicator categories**:
-
-| Category | Sayari inputs (factor IDs) [V] | Tradeverifyd inputs [V unless marked] | Tavily inputs |
-|---|---|---|---|
-| Listed or majority-owned by listed | `sanctioned*`, `ofac_50_percent_rule`, `eu_50_percent_rule`, `uk_50_percent_rule`, `usa_bis_50_percent_rule` | `annotations` badges on the entity itself ("US OFAC", "US BIS", "Asset Freeze") | — |
-| Proximity | `sanctioned_adjacent`, `check_watchlist` paths | `annotated_relationship_paths` depth, sanctions badges only, depth ≤ 2 (see 4.3) | — |
-| Nominee / formation | `mass_business_registration`, `controlled_by_mass_business_registration`, `tcsp_keyword_risk`, `owned_by_tcsp_keyword_risk`, `controlled_by_tcsp_keyword_risk`, `implausible_date_of_birth` | — | — |
-| Address | `mass_address_usage` | — (`find_companies_in_radius` not usable yet) | Virtual-office evidence |
-| Trade control | `exports_bis_high_priority_items_*`, `export_to_sanctioned` | Value-chain flags [C] | — |
-| Adverse media / enforcement | `law_enforcement_action*`, `reputational_risk_financial_crime*`, `regulatory_action` | — | Adverse-media results |
-| Presence | — | — | Website / footprint result |
-| Jurisdiction context | `basel_aml` (0–10, higher is riskier), `cpi_score` (0–100, higher is cleaner) | — | — |
-
-**"Possibly the Same As" (PSA) factors [V → D].** Sayari defines PSA factors (for example, `psa_sanctioned`) as matches to entities that did not meet the threshold to be merged but may be the same. The product treats every `psa_` factor as the same category at **reduced weight** and labels it "unconfirmed identity match" in the report.
-
-### 6.3 Per-category combination [D]
-
-For each entity and category:
-
-1. **Presence of evidence.** A category is `observed` if at least one provider returned data for it, and `unobserved` if none did.
-2. **Signal state.** `fired`, `clear`, or `not checkable`.
-3. **Agreement label:**
-   - **Corroborated:** two or more independent providers report the same category fired.
-   - **Single-source:** one provider reports it fired; others have no data.
-   - **Conflicting:** one provider reports it fired and another reports it clear. Conflicts are shown to the reviewer and lower the confidence level; they are never silently resolved.
-4. **Scoring effect:** Each category contributes **once** to the score (Section 7). Corroboration raises the **confidence** level; it does not multiply the score.
-
-### 6.4 Index outputs per entity [D]
-
-- Category grid (fired / clear / not checkable) with provider-level detail
-- Agreement label per category
-- Coverage: share of categories observed
-- Links to every underlying provider record
-
----
-
-## 7. Risk rating model
-
-### 7.1 Approach [D]
-
-A transparent **likelihood-ratio** model. It is chosen over a trained classifier because (a) no labeled training set exists yet, and (b) each factor's contribution can be shown and challenged by a reviewer.
-
-1. Start from a **base rate** `b` (the assumed share of award-network entities showing shell characteristics). **[D] placeholder: 2%.** Must be revisited after the false-positive study (Section 11).
-2. For each signal with data, apply a likelihood ratio: `LR_fired` if it fired, `LR_clear` if checked and clear. Signals that could not be checked apply no update.
-3. Cap the combined contribution of each signal family (ownership, lifecycle, location, trade, presence, proximity, public money) to limit double counting from correlated signals.
-4. Convert to a likelihood estimate `p`.
-
-```
-logit(p) = logit(b) + Σ_families  min( Σ_signals ln(LR), cap_family )
-```
-
-### 7.2 Starting likelihood ratios [D — uncalibrated placeholders]
-
-| Strength | LR if fired | LR if checked and clear |
+| Layer | Choice | Reason |
 |---|---|---|
-| Strong | 4.0 | 0.9 |
-| Moderate | 2.0 | 0.9 |
-| Weak | 1.3 | 1.0 |
-| Exculpatory (operating website) | — | 0.5 when present |
-| PSA (unconfirmed identity) variants | half the log-LR of the confirmed factor | 1.0 |
-| Family cap | ln(8) per family | — |
+| Frontend | Next.js (App Router) with TypeScript | Server-rendered pages, good table and graph libraries |
+| Styling | Tailwind CSS with the tokens in section 10 | Enforces a consistent design system |
+| Graph view | Cytoscape.js | Handles ownership and trade networks of a few hundred nodes |
+| Charts | Recharts | Simple time-series and bar charts for the dashboard |
+| Tables | TanStack Table | Sorting, filtering, and column control for dense data |
+| Backend API | Python 3.12, FastAPI, Pydantic v2 | Typed request and response models, async HTTP |
+| HTTP client | httpx with retry and backoff | Consistent error handling across vendors |
+| Database | PostgreSQL | Source records, entities, signals, reports, audit log |
+| Cache and jobs | Redis, with a scheduler for news and dashboard refresh | Rate-limit protection and background refresh |
+| PDF reports | HTML templates rendered with WeasyPrint | Precise print layout, footnotes, page numbers |
+| Local dev | Docker Compose | One command brings up all services |
 
-### 7.3 Uncertainty range [D]
+### 4.2 System diagram
 
-Because unchecked signals do not update the score, the report also computes:
+```mermaid
+flowchart LR
+  subgraph Sources
+    SAY[Sayari API]
+    TVD[Tradeverifyd API]
+    TAV[Tavily API]
+    GOV[Free government APIs]
+  end
+  subgraph Backend
+    AD[Adapters]
+    SR[(Source record store)]
+    ER[Entity resolution]
+    SG[Signal engine]
+    RP[Report builder]
+    JB[Scheduled jobs]
+  end
+  subgraph Frontend
+    DB[Dashboard]
+    NF[News feed]
+    CS[Company search]
+    RE[Report export]
+  end
+  SAY --> AD
+  TVD --> AD
+  TAV --> AD
+  GOV --> AD
+  AD --> SR
+  SR --> ER --> SG --> RP
+  JB --> AD
+  SR --> DB
+  SR --> NF
+  SG --> CS
+  RP --> RE
+```
 
-- **Lower bound:** every unchecked signal treated as clear
-- **Upper bound:** every unchecked signal treated as fired
+### 4.3 Repository layout
 
-The report shows the point estimate and this range. A wide range tells the reviewer that more data, not more suspicion, is needed.
+```
+/apps
+  /web                 Next.js frontend
+    /app
+      /dashboard
+      /news
+      /entities/[id]
+      /reports/[id]
+    /components
+    /lib/api.ts        Typed client for the backend
+  /api                 FastAPI backend
+    /adapters          One module per external source
+      sayari.py
+      tradeverifyd.py
+      tavily.py
+      usaspending.py
+      sam.py
+      federal_register.py
+      ofac.py
+      gleif.py
+      opensanctions.py
+      companies_house.py
+    /core
+      resolution.py    Entity resolution and merging
+      signals/         One module per signal family
+      scoring.py       Tier assignment rules
+      provenance.py    Source record storage and hashing
+    /reports
+      templates/       Jinja2 HTML templates for PDF
+      builder.py
+    /jobs              Scheduled refresh tasks
+    /models            SQLAlchemy models
+    /routes            FastAPI routers
+/config
+  signals.yaml         Signal weights and thresholds
+  news_topics.yaml     News queries and typology keyword rules
+  sources.yaml         Source metadata and refresh intervals
+/fixtures              Recorded API responses for tests and offline demo
+/tests
+/docs
+docker-compose.yml
+.env.example
+```
 
-### 7.4 Rating bands and confidence [D]
+---
 
-| Band | Likelihood `p` | Additional requirement |
-|---|---|---|
-| Low indication | < 10% | — |
-| Moderate indication | 10–35% | — |
-| Elevated indication | 35–70% | — |
-| High indication | ≥ 70% | Fired signals must come from **at least two different families**; otherwise the band is capped at Elevated |
+## 5. Data sources and adapters
 
-| Confidence | Condition |
+### 5.1 Adapter contract
+
+Every adapter implements the same interface so that vendors can be swapped or mocked.
+
+```python
+class SourceAdapter(Protocol):
+    source_name: str
+
+    async def call(self, operation: str, params: dict) -> SourceRecord:
+        """Performs one request, stores the raw response as a SourceRecord,
+        and returns it. Never returns unstored data."""
+
+class SourceRecord(BaseModel):
+    id: UUID
+    source_name: str            # e.g. "sayari"
+    operation: str              # e.g. "entity_profile"
+    request_params: dict
+    retrieved_at: datetime      # UTC
+    http_status: int
+    response_hash: str          # SHA-256 of raw body
+    raw_response: dict | list   # stored verbatim
+    vendor_record_ids: list[str]
+    license_tag: str            # governs redistribution in reports
+```
+
+Rules for all adapters:
+
+- API keys load from environment variables on the server only. They never reach the browser.
+- Every raw response is stored before it is parsed.
+- Replay mode: with `REPLAY_MODE=true`, adapters serve stored responses for matching requests. This keeps the demo working if rate limits or Wi-Fi fail during judging.
+- Errors are surfaced to the UI as "Source unavailable: [source], [time]", never silently dropped.
+- Rate limits, pagination, and retry behavior come from vendor docs **[VERIFY]**.
+
+### 5.2 Licensed sources
+
+The capabilities below were confirmed to exist through each vendor's Claude connector. The REST endpoint for each capability must be mapped from the vendor's own API documentation **[VERIFY]**. Do not assume the connector tool names match REST paths.
+
+**Sayari** (ownership, risk, public-money records, trade)
+
+| Capability | Used for |
 |---|---|
-| Good | Coverage ≥ 70% of categories, entity-resolution confidence high, no conflicting categories |
-| Moderate | Coverage 40–70%, or one conflicting category |
-| Limited | Coverage < 40%, low resolution confidence, or multiple conflicts |
+| Entity search | Resolving a company name or identifier to candidate records |
+| Entity profile | Names, addresses, identifiers, registration date, status, relationships, risk factors, sources |
+| Beneficial owners | Ownership chains, including chains that end at a company instead of a person |
+| Watchlist screening | Paths to sanctioned parties, PEPs, and regulatory actions |
+| Network traversal | Officers, shareholders, linked entities at 1 to 3 hops |
+| Upstream supply chain and shipment search | Supplier tiers and trade records |
+| Record retrieval | Original source documents for the evidence trail |
+| Risk factor definitions | Explaining what each Sayari risk flag means |
+| Data source catalog | Showing users which registries back a record |
 
-**Entity-resolution confidence [D].** Every entity match records which attributes agreed (name, country, identifier, address, officer). A match on name alone is "low" and caps confidence at Limited. This follows Sayari's own guidance to never rely on name alone [V].
+**Tradeverifyd** (trade relationships and annotations)
 
----
+| Capability | Used for |
+|---|---|
+| Entity search | Candidate matches with a confidence value, aliases, and prior names |
+| Entity details and addresses | Cross-checking identity |
+| Entity annotations | Sanctions and other flags applied by Tradeverifyd |
+| Entity score | The Tradeverifyd Score, shown alongside other evidence |
+| Trade relationships | Suppliers and customers, with HS codes per relationship |
+| Annotated relationship paths | Paths from an entity to flagged entities in its supply chain |
+| Find companies in radius | Detecting clusters of companies at one address |
+| HS trends | Commodity import trends for the dashboard |
+| Disruptions | Active disaster and weather events for the dashboard |
 
-## 8. Exposure of public money
+**Tavily** (web presence and news)
 
-### 8.1 What can be observed [D]
+| Capability | Used for |
+|---|---|
+| Search | Web-presence checks and media news for the feed |
+| Extract | Pulling the text of a specific page cited as evidence |
 
-The system sees only recorded flows: the prime award, reported subawards, and trade records with declared values. It cannot see bank transfers, internal accounting, or unreported payments. The report states this on its first page.
+### 5.3 Vendor-specific handling
 
-### 8.2 Exposure buckets [D]
+- **Sayari "possibly same as" flags** (prefixed `psa_` in the pilot data) mean a possibly-same record carries that risk. Display them as unconfirmed. They cannot on their own satisfy the sanctions-proximity signal.
+- **Sayari risk flags** are displayed with the definition returned by the risk-factor lookup, not a paraphrase.
+- **Tradeverifyd Score** is displayed as reported, with its version and level. Do not rescale or combine it with other scores until the vendor documents its scale and method **[VERIFY]**.
+- **Tavily results** are shown as links with publisher, title, and date. Page text is quoted only via the extract capability and only in short excerpts, respecting copyright.
 
-| Bucket | Definition | Combined with others? |
+### 5.4 Free public sources
+
+| Source | What it adds | Access |
 |---|---|---|
-| **Direct** | Award amount obligated to the recipient | Yes |
-| **Flow-through** | Observed payments from the recipient to subawardees (subaward amounts) and to suppliers (declared values of goods the recipient received) | Yes |
-| **Control** | Award amount held by an entity whose ownership chain includes risk-indicated owners | **No** — reported separately, because control is not a transfer of money |
-| **Listed-party** | Observed dollars reaching an entity that is listed, or possibly majority-owned by listed parties | Reported separately as a priority item |
+| USAspending.gov API | Contract awards, recipients, subawards, awarding agencies | Free, no key, REST API at api.usaspending.gov |
+| SAM.gov Entity Management API | Registrations (UEI, registration date, business types) | Free API key via api.data.gov **[VERIFY current API version]** |
+| SAM.gov Exclusions | Debarred and excluded parties | Same key, separate dataset |
+| Federal Register API | Official rules and notices, including BIS Entity List and UFLPA updates | Free, no key |
+| OFAC Sanctions List Service | SDN and consolidated lists, official downloads | Free **[VERIFY download URLs and formats]** |
+| GLEIF API | LEI records and parent-child relationships | Free, no key |
+| OpenSanctions | Aggregated sanctions and PEP data for cross-checking | Check license terms for your use case **[VERIFY]** |
+| UK Companies House API | Officers and persons with significant control | Free API key |
 
-### 8.3 Calculation [D]
-
-For each entity `e` with observed inflow `D_e`:
-
-- `D_e` never exceeds the inflow to the entity that paid it (flows are capped upstream).
-- **Risk-weighted exposure** `= Σ D_e × p_e`
-- **Exposure range** `= [Σ D_e × p_e,lower , Σ D_e × p_e,upper]`
-- **Observed-flow total** `= Σ D_e` (unweighted; shown for transparency)
-
-Money flows in the opposite direction to goods. A supplier that ships goods *to* the recipient is paid *by* the recipient, so it counts as flow-through. A buyer that receives goods *from* the recipient pays the recipient, so it does **not** count as an outflow of public money.
-
-### 8.4 Wording rule [D]
-
-The report says "estimated risk-weighted exposure," never "money lost" or "money diverted."
+The government sources serve two jobs: they are the official record against which vendor flags are cross-checked, and they power the dashboard and the official lane of the news feed.
 
 ---
 
-## 9. Regulator report
+## 6. Data model
 
-### 9.1 Structure [D]
+Core tables (PostgreSQL). Field lists are the minimum.
 
-1. **Summary** — award, recipient, observed-flow total, risk-weighted exposure with range, count of entities by band, and any listed-party exposure
-2. **Scope and limitations** — the paragraph in Section 8.1, data retrieval dates, coverage
-3. **Paths of concern** — routes from the award to high-band or listed entities, drawn as a graph
-4. **Entity findings** — for each entity: band, confidence, range, fired signals with evidence and source links, innocent explanations to rule out
-5. **Source agreement** — the Section 6 index grid
-6. **Method** — model, weights file version and hash, provider versions
-7. **Audit appendix** — run manifest and audit-log hash
+| Table | Key fields |
+|---|---|
+| `source_records` | As in section 5.1 |
+| `entities` | id, canonical_name, type (company, person, vessel), jurisdiction, created_at |
+| `entity_identifiers` | entity_id, scheme (UEI, CAGE, LEI, OFAC SDN number, state filing number, vendor ID), value, source_record_id |
+| `entity_members` | entity_id, vendor, vendor_entity_id, match_grade (A–D), match_keys (json), source_record_id |
+| `relationships` | from_entity, to_entity, type (owner, officer, linked, supplier, customer, affiliate), is_former, percentage, hs_codes, source_record_id |
+| `public_money_records` | entity_id, program (contract, PPP, SBA loan), amount, date, awarding_agency, award_id, source_record_id |
+| `signals` | entity_id, signal_code, fired (bool, or null if data unavailable), evidence (json), source_record_ids, computed_at |
+| `assessments` | entity_id, tier, signal_families_fired, combined_score, score_lower, score_upper, component_scores (json), config_version, computed_at |
+| `analyst_reviews` | assessment_id, analyst, decision (confirmed, dismissed, needs_info), note, created_at |
+| `news_items` | lane (official, media), source, publisher, title, url, published_at, retrieved_at, matched_rules, source_record_id |
+| `reports` | id, entity_id, created_by, created_at, content_hash, config_version, source_record_ids |
 
-### 9.2 Language rules [D]
-
-- Use "indicators consistent with," "risk lead," "warrants review."
-- Never use "is a shell company," "laundered," "evaded," or "fraudulent" about an entity unless quoting an official source, with citation.
-- Include each flag's documented innocent explanations next to it.
+A signal with no data available stores `fired = null` and is shown as "not assessable", distinct from "not fired".
 
 ---
 
-## 10. Security engineering
+## 7. Entity resolution
 
-| Control | Implementation | Why |
+The pilot showed that fragmented and look-alike records are the main way these tools produce wrong answers. Resolution rules:
+
+### 7.1 Match grades (A–D)
+
+Matches are graded A to D, following the grading in `docs/tracing_methodology.md` §2. The grade is driven by the number and kind of **match keys** that agree. For Sayari's own `possibly_same_as` links, those are the `match_keys` Sayari returns (`key`, `normalized`, `original`); for the application's own matching, they are the attributes compared below.
+
+| Grade | Rule | Behavior |
 |---|---|---|
-| Secrets management | Keys only from environment variables or a secrets manager; `.env` git-ignored; pre-commit secret scanning | Provider credentials must not leak into the repo or reports |
-| Log redaction | All logs pass through a redaction filter for known secret values | Prevent credentials in audit trails |
-| Tamper-evident audit log | Append-only JSONL; each line stores the SHA-256 of the previous line; a verify command detects edits or deletions | Regulators must be able to trust what data a rating was built from |
-| Response cache with integrity hashes | Each cached provider response stores its SHA-256; mismatches are logged and refetched | Reproducibility and tamper detection |
-| Run manifest | Records code version, weights-file hash, provider list, retrieval timestamps, and cache hashes | Any report can be regenerated and checked |
-| Untrusted web content | Text from Tavily results and extracted pages is treated as data only. It is never passed to an LLM as instructions, and it is HTML-escaped in reports. | Web pages can contain prompt-injection or script-injection content |
-| Input validation | Validate award IDs, entity IDs, and HS codes against expected formats before use | Prevent malformed queries and injection |
-| TLS | Certificate verification on for all provider calls | Integrity of retrieved data |
-| Least data | Store only fields the report uses; no personal data beyond officer names and roles already in public registries | Data minimization |
-| Access control | Reports and cache stored with role-based access; report files watermarked with reviewer and run ID | Outputs name real companies and people and are sensitive |
-| Dependency hygiene | Pinned versions, `pip-audit` in CI | Supply-chain security of the tool itself |
+| **A** | Shares at least one **strong identifier** in the same jurisdiction: official registration or company number, LEI, OFAC SDN number, or tax ID. No conflicting strong identifier | Auto-merge into one entity |
+| **B** | No shared strong identifier, but at least two independent corroborating keys agree (for example normalized name plus full address, or name plus shared officer plus incorporation date), same jurisdiction, no conflicts | Shown grouped; merge requires analyst confirmation |
+| **C** | Normalized name plus one weak key (jurisdiction, city, or a partial address) | Shown as a separate candidate, never merged automatically |
+| **D** | Name only | Shown only as "possible match (unconfirmed)". Never merged, and never used as evidence for a signal |
+
+- **UEI and CAGE:** Sayari lists both as weak (non-unique) identifiers as well as ordinary identifiers (backlog B9 in `docs/data-source-map.md`). Until Sayari confirms how to treat them, a shared UEI or CAGE supports grade A only when both records come from the SAM.gov or DLA CAGE source itself; otherwise it counts as one corroborating key toward B.
+- Name normalization handles legal suffixes (L.L.C., LLC, Ltd), punctuation, "&" versus "and", and transliteration variants. It never raises a grade on its own.
+- Conflicting strong identifiers block a merge, whatever the name similarity, and cap the grade at D.
+- Every merge records its grade, its match keys, and the source records behind them, visible in the UI.
+- Vendor confidence values (such as Tradeverifyd's) are shown but not used as the sole merge basis. Any cutoff is set by testing on the fixtures in appendix A.
+- A `possibly_same_as` link is never upgraded to grade A on name similarity alone.
+
+### 7.2 Search flow
+
+1. User enters a name, UEI, CAGE, LEI, or registration number.
+2. Identifier searches go straight to exact lookup.
+3. Name searches return a candidate list with jurisdiction, identifiers, address, and match grade, grouped where the grade is A or B.
+4. The user picks the entity. The app never auto-selects the first name hit.
 
 ---
 
-## 11. Validation plan
+## 8. Features
 
-1. **Backtest on a documented network [V case, D method].** DOJ describes Serniya Engineering and Sertal LLC as Moscow-based companies operating under Russian intelligence direction that used a network of shell companies and bank accounts worldwide, including in the United States. OFAC designated Serniya, Sertal, and several associated individuals and companies in February 2022. Method: using only records dated before the designation and indictment, check whether the system would have placed the network's US entities in the Elevated or High band.
-2. **False-positive study [D].** Score a random sample of ordinary award recipients. Report the share that reaches Elevated or High. Use the result to recalibrate the base rate and likelihood ratios.
-3. **Resolution audit [D].** Manually check a sample of entity matches and report the error rate.
-4. **Weights governance [D].** Any change to `weights.yaml` is versioned, reviewed, and recorded in the run manifest.
+### 8.1 Dashboard
+
+Purpose: general trends for researchers and regulators. Every panel shows its source and "Data as of".
+
+| Panel | Content | Source |
+|---|---|---|
+| Federal spending in watched sectors | Contract obligations over time for configured NAICS or PSC codes (for example battery and critical-mineral sectors) | USAspending API |
+| Sanctions and export-control actions | Timeline of official notices by agency and program | Federal Register API, OFAC list data |
+| Commodity trade inflections | HS codes whose US import trend is changing | Tradeverifyd HS trends |
+| Active supply-chain disruptions | Current disaster and severe weather events | Tradeverifyd disruptions |
+| Screening portfolio | Tier distribution and recent changes for entities the team has screened | Application database |
+| Newly flagged award recipients | Screened recipients whose tier rose since the last run | Application database |
+
+Behavior:
+
+- Filters for date range, agency, sector, and typology apply across panels.
+- Clicking a chart point opens the underlying records in a table with source links.
+- Panels load independently. A failed source shows an error state in its own panel only.
+
+### 8.2 News feed
+
+Two separate lanes, never mixed, because regulators weigh them differently.
+
+**Official actions lane**
+- Federal Register documents from Treasury, Commerce (BIS), DHS, and other configured agencies, filtered by topic.
+- OFAC list changes, detected by comparing successive official list downloads.
+- Each item shows agency, document type, title, publication date, and a link to the official document.
+
+**Media and research lane**
+- Tavily news searches on topics in `config/news_topics.yaml` (for example sanctions evasion, export controls, UFLPA, federal contract fraud).
+- Optional publisher allowlist, configurable by the team.
+- Each item shows publisher, title, date, and link. No rewriting or summarizing of the article.
+
+Shared behavior:
+
+- Items are tagged by typology using deterministic keyword rules in config. The UI shows which rule matched.
+- Deduplication by canonical URL and title similarity.
+- If an item mentions an entity the team has screened, it links to that entity, but only when the mention matches at grade A or B.
+- Refresh runs on a schedule. "Live" in the UI means "refreshed at [time]", shown on the page.
+
+### 8.3 Company search and supply chain view
+
+Entity page sections, in this order:
+
+1. **Identity.** Canonical name, all names and prior names, identifiers, jurisdictions, addresses, registration date, status, and the list of merged source records with match grades and match keys.
+2. **Public money.** Contract awards, SAM registration (with dataset clearly labeled: registration or exclusion), PPP and SBA loans. Amounts, dates, agencies, award IDs, each linked to the official record.
+3. **Risk summary.** Tier, signal families fired, each signal with evidence and sources, plus signals not assessable and why. The "risk lead, not accusation" notice sits here.
+4. **Ownership.** Beneficial-owner chains with percentages where reported. Chains ending at a legal person are marked.
+5. **Network.** Officers, shareholders, and linked entities at 1 to 3 hops, in a graph and an equivalent table. Flagged nodes are marked by shape and label as well as color.
+6. **Supply chain.** Suppliers and customers by tier, with HS codes, from Sayari and Tradeverifyd shown side by side with their sources. Where no trade data exists, the section says so.
+7. **Paths to flagged parties.** Ranked list of paths from the entity to sanctioned or listed parties, each hop linked to its source record.
+8. **Web presence.** Tavily results grouped into official sites, registry or aggregator listings, and media coverage.
+9. **Analyst review.** Confirm, dismiss, or request information, with a note.
+
+Performance: sections load progressively. The page shows which sources have responded and which are pending.
+
+### 8.4 Report export
+
+Formats:
+
+- **PDF report** for reading and filing.
+- **JSON evidence bundle** containing every source record used.
+- **CSV files** of entities, relationships, and signals.
+
+PDF structure:
+
+1. Cover page: entity name, identifiers, report ID, generation time, content hash, and the risk-lead notice.
+2. Summary table: tier, signal families fired, key public-money records. Built from templates only.
+3. Identity and match reasoning.
+4. Public-money records.
+5. Signals, each with evidence and footnoted sources.
+6. Ownership and network diagrams, with equivalent tables.
+7. Supply chain tables.
+8. Paths to flagged parties.
+9. Sources appendix: every source record with source, record ID, retrieval time, and link.
+10. Methodology and limitations: signal definitions, config version, data coverage gaps (including pass-through grants and informal trade), and data-as-of dates.
+
+Rules:
+
+- The report is generated only from stored source records and is reproducible from them.
+- Analyst review status and notes appear if present.
+- Content from sources that do not permit redistribution is replaced by a reference to the source record **[VERIFY licensing]**.
 
 ---
 
-## 12. Limitations (to state in every report)
+## 9. Signal framework and scoring
 
-- The system has no access to internal company records, bank data, or communications. It estimates likelihood from external records only. [D]
-- Registry coverage varies by jurisdiction. Sayari's guidance notes that some US states and offshore centers may have limited or no beneficial-ownership data. [V]
-- Trade records may lack declared values, and none carry unit quantities, so misinvoicing is measured per kg and is often not checkable. [V]
-- Subaward data depends on prime-recipient reporting, and only first-tier subawards of $40,000 or more (contracts) or $30,000 or more (grants) must be reported. [V]
-- Likelihood ratios are uncalibrated until Section 11 is completed. [D]
-- Adverse-media matching can confuse entities with similar names. [D]
+### 9.1 Signal families
+
+Every signal stores: fired, not fired, or not assessable, plus its evidence and source record IDs. Weights and thresholds live in `config/signals.yaml` and are marked provisional until calibrated (section 12).
+
+**Public money**
+
+| Code | Red flag | Data |
+|---|---|---|
+| PM1 Registration-to-award gap | Registered in SAM.gov shortly before a large award | SAM.gov, USAspending |
+| PM2 Award size versus profile | Award far exceeds what a firm of that age and size typically delivers | SAM.gov, USAspending |
+| PM3 Non-competitive award | Sole-source award to a young or thin company | USAspending |
+| PM4 Pass-through | Prime passes most of the award to subawardees | USAspending subawards |
+| PM5 Shared principals across bidders | Same officers or addresses behind competing firms | Sayari, Companies House |
+| PM6 Excluded party | Entity or a grade A match appears in SAM.gov Exclusions | SAM.gov |
+
+**Structure**
+
+| Code | Red flag | Data |
+|---|---|---|
+| ST1 UBO dead end | Ownership chain ends at a legal person, not a natural person | Sayari |
+| ST2 Layered or circular ownership | Several holding layers, or a loop | Sayari |
+| ST3 Officer concentration | Officer or manager linked to many unrelated companies | Sayari, Companies House |
+| ST4 Secrecy jurisdiction | Entity or owner in a configured list of jurisdictions | Sayari, config |
+
+**Lifecycle**
+
+| Code | Red flag | Data |
+|---|---|---|
+| LC1 Recent incorporation then activity | Registered shortly before significant awards or trade | Sayari, SAM.gov, USAspending |
+| LC2 Program-timing registration | Registered shortly after a funding program opened | Sayari, program dates in config |
+| LC3 Rename history | One or more prior names | Tradeverifyd, Sayari |
+| LC4 Phoenix pattern | New entity shares officers, owners, or addresses with a closed, previously flagged entity | Sayari, application database |
+
+The "shells close within about two years" figure from the brainstorm is not used until a source is found. LC4 works without it.
+
+**Location**
+
+| Code | Red flag | Data |
+|---|---|---|
+| LO1 Address cluster | Unusually many companies at one registered address | Tradeverifyd, Sayari |
+| LO2 Virtual office | Address belongs to a mailbox or coworking provider | Tavily, analyst confirmation |
+
+**Trade**
+
+| Code | Red flag | Data |
+|---|---|---|
+| TR1 Business-goods mismatch | Declared business does not match shipped goods | Sayari, Tradeverifyd |
+| TR2 High-priority goods | HS codes on the multilateral Common High Priority List **[VERIFY current list]** | Sayari, Tradeverifyd |
+| TR3 Transshipment routing | Goods pass through configured hubs | Sayari, Tradeverifyd |
+| TR4 Partner churn | Abrupt changes in trade counterparties | Sayari, Tradeverifyd |
+
+**Presence**
+
+| Code | Red flag | Data |
+|---|---|---|
+| PR1 No footprint | No company website or media, only registry or aggregator listings | Tavily |
+| PR2 Adverse media | Enforcement or investigative coverage | Tavily, Sayari adverse media |
+
+**Proximity**
+
+| Code | Red flag | Data |
+|---|---|---|
+| PX1 Listed entity | Entity is itself on an official list (grade A match only) | Sayari, OFAC, BIS, UFLPA |
+| PX2 Sanctions proximity | Listed party within 1 to 3 hops, weighted by distance | Sayari, Tradeverifyd |
+| PX3 OFAC 50% rule | Listed parties together own 50% or more | Sayari ownership percentages |
+
+### 9.2 Evidence requirements
+
+- A signal can fire only with at least one stored source record as evidence.
+- PX1 and PX2 require the listed party to match at grade A. "Possibly same as" flags produce a separate, visible note, not a firing signal.
+- PR1 requires that the Tavily search was actually run and returned results. A failed search makes PR1 not assessable.
+
+### 9.3 Tiers
+
+| Tier | Rule (provisional) |
+|---|---|
+| High | Signals fired in at least two different families, and at least one is in Proximity or PM6 |
+| Elevated | Signals fired in at least two different families, none in Proximity |
+| Low | Zero or one family fired |
+| Not assessable | Resolution below grade B, or core sources unavailable |
+
+- Proximity and trade mismatch carry the highest weights, because they are the hardest to explain innocently.
+- The display always lists the signals that fired. The tier never appears without them.
+- Config changes create a new config version. Assessments record the version used.
+
+### 9.4 Combined risk score
+
+The product shows a single **combined risk score** (0–100) next to the tier. It is the team's composite index:
+
+```
+Combined score = 0.45 × S_Sayari + 0.35 × T_Tradeverifyd + 0.20 × P_Presence
+```
+
+The weights are **provisional** until calibrated (section 12.4). Each version of the weights is stored with the config version.
+
+**How each component is built.** No vendor's own score is rescaled or averaged in. Each component is built from the application's transparent signals, grouped into shared indicator categories:
+
+| Component | Built from | Indicator categories |
+|---|---|---|
+| `S_Sayari` (0–100) | Sayari entity, ownership, network, watchlist and trade data | Listed or majority-owned by listed (PX1, PX3); proximity (PX2); nominee or formation patterns (ST1–ST3, LO1); lifecycle (LC1–LC4); trade controls (TR1–TR4 from Sayari shipments); enforcement and adverse media from Sayari risk factors |
+| `T_Tradeverifyd` (0–100) | Tradeverifyd annotations, trade relationships, annotated paths, companies in radius | Flagged-entity annotations; supply-chain paths to flagged parties; address clusters; trade relationships with HS codes |
+| `P_Presence` (0–100) | Tavily results (and Sayari negative news for the media part) | No footprint (PR1); adverse media (PR2); virtual office (LO2) |
+
+Within each component, a category contributes once. Each fired signal adds points by its strength (strong, moderate or weak, set in `config/signals.yaml`), capped per category so correlated signals are not double counted. Sayari "possibly same as" (`psa_`) factors count at half weight and are labeled "unconfirmed identity match". Tradeverifyd annotations can be displayed as reported, but the Tradeverifyd Score itself stays out of the formula until its scale and method are documented **[VERIFY]**.
+
+**Agreement across vendors.** For each category the report shows whether providers agree: *corroborated* (two or more providers report it), *single-source*, or *conflicting* (one reports it and another reports it clear). Corroboration raises confidence; it does not multiply the score. Conflicts are shown to the reviewer, never silently resolved.
+
+**Uncertainty range.** A component that cannot be computed (source unavailable, not assessable) is not set to zero. The score is shown as a point estimate plus a range:
+
+- **Lower bound:** every unassessed category treated as clear.
+- **Upper bound:** every unassessed category treated as fired.
+
+While Tradeverifyd is blocked (backlog B1), `T_Tradeverifyd` is unassessed for every entity. The score therefore always shows a range, and the report says "Tradeverifyd component not available" rather than implying a clean result.
+
+**Display rules.**
+
+- The score never appears without the signals that fired, its range, and the tier.
+- The tier rules in 9.3 still govern the High tier: a high score with only one family fired stays below High.
+- Scores and tiers record the config version used.
 
 ---
 
-## 13. Open items to confirm before regulator use
+## 10. Interface design
 
-Status as of 25 September 2026.
+### 10.1 Direction
 
-| # | Item | Status | Where |
-|---|---|---|---|
-| 1 | Tradeverifyd tool names, inputs, and output fields | **Done** for entity, annotation, path, trade and address tools. Value-chain tool outputs and route tools still to test. `find_companies_in_radius` times out | 4.3 |
-| 2 | Sayari production access: MCP connector vs. API credentials, and endpoint mapping | **Done.** OAuth client credentials; all endpoints mapped. Credentials still to obtain | 4.2 |
-| 3 | SAM.gov API endpoint, fields available publicly, and key requirements | **Done.** v4 endpoints; ownership fields are FOUO; 10 requests/day without a role | 4.1 |
-| 4 | USAspending field name for competition status, and subaward reporting thresholds | **Done.** `extent_competed`; $40,000 contracts, $30,000 grants | 4.1 |
-| 5 | Whether Sayari shipment records carry declared values and quantities for demo corridors | **Done.** Values in the 2019–2020 dataset, not the 2022 Russia dataset; no quantities | 5.4 |
-| 6 | Price benchmark source for misinvoicing | **Decided [D]:** UN Comtrade unit value per kg | 5.4 |
-| 7 | Validation case records available pre-designation (Serniya network) | **Done.** All 151 Sayari shipment records to Serniya-named receivers predate the 31 March 2022 designation (earliest 24 Jan 2019, latest 26 Mar 2022). USAspending shows no federal award to the network (`research/README.md`) | 5.4 |
-| 8 | Any other case studies from earlier drafts (e.g., Sudan/UAE, humanitarian fronts, gold, fentanyl precursors) — verify sources before including | **Open.** Team decision whether to include any | — |
+The subject is public spending and official records, so the design takes its cues from government audit documents: dense, legible tables, restrained color, and color reserved for meaning. The one memorable element is the **money trail**: a horizontal strip on each entity page that traces the path from the federal award to the flagged party, one hop per step, each step clickable to its source record.
+
+### 10.2 Tokens
+
+| Token | Value | Use |
+|---|---|---|
+| `ink` | `#1B2A41` | Primary text and headings |
+| `slate` | `#51607A` | Secondary text |
+| `paper` | `#FFFFFF` | Page background |
+| `rule` | `#D5DBE3` | Borders and table lines |
+| `ledger` | `#1E5B4F` | Public-money elements and primary actions |
+| `elevated` | `#9A6A12` | Elevated tier |
+| `high` | `#8E2A2A` | High tier |
+| `unconfirmed` | `#6B6F76` | "Possibly same as" and not-assessable states |
+
+- Typeface: Public Sans for the interface (the typeface of the US Web Design System, which suits government-record subject matter) and Source Serif 4 for PDF report body text. Tabular figures for all numbers.
+- Tier is never conveyed by color alone. Each tier has a text label and a distinct marker shape.
+- Contrast meets WCAG 2.1 AA.
+
+### 10.3 Layout
+
+```
++------------+--------------------------------------------------+
+| Dashboard  |  Entity name                    Tier: Elevated    |
+| News       |  UEI ...  CAGE ...  Data as of ...                |
+| Search     |--------------------------------------------------|
+| Reports    |  Money trail:  Award -> Company -> Owner -> Listed |
+|            |--------------------------------------------------|
+|            |  Identity | Public money | Risk | Ownership | ... |
+|            |  [dense table or graph for the selected section]  |
++------------+--------------------------------------------------+
+```
+
+- Left navigation rail, content left-aligned.
+- Sentence case throughout. No all-caps labels.
+- Motion only in response to user actions, such as expanding a path.
+- Keyboard navigation and visible focus states on every control.
+
+### 10.4 Copy
+
+- Plain, specific labels: "Download report", "Confirm lead", "Dismiss lead".
+- Empty and error states say what happened and what to do next. For example: "Tradeverifyd did not return a match for this company. Trade relationships may be missing."
+- The risk-lead notice reads: "This is a risk lead for human review, not a finding of wrongdoing. Every item links to its source."
 
 ---
 
-## 14. References
+## 11. Security and compliance
 
-**Regulatory**
-- FinCEN, Beneficial Ownership Information Reporting (interim final rule, March 2025): https://www.fincen.gov/boi
-- GOV.UK, Companies House confirms identity verification rollout from 18 November 2025: https://www.gov.uk/government/news/companies-house-confirms-identity-verification-rollout-from-18-november-2025
-- OFAC FAQ 398 and 399 (50 Percent Rule: ownership vs. control; aggregation): https://ofac.treasury.gov/faqs/topic/1521
-- OFAC FAQ 401 (indirect ownership): https://ofac.treasury.gov/faqs/401
-- BIS, Common High Priority Items List (CHPL): https://www.bis.gov/licensing/country-guidance/common-high-priority-items-list-chpl
-- FinCEN and BIS Joint Alert (transshipment points): https://www.fincen.gov/system/files/shared/FinCEN%20and%20BIS%20Joint%20Alert%20FINAL.pdf
-- FATF, Revision of Recommendation 25 white paper (beneficial owner definition): https://www.fatf-gafi.org/en/publications/Fatfrecommendations/R25-public-consultation.html
-- ASIC, Illegal phoenix activity: https://asic.gov.au/for-business/small-business/closing-a-small-business/illegal-phoenix-activity/
+- API keys stored as server-side environment variables. `.env` is git-ignored, `.env.example` lists names only.
+- User authentication for the web app, with per-user audit logs of searches, reviews, and report exports.
+- Data covers companies and their officers as recorded in public registries and licensed datasets. Do not add personal data beyond what sources provide.
+- Respect each vendor's terms on storage, caching duration, and redistribution **[VERIFY]**.
+- HTTPS only in deployment. No keys or vendor data in client-side bundles.
 
-**Public spending data**
-- USAspending API, spending_by_award contract: https://github.com/fedspendingtransparency/usaspending-api/blob/master/usaspending_api/api_contracts/contracts/v2/search/spending_by_award.md
-- USAspending API, subawards contract: https://github.com/fedspendingtransparency/usaspending-api/blob/dev/usaspending_api/api_contracts/contracts/v2/subawards.md
-- USAspending API, award profile contract: https://github.com/fedspendingtransparency/usaspending-api/blob/master/usaspending_api/api_contracts/contracts/v2/awards/award_id.md
+---
 
-- SAM.gov Entity Management API: https://open.gsa.gov/api/entity-api/
-- SAM.gov Exclusions API: https://open.gsa.gov/api/exclusions-api/
-- FAR 52.204-10 (subcontract reporting clause): https://www.acquisition.gov/far/52.204-10
-- FAR 4.1403 (clause threshold, $40,000): https://www.acquisition.gov/far/4.1403
-- 2 CFR 170, Appendix A (subaward reporting, $30,000): https://www.ecfr.gov/current/title-2/subtitle-A/chapter-I/part-170
-- UN Comtrade public API: https://comtradeapi.un.org/
+## 12. Testing and validation
 
-**Validation case**
-- DOJ, Russian military and intelligence agencies procurement network indicted in Brooklyn federal court: https://www.justice.gov/opa/pr/russian-military-and-intelligence-agencies-procurement-network-indicted-brooklyn-federal
-- IRS-CI, sentencing in the same scheme (OFAC designation date): https://www.irs.gov/node/150791
+### 12.1 Automated tests
 
-**Provider documentation (retrieved through connected tools on 25 September 2026)**
-- Sayari `lookup_risk_factors`: definitions for all factor IDs cited in Sections 5 and 6
-- Sayari `get_investigation_guidance` (investigation type: shell company detection): methodology, co-occurring red flags, TBML price thresholds, shelf-company indicators
-- Tavily MCP tool list: `tavily_search`, `tavily_extract`, `tavily_crawl`, `tavily_map`, `tavily_research`
-- Tradeverifyd MCP tool definitions and test calls (Section 4.3)
-- Sayari API documentation: authentication https://documentation.sayari.com/api/key-concepts/authentication and API reference https://documentation.sayari.com/api/api-reference/entity/get-entity
-- Sayari `search_trade_facets` and `search_shipments` on receiver "Serniya" (Section 5.4)
+- Adapter tests against recorded fixtures for every operation.
+- Entity resolution tests using appendix A: the four AZ Gold records must merge only where identifiers support it, and the unrelated "Feeding Our Future" organizations must never merge.
+- Signal tests: each signal fires, does not fire, or returns not assessable on constructed fixtures.
+- Report tests: reports regenerate identically from the same source records (same content hash).
+
+### 12.2 Backtest
+
+Primary typology: federal contractors and sanctions.
+
+1. Assemble a validation set of entities with documented enforcement: SAM.gov exclusions tied to sanctions or export-control actions, and OFAC or BIS designations of entities with prior federal registrations or awards. The specific cases must be selected from official records **[VERIFY: no case has been selected yet]**.
+2. For each case, run the pipeline using only data dated before the enforcement action where timestamps allow.
+3. Report how many would have reached High or Elevated, and how early.
+4. AZ Gold (appendix A) serves as a sanctions-network fixture, but not as a public-money backtest, since its SAM record is an exclusion only.
+
+### 12.3 False-positive study
+
+- Draw a random sample of 50 to 100 ordinary contract recipients from USAspending.
+- Run the full pipeline and report the share reaching each tier.
+- Review every High result by hand and publish the results in the methodology section.
+
+### 12.4 Calibration
+
+Signal weights, combined-score weights, and the vendor match cutoff are tuned on the backtest and false-positive sets, never on intuition. The calibration results are recorded with the config version.
+
+---
+
+## 13. Build plan
+
+| Milestone | Deliverable | Done when |
+|---|---|---|
+| M0 Setup | Repo, Docker Compose, database migrations, env config | `docker compose up` runs all services |
+| M1 Adapters | Sayari, Tradeverifyd, Tavily, USAspending, SAM.gov adapters with source-record storage and replay mode | Fixture tests pass for every operation |
+| M2 Resolution | Match levels, merging, candidate search UI | Appendix A resolution tests pass |
+| M3 Entity page | Identity, public money, ownership, network, supply chain sections | AZ Gold fixture renders fully with sources |
+| M4 Signals | Signal engine, tiers, risk summary, money trail | Signal tests pass, tiers show evidence |
+| M5 Reports | PDF, JSON, and CSV export | Report regenerates with identical hash |
+| M6 News feed | Official and media lanes, typology tagging | Both lanes refresh on schedule with sources |
+| M7 Dashboard | Panels in section 8.1 | Every panel shows source and data-as-of |
+| M8 Validation | Backtest and false-positive results in the methodology page | Results published in the app |
+
+Demo path for judging: pick one federal contractor, show its award, resolve it, walk the money trail to any flagged party, show the signals with evidence, and download the report. Run the demo in replay mode.
+
+---
+
+## 14. Open items
+
+| Item | Needed by |
+|---|---|
+| Obtain Tradeverifyd REST API docs (backlog B1 in `docs/data-source-map.md`). Until then, Tradeverifyd features stay disabled | M1 for Tradeverifyd adapters |
+| Map each vendor capability in section 5.2 to its REST endpoint, auth method, rate limits, and pagination | M1 |
+| Confirm the current SAM.gov Entity Management API version and OFAC list download formats | M1 |
+| Confirm the Tradeverifyd Score scale and method, and the meaning of each Sayari risk flag prefix | M4 |
+| Calibrate the combined-score weights (0.45 / 0.35 / 0.20) and category points on the backtest and false-positive sets | M8 |
+| Confirm with Sayari whether UEI and CAGE are strong or weak identifiers (map backlog B9) | M2 |
+| Confirm vendor licensing terms for caching and for including data in exported reports | M5 |
+| Confirm the current Common High Priority List HS codes | M4 |
+| Select backtest cases from official enforcement records | M8 |
+| Find a source for the "shells close within about two years" figure, or keep it out | Before pitch |
+| Confirm the current status of the US Corporate Transparency Act and UK Companies House identity verification before citing them | Before pitch |
+| Decide the configured NAICS or PSC codes for the dashboard's watched sectors | M7 |
+
+---
+
+## Appendix A: pilot fixtures
+
+These IDs come from the pilot runs through the Sayari and Tradeverifyd connectors on 25 September 2026. Sayari responses for all 17 IDs were recorded through the Sayari connector the same day, in `fixtures/recorded/sayari/` (see `fixtures/recorded/README.md`). The connector's response shape differs from the REST API's, so REST responses must be recorded again at M1 once API credentials are issued. Tradeverifyd responses are not yet recorded (B1).
+
+### A.1 AZ Gold network (Sayari entity IDs)
+
+| Entity | Sayari ID | Notes from pilot |
+|---|---|---|
+| Al Zumoroud and Al Yaqoot Gold & Jewellers Trading L.L.C. | `RoWARA0BHg-GoWvDJFBOSg` | OFAC SDN; registration date 2020-02-20; no trade records |
+| Same name, SAM.gov record | `5_HddMOMZhSHxWUT05LMKA` | Source: SAM.gov Exclusions; carries "possibly same as" flags only |
+| Same name, SAM.gov record | `_SIwEh3f1L3ez2dHdtMADQ` | Source: SAM.gov Exclusions (recorded 25 Sep 2026); UEI identifier; "possibly same as" flags only |
+| Same name, UAE registry record | `JpVf25RrEuLqHVqxnsWSig` | Shares registration number 1708681 with the sanctioned record |
+| Abu Dharr Abdul Nabi Habiballa Ahmmed | `sAgA0QVKr-gjEAqoJvf0zg` | OFAC SDN; one hop to the sibling companies below |
+| Capital Tap Holding L.L.C. | `l-hTG9hSLd7dA4za2B7CRw` | OFAC SDN |
+| Capital Tap General Trading L.L.C. | `XtartWzEze9a18ZDKVad8A` | OFAC SDN; two prior names in Tradeverifyd; Sayari also records former names "M I N S General Trading L.L.C." and "Elrakiza General Trading L.L.C." |
+| Creative Python L.L.C. | `GpzoSlwJiKSXyY0Rl51-6w` | OFAC SDN |
+| Al Jil Alqadem General Trading L.L.C. | `Aq8D2ZKjaHPMSp7ZQdQ3-w` | OFAC SDN |
+| Prodigious Real Estate Management Supervision Services | `dFB7YowXog_6EwiEur43RQ` | Not on US SDN list; single third-party source; "possibly same as" UK-listed record; use as the unconfirmed-lead test |
+
+Expected resolution result, checked against the responses recorded in `fixtures/recorded/sayari/` on 25 September 2026:
+
+| Record | Grade against `RoWARA0BHg-GoWvDJFBOSg` | Why |
+|---|---|---|
+| `JpVf25RrEuLqHVqxnsWSig` (UAE registry) | **A**: merge | Shares commercial register number 1708681 and licence number 880169 |
+| `5_HddMOMZhSHxWUT05LMKA` (SAM.gov Exclusions, UEI QV4ZZMJBEQ93) | **B**: group, analyst confirms | Same normalized name and the same full Dubai address (Office M-10…, PO Box 90928); no shared strong identifier |
+| `_SIwEh3f1L3ez2dHdtMADQ` (SAM.gov Exclusions, UEI K9AEAB4HFRH1) | **C**: separate candidate | Same normalized name; address is only "Dubai". Its UEI differs from the other SAM record's |
+
+### A.2 Feeding Our Future (Sayari entity IDs)
+
+| Entity | Sayari ID | Notes from pilot |
+|---|---|---|
+| Feeding Our Future (Minnesota nonprofit) | `S2sKpLjtsHqnJMTy6mwuTw` | Only Minnesota registry data; no enforcement flag; status active |
+| Empire Cuisine And Market LLC | `DtI-nSSPD00ZgUxoSFxKuA` | Registered 2020-04-01; inactive; law-enforcement flag |
+| Unrelated same-name organizations | `EIO1Rxgq6ezyZVW2-sxPhw` (Texas), `D-bTb1c6BNxP7FQ5o7lEkw` (California), `AWuTtca4O_lvFemdqKteeA` (South Africa), `FjE5JBGCPicBhwRFOYRX4A` (Texas), `g4t3FFj3iCHXClnYPY-tiA` (Wisconsin) | Grade **D** (name only, different registries and filing numbers). Must never merge with the Minnesota entity |
+
+This case is out of scope for public-money detection (pass-through grant) and serves as a resolution and false-positive fixture.
+
+---
+
+## Appendix B: glossary
+
+| Term | Meaning |
+|---|---|
+| UEI | Unique Entity ID, the identifier SAM.gov assigns to registered entities |
+| CAGE | Commercial and Government Entity code, assigned for defense procurement |
+| LEI | Legal Entity Identifier, a global company identifier |
+| SDN | OFAC's Specially Designated Nationals and Blocked Persons List |
+| UBO | Ultimate beneficial owner, the natural person who ultimately owns or controls a company |
+| OFAC 50% rule | Entities owned 50% or more, in total, by blocked persons are themselves treated as blocked |
+| Pass-through grant | Federal funds given to a state or other body, which then passes them to sub-recipients |
+| Risk lead | A pattern worth human review, not a finding of wrongdoing |

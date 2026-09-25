@@ -3,13 +3,13 @@
 Identifiers: OGRN 1177746132563; OFAC SDN UID 35076  
 Report ID: DRAFT-SERNIYA-20260925  
 Generated: 25 September 2026  
-Content hash: sha256:c034a2cdd6be538d  
+Content hash: sha256:77d0683c7a18047b  
 
 > This dossier presents a risk lead for human review. It is not a finding of wrongdoing. Every statement is sourced; see the sources appendix.
 
 ## 1. Executive rationale
 
-No federal contract or loan records were found for OOO SERNIYA INZHINIRING in USAspending.gov as of 25 September 2026; OpenSanctions reports SAM.gov exclusion records for the entity under UEIs LF8MULLSH397 and NYCYDYP1RNJ6.[^S15][^S28] The entity was matched to corporate records at the Confirmed level using a shared registration number (OGRN 1177746132563).[^S02][^S20] The screen produced a composite score of 65 out of 100, with a confidence grade of B. OOO SERNIYA INZHINIRING is listed on the OFAC SDN List under Executive Order 14024, with a designation date of 31 March 2022.[^S01][^S02] 2 signals could not be assessed because the Tradeverifyd connection returned an authorization error (HTTP 401) and the Sayari ownership trace for this entity was not run in this pass. This is a risk lead for human review, not a finding of wrongdoing.
+No federal contract or loan records were found for OOO SERNIYA INZHINIRING in USAspending.gov as of 25 September 2026; OpenSanctions reports SAM.gov exclusion records for the entity under UEIs LF8MULLSH397 and NYCYDYP1RNJ6.[^S15][^S28] The entity was matched to corporate records at grade A using a shared registration number (OGRN 1177746132563).[^S02][^S20] The screen produced a composite score of 65 out of 100, with a confidence grade of B. OOO SERNIYA INZHINIRING is listed on the OFAC SDN List under Executive Order 14024, with a designation date of 31 March 2022.[^S01][^S02] 2 signals could not be assessed because the Tradeverifyd connection returned an authorization error (HTTP 401) and the Sayari ownership trace for this entity was not run in this pass. This is a risk lead for human review, not a finding of wrongdoing.
 
 ## 2. Why this dossier was prepared
 
@@ -30,7 +30,7 @@ Intended use: to help an oversight body decide whether further review is warrant
 | Address (OFAC listing) | d. 57A etazh 2 pom. 211 kom. 211-13, ul. Vavilova, Moscow 117292, Russia | [^S02] |
 | Registration date | 10 February 2017 | [^S20] |
 | OFAC SDN UID | 35076 | [^S20] |
-| Matched records | Sayari entity 7-U98RGw67tUi01ILV4CCQ (Confirmed, shared OGRN); OpenSanctions NK-m5uxh7GMpRei95QkP8qEUA (Confirmed, shared OGRN) | [^S20][^S28] |
+| Matched records | Sayari entity 7-U98RGw67tUi01ILV4CCQ (grade A, shared OGRN); OpenSanctions NK-m5uxh7GMpRei95QkP8qEUA (grade A, shared OGRN) | [^S20][^S28] |
 
 ## 4. Federal awards and loans
 
@@ -101,7 +101,7 @@ This view was not produced for this dossier because Sayari reports 47 received s
 ## 9. Methodology and limitations
 
 - How signals and tiers work: the screen checks a fixed set of signals grouped into seven families. A tier reflects how many families have at least one signal, not the weight of any single signal. Some signals are designed to detect patterns associated with shell or front companies, such as mass-registration addresses or ownership chains that end at a company; a signal firing does not mean an entity is one.
-- Identity matching: a record is linked to the entity only when it shares an identifier (UEI, CAGE, company number, registration number or tax ID) or when an analyst confirms the link. Name-only matches are shown as possible matches (unconfirmed) and never drive a signal on their own.
+- Identity matching: a record is linked to the entity only when it shares an identifier (UEI, CAGE, company number, registration number or tax ID) or when an analyst confirms the link. Matches are graded A to D by the match keys that agree; only grade A merges automatically. Name-only matches (grade D) are shown as possible matches (unconfirmed) and never drive a signal.
 - Proximity: paths through registered agents, company-formation agents, and institutional asset managers are excluded, because they connect unrelated companies at scale.
 - Federal grants passed through state agencies to sub-recipients are not covered.
 - Trade not recorded in customs data would not appear.

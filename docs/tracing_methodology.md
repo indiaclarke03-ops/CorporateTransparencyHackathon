@@ -65,7 +65,8 @@ invented. Confidence grading should be driven by the number and type of `match_k
 weak key (e.g., only a similar name) stays low confidence (Grade C/D), while multiple strong keys
 (shared registered address plus shared officer plus matching registration number) supports Grade B,
 and an exact identifier match (shared LEI, tax ID, or company number) supports Grade A. Never upgrade a
-`possibly_same_as` match to Grade A on name similarity alone.
+`possibly_same_as` match to Grade A on name similarity alone. The A–D grades are now the product's match
+scale (spec §7.1).
 
 
 ## 3. Addresses, Registered Agents and Formation Law Firms
@@ -78,15 +79,20 @@ This points to the state's rules being loose, not to any one specific company be
 
 **New node types:**
 - An `address_hub` node with an `entity_count` field (how many separate companies share that exact
-  address). This powers the existing scoring bonus for a mass-registration address with fifty or more
-  companies. Sayari's `edge_counts` field on an address entity is a direct proxy for this.
+  normalized address). This powers the existing scoring bonus for a mass-registration address with fifty
+  or more companies. Sayari has no address entity type, so the application computes `entity_count` itself:
+  it counts distinct companies whose Sayari `addresses` normalize to the same address (via Sayari entity
+  search), cross-checked with Tradeverifyd's companies-in-radius once backlog B1 is resolved. Sayari's
+  `mass_address_usage` risk factor is a second, vendor-side signal. (Corrected 25 Sep 2026: an earlier
+  draft cited an `edge_counts` field on an address entity; neither exists in the Sayari REST spec.)
 - A `facilitator` node type for registered agents, formation law firms, and corporate service
   providers. Kept separate from the shell-company node type, since these firms set up shells for many
   mostly legitimate clients. Score the pattern of concentration, never the facilitator itself. Sayari's
   `degree` field (number of outgoing relationships) on a facilitator entity is a ready-made fan-out metric.
 
 **New connection types:**
-- `REGISTERED_AGENT_FOR` (facilitator to every company it formed)
+- `REGISTERED_AGENT_FOR` (facilitator to every company it formed; maps to Sayari's `registered_agent_of` /
+  `has_registered_agent` relationship types)
 - `SHARED_ADDRESS` (now points at the address_hub node instead of a plain text match between two companies)
 
 **Facilitator concentration check:** the same registered agent used three times is normal. The same
@@ -123,5 +129,10 @@ for each case must state the confidence at every step, not just the final combin
   research item for this document.
 - Actual Sayari API/bulk-data access is still not connected in this environment (see planning_doc.md
   Section 5). Field mappings above are drafted against Sayari's public documentation
-  (entity_id, label_en, sanctioned, pep, closed, degree, edge_counts, shares, position, match_keys) so
-  integration should be a straight pass-through once access is granted, not a redesign.
+  (id, label, translated_label, sanctioned, pep, closed, degree, relationship_count, shares, position,
+  possibly_same_as.match_keys) so integration should be a straight pass-through once access is granted.
+  Checked against the Sayari OpenAPI spec (`docs/vendor/sayari/openapi.yml`) on 25 September 2026:
+  `label_en` is `translated_label` ("Label in English"), `edge_counts` is `relationship_count` (count per
+  relationship type), the REST entity key is `id` (the connector calls it `entity_id`), and each
+  `match_keys` item is an object `{key, normalized, original}`. `degree` is confirmed as "Number of
+  outgoing relationships".

@@ -1,0 +1,266 @@
+{
+  "source_name": "sayari",
+  "via": "claude.ai Sayari connector (MCP)",
+  "operation": "get_entity_profile",
+  "request_params": {
+    "entity_id": "XtartWzEze9a18ZDKVad8A",
+    "relationships_limit": 50
+  },
+  "retrieved_at": "2026-09-25T18:17:07.333Z",
+  "response_hash": "sha256:f747feeb177bd8ef425228dd1cf6139f33955831688cd1cbbdb2f0b6cd98a0f2",
+  "vendor_record_ids": [
+    "XtartWzEze9a18ZDKVad8A"
+  ],
+  "license_tag": "UNCONFIRMED: vendor licence (spec §2.10)",
+  "raw_response": {
+    "entity_id": "XtartWzEze9a18ZDKVad8A",
+    "label": "Capital Tap General Trading L.L.C.",
+    "type": "company",
+    "closed": false,
+    "attributes": {
+      "names": [
+        "M I N S General Trading L.L.C.",
+        "كابيتال تاب للتجارة العامة ش.ذ.م.م",
+        "Elrakiza General Trading L.L.C.",
+        "ELRAKIZA GENERAL TRADING L.L.C.",
+        "Capital Tap General Trading L.L.C."
+      ],
+      "addresses": [
+        "406, Business Bay, Royal Class Business Centre, Dubai, AE",
+        "406, BUSINESS BAY, ROYAL CLASS BUSINESS CENTRE, DUBAI, ARE",
+        "PO Box 416657, 44 & 43, Dubai Municipality, Dubai, AE",
+        "PO Box 416657, 44 & 43 Dubai Municipality, Dubai, ARE"
+      ],
+      "identifiers": [
+        {
+          "type": "unknown",
+          "value": "11337684"
+        },
+        {
+          "type": "unknown",
+          "value": "826794"
+        },
+        {
+          "type": "usa_ofac_sdn_number",
+          "value": "48962"
+        },
+        {
+          "type": "unknown_commercial_register_id",
+          "value": "1393657"
+        },
+        {
+          "type": "xxx_cedar_rose_uid",
+          "value": "AEC74445682"
+        }
+      ],
+      "countries": [
+        "ARE"
+      ],
+      "registration_date": "2019-02-18",
+      "company_type": "LLC",
+      "business_purpose": [
+        "Wholesale and retail trade"
+      ]
+    },
+    "risk": {
+      "sanctioned": true,
+      "pep": false,
+      "risk_levels": [
+        "basel_aml",
+        "cpi_score",
+        "export_controls",
+        "ofac_50_percent_rule",
+        "owned_by_entity_in_export_controls",
+        "owned_by_regulatory_action_entity",
+        "owned_by_sanctioned_entity",
+        "owned_by_sanctioned_gbr_fcdo_entity",
+        "owned_by_sanctioned_usa_ofac_sdn_entity",
+        "psa_ofac_50_percent_rule",
+        "psa_owned_by_entity_in_export_controls",
+        "psa_owned_by_regulatory_action_entity",
+        "psa_owned_by_sanctioned_entity",
+        "psa_owned_by_sanctioned_gbr_fcdo_entity",
+        "psa_owned_by_sanctioned_usa_ofac_sdn_entity",
+        "regulatory_action",
+        "sanctioned_usa_ofac_sdn"
+      ]
+    },
+    "relationships": {
+      "has_shareholder": [
+        {
+          "entity_id": "sAgA0QVKr-gjEAqoJvf0zg",
+          "label": "Abu Dharr Abdul Nabi Habiballa AHMMED",
+          "type": "person",
+          "countries": [
+            "SDN",
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "owner_of_export_controls_entity",
+              "owner_of_regulatory_action_entity",
+              "owner_of_sanctioned_entity",
+              "owner_of_sanctioned_usa_ofac_sdn_entity",
+              "psa_owner_of_export_controls_entity",
+              "psa_owner_of_regulatory_action_entity",
+              "psa_owner_of_sanctioned_entity",
+              "psa_owner_of_sanctioned_usa_ofac_sdn_entity",
+              "sanctioned_gbr_fcdo",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Capital Tap General Trading L.L.C.",
+          "entity_url": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg"
+        }
+      ],
+      "linked_to": [
+        {
+          "entity_id": "sAgA0QVKr-gjEAqoJvf0zg",
+          "label": "Abu Dharr Abdul Nabi Habiballa AHMMED",
+          "type": "person",
+          "countries": [
+            "SDN",
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "owner_of_export_controls_entity",
+              "owner_of_regulatory_action_entity",
+              "owner_of_sanctioned_entity",
+              "owner_of_sanctioned_usa_ofac_sdn_entity",
+              "psa_owner_of_export_controls_entity",
+              "psa_owner_of_regulatory_action_entity",
+              "psa_owner_of_sanctioned_entity",
+              "psa_owner_of_sanctioned_usa_ofac_sdn_entity",
+              "sanctioned_gbr_fcdo",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "position": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Capital Tap General Trading L.L.C.",
+          "entity_url": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg"
+        }
+      ],
+      "subsidiary_of": [
+        {
+          "entity_id": "l-hTG9hSLd7dA4za2B7CRw",
+          "label": "Capital Tap Holding L.L.C.",
+          "type": "company",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": true,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls",
+              "owner_of_export_controls_entity",
+              "owner_of_regulatory_action_entity",
+              "owner_of_sanctioned_entity",
+              "owner_of_sanctioned_usa_ofac_sdn_entity",
+              "psa_owner_of_export_controls_entity",
+              "psa_owner_of_regulatory_action_entity",
+              "psa_owner_of_sanctioned_entity",
+              "psa_owner_of_sanctioned_usa_ofac_sdn_entity",
+              "regulatory_action",
+              "sanctioned_usa_ofac_sdn"
+            ]
+          },
+          "former": false,
+          "entity_url": "https://graph.sayari.com/resource/entity/l-hTG9hSLd7dA4za2B7CRw"
+        }
+      ],
+      "has_manager": [
+        {
+          "entity_id": "QwJxDWpsENhhpo5R6BgRRA",
+          "label": "Naser Helal Abdullah Hammadi",
+          "type": "person",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls_adjacent",
+              "sanctioned_adjacent"
+            ]
+          },
+          "former": false,
+          "position": "Manager",
+          "entity_url": "https://graph.sayari.com/resource/entity/QwJxDWpsENhhpo5R6BgRRA"
+        },
+        {
+          "entity_id": "4jGmEWn103i4b33hvh5t9A",
+          "label": "Eslam Badruddine Mohammed Abdullah",
+          "type": "person",
+          "countries": [
+            "ARE"
+          ],
+          "risk_flags": {
+            "sanctioned": false,
+            "pep": false,
+            "risk_levels": [
+              "basel_aml",
+              "cpi_score",
+              "export_controls_adjacent",
+              "sanctioned_adjacent"
+            ]
+          },
+          "former": false,
+          "position": "Manager",
+          "entity_url": "https://graph.sayari.com/resource/entity/4jGmEWn103i4b33hvh5t9A"
+        }
+      ],
+      "summary": {
+        "has_shareholder": 1,
+        "subsidiary_of": 1,
+        "has_manager": 2,
+        "linked_to": 1
+      }
+    },
+    "sources": [
+      "Acuris Risk Intelligence - Entities & Relationships (3rd Party Data)",
+      "Acuris Risk Intelligence - Risk Information and Articles (3rd Party Data)",
+      "UAE Cedar Rose Company Database (3rd Party Data)",
+      "USA Treasury OFAC Specially Designated Nationals (SDN) List",
+      "OpenSanctions - Global Sanctions List"
+    ],
+    "trade_count": {
+      "sent": 0,
+      "received": 0
+    },
+    "investigation_notes": [
+      "Try multiple Romanizations when resolving Russian entities — Sayari may index entities under different transliterations.",
+      "Since 2022, live EGRUL access may be restricted — Sayari's pre-2022 historical data is valuable for Russian entity research. Use the Sayari API to access this data.",
+      "Russian sanctions evasion often involves restructuring ownership through intermediaries in CIS countries (Kazakhstan, Armenia, Georgia, Kyrgyzstan) or through Turkish, UAE, and Chinese entities."
+    ],
+    "_hints": [
+      "For full risk factor details including scoring methodology, use the lookup_risk_factors tool."
+    ],
+    "entity_url": "https://graph.sayari.com/resource/entity/XtartWzEze9a18ZDKVad8A",
+    "_guidance": {
+      "entity_links": "IMPORTANT: When presenting these results to the user, display every entity_url in this response as a clickable markdown link using the entity's name as link text, e.g. [Acme Corp](https://graph.sayari.com/resource/entity/abc123). Every entity, owner, trade partner, and relationship you mention must link to Sayari Graph so the user can verify the data.",
+      "follow_up": "After presenting findings, if there are unexplored leads listed in suggested_next_steps below, ask the user which they'd like to investigate. When multiple options exist, briefly describe each and let the user choose.",
+      "suggested_next_steps": [
+        "Entities with risk flags found: Abu Dharr Abdul Nabi Habiballa AHMMED, Capital Tap Holding L.L.C. — offer to profile or ownership-trace these entities."
+      ],
+      "entity_quality": "Treat entity resolution as a same-legal-entity judgment, not just name matching. Validate identifiers, countries, source quality, relationships, and the user's seed facts. If a result looks conflated across jurisdictions or critical-risk flags are involved, surface the ambiguity explicitly instead of silently merging or normalizing records."
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "source_name": "tradeverifyd",
+  "via": "Tradeverifyd MCP server (tools/call)",
+  "operation": "entity_annotations",
+  "request_params": {
+    "entity_id": "256a4cc6-d8f4-4799-b31f-31afd3eb090d"
+  },
+  "retrieved_at": "2026-09-25T18:47:26.525225Z",
+  "http_status": 200,
+  "response_hash": "sha256:5c55a731dabb07621cc99a58336f0928e92033194c290b8131083c58eeef27f7",
+  "license_tag": "UNCONFIRMED: vendor licence",
+  "raw_response": {
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"annotations\":[{\"annotation_id\":\"f54c8feb-fa20-43e0-b8ec-b97f311c6b66\",\"name\":\"Sudan and Darfur Sanctions\",\"description\":\"Executive Order 14098 (Sudan)\",\"polarity\":-1,\"category_url\":\"https://sanctionssearch.ofac.treas.gov/\",\"created_at\":\"2026-09-23T17:28:06.571Z\",\"valid_from\":null},{\"annotation_id\":\"c4c4964f-09ec-42ff-a309-01f3c67d32a7\",\"name\":\"US SAM Procurement Exclusions\",\"description\":\"US SAM Procurement Exclusions. Publisher: General Services Administration. Country: United States\",\"polarity\":-1,\"category_url\":\"https://www.opensanctions.org/datasets/us_sam_exclusions/\",\"created_at\":\"2026-08-15T16:11:21.543Z\",\"valid_from\":\"2024-09-18T00:00:00.000Z\"},{\"annotation_id\":\"c95ec43b-4b82-44e6-a52d-e690da423907\",\"name\":\"US OFAC Specially Designated Nationals (SDN) List\",\"description\":\"Executive Order 14098 (Sudan)\",\"polarity\":-1,\"category_url\":\"https://sanctionssearch.ofac.treas.gov/\",\"created_at\":\"2026-08-15T16:11:21.543Z\",\"valid_from\":null},{\"annotation_id\":\"64f00109-ed6e-44f2-a011-cda94e8e2292\",\"name\":\"Specially Designated Nationals (SDN) - Treasury Department\",\"description\":\"SUDAN-EO14098\",\"polarity\":-1,\"category_url\":\"https://sanctionslist.ofac.treas.gov/Home/SdnList\",\"created_at\":\"2026-03-22T04:40:40.809Z\",\"valid_from\":null}],\"page\":1,\"page_size\":25,\"total_records\":4,\"total_pages\":1}"
+        }
+      ]
+    },
+    "jsonrpc": "2.0",
+    "id": 23
+  }
+}

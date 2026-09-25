@@ -45,7 +45,11 @@ Default limits (`K`, `N` and so on) are proposals. The final values go in `confi
 | 21 | Registered address check | `web_presence` | Tavily `POST /search` on the address | 1 | LO2 (analyst confirms) |
 | 22 | LEI parent links, only if the entity has an LEI | `lei_record` | GLEIF `GET /api/v1/lei-records/{lei}` | 0–1 | ST1 cross-check |
 | 23 | Phoenix check | (application database) | No external call | 0 | LC4 |
-| — | Tradeverifyd: search, details, annotations, score, trade relationships, annotated paths, companies in radius | `tradeverifyd_*` | **Blocked (B1)**: not called | 0 | LC3, LO1, TR1–TR4, PX2 once B1 is resolved |
+| 24 | Tradeverifyd entity match | `tv_search_entities` | MCP `search_entities` (`name`, `jurisdiction`, `limit`) | 1 | Candidate match, annotation counts, aliases (LC3) |
+| 25 | Tradeverifyd details and score | `tv_entity_details`, `tv_entity_score` | MCP `entity_details`, `entity_score` | 2 | NAICS for TR1; Tradeverifyd Score shown as reported |
+| 26 | Tradeverifyd annotations | `tv_entity_annotations` | MCP `entity_annotations` | 1 | PX2 cross-vendor, T component |
+| 27 | Tradeverifyd trade, both directions | `tv_trade_relationships` | MCP `entity_trade_relationships` (`direction` in, then out) | 2 | TR1–TR4 cross-vendor |
+| 28 | Tradeverifyd paths to flagged parties | `tv_annotated_paths` | MCP `annotated_relationship_paths` (`direction` both, `max_depth` 2) | 1 | PX2 via trade links |
 
 **Seed total with defaults** (`M`=1, `A`=1, `K`=5, `P`=1, `L`=5):
 
@@ -56,8 +60,8 @@ Default limits (`K`, `N` and so on) are proposals. The final values go in `confi
 | SAM.gov | **2** (limit: 10 requests per day without a SAM.gov role, so at most 5 seed companies per day; backlog B22) |
 | Tavily | **3** (general, news, address) |
 | GLEIF | **0–1** |
-| Tradeverifyd | **0** (blocked) |
-| **Total** | **32–33** |
+| Tradeverifyd | **7** (MCP; rate limits unknown) |
+| **Total** | **39–40** |
 
 ## Connected companies: summary calls only
 
@@ -83,4 +87,4 @@ Connected companies never get watchlist, traversal, trade, Tavily or Tradeverify
 
 ## Whole-search estimate
 
-With the defaults: **about 57–83 calls** per full company search. That's 32–33 for the seed plus 25–50 for connected companies, excluding on-demand calls. Sayari and USAspending carry most of the load. Sayari's rate limits are not documented (backlog B10), so the budget in `config/datasets.yaml` should be set once they are known.
+With the defaults: **about 64–90 calls** per full company search. That's 39–40 for the seed plus 25–50 for connected companies, excluding on-demand calls. Sayari and USAspending carry most of the load. Sayari's rate limits are not documented (backlog B10), so the budget in `config/datasets.yaml` should be set once they are known.

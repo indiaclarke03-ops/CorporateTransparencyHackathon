@@ -546,7 +546,7 @@ Within each component, a category contributes once. Each fired signal adds point
 - **Lower bound:** every unassessed category treated as clear.
 - **Upper bound:** every unassessed category treated as fired.
 
-While Tradeverifyd is blocked (backlog B1), `T_Tradeverifyd` is unassessed for every entity. The score therefore always shows a range, and the report says "Tradeverifyd component not available" rather than implying a clean result.
+Where Tradeverifyd has no match for an entity, or its paths call reports the entity missing from its relationship graph, `T_Tradeverifyd` is unassessed for that entity. The score then shows a range, and the report says "Tradeverifyd component not available for this entity" rather than implying a clean result. The Tradeverifyd Score itself is not on a 0–100 scale (AZ Gold: 258, level "High", version 1.0.0; `fixtures/recorded/tradeverifyd/`) and stays out of the formula.
 
 **Display rules.**
 
@@ -685,7 +685,7 @@ Demo path for judging: pick one federal contractor, show its award, resolve it, 
 
 ## Appendix A: pilot fixtures
 
-These IDs come from the pilot runs through the Sayari and Tradeverifyd connectors on 25 September 2026. Sayari responses for all 17 IDs were recorded through the Sayari connector the same day, in `fixtures/recorded/sayari/` (see `fixtures/recorded/README.md`). The connector's response shape differs from the REST API's, so REST responses must be recorded again at M1 once API credentials are issued. Tradeverifyd responses are not yet recorded (B1).
+These IDs come from the pilot runs through the Sayari and Tradeverifyd connectors on 25 September 2026. Sayari responses for all 17 IDs were recorded through the Sayari connector the same day, in `fixtures/recorded/sayari/` (see `fixtures/recorded/README.md`). The connector's response shape differs from the REST API's, so REST responses must be recorded again at M1 once API credentials are issued. Tradeverifyd responses for AZ Gold were recorded through its MCP server the same day (`fixtures/recorded/tradeverifyd/`). Unlike the pilot note in §3.2, Tradeverifyd now indexes AZ Gold (entity `256a4cc6-d8f4-4799-b31f-31afd3eb090d`, annotations US OFAC 3 and US GSA 2), but has no relationship-graph or trade records for it.
 
 ### A.1 AZ Gold network (Sayari entity IDs)
 

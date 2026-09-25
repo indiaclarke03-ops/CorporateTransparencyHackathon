@@ -1,0 +1,25 @@
+{
+  "source_name": "tradeverifyd",
+  "via": "Tradeverifyd MCP server (tools/call)",
+  "operation": "search_entities",
+  "request_params": {
+    "name": "Palantir Technologies",
+    "limit": 5
+  },
+  "retrieved_at": "2026-09-25T18:46:58.943310Z",
+  "http_status": 200,
+  "response_hash": "sha256:4c49b26cf27166c04c4002bb96517779edab0f780fc374343cd4e8ee08d4a966",
+  "license_tag": "UNCONFIRMED: vendor licence",
+  "raw_response": {
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"query\": {\n    \"name\": \"Palantir Technologies\",\n    \"external_id\": null,\n    \"jurisdiction\": null\n  },\n  \"results\": [\n    {\n      \"entity_id\": \"35a716c4-64dc-43c5-9497-69d4ffbebd08\",\n      \"name\": \"PALANTIR TECHNOLOGIES INC.\",\n      \"jurisdiction\": \"US\",\n      \"confidence\": 1,\n      \"aliases\": [\n        \"PALANTIR TECHNOLOGIES Inc.\",\n        \"PALANTIR TECHNOLOGIES INCORPORATED\",\n        \"PALANTIR TECHNOLOGIES INC\",\n        \"PALANTIR TECHNOLOGIES\",\n        \"PALANTIR TECHNOLOGIES INC.\",\n        \"Palantir Technologies Inc.\"\n      ],\n      \"industry\": \"Custom Computer Programming Services\",\n      \"naics\": \"541511\",\n      \"external_ids\": [\n        {\n          \"type\": \"company_number\",\n          \"value\": \"20201707433\"\n        },\n        {\n          \"type\": \"company_number\",\n          \"value\": \"3649383\"\n        },\n        {\n          \"type\": \"company_number\",\n          \"value\": \"EXTUID_4106874\"\n        },\n        {\n          \"type\": \"company_number\",\n          \"value\": \"N0000000982\"\n        },\n        {\n          \"type\": \"lei\",\n          \"value\": \"549300UVN46B3BBDHO85\",\n          \"href\": \"https://search.gleif.org/#/record/549300UVN46B3BBDHO85\"\n        }\n      ],\n      \"annotation_count\": 0,\n      \"direct_inbound_relationships\": 1,\n      \"direct_outbound_relationships\": 0,\n      \"affiliate_relationship_count\": 18\n    },\n    {\n      \"entity_id\": \"6d85f5b9-7508-418d-86b0-264129b41f93\",\n      \"name\": \"PALANTIR TECHNOLOGIES\",\n      \"jurisdiction\": \"GB\",\n      \"confidence\": 1,\n      \"aliases\": [],\n      \"industry\": null,\n      \"naics\": null,\n      \"external_ids\": [],\n      \"annotation_count\": 0,\n      \"direct_inbound_relationships\": 0,\n      \"direct_outbound_relationships\": 1,\n      \"affiliate_relationship_count\": 0\n    },\n    {\n      \"entity_id\": \"22a06e2a-e133-4c96-86c5-714b36547e53\",\n      \"name\": \"PALANTIR TECHNOLOGIES INC.\",\n      \"jurisdiction\": \"PR\",\n      \"confidence\": 1,\n      \"aliases\": [\n        \"PALANTIR TECHNOLOGIES INC.\",\n        \"PALANTIR TECHNOLOGIES INCORPORATED\",\n        \"PALANTIR TECHNOLOGIES INC\"\n      ],\n      \"industry\": null,\n      \"naics\": null,\n      \"external_ids\": [\n        {\n          \"type\": \"company_number\",\n          \"value\": \"491387-112\"\n        }\n      ],\n      \"annotation_count\": 0,\n      \"direct_inbound_relationships\": 0,\n      \"direct_outbound_relationships\": 0,\n      \"affiliate_relationship_count\": 2\n    },\n    {\n      \"entity_id\": \"b800fee5-acdb-4e49-be60-f2671a34f37f\",\n      \"name\": \"PALANTIR TECHNOLOGIES, INC.\",\n      \"jurisdiction\": \"AU\",\n      \"confidence\": 1,\n      \"aliases\": [\n        \"PALANTIR TECHNOLOGIES, INC.\",\n        \"PALANTIR TECHNOLOGIES INCORPORATED\",\n        \"PALANTIR TECHNOLOGIES INC\"\n      ],\n      \"industry\": null,\n      \"naics\": null,\n      \"external_ids\": [\n        {\n          \"type\": \"company_number\",\n          \"value\": \"131418329\"\n        }\n      ],\n      \"annotation_count\": 0,\n      \"direct_inbound_relationships\": 0,\n      \"direct_outbound_relationships\": 0,\n      \"affiliate_relationship_count\": 1\n    },\n    {\n      \"entity_id\": \"77ddd179-595a-4faf-b1b5-379d4136a983\",\n      \"name\": \"Palantir Technologies GmbH\",\n      \"jurisdiction\": \"DE\",\n      \"confidence\": 1,\n      \"aliases\": [\n        \"PALANTIR TECHNOLOGIES GESELLSCHAFT MIT BESCHRÄNKTER HAFTUNG\",\n        \"PALANTIR TECHNOLOGIES GMBH\",\n        \"Palantir Technologies GmbH\"\n      ],\n      \"industry\": \"Computer and Computer Peripheral Equipment and Software Merchant Wholesalers\",\n      \"naics\": \"423430\",\n      \"external_ids\": [\n        {\n          \"type\": \"company_number\",\n          \"value\": \"Frankfurt am Main HRB 93940\"\n        },\n        {\n          \"type\": \"company_number\",\n          \"value\": \"M1201_HRB93940\"\n        }\n      ],\n      \"annotation_count\": 0,\n      \"direct_inbound_relationships\": 0,\n      \"direct_outbound_relationships\": 0,\n      \"affiliate_relationship_count\": 0\n    }\n  ],\n  \"total\": 5,\n  \"confidence_version\": 5,\n  \"meta\": {\n    \"response_time_ms\": 1491\n  }\n}"
+        }
+      ]
+    },
+    "jsonrpc": "2.0",
+    "id": 13
+  }
+}

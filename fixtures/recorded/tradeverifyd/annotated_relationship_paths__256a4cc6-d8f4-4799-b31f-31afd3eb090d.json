@@ -1,0 +1,26 @@
+{
+  "source_name": "tradeverifyd",
+  "via": "Tradeverifyd MCP server (tools/call)",
+  "operation": "annotated_relationship_paths",
+  "request_params": {
+    "entity_id": "256a4cc6-d8f4-4799-b31f-31afd3eb090d",
+    "direction": "both",
+    "max_depth": 2
+  },
+  "retrieved_at": "2026-09-25T18:47:27.216013Z",
+  "http_status": 200,
+  "response_hash": "sha256:4c474200ec928720c5b927874f063582a2f8030e7b604447d8c51a43a81604ba",
+  "license_tag": "UNCONFIRMED: vendor licence",
+  "raw_response": {
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"error\":\"Entity 256a4cc6-d8f4-4799-b31f-31afd3eb090d not found in relationship graph\"}"
+        }
+      ]
+    },
+    "jsonrpc": "2.0",
+    "id": 24
+  }
+}

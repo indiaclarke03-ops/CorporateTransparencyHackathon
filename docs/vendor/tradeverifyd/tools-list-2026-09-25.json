@@ -1,0 +1,1591 @@
+[
+ {
+  "name": "search_entities",
+  "title": "Search Entities",
+  "description": "Search for entities by name, external ID, or entity UUID. Returns matched entities with confidence scores and hydrated data. Use this to find entities before fetching annotations or details.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string",
+     "description": "Company or entity name to search for. If a UUID is provided, a direct entity lookup is attempted first. At least one of name or external_id is required."
+    },
+    "external_id": {
+     "type": "string",
+     "description": "External identifier value (e.g., LEI, DUNS) for direct entity lookup. If both name and external_id are provided, external ID is tried first; if no match, falls back to name search."
+    },
+    "jurisdiction": {
+     "type": "string",
+     "description": "ISO 3166-1 alpha-2 country code to filter results (e.g., \"US\", \"GB\", \"CN\")"
+    },
+    "limit": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 100,
+     "default": 10,
+     "description": "Maximum number of results to return (default: 10, max: 100)"
+    },
+    "has_annotations": {
+     "type": "boolean",
+     "description": "If true, only return entities that have at least one annotation (sanctions, forced labor, etc.)"
+    },
+    "annotation_categories": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "description": "Filter by specific annotation categories (OR logic). Example: [\"OFAC SDN\", \"Forced Labor\"]. Implies has_annotations=true."
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "find_companies_in_radius",
+  "title": "Find Companies In Radius",
+  "description": "Find base-graph entities whose primary address falls within a radius (in nautical miles) of a point. Returns entity ids with distance, closest first. Shared reference data with no organization scoping; intended for disaster/event linkage.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "latitude": {
+     "type": "number",
+     "minimum": -90,
+     "maximum": 90,
+     "description": "Center latitude in WGS84 degrees."
+    },
+    "longitude": {
+     "type": "number",
+     "minimum": -180,
+     "maximum": 180,
+     "description": "Center longitude in WGS84 degrees."
+    },
+    "radius_nm": {
+     "type": "number",
+     "exclusiveMinimum": 0,
+     "maximum": 10000,
+     "description": "Search radius in nautical miles."
+    },
+    "limit": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 1000,
+     "default": 200,
+     "description": "Maximum number of results to return (default: 200, max: 1000)."
+    }
+   },
+   "required": [
+    "latitude",
+    "longitude",
+    "radius_nm"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "annotations_categories",
+  "title": "Get Annotations Categories",
+  "description": "Returns all annotation categories with their name, description, and polarity.",
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "type": "object",
+   "properties": {}
+  },
+  "annotations": {
+   "readOnlyHint": true
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "entity_annotations",
+  "title": "Get Entity Annotations",
+  "description": "Returns annotations for a given entity, identified by entity_id. Requires annotations:read or annotations:read-exists scope. With annotations:read and a monitored entity, returns full annotation details with pagination. Otherwise, returns an annotation count only.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "entity_id": {
+     "type": "string",
+     "description": "The entity ID to fetch annotations for"
+    },
+    "page": {
+     "type": "integer",
+     "minimum": 1,
+     "default": 1,
+     "description": "Page number (default: 1)"
+    },
+    "page_size": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 100,
+     "default": 25,
+     "description": "Results per page (default: 25, max: 100)"
+    }
+   },
+   "required": [
+    "entity_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "entity_details",
+  "title": "Get Entity Details",
+  "description": "Returns details for an entity, including name, aliases, legal form, jurisdiction, NAICS code, industry label, status, and external identifiers.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "entity_id": {
+     "type": "string",
+     "description": "The entity ID to fetch details for"
+    }
+   },
+   "required": [
+    "entity_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "entity_addresses",
+  "title": "Get Entity Addresses",
+  "description": "Returns addresses for a given entity, identified by entity_id. Supports pagination via page and page_size parameters. Optional filters: q (free-text search), jurisdiction (ISO 3166-1 alpha-2 country code), location_type, city, and state_province.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "entity_id": {
+     "type": "string",
+     "description": "The entity ID to fetch addresses for"
+    },
+    "page": {
+     "type": "integer",
+     "minimum": 1,
+     "default": 1,
+     "description": "Page number (default: 1)"
+    },
+    "page_size": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 100,
+     "default": 25,
+     "description": "Results per page (default: 25, max: 100)"
+    },
+    "q": {
+     "type": "string",
+     "description": "Free-text search across address fields (line1, line2, city, state/province, postal code)"
+    },
+    "jurisdiction": {
+     "type": "string",
+     "description": "ISO 3166-1 alpha-2 country code filter (e.g. US, GB, CN)"
+    },
+    "location_type": {
+     "type": "string",
+     "description": "Location type filter (e.g. legal_address, mailing_address, headquarters)"
+    },
+    "city": {
+     "type": "string",
+     "description": "City filter (case-insensitive substring match)"
+    },
+    "state_province": {
+     "type": "string",
+     "description": "State/province filter (case-insensitive)"
+    }
+   },
+   "required": [
+    "entity_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "entity_trade_relationships",
+  "title": "Get Entity Trade Relationships",
+  "description": "Returns trade relationships for a given entity, identified by entity_id. Use direction to control whether you see suppliers (in) or customers (out). Defaults to in. Each relationship includes hs_codes: the HS codes actually carried on that trade edge, sorted (e.g. [\"84733010\"]); empty when the edge carries no commodity codes. Optionally pass hs_codes to filter to specific commodities: only relationships whose edge carries a code falling under at least one of the supplied prefixes (2-11 digits, e.g. \"84\" matches an edge code of \"84733010\") are returned.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "entity_id": {
+     "type": "string",
+     "description": "The entity ID to fetch trade relationships for"
+    },
+    "direction": {
+     "type": "string",
+     "enum": [
+      "in",
+      "out"
+     ],
+     "default": "in",
+     "description": "Relationship direction: 'in' for suppliers, 'out' for customers (default: in)"
+    },
+    "page": {
+     "type": "integer",
+     "minimum": 1,
+     "default": 1,
+     "description": "Page number (default: 1)"
+    },
+    "page_size": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 100,
+     "default": 25,
+     "description": "Results per page (default: 25, max: 100)"
+    },
+    "hs_codes": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "pattern": "^\\d{2,11}$"
+     },
+     "description": "Optional HS codes (2-11 digits each). When supplied, only relationships whose edge carries a code falling under at least one of these prefixes are returned (match any)."
+    }
+   },
+   "required": [
+    "entity_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "entity_affiliate_relationships",
+  "title": "Get Entity Affiliate Relationships",
+  "description": "Returns affiliate relationships for a given entity, identified by entity_id. Use direction to control whether you see parent entities (in) or subsidiaries/branches (out). Defaults to in.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "entity_id": {
+     "type": "string",
+     "description": "The entity ID to fetch affiliate relationships for"
+    },
+    "direction": {
+     "type": "string",
+     "enum": [
+      "in",
+      "out"
+     ],
+     "default": "in",
+     "description": "Relationship direction: 'in' for parents, 'out' for subsidiaries/branches (default: in)"
+    },
+    "page": {
+     "type": "integer",
+     "minimum": 1,
+     "default": 1,
+     "description": "Page number (default: 1)"
+    },
+    "page_size": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 100,
+     "default": 25,
+     "description": "Results per page (default: 25, max: 100)"
+    }
+   },
+   "required": [
+    "entity_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "annotated_relationship_paths",
+  "title": "Get Annotated Relationship Paths",
+  "description": "Returns paths from a root entity to annotated (sanctioned, flagged) entities in its supply chain graph. Each path shows the hop-by-hop route from the root to an annotated entity, and each hop includes the HS codes carried on its incoming edge. Use this to identify which supply chain relationships lead to compliance-relevant entities. Optionally pass hs_codes to filter by commodity: the traversal is pruned at the first tier only \u2014 tier-1 suppliers whose edge from the root carries no code falling under any of the supplied prefixes (2-11 digits, e.g. \"84\" matches an edge code of \"84733010\") are excluded, along with their downstream paths.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "entity_id": {
+     "type": "string",
+     "description": "The entity ID to find annotated paths from"
+    },
+    "direction": {
+     "type": "string",
+     "enum": [
+      "in",
+      "out",
+      "both"
+     ],
+     "default": "in",
+     "description": "Relationship direction: 'in' for suppliers, 'out' for customers, 'both' for all (default: in)"
+    },
+    "max_depth": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 5,
+     "default": 5,
+     "description": "Maximum BFS depth (1-5, default: 5)"
+    },
+    "hs_codes": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "pattern": "^\\d{2,11}$"
+     },
+     "description": "Optional HS codes (2-11 digits each). When supplied, the traversal is pruned at the first tier only: tier-1 suppliers whose edge from the root carries no code falling under any of these prefixes are dropped, along with their downstream paths (match any)."
+    }
+   },
+   "required": [
+    "entity_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "relationship_types",
+  "title": "Get Relationship Types",
+  "description": "Returns relationship types grouped by affiliate and trade.",
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "type": "object",
+   "properties": {}
+  },
+  "annotations": {
+   "readOnlyHint": true
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "entity_score",
+  "title": "Get Tradeverifyd Score for Entity",
+  "description": "Returns the Tradeverifyd Score for an entity, including overall score, score version, and level.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "entity_id": {
+     "type": "string",
+     "description": "The entity ID to fetch the score for"
+    }
+   },
+   "required": [
+    "entity_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "monitor_company",
+  "title": "Monitor Company",
+  "description": "Start monitoring a company by name. Automatically finds and associates matching companies across all countries the company operates in, and returns aggregate KPIs.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string",
+     "description": "The company name to monitor"
+    },
+    "countries": {
+     "type": "array",
+     "items": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2}$"
+     },
+     "description": "Optional ISO 3166-1 alpha-2 country codes to scope monitoring to. Omit or pass an empty array to monitor the company in every country it matches."
+    },
+    "tags": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "description": "Optional tags"
+    },
+    "business_unit": {
+     "type": "string",
+     "description": "Optional business unit label"
+    }
+   },
+   "required": [
+    "name"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "list_monitored_companies",
+  "title": "List Monitored Companies",
+  "description": "List the companies your organization monitors, with aggregate KPIs (Tradeverifyd Score, annotations, open alerts, country count). Sorted highest-risk first by default.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "page": {
+     "type": "integer",
+     "minimum": 1
+    },
+    "limit": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 200
+    },
+    "sort": {
+     "type": "string",
+     "enum": [
+      "risk",
+      "name",
+      "added"
+     ]
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "get_monitored_company",
+  "title": "Get Monitored Company",
+  "description": "Get a monitored company's aggregate KPIs and the list of associated companies with their countries. Provide the monitored company id.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string",
+     "description": "The monitored company id"
+    }
+   },
+   "required": [
+    "id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "resolve_company_associations",
+  "title": "Resolve Company Associations",
+  "description": "Preview the companies a name would resolve to across countries, without monitoring it. Use to check coverage before calling monitor_company.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "name": {
+     "type": "string",
+     "description": "The company name to resolve"
+    }
+   },
+   "required": [
+    "name"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "annotations": {
+   "readOnlyHint": true
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "stop_monitoring_company",
+  "title": "Stop Monitoring Company",
+  "description": "Stop monitoring a company. Provide the monitored company id.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "id": {
+     "type": "string",
+     "description": "The monitored company id"
+    }
+   },
+   "required": [
+    "id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_create_value_chain",
+  "title": "tia_create_value_chain",
+  "description": "Create a value chain with automatic supply chain discovery. Immediately creates the chain record and launches background discovery. Returns the chain with status `discovering` while discovery runs asynchronously. `company` is the anchor (root) company. `product` optionally focuses discovery on one product line (and is the primary way to narrow an overly broad chain). `direction` is `upstream` (suppliers) or `downstream` (customers). Pass `name` ONLY when the user explicitly named the chain; otherwise it falls back to `{company} {product} value chain` (or `{company} value chain` when no product was given). Use this ONLY to make a NEW chain: if the user is referring to a chain they already have (e.g. \"update/re-scope MY chain to X\"), call tia_update_value_chain on that chain instead \u2014 calling this would create a duplicate.\n\nCREATE DEDUPES BY ANCHOR + PRODUCT: if this organization already has a chain for the anchor company and product focus, this tool creates NOTHING and returns that existing chain with `created:false` (its real name, status and node_count, plus a `session_context` callout). When you get `created:false`, do NOT say a new chain was created and do NOT report it as a fresh build \u2014 relay the callout instead. A `name` you passed is NOT applied to an existing chain; the name it ignored comes back as `requested_name_ignored` (use tia_rename_value_chain to actually apply it). An ARCHIVED chain does not count as existing: when the only match is archived, this tool creates a NEW chain and leaves the archived one archived, and the `session_context` names it. NEVER restore an archived chain (tia_archive_value_chain restore=true) on your own initiative to get past a match \u2014 mention it, and restore only if the user asks.\n\nBREADTH CHECK: for a new company-only chain (no `product`), this may return `status:\"needs_narrowing\"` WITHOUT creating \u2014 the anchor is so connected the chain would blow past the node cap and be too broad to be useful. When you get that, do NOT report a chain was created: relay the `session_context` callout, tell the user it looks very broad, and offer to narrow the scope (name a product, or anchor on a subsidiary). Only if the user then says they want the full chain anyway, call again with `confirm_broad=true`.\n\nWHICH COMPANY: this may return `status:\"needs_anchor_confirmation\"` WITHOUT creating, when `company` matches more than one real trading company (e.g. \"Nike\" matching Nike Inc in the US and a Nike entity in Belgium). Do NOT report a chain was created: relay the `session_context` callout and ask the user which company they mean, naming the companies and their countries. Then call again with `company` UNCHANGED and `anchor_choice` set to the chosen company's name exactly as offered. NEVER put their answer in `company` \u2014 that looks the name up afresh and can land on a third company. NEVER show the user an entity id.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "company": {
+     "type": "string",
+     "description": "Anchor company name (the root of the value chain)."
+    },
+    "product": {
+     "type": "string",
+     "description": "Optional product to focus discovery on."
+    },
+    "direction": {
+     "type": "string",
+     "default": "upstream",
+     "description": "`upstream` (suppliers) or `downstream` (customers)."
+    },
+    "name": {
+     "type": "string",
+     "description": "Human-readable chain name. Pass only when the user gave one."
+    },
+    "confirm_broad": {
+     "type": "boolean",
+     "default": false,
+     "description": "Set true ONLY to proceed past a `needs_narrowing` breadth callout after the user has decided to create the full (broad) chain anyway."
+    },
+    "anchor_entity_id": {
+     "type": "string",
+     "description": "The chosen company's `anchor_entity_id`, copied from a `needs_anchor_confirmation` payload's `choices` after the USER said which company they meant. Never set this on your own initiative, and never show it to the user."
+    },
+    "anchor_choice": {
+     "type": "string",
+     "description": "The NAME of the company the user picked from a `needs_anchor_confirmation` payload, exactly as it was offered (e.g. \"SAMSUNG SEMICONDUCTOR EUROPE LIMITED\"). Use this when you no longer have the ids from that payload \u2014 which is normal, since a previous turn's tool results are not in your context. Keep `company` as the ORIGINAL anchor the user asked for and put their choice here; that way the choice is matched against the exact candidates you offered instead of being looked up as a fresh name."
+    },
+    "anchor_choice_country": {
+     "type": "string",
+     "description": "The country of the company the user picked, as shown next to it (a two-letter code or the country name, e.g. \"TW\" or \"Taiwan\"). ALWAYS pass this alongside `anchor_choice`: candidates frequently share an identical name and differ only by country (a search for \"delta electronics\" returns eight companies all named \"DELTA ELECTRONICS\"), and without the country the choice is ambiguous and I will have to ask again."
+    },
+    "anchor_choice_index": {
+     "type": "integer",
+     "minimum": 1,
+     "description": "The position of the company the user picked in the list that was offered, counting from 1 (so the first company is 1). Pass this whenever you can tell which position they meant \u2014 it identifies the company exactly even when several share a name."
+    }
+   },
+   "required": [
+    "company"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_rename_value_chain",
+  "title": "tia_rename_value_chain",
+  "description": "Rename an existing value chain (TV-15724). Changes ONLY the chain's display name; its id, anchor, products, suppliers, and discovery data are preserved \u2014 there is no need to recreate the chain just to rename it. Pass the `value_chain_id` of the chain currently in context.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "value_chain_id": {
+     "type": "string",
+     "description": "UUID of the value chain to rename."
+    },
+    "name": {
+     "type": "string",
+     "description": "New human-readable name for the chain."
+    }
+   },
+   "required": [
+    "value_chain_id",
+    "name"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_update_value_chain",
+  "title": "tia_update_value_chain",
+  "description": "Update an existing value chain's own attributes IN PLACE (#1677): its product focus/scope (`product`), `direction`, `description`, and/or display `name`. This is how you re-scope a chain the user already has \u2014 e.g. \"narrow my existing chain to water-utility metering\" sets `product`. Prefer this over tia_create_value_chain whenever the user refers to a chain that already exists: creating would make a DUPLICATE. Pass the `value_chain_id` of the chain in context plus only the fields to change; omitted fields are left untouched. Its id, anchor, nodes, edges, and discovery data are preserved. To rename only, tia_rename_value_chain also works. The ANCHOR cannot be changed on an existing chain (tradeverifyd/workspace#1735): the only path to a different anchor is delete-and-rebuild, so do not offer to repoint it.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "value_chain_id": {
+     "type": "string",
+     "description": "UUID of the value chain to update."
+    },
+    "name": {
+     "type": "string",
+     "description": "New display name. Omit to leave unchanged."
+    },
+    "product": {
+     "type": "string",
+     "description": "New product focus/scope for the chain (the primary way to narrow or re-scope it). Omit to leave unchanged."
+    },
+    "direction": {
+     "type": "string",
+     "description": "`upstream` (suppliers) or `downstream` (customers). Omit to leave unchanged."
+    },
+    "description": {
+     "type": "string",
+     "description": "New free-text description. Omit to leave unchanged."
+    }
+   },
+   "required": [
+    "value_chain_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_archive_value_chain",
+  "title": "tia_archive_value_chain",
+  "description": "Archive (or restore) a value chain (#509). Archiving hides the chain from the default chain list and pauses its twice-daily auto-refresh, without deleting any data \u2014 reversible at any time. Pass `restore=true` to bring an archived chain back.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "value_chain_id": {
+     "type": "string",
+     "description": "UUID of the value chain to archive or restore."
+    },
+    "restore": {
+     "type": "boolean",
+     "default": false,
+     "description": "When true, restore an archived chain instead of archiving it."
+    }
+   },
+   "required": [
+    "value_chain_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_duplicate_value_chain",
+  "title": "tia_duplicate_value_chain",
+  "description": "Duplicate a value chain (#509). Creates a new chain named `<name> (copy)` that copies the source chain's metadata and all of its nodes (preserving which nodes were user-curated). The copy does NOT re-enroll monitoring and does NOT re-run discovery \u2014 it is an immediate, editable snapshot.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "value_chain_id": {
+     "type": "string",
+     "description": "UUID of the value chain to duplicate."
+    }
+   },
+   "required": [
+    "value_chain_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_get_value_chain_by_anchor",
+  "title": "tia_get_value_chain_by_anchor",
+  "description": "Look up a saved value chain by anchor (TV-15544). Returns the persisted chain matching `(org, normalize(legal_name), normalize(product))` or null if none exists. An active chain is preferred; an archived one (non-null `archived_at`) is returned only when no active chain matches, and it is not a chain the customer has on file \u2014 do not restore it unasked. `normalize()` lowercases and strips non-alphanumerics, so \"Acme Industries, Inc.\" and \"acme industries inc\" collapse to the same key. Use this before creating/discovering a chain when you want explicit lookup-before-discover behavior.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "legal_name": {
+     "type": "string",
+     "description": "Anchor company name from tenant_profile.legal_name."
+    },
+    "product": {
+     "type": "string",
+     "description": "Product line slug from tenant_profile.product_lines[]."
+    }
+   },
+   "required": [
+    "legal_name",
+    "product"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_value_chain_appearances",
+  "title": "tia_value_chain_appearances",
+  "description": "List the caller's value chains that contain a given entity (tia#499). Reverse lookup answering \"what chains is X in?\" Returns one appearance per distinct (chain, tier) the entity sits at, each with the chain id, name, chain-level product, and tier. Scoped to the caller's org. Takes an entity id, a name, or both \u2014 pass both when you have both, since nodes are identified either way (see tradeverifyd/workspace#2489).",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "entity_id": {
+     "type": "string",
+     "minLength": 1,
+     "description": "Base-graph entity id of the company (`entity_summaries.id`, the `/company/[id]` route key). Matched against the node's resolved `canonical_id` and its raw `entity_id`."
+    },
+    "entity_name": {
+     "type": "string",
+     "minLength": 1,
+     "description": "Company NAME as it appears in the chain. The chat path passes this. Also the only key for a node the canonical resolver has not reached and for a name-keyed profile link."
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_get_value_chain_by_id",
+  "title": "tia_get_value_chain_by_id",
+  "description": "Retrieve one saved value chain by id, scoped to the caller's org: the chain metadata (name, anchor, status) flattened with ONE PAGE of its nodes (tier-ascending), the edges between the nodes on that page, and whole-chain rollups. The node list is PAGED in BOTH scopes: at most `limit` nodes per call (default 100, max 200), `cursor` for the next page (null on the last one), and `nodes_total_in_scope` for how many nodes the requested scope holds \u2014 a page of 100 with nodes_total_in_scope 412 is 100 of 412, not the chain. The rollups (`mapped_scale`, `screening_coverage`, `node_cap`, `at_node_cap`) always describe the WHOLE chain, whatever page or scope was served. NEVER page through a whole chain to find one company: use tia_find_value_chain_node to find a company in a chain, tia_value_chain_appearances to learn which chains a company is in, and tia_trace_value_chain_path to trace a supplier's path to the anchor. If a result says it was truncated, narrow the request (thin scope, a smaller limit, or one of those tools) instead of retrying it. Read screening_coverage before calling any part of the chain clean. When status is `discovering` the chain is STILL BEING BUILT: the node list is partial (often empty early on), screening_coverage carries discovery_in_progress=true, and an incomplete or empty relationship list is evidence of nothing except that the run has not finished \u2014 do not characterize coverage, and never report the emptiness as a coverage or data gap. NOT_FOUND when the id does not exist in the caller's org.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "value_chain_id": {
+     "type": "string",
+     "description": "UUID of the value chain to retrieve."
+    },
+    "node_scope": {
+     "type": "string",
+     "enum": [
+      "thin",
+      "all"
+     ],
+     "default": "thin",
+     "description": "Which nodes to return. 'thin' (DEFAULT) is the first-screen set: the anchor, every company the customer supplied, and the routes toward companies carrying a compliance annotation or declared by the org's knowledge base. 'all' is every node in the chain's membership. BOTH scopes are PAGED \u2014 at most `limit` nodes per call (default 100, max 200), `cursor` for the next page, `nodes_total_in_scope` for the scope's total \u2014 so 'all' never hands back a whole large chain in one call, and paging through it to find one company is the wrong tool: use tia_find_value_chain_node for that. EITHER WAY the rollups (`mapped_scale`, `screening_coverage`) describe the WHOLE chain, so a thin read still tells you how much was mapped and screened."
+    },
+    "limit": {
+     "type": "integer",
+     "default": 100,
+     "description": "Nodes per page (default 100, max 200; a larger value is clamped, not refused). Applies to BOTH node_scope values."
+    },
+    "cursor": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "description": "Opaque cursor from a prior page's `cursor` field to fetch the next page. Omit (or null) for the first page. Never page through a whole chain to find one company \u2014 use tia_find_value_chain_node instead."
+    }
+   },
+   "required": [
+    "value_chain_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_delete_value_chain",
+  "title": "tia_delete_value_chain",
+  "description": "Permanently delete a value chain and all of its nodes (and schedules), scoped to the caller's org. Irreversible. NOT_FOUND when the id does not exist in the caller's org.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "value_chain_id": {
+     "type": "string",
+     "description": "UUID of the value chain to delete."
+    }
+   },
+   "required": [
+    "value_chain_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_add_value_chain_node",
+  "title": "tia_add_value_chain_node",
+  "description": "Manually add a supplier/company to a value chain.\n\nUse to add a known supplier discovery missed \u2014 including adding a company at `tier=1`. The node is flagged as user-curated so it survives the twice-daily auto-refresh. A supplier added by name ALWAYS lands, even when the chain is at its node cap \u2014 only automatic discovery is bounded by the cap. The one refusal is a chain that already holds the cap's worth of user-added nodes.\n\nA company already on this chain at this tier is NOT added twice: the existing node is returned with `already_on_chain: true` and a `note` saying so. Relay that \u2014 do not report it as a new addition.\n\nAbove tier 1 `parent_node_id` is required; without it the add is refused (PARENT_REQUIRED) and you must ask which company the supplier supplies.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "value_chain_id": {
+     "type": "string",
+     "description": "UUID of the value chain to add the node to."
+    },
+    "entity_name": {
+     "type": "string",
+     "description": "Name of the supplier/company to add."
+    },
+    "nickname": {
+     "type": "string",
+     "description": "Optional nickname the customer reads instead of the official name."
+    },
+    "tier": {
+     "type": "integer",
+     "minimum": 1,
+     "default": 1,
+     "description": "Supply-chain tier for the node. 1 or greater."
+    },
+    "role": {
+     "type": "string",
+     "description": "Optional role. One of: anchor, supplier, customer. Not a free-text description of what the company supplies \u2014 anything else is rejected. Leave unset if none applies."
+    },
+    "jurisdiction": {
+     "type": "string",
+     "description": "Optional jurisdiction (country code)."
+    },
+    "entity_id": {
+     "type": "string",
+     "description": "Optional resolved platform entity id for deep-linking."
+    },
+    "parent_node_id": {
+     "type": "string",
+     "description": "UUID of the node this company supplies \u2014 the company it sits under on the chain. Optional at tier 1, where it defaults to the chain's anchor company. REQUIRED above tier 1: a tier-2 or deeper supplier supplies a specific company, and there is no safe default. Get it from tia_find_value_chain_node."
+    }
+   },
+   "required": [
+    "value_chain_id",
+    "entity_name"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_edit_value_chain_node",
+  "title": "tia_edit_value_chain_node",
+  "description": "Correct a value chain node's tier or role, or give it a nickname.\n\nThe company's NAME and COUNTRY are not editable and this tool refuses them: they are facts about a real company, resolved from records, and a node that disagrees with that record no longer matches what we screen and score it against. If it is the wrong company, remove this node and add the right one. To read the company under a name of the customer's own, set `nickname`.\n\nEditing promotes the node to user-curated so the correction survives auto-refresh \u2014 meaning it will no longer pick up future discovery corrections for that node.\n\nGet `node_id` from tia_find_value_chain_node (search the chain by company name); do not read the whole chain to find it.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "value_chain_id": {
+     "type": "string",
+     "description": "UUID of the value chain the node belongs to."
+    },
+    "node_id": {
+     "type": "string",
+     "description": "UUID of the node to edit."
+    },
+    "entity_name": {
+     "type": "string",
+     "description": "REFUSED \u2014 a node's company name cannot be changed."
+    },
+    "tier": {
+     "type": "number",
+     "description": "New supply-chain tier."
+    },
+    "role": {
+     "type": "string",
+     "description": "New role. One of: anchor, supplier, customer, or an empty string to clear it. Not a free-text description."
+    },
+    "nickname": {
+     "type": "string",
+     "description": "New nickname (the customer's own name for the company). Pass an empty string to clear it; the official name is never affected."
+    },
+    "jurisdiction": {
+     "type": "string",
+     "description": "REFUSED \u2014 a node's country cannot be changed."
+    }
+   },
+   "required": [
+    "value_chain_id",
+    "node_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_remove_value_chain_node",
+  "title": "tia_remove_value_chain_node",
+  "description": "Remove a (false-positive) node from a value chain.\n\nRecords a suppression so re-discovery won't re-add the entity \u2014 the removal survives the twice-daily auto-refresh.\n\nGet `node_id` from tia_find_value_chain_node (search the chain by company name); do not read the whole chain to find it.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "value_chain_id": {
+     "type": "string",
+     "description": "UUID of the value chain the node belongs to."
+    },
+    "node_id": {
+     "type": "string",
+     "description": "UUID of the node to remove."
+    }
+   },
+   "required": [
+    "value_chain_id",
+    "node_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_find_value_chain_node",
+  "title": "tia_find_value_chain_node",
+  "description": "Find a node inside ONE value chain by part of its company name or nickname. Returns the node_id you need for tia_edit_value_chain_node / tia_remove_value_chain_node, plus each match's tier, role, country, and parent. Use this instead of reading the whole chain: never call tia_get_value_chain_by_id with node_scope 'all' to locate a company. Returns at most `limit` matches (default 10, max 20), best match first; has_more=true means narrow the name or add a tier. To learn which chains a company appears in, use tia_value_chain_appearances instead.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "value_chain_id": {
+     "type": "string",
+     "description": "UUID of the value chain to search within."
+    },
+    "name": {
+     "type": "string",
+     "minLength": 1,
+     "description": "Part of the company name or nickname as it appears in the chain. Case-insensitive; whitespace is collapsed."
+    },
+    "tier": {
+     "type": "integer",
+     "description": "Optional supply-chain tier to restrict the match to."
+    },
+    "limit": {
+     "type": "integer",
+     "description": "Max matches to return (default 10, max 20)."
+    }
+   },
+   "required": [
+    "value_chain_id",
+    "name"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_value_chain_overview",
+  "title": "tia_value_chain_overview",
+  "description": "Summarize a value chain: its anchor, the tier distribution, risk bands derived from each node's authoritative Tradeverifyd Score, and the screening rollup \u2014 plus ONE PAGE of its nodes (each with its Tradeverifyd Score where the platform has one; null otherwise, never a substitute). The `summary` rollups always describe the WHOLE chain. The node list is PAGED in BOTH scopes: at most `limit` nodes per call (default 100, max 200), `cursor` for the next page (null on the last one), and `nodes_total_in_scope` for how many nodes the requested scope holds \u2014 read nodes_returned against it, not as the chain. NEVER page through a whole chain to find one company: use tia_find_value_chain_node to find a company in a chain, tia_value_chain_appearances to learn which chains a company is in, and tia_trace_value_chain_path to trace a supplier's path to the anchor. If a result says it was truncated, narrow the request (thin scope, a smaller limit, or one of those tools) instead of retrying it. Pass the value_chain_id from a prior create/lookup.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "value_chain_id": {
+     "type": "string",
+     "description": "UUID of the value chain to summarize."
+    },
+    "node_scope": {
+     "type": "string",
+     "enum": [
+      "thin",
+      "all"
+     ],
+     "default": "thin",
+     "description": "Which nodes to list. 'thin' (DEFAULT) is the first-screen set plus every node carrying a screening flag or a platform annotation \u2014 the companies a narrative has to be able to name. 'all' is every node in the chain's membership. BOTH scopes are PAGED \u2014 at most `limit` nodes per call (default 100, max 200), `cursor` for the next page, `nodes_total_in_scope` for the scope's total \u2014 so 'all' never hands back a whole large chain in one call, and paging through it to find one company is the wrong tool: use tia_find_value_chain_node for that. The `summary` rollups (node_count, tier_distribution, risk_bands, screening, coverage) always describe the WHOLE chain either way, so the default costs you no accuracy about scale."
+    },
+    "limit": {
+     "type": "integer",
+     "default": 100,
+     "description": "Nodes per page (default 100, max 200; a larger value is clamped, not refused). Applies to BOTH node_scope values."
+    },
+    "cursor": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "description": "Opaque cursor from a prior page's `cursor` field to fetch the next page. Omit (or null) for the first page. Never page through a whole chain to find one company \u2014 use tia_find_value_chain_node instead."
+    }
+   },
+   "required": [
+    "value_chain_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_portfolio_overview",
+  "title": "tia_portfolio_overview",
+  "description": "Aggregate view across all of the organization's value chains: total chains and nodes, a status breakdown, the chain list (each enriched with its tier/country spread, jurisdictions, and platform-score risk bands), a portfolio-wide risk-band + geography aggregate, and cross-chain concentration risks (entities appearing in two or more chains). Scoped to the caller's organization.",
+  "inputSchema": {
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "type": "object",
+   "properties": {}
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_quick_check",
+  "title": "tia_quick_check",
+  "description": "Combined cached search + score in one call for rapid pre-meeting checks. Returns the top entity match from the knowledge base, the authoritative Tradeverifyd Score from the platform (an int, or null with a note when the platform has no score or is unreachable -- never a TIA-computed substitute), and this entity's LAST SETTLED screening result if one exists. This is a CACHED lookup, NOT a sanctions screen: it runs no lists itself. When screening.status is \"not_screened\" the entity has NEVER been screened -- that is not a clean result and must never be reported as one. Run tia_screen_entity to actually screen against the lists.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "query": {
+     "type": "string",
+     "description": "Entity name to check."
+    },
+    "jurisdiction": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "query"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_commodity_price",
+  "title": "tia_commodity_price",
+  "description": "Look up current commodity price by symbol or name. Returns current price, unit, 30-day and 90-day change percentages, and trend direction.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "symbol_or_name": {
+     "type": "string",
+     "description": "Ticker like CU or a natural-language name like copper."
+    }
+   },
+   "required": [
+    "symbol_or_name"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_get_disruptions",
+  "title": "tia_get_disruptions",
+  "description": "Retrieve active natural disaster and severe weather events. Queries GDACS (global) and NOAA (US) for active events. Supports filtering by region, event type, severity, and geographic radius.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "region": {
+     "type": "string",
+     "description": "Country name or ISO3/region to filter by."
+    },
+    "event_types": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "description": "earthquake, cyclone, flood, volcano, drought, wildfire, severe_weather."
+    },
+    "min_severity": {
+     "type": "string",
+     "description": "minor | advisory | warning | critical."
+    },
+    "latitude": {
+     "type": "number"
+    },
+    "longitude": {
+     "type": "number"
+    },
+    "radius_nm": {
+     "type": "number"
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_trade_flow",
+  "title": "tia_trade_flow",
+  "description": "Query bilateral trade flows by HS code and country pair. Returns annual import/export volumes, USD values, trend direction, and top trading partners from UN Comtrade data.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "hs_code": {
+     "type": "string",
+     "description": "HS 6-digit code (e.g. 260500 for cobalt ores)."
+    },
+    "reporter": {
+     "type": "string",
+     "description": "ISO3 reporter country code (e.g. CHN). Omit for global."
+    },
+    "partner": {
+     "type": "string",
+     "description": "ISO3 partner country code (e.g. COD). Omit for all partners."
+    },
+    "years": {
+     "type": "number",
+     "default": 3,
+     "description": "Number of years to query (default 3, max 10)."
+    }
+   },
+   "required": [
+    "hs_code"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_emissions_profile",
+  "title": "tia_emissions_profile",
+  "description": "Query emissions data for a country or facility. Returns CO2 metrics, intensity factors, reporting year, and scope.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "country_or_facility": {
+     "type": "string",
+     "description": "ISO3 country code (e.g. CHN) or facility name."
+    }
+   },
+   "required": [
+    "country_or_facility"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_value_chain_briefing",
+  "title": "tia_value_chain_briefing",
+  "description": "Generate (or serve from cache) the Value Chains Briefing-tab narrative. With value_chain_id: a per-chain briefing. Without it: a portfolio briefing across all the organization's value chains. Returns Markdown (content_markdown); has_data is false only when there is nothing to brief on (no chains, or the selected chain has no nodes).",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "value_chain_id": {
+     "type": "string",
+     "description": "UUID of a value chain for a per-chain briefing; omit for the portfolio-wide briefing."
+    },
+    "refresh": {
+     "type": "boolean",
+     "description": "Force a fresh regeneration, bypassing the warm cache, and overwrite it with the result (the Briefing tab's Refresh button and the worker's post-discovery/refresh pre-cache warm both pass this)."
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_list_briefings",
+  "title": "tia_list_briefings",
+  "description": "List recent briefings for the current organization, most recent first.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "limit": {
+     "type": "integer",
+     "default": 20,
+     "description": "Maximum number of briefings to return (1..500, default 20)."
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_get_briefing",
+  "title": "tia_get_briefing",
+  "description": "Retrieve a specific briefing by its ID (org-scoped).",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "briefing_id": {
+     "type": "string",
+     "description": "UUID of the briefing to fetch."
+    }
+   },
+   "required": [
+    "briefing_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_get_report",
+  "title": "tia_get_report",
+  "description": "Retrieve a previously generated report by its report_id. Returns the report type, status, and Markdown content, or NOT_FOUND. Cross-org reads return NOT_FOUND.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "report_id": {
+     "type": "string",
+     "description": "The report id returned by tia_generate_report."
+    }
+   },
+   "required": [
+    "report_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_diff_report",
+  "title": "tia_diff_report",
+  "description": "Compare a report against a prior version and return the changed lines. Report versioning is parity-only: when no comparable prior version exists, returns status=no_versions_stored.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "report_id": {
+     "type": "string",
+     "description": "The report identifier."
+    },
+    "version": {
+     "type": "integer",
+     "description": "The prior version number to compare against the current version."
+    }
+   },
+   "required": [
+    "report_id",
+    "version"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_get_route",
+  "title": "tia_get_route",
+  "description": "Retrieve a previously persisted trade route by ID, with its waypoints, chokepoints, jurisdictions transited, transit estimate, and distance.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "route_id": {
+     "type": "string",
+     "description": "Route UUID."
+    }
+   },
+   "required": [
+    "route_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_list_routes",
+  "title": "tia_list_routes",
+  "description": "List persisted trade routes for the organization, ranked by likelihood. Filter by entity (origin or destination), transport mode, and staleness.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "entity_id": {
+     "type": "string",
+     "description": "Filter by origin or destination entity id."
+    },
+    "transport_mode": {
+     "type": "string",
+     "description": "Filter by transport mode (sea, air, rail)."
+    },
+    "include_stale": {
+     "type": "boolean",
+     "description": "Include stale routes (default false)."
+    },
+    "limit": {
+     "type": "number",
+     "description": "Maximum results (default 50, max 200)."
+    },
+    "offset": {
+     "type": "number",
+     "description": "Pagination offset (default 0)."
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_ingest_supply_chain_records",
+  "title": "tia_ingest_supply_chain_records",
+  "description": "Inject agent-digested, STRUCTURED supply-chain records (companies + who-supplies-whom) into the caller org's private knowledge base. The caller's own agent must digest the document locally first \u2014 this tool takes structured records ONLY, never a file, and the raw document never reaches Tradeverifyd. Writes entities, supply relationships, and the raw injected batch org-scoped, and returns the persisted counts.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "entities": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "properties": {
+       "name": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Company / entity name."
+       },
+       "jurisdiction": {
+        "type": "string",
+        "description": "ISO country / jurisdiction, if known (e.g. CN, VN)."
+       },
+       "aliases": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "description": "Alternate names the document used for this entity."
+       },
+       "role": {
+        "type": "string",
+        "description": "The entity's role in the chain (e.g. supplier, manufacturer)."
+       }
+      },
+      "required": [
+       "name"
+      ],
+      "additionalProperties": false
+     },
+     "maxItems": 200,
+     "default": [],
+     "description": "Companies extracted from the document. Maximum 200 per batch."
+    },
+    "relationships": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "properties": {
+       "from": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Source entity name (the supplier side)."
+       },
+       "to": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Target entity name (the buyer side)."
+       },
+       "relationship_type": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Relationship kind, e.g. 'supplies', 'customer_of'."
+       },
+       "product": {
+        "type": "string",
+        "description": "Product / commodity the relationship concerns."
+       },
+       "hs_code": {
+        "type": "string",
+        "description": "HS code for the product, if known."
+       },
+       "source_reference": {
+        "type": "string",
+        "description": "Caller-supplied reference to the record in the source doc."
+       },
+       "confidence": {
+        "type": "number",
+        "description": "The agent's 0-1 confidence in this relationship."
+       }
+      },
+      "required": [
+       "from",
+       "to",
+       "relationship_type"
+      ],
+      "additionalProperties": false
+     },
+     "maxItems": 200,
+     "default": [],
+     "description": "Supply relationships (who supplies whom) from the document. Maximum 200 per batch."
+    },
+    "source": {
+     "type": "string",
+     "enum": [
+      "bom",
+      "byod_roster",
+      "product_link"
+     ],
+     "default": "bom",
+     "description": "Which kind of document this digest came from."
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_hs_trends",
+  "title": "tia_hs_trends",
+  "description": "List commodities whose US import trend is currently inflecting: which HS6 codes have broken out of their own seasonal baseline, in which direction, and how strong the evidence is. Answers 'is anything I buy getting scarce?'. Distinguishes a volume surge (more is arriving) from a price surge (the same weight costs much more). Call tia_hs_trend_explain with a signal_id for the full evidence trail.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "hs_codes": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "description": "Restrict to these HS6 codes. Omit for everything currently inflecting."
+    },
+    "signal_type": {
+     "type": "string",
+     "enum": [
+      "volume_surge",
+      "price_surge"
+     ],
+     "description": "Restrict to one kind of movement."
+    },
+    "limit": {
+     "type": "number",
+     "description": "Maximum signals to return (default 20)."
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_hs_trend_explain",
+  "title": "tia_hs_trend_explain",
+  "description": "Get the full evidence trail for one HS Trends signal: which series moved, its seasonal baseline, the window, how far above the baseline it sits, where the level ranks in the commodity's own history, how much history that rests on, and everything the finding cannot rule out. Use whenever a user asks why a signal fired or whether to trust it.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "signal_id": {
+     "type": "string",
+     "description": "The signal_id from tia_hs_trends."
+    }
+   },
+   "required": [
+    "signal_id"
+   ],
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ },
+ {
+  "name": "tia_hs_trend_exposure",
+  "title": "tia_hs_trend_exposure",
+  "description": "Given the caller's own value chains, report which of them are exposed to a commodity whose US import trend is currently inflecting, and which suppliers sit on those chains. Answers 'does any of this affect what I buy?'. Use after tia_hs_trends, or on its own to sweep the caller's whole portfolio.",
+  "inputSchema": {
+   "type": "object",
+   "properties": {
+    "hs_codes": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "description": "Restrict to these HS6 codes. Omit to check every currently inflecting code."
+    },
+    "value_chain_id": {
+     "type": "string",
+     "description": "Restrict to one value chain."
+    },
+    "limit": {
+     "type": "number",
+     "description": "Maximum exposed chains to return (default 10)."
+    }
+   },
+   "additionalProperties": false,
+   "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "execution": {
+   "taskSupport": "forbidden"
+  }
+ }
+]

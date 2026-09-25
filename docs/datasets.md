@@ -14,7 +14,7 @@ Rules used:
 | ID | Blocker | Effect |
 |---|---|---|
 | **B25** *(new)* | **Sayari REST API credentials** (`client_id` / `client_secret`) have not been issued (`docs/planning_doc.md` §5). The Sayari connector works, but the build jobs call the REST API through the adapters | Every Sayari dataset can be built **in replay mode** from `fixtures/recorded/` and new recordings, but not live |
-| B1 | Tradeverifyd REST API docs | Tradeverifyd datasets: schema only |
+| B1 | Mostly resolved 25 Sep: Tradeverifyd is MCP-only; tools confirmed live. Still open: rate limits, score scale, licensing | Tradeverifyd datasets can be built through an MCP adapter; fields beyond the recorded ones stay `UNCONFIRMED` |
 | B22 | SAM.gov: 10 requests per day without a SAM.gov role | SAM API calls capped at 5 seed companies per day |
 | B14 | How Sayari exposes PPP, SBA and USAspending record values | PPP and SBA rows in `public_money` |
 
@@ -39,9 +39,9 @@ Rules used:
 | 14 | `official_list_entries` *(new)* | One Consolidated Screening List entry per daily snapshot | Ready |
 | 15 | `spending_trends` *(new)* | One period × sector aggregate | Ready |
 | 16 | `reference_lists` *(new)* | One risk-factor definition, source, or high-priority HS code | Partly blocked (B25 for the Sayari parts) |
-| 17 | `tradeverifyd_annotations` | One annotation per entity | Blocked (B1): schema only |
-| 18 | `tradeverifyd_trade` | One Tradeverifyd trade relationship or path hop | Blocked (B1): schema only |
-| 19 | `address_clusters` | One normalized address | Partly blocked (B21, B1) |
+| 17 | `tradeverifyd_annotations` | One annotation per entity | Ready (MCP) |
+| 18 | `tradeverifyd_trade` | One Tradeverifyd trade relationship or path hop | Ready (MCP); relationship item fields to record |
+| 19 | `address_clusters` | One normalized address | Partly blocked (B21, B27) |
 | 20 | `signals` | One entity × one signal code | Derived |
 | 21 | `assessments` *(new)* | One entity × one config version | Derived |
 | 22 | `backtest_candidates` | One candidate enforcement case | Partly blocked (B25, B26) |
@@ -220,25 +220,25 @@ Rules used:
 ## 17. `tradeverifyd_annotations`
 
 - **Needed by:** spec §5.2 Tradeverifyd "Entity annotations"; spec §9.1 PX2 ("Sayari, Tradeverifyd"); spec §9.4 `T_Tradeverifyd`.
-- **Built from:** Tradeverifyd. **Blocked (B1).**
-- **Fields:** `UNCONFIRMED: awaiting vendor docs`. The connector's fields are recorded in `docs/archive/technical-design-spec-v1.md` §4.3, for reference only.
-- **Grain:** one annotation category per entity.
-- **Refresh:** per build run once unblocked.
-- **Status:** blocked. Build the table schema only; fill every column with "not collected: blocked on B1".
+- **Built from:** Tradeverifyd MCP `search_entities` (annotation counts), `entity_annotations`, `entity_score`, `annotations_categories` (map Q4, Confirmed).
+- **Fields:** `tv_entity_id`, `annotations` (count per category, e.g. `US OFAC`, `US GSA`), `annotation_count`, and per annotation `annotation_id`, `name`, `description`, `polarity`, `valid_from`, `created_at`, `category_url`; score `tradeverifyd_score`, `score_level`, `score_version` (shown as reported, never rescaled; spec §5.3). Match `confidence` and `confidence_version` from search.
+- **Grain:** one annotation per entity (plus one score row per entity).
+- **Refresh:** per build run.
+- **Status:** ready through an MCP adapter. Recorded for AZ Gold in `fixtures/recorded/tradeverifyd/`. Full annotation details need the `annotations:read` scope on a monitored entity; otherwise only counts.
 
 ## 18. `tradeverifyd_trade`
 
 - **Needed by:** spec §8.3 "6. **Supply chain.** … from Sayari and Tradeverifyd shown side by side"; spec §9.1 TR1–TR4, LC3.
-- **Built from:** Tradeverifyd. **Blocked (B1).**
-- **Fields:** `UNCONFIRMED: awaiting vendor docs`.
+- **Built from:** Tradeverifyd MCP `entity_trade_relationships` (both directions), `annotated_relationship_paths` (`max_depth` 2), `entity_affiliate_relationships` (map Q3, Q4, Confirmed).
+- **Fields:** envelope `trade_relationships`, `total_records`, `direction`; per relationship `hs_codes` (tool description); path hops with their HS codes. Other item fields `UNCONFIRMED` until a non-empty response is recorded. An entity missing from the relationship graph returns an error: store it as not assessable.
 - **Grain:** one trade relationship, or one hop of an annotated path.
-- **Refresh:** per build run once unblocked.
-- **Status:** blocked. Schema only.
+- **Refresh:** per build run.
+- **Status:** ready through an MCP adapter; record a non-empty response first.
 
 ## 19. `address_clusters`
 
 - **Needed by:** spec §9.1 "LO1 Address cluster | Unusually many companies at one registered address"; `docs/tracing_methodology.md` §3 (`address_hub`, `entity_count`).
-- **Built from:** the application. It counts distinct companies whose Sayari `addresses` normalize to the same address, found through Sayari entity search (Confirmed, but the address `fields` value is unconfirmed, B21). Tradeverifyd companies-in-radius is not usable yet (archived spec §4.3) and is blocked on B1. Sayari's `mass_address_usage` risk flag is kept alongside as the vendor's own signal.
+- **Built from:** the application. It counts distinct companies whose Sayari `addresses` normalize to the same address, found through Sayari entity search (Confirmed, but the address `fields` value is unconfirmed, B21). Tradeverifyd companies-in-radius needs latitude and longitude, which its address data does not provide (B27). Sayari's `mass_address_usage` risk flag is kept alongside as the vendor's own signal.
 - **Fields:** `normalized_address`, `entity_count`, `entity_ids`, `method`, `sayari_mass_address_usage` (flag present or not).
 - **Grain:** one normalized address.
 - **Refresh:** per build run.

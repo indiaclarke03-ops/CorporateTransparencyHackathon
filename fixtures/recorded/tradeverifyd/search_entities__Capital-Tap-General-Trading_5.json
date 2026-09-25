@@ -1,0 +1,25 @@
+{
+  "source_name": "tradeverifyd",
+  "via": "Tradeverifyd MCP server (tools/call)",
+  "operation": "search_entities",
+  "request_params": {
+    "name": "Capital Tap General Trading",
+    "limit": 5
+  },
+  "retrieved_at": "2026-09-25T18:46:57.362389Z",
+  "http_status": 200,
+  "response_hash": "sha256:76f090a353a50b27af01fd6ec341f38927f91f7b9008d865e01eb905765b0904",
+  "license_tag": "UNCONFIRMED: vendor licence",
+  "raw_response": {
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"query\": {\n    \"name\": \"Capital Tap General Trading\",\n    \"external_id\": null,\n    \"jurisdiction\": null\n  },\n  \"results\": [\n    {\n      \"entity_id\": \"d2849ab1-9616-417e-9e1d-0b930768d19f\",\n      \"name\": \"كابيتال تاب للتجارة العامة ش.ذ.م.م\",\n      \"jurisdiction\": \"AE\",\n      \"confidence\": 1,\n      \"aliases\": [\n        \"M I N S GENERAL TRADING LIMITED LIABILITY COMPANY\",\n        \" M I N S GENERAL TRADING L.L.C.\",\n        \"M I N S GENERAL TRADING L.L.C.\",\n        \"ELRAKIZA GENERAL TRADING L.L.C.\",\n        \"M I N S GENERAL TRADING\",\n        \"CAPITAL TAP GENERAL TRADING\",\n        \"ELRAKIZA GENERAL TRADING\",\n        \"ELRAKIZA GENERAL TRADING LIMITED LIABILITY COMPANY\",\n        \"كابيتال تاب للتجارة العامة ش.ذ.م.م\",\n        \"ام اي ان اس للتجارة العامة ش ذ م م\",\n        \"Elrakiza General Trading L.L.C.\",\n        \"الركيزة للتجارة العامة ذ.م.م\",\n        \"CAPITAL TAP GENERAL TRADING L.L.C.\",\n        \"الركيزة للتجارة العامة ذمم\",\n        \"Capital Tap General Trading L.L.C.\",\n        \"كابيتال تاب للتجارة العامة شذمم\",\n        \"M I N S General Trading L.L.C.\"\n      ],\n      \"industry\": null,\n      \"naics\": null,\n      \"external_ids\": [\n        {\n          \"type\": \"company_number\",\n          \"value\": \"11337684\"\n        }\n      ],\n      \"annotations\": {\n        \"US GSA\": 2,\n        \"US OFAC\": 3\n      },\n      \"annotation_count\": 5,\n      \"direct_inbound_relationships\": 0,\n      \"direct_outbound_relationships\": 0,\n      \"affiliate_relationship_count\": 0\n    }\n  ],\n  \"total\": 1,\n  \"confidence_version\": 5,\n  \"meta\": {\n    \"response_time_ms\": 1087\n  }\n}"
+        }
+      ]
+    },
+    "jsonrpc": "2.0",
+    "id": 12
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "source_name": "tradeverifyd",
+  "via": "Tradeverifyd MCP server (tools/call)",
+  "operation": "entity_score",
+  "request_params": {
+    "entity_id": "256a4cc6-d8f4-4799-b31f-31afd3eb090d"
+  },
+  "retrieved_at": "2026-09-25T18:47:25.808263Z",
+  "http_status": 200,
+  "response_hash": "sha256:389341720f0286d22325ad4af1324f97f3181a7c603194449163adb597710137",
+  "license_tag": "UNCONFIRMED: vendor licence",
+  "raw_response": {
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"entity_id\": \"256a4cc6-d8f4-4799-b31f-31afd3eb090d\",\n  \"name\": \"Al Zumoroud and Al Yaqoot Gold & Jewellers L.L.C.\",\n  \"tradeverifyd_score\": 258,\n  \"score_version\": \"1.0.0\",\n  \"score_level\": \"High\",\n  \"meta\": {\n    \"response_time_ms\": 181\n  }\n}"
+        }
+      ]
+    },
+    "jsonrpc": "2.0",
+    "id": 22
+  }
+}

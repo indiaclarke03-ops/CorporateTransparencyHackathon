@@ -18,7 +18,7 @@ Built from `follow-the-public-dollar-spec.md` (section 9) and the team's brainst
 | **Design** | Computed by the application; no external source |
 | **Gap** | Needed by the repo, but no available tool provides it |
 
-All Tradeverifyd rows are **Blocked** on backlog item B1 (REST API docs). The capabilities are confirmed through the connector, but the REST endpoints are not. The connector's tool names, inputs and output fields were checked on 25 September 2026 and are recorded in `docs/archive/technical-design-spec-v1.md` §4.3 (by Lola C); the HTTP 401 error seen earlier that day no longer occurs.
+**Tradeverifyd** has no REST API; its vendor-provided interface is its MCP server (`https://platform.tradeverifyd.com/api/mcp`, configured in `.mcp.json`). Tool names and inputs are **Confirmed** from the live `tools/list` response on 25 September 2026 (`tradeverifyd/mcp-tools.md`, `tradeverifyd/tools-list-2026-09-25.json`; 47 tools). Response fields are confirmed only where a response has been recorded in `fixtures/recorded/tradeverifyd/`. Adapters must call Tradeverifyd through an MCP client, not HTTP REST.
 
 Sayari REST calls authenticate with `POST /oauth/token` (`client_id`, `client_secret`, `grant_type: client_credentials`) and a Bearer token; server `https://api.sayari.com` (`sayari/openapi.yml`). Rate limits: a `429 Rate limit exceeded` response is documented, but the limits themselves are not (B10).
 
@@ -61,13 +61,13 @@ Sayari REST calls authenticate with `POST /oauth/token` (`client_id`, `client_se
 |---|---|---|---|
 | Registration date and status | Sayari entity profile `GET /v1/entity/{id}` | `registration_date`, `latest_status`, `closed`. Corrected: the field is `latest_status` (with `attributes.status` for history), not `status` | **Pilot** + **Confirmed** (`EntityDetails`) |
 | Registered around a funding program | Sayari registration date plus program start dates in config | Date comparison | **Confirmed** (dates); config needed |
-| Prior names | Tradeverifyd entity search; Sayari entity names | Tradeverifyd `aliases`; Sayari `attributes.name`, `label`, `translated_label` | Sayari **Confirmed**; Tradeverifyd **Pilot**, **Blocked** for REST (B1) |
+| Prior names | Tradeverifyd `search_entities` / `entity_details`; Sayari entity names | Tradeverifyd `aliases` (recorded); Sayari `attributes.name`, `label`, `translated_label` | **Confirmed** (Sayari spec; Tradeverifyd recorded responses) |
 
 ### Location
 
 | Need | Tool / dataset | Fields | Status |
 |---|---|---|---|
-| Many companies at one address | Tradeverifyd find companies in radius; Sayari entity search `GET /v1/search/entity` (`q`, `fields`, `facets`) | Count of entities at or near the address. Sayari has **no `address` entity type** (`Entities` enum), so an address cluster must be counted from search results, not read from an address node | Tradeverifyd **Blocked** (B1); Sayari search **Confirmed**, but the searchable `fields` value for address is `UNCONFIRMED` (B21) |
+| Many companies at one address | Sayari entity search `GET /v1/search/entity` (`q`, `fields`, `facets`); Tradeverifyd `find_companies_in_radius` (`latitude`, `longitude`, `radius_nm` in nautical miles, `limit`) | Count of entities at or near the address. Sayari has **no `address` entity type** (`Entities` enum), so an address cluster must be counted from search results, not read from an address node. Tradeverifyd's radius tool takes a point, not an address, and `entity_addresses` returns no coordinates; its own description says it is for disaster and event linkage | Sayari search **Confirmed**, but the searchable `fields` value for address is `UNCONFIRMED` (B21). Tradeverifyd tool **Confirmed** but not usable for LO1 without geocoding (B27) |
 | Mailbox or coworking address | Tavily search on the address: `POST /search`, `topic: general` | `results[].url`, `title`, `content`, `score`; reviewed by an analyst | **Confirmed** (`tavily/search.md`) |
 | Registered agent or formation firm behind many companies *(new row; `docs/tracing_methodology.md` §3 "Addresses, Registered Agents and Formation Law Firms")* | Sayari relationship types `has_registered_agent` / `registered_agent_of`; fan-out from `degree` or `relationship_count` on the agent entity | `degree`, `relationship_count` | **Confirmed** (`Relationships` enum, `EntityDetails`) |
 
@@ -88,7 +88,7 @@ Sayari REST calls authenticate with `POST /oauth/token` (`client_id`, `client_se
 |---|---|---|---|
 | Shipments | Sayari `POST /v1/trade/search/shipments`, `/v1/trade/search/suppliers`, `/v1/trade/search/buyers`. Body: `q`, `filter`, `facets`. Filters include `hs_code`, `departure_country`, `arrival_country`, `transit_country`, `supplier_id`, `buyer_id`, `departure_date`, `arrival_date` | Shipment: `id`, `departure_date`, `arrival_date`, `departure_country`, `arrival_country`, `transit_country`, `hs_codes`, `product_descriptions`, `product_origin`, `weight`, `monetary_value`, `supplier`, `buyer`, `sources`, `record` | **Confirmed** (`sayari/openapi.yml` `TradeFilter`, `Shipment`) |
 | Upstream suppliers by tier | Sayari `GET /v1/supply_chain/upstream/{id}` | Parameters `product`, `risk`, `countries`, `max_depth`, `min_date`, `max_date`, `component`, `tier1_shipment_country`…`tier5_shipment_country`, `limit`; supplier paths | **Confirmed** |
-| Trade relationships with goods codes | Tradeverifyd trade relationships (both directions) | Counterparty, HS codes per relationship | **Blocked** (B1) |
+| Trade relationships with goods codes | Tradeverifyd `entity_trade_relationships` (`entity_id`, `direction` `in` = suppliers / `out` = customers, `hs_codes` prefix filter, `page`, `page_size`) | Response: `trade_relationships[]`, `total_records`, `total_pages`, `page`, `page_size`, `direction`; each relationship carries `hs_codes` (tool description). Relationship item fields `UNCONFIRMED` until a non-empty response is recorded (AZ Gold returned 0) | **Confirmed** (MCP schema; recorded response) |
 | Declared business vs goods shipped | Sayari entity `attributes.business_purpose` or USAspending `NAICS`, compared with shipment `hs_codes` | Text and code comparison | **Pilot** (`business_purpose` seen) + **Confirmed** |
 | High-priority goods | Shipment `hs_codes` compared with the BIS Common High Priority Items List | 50 HS codes in tiers (`bis/common-high-priority-items-list.html`) | List source **Confirmed**; version date `UNCONFIRMED`, since the page gives none (B5) |
 | Transshipment routing | Sayari shipment `departure_country`, `arrival_country` and `transit_country`, compared with a hub list in config | Countries | **Confirmed** (`transit_country` exists as a field and filter) |
@@ -111,8 +111,8 @@ Sayari REST calls authenticate with `POST /oauth/token` (`client_id`, `client_se
 | Forced-labor exposure | Sayari (source "USA DHS Uyghur Forced Labor Prevention Act List") | List membership | **Pilot** (live source catalogue) |
 | Paths to listed parties | Sayari `GET /v1/watchlist/{id}`. `psa` **defaults to true** ("Defaults to traversing possibly same as relationships"); `sanctioned` filters paths to those ending at a listed entity; `max_depth` default 4; `limit` default 10, max 50 | Response: `data[]` of `source`, `target`, `path`, plus `partial_results`, `explored_count` | **Confirmed** (`traversal_watchlist`) |
 | Shortest path to a named listed party *(new row; spec §8.3 "7. Paths to flagged parties")* | Sayari `GET /v1/shortest_path?entities=` | Path between two entities | **Confirmed** |
-| Paths to flagged parties in the supply chain | Tradeverifyd annotated relationship paths | Hop-by-hop path with HS codes | **Blocked** (B1) |
-| Tradeverifyd flags | Tradeverifyd entity annotations | Annotation categories (pilot showed `US OFAC`, `US GSA`) | **Pilot**, **Blocked** for REST (B1) |
+| Paths to flagged parties in the supply chain | Tradeverifyd `annotated_relationship_paths` (`entity_id`, `direction` `in`/`out`/`both`, `max_depth` 1–5, `hs_codes`) | Hop-by-hop path with HS codes per hop. For AZ Gold it returned `{"error": "… not found in relationship graph"}`: store as not assessable, not as "no paths". Paths also end at non-sanctions and zero-annotation entities (archived spec §4.3), so filter to sanctions badges | **Confirmed** (MCP schema; recorded response) |
+| Tradeverifyd flags | Tradeverifyd `search_entities` (`annotations` counts per category, `annotation_count`) and `entity_annotations` (`entity_id`, `page`, `page_size`) | Search: `annotations` e.g. `{"US OFAC": 3, "US GSA": 2}`. Annotations: `annotation_id`, `name`, `description`, `polarity`, `valid_from`, `created_at`, `category_url` (full details need `annotations:read` on a monitored entity). Categories: `annotations_categories` (`name`, `description`, `polarity`) | **Confirmed** (recorded responses for AZ Gold) |
 | OFAC 50% rule | Sayari ownership percentages (`shares` attribute; `min_shares`, `include_unknown_shares` parameters); Sayari risk flag `ofac_50_percent_rule` | Percentages, flag | **Pilot** (flag seen) + **Confirmed** (parameters) |
 | Listing date and program, for narrative templates *(new row; `docs/narrative-copy-spec.md` §4 evidence templates `list_designation`, `list_removal`)* | CSL `start_date`, `end_date`, `programs`, `federal_register_notice`; OFAC recent-actions pages (tier-1 sources in `research/sources.json`) | Designation date, program, removal date | CSL **Confirmed**; Sayari listing dates `UNCONFIRMED` |
 
@@ -158,14 +158,14 @@ The pilot showed person records are often split across filings, so matching must
 |---|---|---|
 | Federal spending in watched sectors | USAspending `POST /api/v2/search/spending_over_time/` (`group`, `filters`; results `time_period`, `aggregated_amount`) | **Confirmed** (`usaspending/search_spending_over_time.md`) |
 | Sanctions and export-control actions | Federal Register API `GET https://www.federalregister.gov/api/v1/documents.json` with `conditions[agencies][]` (e.g. `industry-and-security-bureau`), no key; Consolidated Screening List | **Pilot** (live call 25 Sep 2026; fields `document_number`, `type`, `title`, `publication_date`, `html_url`, `pdf_url`, `agencies`, `abstract`, `excerpts`; `federal_register/api-sample-documents.json`). The docs page blocks automated download (B13) |
-| Commodity trade inflections | Tradeverifyd HS trends | **Blocked** (B1) |
-| Supply-chain disruptions | Tradeverifyd disruptions | **Blocked** (B1) |
+| Commodity trade inflections | Tradeverifyd `tia_hs_trends` (`hs_codes`, `signal_type` `volume_surge`/`price_surge`, `limit`) and `tia_hs_trend_explain` (`signal_id`) | **Confirmed** (MCP schema); response fields `UNCONFIRMED` until recorded |
+| Supply-chain disruptions | Tradeverifyd `tia_get_disruptions` (`event_types`, `region`, `min_severity`, `latitude`, `longitude`, `radius_nm`; sources GDACS and NOAA) | **Confirmed** (MCP schema); response fields `UNCONFIRMED` until recorded |
 | Screening portfolio; newly flagged award recipients *(new row; spec §8.1)* | Application database | **Design** |
 | Official news lane | Federal Register API | **Pilot** |
 | OFAC list changes *(new row; spec §8.2 "OFAC list changes, detected by comparing successive official list downloads")* | Daily diff of CSL downloads (Treasury entries); OFAC SLS downloads once B4 is resolved | CSL **Confirmed**; SLS **Unconfirmed** (B4) |
 | Media news lane | Tavily search with `topic: news` | **Confirmed** |
 
-Until B1 is resolved, the dashboard ships without the two Tradeverifyd panels.
+The two Tradeverifyd panels can now be built; their response fields must be recorded first.
 
 ---
 
@@ -216,7 +216,7 @@ The agent plans which of these to call. It cannot call anything else.
 | `lei_record` *(new)* | GLEIF `GET /api/v1/lei-records/{lei}` | LEI record and parent links | Pilot |
 | `web_presence` | Tavily `POST /search` | Results classified by type | Confirmed |
 | `extract_page` *(new)* | Tavily `POST /extract` (`urls`, `extract_depth`, `format`, `query`) | Text of one cited page, returned as `results[].raw_content` | Confirmed (`tavily/extract.md`) |
-| `tradeverifyd_*` | Tradeverifyd | Disabled until B1 | Blocked |
+| `tv_search_entities`, `tv_entity_details`, `tv_entity_score`, `tv_entity_annotations`, `tv_trade_relationships`, `tv_annotated_paths`, `tv_affiliates`, `tv_quick_check`, `tv_hs_trends`, `tv_disruptions` *(new)* | Tradeverifyd MCP tools `search_entities`, `entity_details`, `entity_score`, `entity_annotations`, `entity_trade_relationships`, `annotated_relationship_paths`, `entity_affiliate_relationships`, `tia_quick_check`, `tia_hs_trends`, `tia_get_disruptions` | Read-only Tradeverifyd lookups. Monitoring, value-chain write, ingest and admin tools are excluded (they change vendor-side state) | Confirmed (MCP) |
 
 Every call goes through the adapters, so each result is stored as a source record with provenance.
 
@@ -257,7 +257,7 @@ Every capability of the Sayari connector used in the pilot, with its REST equiva
 
 | ID | Item | Status (25 Sep 2026) |
 |---|---|---|
-| B1 | Obtain Tradeverifyd REST API docs: OpenAPI spec, auth method, rate limits, MCP-to-REST mapping, score method, annotation categories, licensing, sample responses | Open. Awaiting vendor files in `docs/vendor/tradeverifyd/`. The connector works again (401 cleared) and its tools are documented in archived spec §4.3, but REST endpoints stay blocked until the vendor docs arrive |
+| B1 | Obtain Tradeverifyd API docs: auth method, rate limits, score method, annotation categories, licensing, sample responses | **Mostly resolved** 25 Sep 2026. Tradeverifyd has no REST API; the MCP tool reference is in `docs/vendor/tradeverifyd/` and was checked against the live server (47 tools, matching the doc except the admin-only `tia_invite_member`). Sample responses recorded for 6 tools. Still open: rate limits and quotas; licensing; the Tradeverifyd Score scale (AZ Gold scored **258**, level "High", version 1.0.0, so it is not a 0–100 scale); annotation detail access (`annotations:read` scope) |
 | B2 | Confirm USAspending competition field names and the subaward endpoint in the official API docs at api.usaspending.gov | **Resolved**: see Q1 rows 2–3 |
 | B3 | Confirm the current SAM.gov Entity API version | **Resolved**: v4 |
 | B4 | Confirm the OFAC Sanctions List Service download format | Open. SLS pages render only in a browser; check manually. Interim: CSL files |
@@ -283,3 +283,5 @@ Every capability of the Sayari connector used in the pilot, with its REST equiva
 | B24 | `scoring/engine.py` sets the Tradeverifyd component to 0 when it is missing. Spec §9.4 requires an unassessed component to produce a score range (lower and upper bound), not a zero. Update the engine to return the range | New (for the scoring-engine owner) |
 | B25 | Obtain Sayari REST API credentials (`client_id` / `client_secret`, spec §5.1; `docs/planning_doc.md` §5). The dataset jobs call the REST API through the adapters, so every Sayari dataset is replay-only until then (`docs/datasets.md`) | New |
 | B26 | Confirm the query syntax of Sayari `GET /v1/search/entity` `advanced` and `facets` parameters for filtering by source (e.g. SAM.gov Exclusions) and risk factor. Needed for `backtest_candidates` | New |
+| B27 | Tradeverifyd `find_companies_in_radius` needs latitude and longitude, and `entity_addresses` returns none. Decide whether to add a geocoder for LO1, or rely on Sayari address counts | New |
+| B28 | `search_entities` `confidence` was 1 for every Palantir hit across five countries, so it does not separate true from false matches. Calibrate on Appendix A before using it (spec §7.1 already forbids it as the sole merge basis) | New |

@@ -1,0 +1,25 @@
+{
+  "source_name": "tradeverifyd",
+  "via": "Tradeverifyd MCP server (tools/call)",
+  "operation": "entity_trade_relationships",
+  "request_params": {
+    "entity_id": "256a4cc6-d8f4-4799-b31f-31afd3eb090d",
+    "direction": "in"
+  },
+  "retrieved_at": "2026-09-25T18:47:27.886138Z",
+  "http_status": 200,
+  "response_hash": "sha256:0e061a2948344a87d90d2a54b56c9efff64fa4869f235015c67bc162b0735129",
+  "license_tag": "UNCONFIRMED: vendor licence",
+  "raw_response": {
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"direction\":\"in\",\"trade_relationships\":[],\"page\":1,\"page_size\":25,\"total_records\":0,\"total_pages\":0}"
+        }
+      ]
+    },
+    "jsonrpc": "2.0",
+    "id": 25
+  }
+}

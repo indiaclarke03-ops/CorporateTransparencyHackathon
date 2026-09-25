@@ -1,0 +1,24 @@
+{
+  "source_name": "tradeverifyd",
+  "via": "Tradeverifyd MCP server (tools/call)",
+  "operation": "entity_details",
+  "request_params": {
+    "entity_id": "256a4cc6-d8f4-4799-b31f-31afd3eb090d"
+  },
+  "retrieved_at": "2026-09-25T18:47:24.871423Z",
+  "http_status": 200,
+  "response_hash": "sha256:6e5e3674537de21e72ae4cb1c15b9c7bcb1c37cf9f3afd6feec5e25116310e84",
+  "license_tag": "UNCONFIRMED: vendor licence",
+  "raw_response": {
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"entity_id\": \"256a4cc6-d8f4-4799-b31f-31afd3eb090d\",\n  \"name\": \"Al Zumoroud and Al Yaqoot Gold & Jewellers L.L.C.\",\n  \"aliases\": [\n    \"Al Zumoroud and Al Yaqoot Gold & Jewellers L.L.C.\",\n    \"الزمرد و اليقوت للتجارة الذهب و المجو مرات شذمم\",\n    \"AZ Gold\",\n    \"الزمرد و اليقوت للتجارة الذهب و المجو مرات ش.ذ.م.م\",\n    \"AL ZUMOROUD AND AL YAQOOT GOLD & JEWELLERS TRADING L.L.C.\",\n    \"AL ZUMOROUD AND AL YAQOOT GOLD AND JEWELLERS TRADING L.L.C.\",\n    \"AL ZUMOROUD AND AL YAQOOT GOLD AND JEWELLERS TRADING LIMITED LIABILITY COMPANY\",\n    \" AL ZUMOROUD AND AL YAQOOT GOLD AND JEWELLERS TRADING L.L.C.\",\n    \"AZ GOLD\",\n    \"AL ZUMOROUD AND AL YAQOOT GOLD AND JEWELLERS\",\n    \"AL ZUMOROUD AND AL YAQOOT GOLD AND JEWELLERS TRADING\"\n  ],\n  \"legal_form\": null,\n  \"jurisdiction\": \"AE\",\n  \"naics\": null,\n  \"industry\": null,\n  \"external_ids\": [\n    {\n      \"type\": \"company_number\",\n      \"value\": \"1708681\"\n    }\n  ],\n  \"meta\": {\n    \"response_time_ms\": 337\n  }\n}"
+        }
+      ]
+    },
+    "jsonrpc": "2.0",
+    "id": 21
+  }
+}

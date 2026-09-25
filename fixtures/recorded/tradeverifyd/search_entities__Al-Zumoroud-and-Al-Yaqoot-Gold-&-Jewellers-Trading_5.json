@@ -1,0 +1,25 @@
+{
+  "source_name": "tradeverifyd",
+  "via": "Tradeverifyd MCP server (tools/call)",
+  "operation": "search_entities",
+  "request_params": {
+    "name": "Al Zumoroud and Al Yaqoot Gold & Jewellers Trading",
+    "limit": 5
+  },
+  "retrieved_at": "2026-09-25T18:46:55.461972Z",
+  "http_status": 200,
+  "response_hash": "sha256:8b36afc04f9052080fabd22f81da0682f8dec34bfa893eb6e4feba7eb3e5c067",
+  "license_tag": "UNCONFIRMED: vendor licence",
+  "raw_response": {
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"query\": {\n    \"name\": \"Al Zumoroud and Al Yaqoot Gold & Jewellers Trading\",\n    \"external_id\": null,\n    \"jurisdiction\": null\n  },\n  \"results\": [\n    {\n      \"entity_id\": \"256a4cc6-d8f4-4799-b31f-31afd3eb090d\",\n      \"name\": \"Al Zumoroud and Al Yaqoot Gold & Jewellers L.L.C.\",\n      \"jurisdiction\": \"AE\",\n      \"confidence\": 1,\n      \"aliases\": [\n        \"Al Zumoroud and Al Yaqoot Gold & Jewellers L.L.C.\",\n        \"الزمرد و اليقوت للتجارة الذهب و المجو مرات شذمم\",\n        \"AZ Gold\",\n        \"الزمرد و اليقوت للتجارة الذهب و المجو مرات ش.ذ.م.م\",\n        \"AL ZUMOROUD AND AL YAQOOT GOLD & JEWELLERS TRADING L.L.C.\",\n        \"AL ZUMOROUD AND AL YAQOOT GOLD AND JEWELLERS TRADING L.L.C.\",\n        \"AL ZUMOROUD AND AL YAQOOT GOLD AND JEWELLERS TRADING LIMITED LIABILITY COMPANY\",\n        \" AL ZUMOROUD AND AL YAQOOT GOLD AND JEWELLERS TRADING L.L.C.\",\n        \"AZ GOLD\",\n        \"AL ZUMOROUD AND AL YAQOOT GOLD AND JEWELLERS\",\n        \"AL ZUMOROUD AND AL YAQOOT GOLD AND JEWELLERS TRADING\"\n      ],\n      \"industry\": null,\n      \"naics\": null,\n      \"external_ids\": [\n        {\n          \"type\": \"company_number\",\n          \"value\": \"1708681\"\n        }\n      ],\n      \"annotations\": {\n        \"US GSA\": 2,\n        \"US OFAC\": 3\n      },\n      \"annotation_count\": 5,\n      \"direct_inbound_relationships\": 0,\n      \"direct_outbound_relationships\": 0,\n      \"affiliate_relationship_count\": 0\n    }\n  ],\n  \"total\": 1,\n  \"confidence_version\": 5,\n  \"meta\": {\n    \"response_time_ms\": 1442\n  }\n}"
+        }
+      ]
+    },
+    "jsonrpc": "2.0",
+    "id": 11
+  }
+}

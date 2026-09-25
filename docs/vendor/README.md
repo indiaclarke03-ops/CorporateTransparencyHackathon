@@ -25,7 +25,14 @@ The spec file lives on a documentation-vendor S3 bucket, not a Sayari domain. It
 
 ## Tradeverifyd (`tradeverifyd/`)
 
-**Empty: awaiting vendor docs.** There are no public API docs, and none were searched for or reconstructed. Until the vendor's files are added here, every Tradeverifyd endpoint, parameter and field in this repo is `UNCONFIRMED: awaiting vendor docs` (backlog B1).
+Tradeverifyd has no public REST API. Its vendor-provided interface is the MCP server `https://platform.tradeverifyd.com/api/mcp` (login configured in `.mcp.json`, which is never committed).
+
+| File | Source | Notes |
+|---|---|---|
+| `mcp-tools.md` | Tool reference written from the MCP server's tool schemas, supplied by the team on 25 Sep 2026 (13,029 B) | Inputs per tool; no response bodies |
+| `tools-list-2026-09-25.json` | Live `tools/list` response from the MCP server, 25 Sep 2026 | 47 tools. Matches `mcp-tools.md` except `tia_invite_member` (admin only, not exposed to this account). Contains no credentials |
+
+Response shapes are recorded in `fixtures/recorded/tradeverifyd/`.
 
 ## Government and public sources (added for Task 1)
 

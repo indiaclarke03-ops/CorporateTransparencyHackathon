@@ -50,7 +50,19 @@ Responses recorded for the spec's Appendix A pilot cases, for replay mode (`REPL
 ## Not yet recorded
 
 - Sayari watchlist, UBO and traversal responses for these IDs. The connector's watchlist tool has no `psa` setting, so the scoring and labelling runs in `docs/call-budget.md` can only be recorded through the REST API.
-- Tradeverifyd responses (blocked on B1).
 - Tavily web-presence responses for the pilot entities.
+
+## Tradeverifyd (`tradeverifyd/`)
+
+Recorded 25 September 2026 through the Tradeverifyd MCP server (`tools/call`), in the same `SourceRecord` layout. The request headers (including the login) are not stored.
+
+| File | What it shows |
+|---|---|
+| `search_entities__*` (AZ Gold, Capital Tap General Trading, Palantir) | Envelope `query`, `results`, `total`, `confidence_version`, `meta`; per result `entity_id`, `name`, `aliases`, `jurisdiction`, `naics`, `industry`, `external_ids`, `confidence`, `annotation_count`, `annotations`, relationship counts. Every Palantir hit had confidence 1 (B28) |
+| `entity_details__256a4cc6…` | `aliases`, `legal_form`, `jurisdiction`, `naics`, `industry`, `external_ids` |
+| `entity_score__256a4cc6…` | `tradeverifyd_score` 258, `score_level` High, `score_version` 1.0.0 |
+| `entity_annotations__256a4cc6…` | 4 annotations with `annotation_id`, `name`, `description`, `polarity`, `valid_from`, `created_at`, `category_url` |
+| `annotated_relationship_paths__256a4cc6…` | Error: entity not in the relationship graph (not assessable) |
+| `entity_trade_relationships__256a4cc6…` | 0 trade relationships |
 
 The earlier project fixtures (`../serniya_investigation.json`, `../palantir_control.json`) are graph-contract examples, not source records, and are unchanged.

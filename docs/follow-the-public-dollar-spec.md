@@ -4,7 +4,7 @@
 **Audience for outputs:** Regulators, inspectors general, and audit staff
 **Build environment:** VS Code (Python)
 **Data providers:** Sayari, Tradeverifyd, Tavily, plus public spending data (USAspending.gov, SAM.gov)
-**Document status:** Draft v1 — prepared 25 September 2026
+**Document status:** Draft v1.1 — prepared 25 September 2026; open items in Section 13 checked the same day
 
 ---
 
@@ -106,10 +106,14 @@ public-dollar/
 | USAspending `POST /api/v2/search/spending_by_award/` | Find awards by recipient. Setting `subawards: true` searches subawards instead of prime awards. | Public REST API | [V] |
 | USAspending `POST /api/v2/subawards/` | List subawards for one prime award, filtered by `award_id` (generated award ID preferred). | Public REST API | [V] |
 | USAspending `GET /api/v2/awards/<award_id>/` | Award profile, including `subaward_count` and `total_subaward_amount`. | Public REST API | [V] |
-| SAM.gov Entity Management API | Registration dates, business types, NAICS codes. | Free API key | [C] Confirm current endpoint, fields, and whether ownership fields are public |
-| SAM.gov Exclusions | Debarred and suspended parties. | Free API key | [C] Confirm endpoint |
+| SAM.gov Entity Management API `GET https://api.sam.gov/entity-information/v4/entities` | Registration dates (`registrationDate`), business types (`businessTypeCode`/`businessTypeDesc`), NAICS (`primaryNaics`, `naicsCode`). Key passed as `api_key` query parameter. | Free API key | [V] Public-level fields only. Parent/owner fields (`immediateParentEntity`, `ultimateParentEntity`) are **FOUO**, not available with a public key, so ownership must come from Sayari |
+| SAM.gov Exclusions API `GET https://api.sam.gov/entity-information/v4/exclusions` | Debarred and suspended parties. Filter by `ueiSAM`, `exclusionName`, `classification`. v1–v3 retired September 2024. | Free API key | [V] |
 
-**Known gap [C].** Subaward data is self-reported by prime recipients and may be incomplete. Confirm the current reporting thresholds before stating coverage in any report.
+**SAM.gov rate limit [V].** A personal key for a non-federal user **without a SAM.gov role allows 10 requests per day**; with a role, 1,000. The build must cache SAM.gov responses and query only the recipient and first-tier entities, or request a role before the demo.
+
+**Known gap [V].** Subaward data is self-reported by prime recipients and may be incomplete. Reporting applies only to first-tier subawards at or above the threshold: **$40,000 for contracts** (FAR 52.204-10, threshold set in FAR 4.1403(a)) and **$30,000 for grants and other assistance** (2 CFR 170, Appendix A). Smaller subawards and all second-tier subawards are not reported, so every report must state that subaward coverage is partial.
+
+**Competition fields [V].** The award profile (`GET /api/v2/awards/<award_id>/`) carries `latest_transaction_contract_data.extent_competed` and `extent_competed_description`, plus `number_of_offers_received` and `solicitation_procedures`. These are **null on some IDVs and BPAs** (checked on `CONT_IDV_19AQMM25A1228_1900`); for those, read the field on the individual orders, and treat null as "not checkable," never as "not competed."
 
 ### 4.2 Sayari (ownership, network, risk factors, trade) — tool names verified from the connected tools
 
@@ -126,17 +130,43 @@ public-dollar/
 | `lookup_risk_factors` | Definitions for Sayari risk-factor IDs (721 defined at the time of writing). |
 | `get_investigation_guidance` | Sayari's analyst tradecraft, including shell-company methodology. |
 
-**[C] Production access.** The tools above are the MCP connector interface. A production application needs Sayari API credentials. Confirm which interface the build will use and map each call to the corresponding API endpoint.
+**Production access [V].** The tools above are the MCP connector interface, which is suitable for the hackathon demo. A production application uses the REST API with OAuth 2.0 client credentials: `POST https://api.sayari.com/oauth/token` with `client_id`, `client_secret`, `audience: "sayari.com"`, `grant_type: "client_credentials"`; the bearer token lasts 24 hours. Endpoint mapping:
+
+| MCP tool | REST endpoint |
+|---|---|
+| `search_entities` | `POST /v1/search/entity` |
+| `get_entity_profile` | `GET /v1/entity/{id}` |
+| `get_entity_summary` | `GET /v1/entity_summary/{id}` |
+| `traverse_network` | `GET /v1/traversal/{id}` |
+| `find_beneficial_owners` | `GET /v1/ubo/{id}` |
+| `check_watchlist` | `GET /v1/watchlist/{id}` |
+| `find_shortest_path` | `GET /v1/shortest_path` |
+| `search_shipments` | `POST /v1/trade/search/shipments` |
+| `get_upstream_supply_chain` | `GET /v1/supply_chain/upstream/{id}` |
+| `get_record` | `GET /v1/record/{id}` |
+| (entity resolution) | `POST /v1/resolution` |
+
+**[D]** The demo uses the MCP connector; the Python build wraps both behind one client interface so the switch to REST is a configuration change.
 
 ### 4.3 Tradeverifyd (trade exposure)
 
-| Capability (per team notes) | Planned use | Tag |
-|---|---|---|
-| `annotated_relationship_paths` | Paths from the recipient to flagged entities | [C] Confirm name, inputs, and output fields |
-| `find_companies_in_radius` | Count of companies registered near the recipient's address | [C] Confirm name, radius units, and output fields |
-| Value-chain tools | Tier-by-tier supply chain | [C] Confirm tool names |
+Checked through the connected Tradeverifyd MCP tools on 25 September 2026. The HTTP 401 error recorded earlier that day in `research/README.md` no longer occurs.
 
-Tradeverifyd was not available to the author of this spec, so no Tradeverifyd behavior is asserted here. The index in Section 6 is designed so Tradeverifyd outputs plug in once their fields are confirmed.
+| Tool | Inputs | Output fields used | Planned use | Tag |
+|---|---|---|---|---|
+| `search_entities` | `name` or `external_id` (LEI, DUNS), optional `jurisdiction`, `has_annotations`, `annotation_categories` | `entity_id`, `external_ids`, `naics`, `annotations` (count per category, e.g. `"US OFAC": 3`), `annotation_count` | Resolve the recipient; read list annotations | [V] |
+| `entity_details` | `entity_id` | `legal_form`, `jurisdiction`, `naics`, `industry`, `external_ids` | Declared activity for the business–goods mismatch signal | [V] |
+| `entity_annotations` | `entity_id` | Full annotation details only for **monitored** entities with `annotations:read` scope; otherwise a count only | Annotation detail | [V] |
+| `annotated_relationship_paths` | `entity_id`, `direction` (`in` suppliers / `out` customers / `both`), `max_depth` 1–5, optional `hs_codes` | `paths[]` with `annotated_entity` (`annotation_count`, `annotation_badges`), `hops[]` (`tier`, `hs_codes`), `depth` | Proximity via trade links | [V] |
+| `entity_trade_relationships` | `entity_id`, `direction`, optional `hs_codes` | Counterparties with the HS codes on each edge | Trade counterparties | [V] |
+| `entity_addresses` | `entity_id`, filters | Address lines, city, postal code, `location_type`. **No coordinates** | Address evidence | [V] |
+| `find_companies_in_radius` | `latitude`, `longitude`, `radius_nm` (**nautical miles**), `limit` ≤ 1,000 | Entity IDs with distance | Not used; see note below | [V] |
+| Value-chain tools | `tia_create_value_chain`, `tia_get_value_chain_by_id`, `tia_get_value_chain_by_anchor`, `tia_value_chain_overview`, `tia_value_chain_briefing`, `tia_add_value_chain_node`, and related `tia_*` tools | Not yet exercised | Tier-by-tier supply chain | Names [V]; outputs [C] |
+
+**Findings that change the design:**
+
+- **[V] `annotated_relationship_paths` returns non-sanctions and zero-annotation endpoints.** For the Palantir control (depth 3, both directions) it returned 22 paths. They include entities with `annotation_count: 0`, badges such as "Forced Labor Research", "US GSA" and "Human Rights", and one path to an entity with 3 "US OFAC" annotations through three trade hops. **[D]** The Proximity category counts only paths whose endpoint carries a sanctions or export-control badge ("US OFAC", "US BIS", "Asset Freeze", "Natl Securty"), and only at depth 1–2. Deeper paths are shown for context but never scored. Without this filter the control case fails, the same risk `research/README.md` records for Sayari watchlist paths.
+- **[V] `find_companies_in_radius` is not usable for address clustering yet.** It takes a point, not an address, and `entity_addresses` returns no coordinates, so it needs a separate geocoding step. Its own description says it is intended for disaster and event linkage. Three test calls (radius 0.01–0.5 nm, New York and South Dakota) all failed with a server-side statement timeout. **[D]** The address signal uses Sayari `mass_address_usage` only until this works.
 
 ### 4.4 Tavily (real-world presence and adverse media) — tool names verified
 
@@ -169,7 +199,7 @@ Each signal records: **what fired**, **the evidence**, **the source record**, an
 
 | Signal | Definition | Source | Sayari factor ID [V] | Strength [D] | Innocent explanations |
 |---|---|---|---|---|---|
-| Mass address usage | Registered at an address shared by more than 1,000 distinct entities | Sayari; Tradeverifyd `find_companies_in_radius` [C] | `mass_address_usage` | Weak | Registered-agent addresses are used by many legitimate companies |
+| Mass address usage | Registered at an address shared by more than 1,000 distinct entities | Sayari (Tradeverifyd `find_companies_in_radius` not usable yet; see 4.3) [V] | `mass_address_usage` | Weak | Registered-agent addresses are used by many legitimate companies |
 
 **Double-counting rule [D].** Sayari's `mass_address_usage` and Tradeverifyd's address clustering measure the same thing. They form **one** signal. Agreement between them raises *confidence*, not the score (see Section 6.3).
 
@@ -177,7 +207,7 @@ Each signal records: **what fired**, **the evidence**, **the source record**, an
 
 | Signal | Definition | Source | Strength [D] | Innocent explanations |
 |---|---|---|---|---|
-| Registration-to-award gap | Entity registered in SAM.gov or incorporated shortly before a large award | SAM.gov [C], Sayari, USAspending | Moderate | New legitimate firms, including small-business program entrants |
+| Registration-to-award gap | Entity registered in SAM.gov or incorporated shortly before a large award | SAM.gov `registrationDate` [V], Sayari, USAspending | Moderate | New legitimate firms, including small-business program entrants |
 | Shelf activation | Long dormancy after incorporation, then sudden activity or officer turnover | Sayari profile history | Moderate | Legitimate shelf-company purchase |
 | Phoenix linkage | A new entity shares two or more identifiers (officer, owner, address, phone, email domain, trade counterparty) with a previously dissolved entity that carried risk indicators | Sayari relationships and status | Strong | Legitimate business rescue (ASIC distinguishes this by intent) |
 
@@ -193,19 +223,19 @@ Each signal records: **what fired**, **the evidence**, **the source record**, an
 
 | Signal | Definition | Source | Sayari factor ID [V] | Strength [D] |
 |---|---|---|---|---|
-| Business–goods mismatch | Declared activity (e.g., NAICS services code) inconsistent with HS codes traded | Sayari shipments; SAM.gov NAICS [C] | — (derived) | Strong |
+| Business–goods mismatch | Declared activity (e.g., NAICS services code) inconsistent with HS codes traded | Sayari shipments; SAM.gov `primaryNaics` or Tradeverifyd `naics` [V] | — (derived) | Strong |
 | CHPL goods | Entity trades HS codes on the Common High Priority List | Sayari shipments | `exports_bis_high_priority_items_direct`, `..._indirect`, `..._critical_components_direct`, `..._critical_components_indirect` | Moderate |
-| Transshipment routing | Shipments route through BIS-identified transshipment points | Sayari shipments; Tradeverifyd [C] | — (derived) | Weak alone; Moderate with CHPL goods |
+| Transshipment routing | Shipments route through BIS-identified transshipment points | Sayari shipments (`transit_country` [V]); Tradeverifyd route tools (`tia_get_route`, `tia_trade_flow`) [C] | — (derived) | Weak alone; Moderate with CHPL goods |
 | Exports to sanctioned parties | Exports arriving after the counterparty's designation date | Sayari | `export_to_sanctioned` | Strong |
-| Price anomaly (misinvoicing) | Declared unit value far from a benchmark for the same HS code | Sayari shipments (if values present) [C]; external benchmark [C] | — (derived) | Moderate |
+| Price anomaly (misinvoicing) | Declared unit value far from a benchmark for the same HS code | Sayari shipments (value and weight, where present) [V]; UN Comtrade benchmark [D] | — (derived) | Moderate |
 | Counterparty churn | Rapid rotation of short-lived trading partners | Sayari shipments | — (derived) | Weak |
 
 **Notes on trade signals:**
 
 - **[V]** Sayari's definition of `export_to_sanctioned` states that such an export does not by definition indicate a violation, because it may be permitted under a general license or exemption. The report must repeat this caveat whenever the factor fires.
 - **[D]** Price-anomaly thresholds start at the values in Sayari's tradecraft guidance (unit price at least 30% above, or at or below 70% of, a benchmark). These are Sayari's guidance values, not a legal standard.
-- **[C]** Confirm whether Sayari shipment records include declared values and quantities for the corridors in the demo. Without them, the misinvoicing signal is recorded as "not checkable," not as "clear."
-- **[C]** Choose and document the price benchmark source before using this signal.
+- **[V] Value coverage depends on the trade dataset.** Checked on the Serniya receiver records (151 shipments, 24 Jan 2019 – 26 Mar 2022). Records from "Global Historical Imports & Exports (2019 - 2020)" carry `value` (USD) and `weight` (kg). Records from "Russia Imports & Exports (January 2022 - Present)" carry weight only. **Neither carries unit quantity.** The signal is therefore computed as **USD per kg**, only on shipments with both fields; shipments without a value are "not checkable," never "clear."
+- **[D] Benchmark: UN Comtrade.** For each shipment, compare its USD/kg with the Comtrade unit value (`primaryValue` / `netWgt`) for the same 6-digit HS code, reporter, partner and year. The public preview endpoint needs no key (`GET https://comtradeapi.un.org/public/v1/preview/C/A/HS?reporterCode=…&partnerCode=…&period=…&cmdCode=…&flowCode=M`). Example [V]: Russia's 2020 imports of HS 903090 from Germany were $2,433,701 over 3,283 kg, about $741/kg. Weight-based unit values are noisy for high-value instruments, so this signal stays Moderate and never fires on a single shipment. Tradeverifyd `tia_commodity_price` covers exchange-traded commodities (e.g. copper), not manufactured goods, so it is not used here.
 
 ### 5.5 Real-world presence (Tavily)
 
@@ -231,8 +261,8 @@ Sayari also publishes adverse-media factors (`law_enforcement_action`, `reputati
 | Signal | Definition | Source | Strength [D] |
 |---|---|---|---|
 | Pass-through | Subawards total a large share of the prime award | USAspending subawards | Weak |
-| Award vs. entity profile | Award size far exceeds what the entity's age and footprint suggest | USAspending; SAM.gov [C]; Sayari | Moderate |
-| Non-competitive award to young entity | Award not competed, and recipient recently formed | USAspending [C] (confirm competition field name) | Weak |
+| Award vs. entity profile | Award size far exceeds what the entity's age and footprint suggest | USAspending; SAM.gov `registrationDate` [V]; Sayari | Moderate |
+| Non-competitive award to young entity | Award not competed, and recipient recently formed | USAspending `extent_competed` [V] (null on some IDVs; see 4.1) | Weak |
 
 ---
 
@@ -246,13 +276,13 @@ Each provider sees part of the picture. The index combines their outputs into on
 
 Map every provider output into shared **indicator categories**:
 
-| Category | Sayari inputs (factor IDs) [V] | Tradeverifyd inputs [C] | Tavily inputs |
+| Category | Sayari inputs (factor IDs) [V] | Tradeverifyd inputs [V unless marked] | Tavily inputs |
 |---|---|---|---|
-| Listed or majority-owned by listed | `sanctioned*`, `ofac_50_percent_rule`, `eu_50_percent_rule`, `uk_50_percent_rule`, `usa_bis_50_percent_rule` | Flagged-entity annotation on the entity itself | — |
-| Proximity | `sanctioned_adjacent`, `check_watchlist` paths | `annotated_relationship_paths` path length | — |
+| Listed or majority-owned by listed | `sanctioned*`, `ofac_50_percent_rule`, `eu_50_percent_rule`, `uk_50_percent_rule`, `usa_bis_50_percent_rule` | `annotations` badges on the entity itself ("US OFAC", "US BIS", "Asset Freeze") | — |
+| Proximity | `sanctioned_adjacent`, `check_watchlist` paths | `annotated_relationship_paths` depth, sanctions badges only, depth ≤ 2 (see 4.3) | — |
 | Nominee / formation | `mass_business_registration`, `controlled_by_mass_business_registration`, `tcsp_keyword_risk`, `owned_by_tcsp_keyword_risk`, `controlled_by_tcsp_keyword_risk`, `implausible_date_of_birth` | — | — |
-| Address | `mass_address_usage` | `find_companies_in_radius` count | Virtual-office evidence |
-| Trade control | `exports_bis_high_priority_items_*`, `export_to_sanctioned` | Value-chain flags | — |
+| Address | `mass_address_usage` | — (`find_companies_in_radius` not usable yet) | Virtual-office evidence |
+| Trade control | `exports_bis_high_priority_items_*`, `export_to_sanctioned` | Value-chain flags [C] | — |
 | Adverse media / enforcement | `law_enforcement_action*`, `reputational_risk_financial_crime*`, `regulatory_action` | — | Adverse-media results |
 | Presence | — | — | Website / footprint result |
 | Jurisdiction context | `basel_aml` (0–10, higher is riskier), `cpi_score` (0–100, higher is cleaner) | — | — |
@@ -417,8 +447,8 @@ The report says "estimated risk-weighted exposure," never "money lost" or "money
 
 - The system has no access to internal company records, bank data, or communications. It estimates likelihood from external records only. [D]
 - Registry coverage varies by jurisdiction. Sayari's guidance notes that some US states and offshore centers may have limited or no beneficial-ownership data. [V]
-- Trade records may lack declared values, so misinvoicing may not be checkable. [C]
-- Subaward data depends on prime-recipient reporting. [C]
+- Trade records may lack declared values, and none carry unit quantities, so misinvoicing is measured per kg and is often not checkable. [V]
+- Subaward data depends on prime-recipient reporting, and only first-tier subawards of $40,000 or more (contracts) or $30,000 or more (grants) must be reported. [V]
 - Likelihood ratios are uncalibrated until Section 11 is completed. [D]
 - Adverse-media matching can confuse entities with similar names. [D]
 
@@ -426,16 +456,18 @@ The report says "estimated risk-weighted exposure," never "money lost" or "money
 
 ## 13. Open items to confirm before regulator use
 
-| # | Item | Owner |
-|---|---|---|
-| 1 | Tradeverifyd tool names, inputs, and output fields | |
-| 2 | Sayari production access: MCP connector vs. API credentials, and endpoint mapping | |
-| 3 | SAM.gov API endpoint, fields available publicly, and key requirements | |
-| 4 | USAspending field name for competition status, and subaward reporting thresholds | |
-| 5 | Whether Sayari shipment records carry declared values and quantities for demo corridors | |
-| 6 | Price benchmark source for misinvoicing | |
-| 7 | Validation case records available pre-designation (Serniya network) | |
-| 8 | Any other case studies from earlier drafts (e.g., Sudan/UAE, humanitarian fronts, gold, fentanyl precursors) — verify sources before including | |
+Status as of 25 September 2026.
+
+| # | Item | Status | Where |
+|---|---|---|---|
+| 1 | Tradeverifyd tool names, inputs, and output fields | **Done** for entity, annotation, path, trade and address tools. Value-chain tool outputs and route tools still to test. `find_companies_in_radius` times out | 4.3 |
+| 2 | Sayari production access: MCP connector vs. API credentials, and endpoint mapping | **Done.** OAuth client credentials; all endpoints mapped. Credentials still to obtain | 4.2 |
+| 3 | SAM.gov API endpoint, fields available publicly, and key requirements | **Done.** v4 endpoints; ownership fields are FOUO; 10 requests/day without a role | 4.1 |
+| 4 | USAspending field name for competition status, and subaward reporting thresholds | **Done.** `extent_competed`; $40,000 contracts, $30,000 grants | 4.1 |
+| 5 | Whether Sayari shipment records carry declared values and quantities for demo corridors | **Done.** Values in the 2019–2020 dataset, not the 2022 Russia dataset; no quantities | 5.4 |
+| 6 | Price benchmark source for misinvoicing | **Decided [D]:** UN Comtrade unit value per kg | 5.4 |
+| 7 | Validation case records available pre-designation (Serniya network) | **Done.** All 151 Sayari shipment records to Serniya-named receivers predate the 31 March 2022 designation (earliest 24 Jan 2019, latest 26 Mar 2022). USAspending shows no federal award to the network (`research/README.md`) | 5.4 |
+| 8 | Any other case studies from earlier drafts (e.g., Sudan/UAE, humanitarian fronts, gold, fentanyl precursors) — verify sources before including | **Open.** Team decision whether to include any | — |
 
 ---
 
@@ -456,6 +488,13 @@ The report says "estimated risk-weighted exposure," never "money lost" or "money
 - USAspending API, subawards contract: https://github.com/fedspendingtransparency/usaspending-api/blob/dev/usaspending_api/api_contracts/contracts/v2/subawards.md
 - USAspending API, award profile contract: https://github.com/fedspendingtransparency/usaspending-api/blob/master/usaspending_api/api_contracts/contracts/v2/awards/award_id.md
 
+- SAM.gov Entity Management API: https://open.gsa.gov/api/entity-api/
+- SAM.gov Exclusions API: https://open.gsa.gov/api/exclusions-api/
+- FAR 52.204-10 (subcontract reporting clause): https://www.acquisition.gov/far/52.204-10
+- FAR 4.1403 (clause threshold, $40,000): https://www.acquisition.gov/far/4.1403
+- 2 CFR 170, Appendix A (subaward reporting, $30,000): https://www.ecfr.gov/current/title-2/subtitle-A/chapter-I/part-170
+- UN Comtrade public API: https://comtradeapi.un.org/
+
 **Validation case**
 - DOJ, Russian military and intelligence agencies procurement network indicted in Brooklyn federal court: https://www.justice.gov/opa/pr/russian-military-and-intelligence-agencies-procurement-network-indicted-brooklyn-federal
 - IRS-CI, sentencing in the same scheme (OFAC designation date): https://www.irs.gov/node/150791
@@ -464,3 +503,6 @@ The report says "estimated risk-weighted exposure," never "money lost" or "money
 - Sayari `lookup_risk_factors`: definitions for all factor IDs cited in Sections 5 and 6
 - Sayari `get_investigation_guidance` (investigation type: shell company detection): methodology, co-occurring red flags, TBML price thresholds, shelf-company indicators
 - Tavily MCP tool list: `tavily_search`, `tavily_extract`, `tavily_crawl`, `tavily_map`, `tavily_research`
+- Tradeverifyd MCP tool definitions and test calls (Section 4.3)
+- Sayari API documentation: authentication https://documentation.sayari.com/api/key-concepts/authentication and API reference https://documentation.sayari.com/api/api-reference/entity/get-entity
+- Sayari `search_trade_facets` and `search_shipments` on receiver "Serniya" (Section 5.4)

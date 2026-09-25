@@ -2,7 +2,7 @@
 
 **Purpose:** Add control rows to `research/ground_truth_entities.csv` so the scoring engine can be tested for false positives. The fixture set had 9 positives and 0 controls; the target was at least 9 controls (1:1).
 
-**Status (25 September 2026):** 30 candidates drawn, all 30 screened, **22 controls appended** (all grade C; see Section 7). The candidates and every screen result are in `research/control_candidates.csv`.
+**Status (25 September 2026):** 30 candidates drawn, all 30 screened, **22 controls appended** (18 grade B, 4 grade C; see Section 7). The candidates and every screen result are in `research/control_candidates.csv`.
 
 ---
 
@@ -82,6 +82,7 @@ The script is [`scripts/sample_controls.py`](../scripts/sample_controls.py). Run
 
 **Open steps:**
 
-1. **SAM exclusions** were not checked for any row, so every control is grade C. Check each UEI on sam.gov (Search → Exclusions), or with the Exclusions API, and change `sam_exclusions_check` to `clear`. A personal key without a SAM.gov role allows only 10 requests a day. Rows already appended must then have their grade edited in `ground_truth_entities.csv` by hand.
+1. **SAM exclusions: done.** Lola C ran all 22 controls through a Tradeverifyd multi-list screen (OFAC, SAM.gov, NDAA, UFLPA, EU and other lists) on 25 September 2026. No SAM.gov exclusion was found, so 18 controls are now grade B. This is an aggregator result, not the SAM.gov record; spot-check a few on sam.gov before regulator use.
 2. **Identity not confirmed** in Sayari for 4 controls: BAE Systems Technology Solutions & Services, Castro & Company, Nammo Perry, and Northrop Grumman Systems. Their Sayari check is `not_checked`.
 3. **Hard negatives worth watching.** Several controls carry flags the scoring engine could misread: `mass_address_usage` (GAP Solutions, Meridian, The Craddock Group, HPI Federal, ECS Federal, Leidos), `sanctioned_adjacent` (Hardwire), and a parent with a regulatory action (ECS Federal). These controls must still score Low or Moderate.
+4. **China countermeasure listings: decided.** The Tradeverifyd screen matched Northrop Grumman Systems Corporation (confirmed) and DZYNE Technologies (0.927, unconfirmed) to China's Anti-Foreign Sanctions Law countermeasure lists, which target US defense companies over arms sales to Taiwan. Agreed rule (spec section 9.2): only US, UN, EU and UK lists make a "listed party"; other lists are context only. Both rows stay controls and act as hard negatives. `tests/test_scoring.py` checks that such a listing does not score.

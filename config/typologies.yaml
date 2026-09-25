@@ -1,0 +1,64 @@
+# Typology profiles (spec section 9.5). Provisional until calibrated (spec 12.4).
+#
+# indicators: signal codes from spec 9.1 that belong to the pattern.
+# anchors:    each entry is a set of signals that must all fire; any one entry
+#             counts as an anchor for the High tier (spec 9.3).
+# A typology matches when an anchor fires plus one indicator from a different family.
+# validation: source IDs from research/sources.json, or fixtures in spec appendix A.
+# Report wording: "indicators consistent with <label> patterns". Never "is part of".
+
+version: 0.1
+
+hs_codes:
+  gold: ["7108"]
+  critical_minerals:
+    cobalt: ["8105"]
+    graphite_natural: ["2504"]
+    graphite_artificial: ["3801"]
+    rare_earths: ["2805", "2846"]
+    gallium: []        # VERIFY HS code before use
+    germanium: []      # VERIFY HS code before use
+  fentanyl_precursors: []  # VERIFY list against DEA and FinCEN sources before use
+
+typologies:
+  russia_sanctions_evasion:
+    label: Russia sanctions evasion
+    indicators: [ST1, ST2, LC1, LC4, TR1, TR2, TR3, TR4, PX1, PX2, PX3]
+    anchors: [[PX1], [PX2], [PX3], [TR2, TR3]]
+    validation: [S01, S02, S05]
+
+  pandemic_loan_fraud:
+    label: Pandemic loan fraud
+    indicators: [PM1, PM2, PM7, LC1, LC2, LO1, LO2, ST3, PR1]
+    anchors: [[PM7], [LC2, PM2], [LC2, PM7], [PM6]]
+    validation: [appendix_A2_feeding_our_future, S42]
+
+  sudan_uae_arms_gold:
+    label: Sudan and UAE arms and gold
+    indicators: [ST4, LC3, LO1, TR5, PX1, PX2, PX3]
+    anchors: [[PX1], [PX2], [PX3], [TR5]]
+    validation: [appendix_A1_az_gold, S36]   # S36: VERIFY which UAE-based companies it names
+
+  fentanyl_precursors:
+    label: Fentanyl precursors
+    indicators: [TR1, TR6, ST1, LO1, PR1, PX1, PX2, PX3]
+    anchors: [[TR6, TR1], [PX1], [PX2], [PX3]]
+    validation: [S39, S40]
+
+  humanitarian_fronts:
+    label: Humanitarian fronts
+    indicators: [NP1, NP2, PR1, PR2, ST3, PX1, PX2, PX3]
+    anchors: [[NP1, PX2], [PX1]]
+    validation: [S34, S35]
+
+  xinjiang_critical_minerals:
+    label: Xinjiang and critical minerals
+    indicators: [TR1, TR4, TR7, ST1, ST2]
+    anchors: [[TR7]]           # TR7 anchors only on a grade A UFLPA Entity List match
+    validation: [S41]
+
+  gold:
+    label: Gold
+    indicators: [ST4, LC3, TR3, TR5, PX1, PX2, PX3]
+    anchors: [[PX1], [PX2], [PX3], [TR5]]
+    validation: [S37, S38]

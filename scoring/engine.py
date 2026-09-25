@@ -12,6 +12,21 @@ from typing import Dict, List, Literal, Optional
 
 RiskGrade = Literal["A", "B", "C", "D", "F"]
 
+# Sanctions lists that count toward the score: US, UN, EU and UK (spec section 5.6).
+# Everything else, including China's Anti-Foreign Sanctions Law countermeasure lists
+# (Sayari `sanctioned_other`), is shown as context and never scored.
+SCORED_SANCTION_FACTORS = frozenset({
+    "sanctioned_usa_ofac_sdn", "sanctioned_usa_ofac_non_sdn", "ofac_sdn",
+    "ofac_fto_sanctioned", "ofac_sdgt_sanctioned", "ofac_sdnt_sanctioned",
+    "ofac_sdntk_sanctioned", "ofac_sdn_mex_dto_sanctioned", "ofac_illicit_drugs_eo14059_sanctioned",
+    "export_controls", "export_controls_bis_entity",
+    "sanctioned_un_sc",
+    "eu_sanctioned", "sanctioned_eu_sanctions", "sanctioned_eu_dg_fisma_ec",
+    "sanctioned_eu_ec_sanctions_map", "sanctioned_eu_ec_regulation_269_2014",
+    "sanctioned_eu_ec_regulation_833_2014",
+    "sanctioned_gbr_fcdo", "sanctioned_gbr_hmt_ofsi",
+})
+
 
 @dataclass(frozen=True)
 class SayariPassThrough:
@@ -27,6 +42,10 @@ class SayariPassThrough:
     possibly_same_as: List[str] = field(default_factory=list)
     # Sayari `possibly_same_as[].match_keys`: objects with `key`, `normalized`, `original`.
     match_keys: List[Dict[str, str]] = field(default_factory=list)
+    # Sayari risk factor IDs on the entity (e.g. "sanctioned_usa_ofac_sdn"). When given,
+    # `sanctioned` scores only if one of SCORED_SANCTION_FACTORS is present. When empty,
+    # the `sanctioned` boolean is used as-is, so callers should pass these.
+    risk_factors: List[str] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -60,9 +79,14 @@ def calculate_sayari_subscore(data: SayariPassThrough) -> "tuple[float, List[str
     raw_score = 0.0
     flags: List[str] = []
 
-    if data.sanctioned:
+    scored_listing = data.sanctioned and (
+        not data.risk_factors or any(f in SCORED_SANCTION_FACTORS for f in data.risk_factors)
+    )
+    if scored_listing:
         raw_score += 65.0
         flags.append("Directly or parent-level designated under sanctions")
+    elif data.sanctioned:
+        flags.append("Listed only on sanctions lists outside US/UN/EU/UK (context, not scored)")
     if data.pep:
         raw_score += 20.0
         flags.append("Associated with Politically Exposed Person (PEP)")

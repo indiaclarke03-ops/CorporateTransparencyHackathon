@@ -26,7 +26,9 @@ export function SummaryBar({ summary }: { summary: InvestigationSummary }) {
 
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <div className="flex flex-wrap items-center gap-2">
-          <h2 className="font-heading text-lg font-semibold">{summary.root_recipient}</h2>
+          <h2 className="font-heading text-lg font-semibold" title={summary.root_recipient}>
+            {summary.root_recipient.startsWith('UNRESOLVED') ? 'No federal award recipient resolved (sanctions validation case)' : summary.root_recipient}
+          </h2>
           <span className="rounded-full bg-muted px-3 py-1 text-xs font-bold text-accent">{summary.primary_typology}</span>
         </div>
         <details className="group rounded-2xl bg-muted px-4 py-2">

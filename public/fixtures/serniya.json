@@ -1,10 +1,12 @@
 {
   "investigation_summary": {
-    "root_recipient": "OOO Serniya Engineering",
+    "root_recipient": "UNRESOLVED - no SAM.gov federal award or UEI identified in public record for this network; case study uses OFAC/DOJ export-control action, not a traced public procurement dollar",
+    "award_id": "N/A - no verified Federal Award ID located",
     "composite_risk_score": 65,
     "confidence_rating": "B",
     "primary_typology": "Russia Sanctions Evasion",
-    "executive_rationale": "Serniya Engineering (Moscow) was designated by OFAC..."
+    "executive_rationale": "No federal contract or loan records were found for OOO SERNIYA INZHINIRING in USAspending.gov as of 25 September 2026; OpenSanctions reports SAM.gov exclusion records for the entity under UEIs LF8MULLSH397 and NYCYDYP1RNJ6. The entity was matched to corporate records at grade A using a shared registration number (OGRN 1177746132563). The screen produced a composite score of 65 out of 100, with a confidence grade of B. OOO SERNIYA INZHINIRING is listed on the OFAC SDN List under Executive Order 14024, with a designation date of 31 March 2022. 2 signals could not be assessed because Tradeverifyd trade relationships were not retrieved for this entity in this pass and the Sayari ownership trace for this entity was not run in this pass. This is a risk lead for human review, not a finding of wrongdoing.",
+    "citation_audit": "Applied 2026-09-25 (research/citation_audit.md). Every signal and edge cites research/sources.json."
   },
   "nodes": [
     {
@@ -18,15 +20,29 @@
           "signal_name": "OFAC SDN Designation E.O. 14024",
           "severity": "CRITICAL",
           "provenance_source": "Tavily",
-          "evidence_record": "https://home.treasury.gov/"
+          "evidence_record": "https://home.treasury.gov/news/press-releases/jy0692",
+          "source_id": "S01",
+          "source_authority": "U.S. Treasury (OFAC)"
+        },
+        {
+          "signal_name": "Named in DOJ superseding indictment (E.D.N.Y., 13 Dec 2022) as heading the procurement network",
+          "severity": "CRITICAL",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://www.justice.gov/d9/press-releases/attachments/2022/12/13/grinin_superseder_0.pdf",
+          "source_id": "S05",
+          "source_authority": "U.S. Department of Justice (E.D.N.Y.)"
         }
       ],
       "sayari_pass_through": {
+        "data_source": "public_record_derived_not_live_sayari_api",
         "sanctioned": true,
         "pep": false,
         "closed": null,
         "degree": 5,
-        "edge_counts": { "shared_address": 1, "beneficial_owner": 4 },
+        "relationship_count": {
+          "shared_address": 1,
+          "beneficial_owner": 4
+        },
         "shares": [],
         "position": [],
         "possibly_same_as": [],
@@ -35,24 +51,462 @@
     },
     {
       "id": "ent_sertal",
-      "label": "ent_sertal",
-      "type": "address_hub",
-      "jurisdiction": null,
-      "entity_confidence": null,
-      "risk_signals": [],
+      "label": "OOO Sertal",
+      "type": "sanctioned_entity",
+      "jurisdiction": "RU",
+      "entity_confidence": "A",
+      "risk_signals": [
+        {
+          "signal_name": "OFAC SDN Designation E.O. 14024",
+          "severity": "CRITICAL",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://ofac.treasury.gov/recent-actions/20220331",
+          "source_id": "S02",
+          "source_authority": "OFAC"
+        }
+      ],
+      "sayari_pass_through": {
+        "data_source": "public_record_derived_not_live_sayari_api",
+        "sanctioned": true,
+        "pep": false,
+        "closed": null,
+        "degree": 2,
+        "relationship_count": {
+          "shared_address": 1,
+          "supply_chain_shipment": 1
+        },
+        "shares": [],
+        "position": [],
+        "possibly_same_as": [],
+        "match_keys": []
+      }
+    },
+    {
+      "id": "ent_robintreid",
+      "label": "OOO Robin Treid",
+      "type": "sanctioned_entity",
+      "jurisdiction": "RU",
+      "entity_confidence": "A",
+      "risk_signals": [
+        {
+          "signal_name": "OFAC SDN Designation E.O. 14024 (Treasury: “utilized by Serniya to facilitate its procurement”)",
+          "severity": "CRITICAL",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://ofac.treasury.gov/recent-actions/20220331",
+          "source_id": "S02",
+          "source_authority": "OFAC"
+        }
+      ],
+      "sayari_pass_through": {
+        "data_source": "public_record_derived_not_live_sayari_api",
+        "sanctioned": true,
+        "pep": false,
+        "closed": null,
+        "degree": 1,
+        "relationship_count": {
+          "beneficial_owner": 1
+        },
+        "shares": [],
+        "position": [],
+        "possibly_same_as": [],
+        "match_keys": []
+      }
+    },
+    {
+      "id": "ent_majory",
+      "label": "Majory LLP",
+      "type": "sanctioned_entity",
+      "jurisdiction": "GB",
+      "entity_confidence": "A",
+      "risk_signals": [
+        {
+          "signal_name": "OFAC SDN Designation E.O. 14024",
+          "severity": "CRITICAL",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://ofac.treasury.gov/recent-actions/20220331",
+          "source_id": "S02",
+          "source_authority": "OFAC"
+        },
+        {
+          "signal_name": "Companies House: no accounts after 31 Aug 2022; voluntary strike-off notice 6 Dec 2022",
+          "severity": "MEDIUM",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://find-and-update.company-information.service.gov.uk/company/OC400827/filing-history",
+          "source_id": "S12",
+          "source_authority": "Companies House (UK)"
+        }
+      ],
+      "sayari_pass_through": {
+        "data_source": "public_record_derived_not_live_sayari_api",
+        "sanctioned": true,
+        "pep": false,
+        "closed": null,
+        "degree": 2,
+        "relationship_count": {
+          "beneficial_owner": 1,
+          "officer_director": 1
+        },
+        "shares": [],
+        "position": [],
+        "possibly_same_as": [],
+        "match_keys": []
+      }
+    },
+    {
+      "id": "ent_photonpro",
+      "label": "Photon Pro LLP",
+      "type": "sanctioned_entity",
+      "jurisdiction": "GB",
+      "entity_confidence": "A",
+      "risk_signals": [
+        {
+          "signal_name": "OFAC SDN Designation E.O. 14024",
+          "severity": "CRITICAL",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://home.treasury.gov/news/press-releases/jy0692",
+          "source_id": "S01",
+          "source_authority": "U.S. Treasury (OFAC)"
+        },
+        {
+          "signal_name": "EU and Japan export-related restrictions (Treasury: imposed “within the past month”)",
+          "severity": "HIGH",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://home.treasury.gov/news/press-releases/jy0692",
+          "source_id": "S01",
+          "source_authority": "U.S. Treasury (OFAC)"
+        },
+        {
+          "signal_name": "Companies House: still registered; confirmation statement overdue",
+          "severity": "MEDIUM",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://find-and-update.company-information.service.gov.uk/company/OC425116",
+          "source_id": "S13",
+          "source_authority": "Companies House (UK)"
+        }
+      ],
+      "sayari_pass_through": {
+        "data_source": "public_record_derived_not_live_sayari_api",
+        "sanctioned": true,
+        "pep": false,
+        "closed": null,
+        "degree": 2,
+        "relationship_count": {
+          "beneficial_owner": 1,
+          "officer_director": 1
+        },
+        "shares": [],
+        "position": [],
+        "possibly_same_as": [],
+        "match_keys": []
+      }
+    },
+    {
+      "id": "ent_inventionbridge",
+      "label": "Invention Bridge SL",
+      "type": "sanctioned_entity",
+      "jurisdiction": "ES",
+      "entity_confidence": "A",
+      "risk_signals": [
+        {
+          "signal_name": "OFAC SDN Designation E.O. 14024 (for acting for or on behalf of Serniya)",
+          "severity": "CRITICAL",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://home.treasury.gov/news/press-releases/jy0692",
+          "source_id": "S01",
+          "source_authority": "U.S. Treasury (OFAC)"
+        }
+      ],
+      "sayari_pass_through": {
+        "data_source": "public_record_derived_not_live_sayari_api",
+        "sanctioned": true,
+        "pep": false,
+        "closed": null,
+        "degree": 1,
+        "relationship_count": {
+          "beneficial_owner": 1
+        },
+        "shares": [],
+        "position": [],
+        "possibly_same_as": [],
+        "match_keys": []
+      }
+    },
+    {
+      "id": "person_grinin",
+      "label": "Yevgeniy Aleksandrovich Grinin",
+      "type": "nominee_person",
+      "jurisdiction": "RU",
+      "entity_confidence": "A",
+      "risk_signals": [
+        {
+          "signal_name": "OFAC SDN listing linked to Serniya and Photon Pro LLP",
+          "severity": "CRITICAL",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://ofac.treasury.gov/recent-actions/20220331",
+          "source_id": "S02",
+          "source_authority": "OFAC"
+        },
+        {
+          "signal_name": "Named defendant in E.D.N.Y. 16-count superseding indictment (allegations only)",
+          "severity": "CRITICAL",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://www.justice.gov/d9/press-releases/attachments/2022/12/13/grinin_superseder_0.pdf",
+          "source_id": "S05",
+          "source_authority": "U.S. Department of Justice (E.D.N.Y.)"
+        }
+      ],
+      "sayari_pass_through": {
+        "data_source": "public_record_derived_not_live_sayari_api",
+        "sanctioned": true,
+        "pep": false,
+        "closed": null,
+        "degree": 1,
+        "relationship_count": {
+          "officer_director": 1
+        },
+        "shares": [],
+        "position": [
+          "Officer/Director, Photon Pro LLP"
+        ],
+        "possibly_same_as": [],
+        "match_keys": []
+      }
+    },
+    {
+      "id": "person_krugovov",
+      "label": "Anton Alekseevich Krugovov",
+      "type": "nominee_person",
+      "jurisdiction": "RU",
+      "entity_confidence": "A",
+      "risk_signals": [
+        {
+          "signal_name": "STATUS CHANGE: removed from the OFAC SDN List on 23 Jun 2026 (designated 31 Mar 2022 as senior executive officer of Majory LLP)",
+          "severity": "MEDIUM",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://ofac.treasury.gov/recent-actions/20260623",
+          "source_id": "S03",
+          "source_authority": "OFAC"
+        }
+      ],
+      "sayari_pass_through": {
+        "data_source": "public_record_derived_not_live_sayari_api",
+        "sanctioned": false,
+        "pep": false,
+        "closed": null,
+        "degree": 1,
+        "relationship_count": {
+          "officer_director": 1
+        },
+        "shares": [],
+        "position": [
+          "Senior Executive Officer, Majory LLP (former; delisted 2026-06-23)"
+        ],
+        "possibly_same_as": [],
+        "match_keys": [],
+        "notes": "Formerly OFAC-sanctioned under this 2022 action; delisted 2026-06-23. sanctioned=False reflects current status only."
+      }
+    },
+    {
+      "id": "person_livshits",
+      "label": "Boris Livshits",
+      "type": "nominee_person",
+      "jurisdiction": "RU",
+      "entity_confidence": "A",
+      "risk_signals": [
+        {
+          "signal_name": "Subject of BIS Temporary Denial Order (13 Dec 2022, renewed 14 Jun 2023)",
+          "severity": "HIGH",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://www.federalregister.gov/d/2022-27347",
+          "source_id": "S08",
+          "source_authority": "Bureau of Industry and Security (Federal Register)"
+        },
+        {
+          "signal_name": "Named defendant in E.D.N.Y. superseding indictment (allegations only)",
+          "severity": "CRITICAL",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://www.justice.gov/d9/press-releases/attachments/2022/12/13/grinin_superseder_0.pdf",
+          "source_id": "S05",
+          "source_authority": "U.S. Department of Justice (E.D.N.Y.)"
+        }
+      ],
+      "sayari_pass_through": null
+    },
+    {
+      "id": "ent_aws",
+      "label": "Advanced Web Services",
+      "type": "shell_intermediary",
+      "jurisdiction": "US",
+      "entity_confidence": "A",
+      "risk_signals": [
+        {
+          "signal_name": "BIS Temporary Denial Order (180 days): unauthorized export of EAR items to Russia",
+          "severity": "HIGH",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://www.federalregister.gov/d/2022-27347",
+          "source_id": "S08",
+          "source_authority": "Bureau of Industry and Security (Federal Register)"
+        }
+      ],
+      "sayari_pass_through": null
+    },
+    {
+      "id": "ent_strandway",
+      "label": "Strandway, LLC",
+      "type": "shell_intermediary",
+      "jurisdiction": "US",
+      "entity_confidence": "A",
+      "risk_signals": [
+        {
+          "signal_name": "BIS Temporary Denial Order (180 days): unauthorized export of EAR items to Russia",
+          "severity": "HIGH",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://www.federalregister.gov/d/2022-27347",
+          "source_id": "S08",
+          "source_authority": "Bureau of Industry and Security (Federal Register)"
+        }
+      ],
       "sayari_pass_through": null
     }
   ],
   "edges": [
     {
-      "source": "ent_serniya",
-      "target": "ent_sertal",
+      "source": "ent_sertal",
+      "target": "ent_robintreid",
       "relationship_type": "SHARED_ADDRESS",
       "ownership_percentage": null,
-      "provenance_ref": "https://home.treasury.gov/"
+      "provenance_ref": "https://ofac.treasury.gov/recent-actions/20220331",
+      "source_id": "S02",
+      "source_authority": "OFAC"
+    },
+    {
+      "source": "ent_majory",
+      "target": "ent_photonpro",
+      "relationship_type": "SHARED_ADDRESS",
+      "ownership_percentage": null,
+      "provenance_ref": "https://ofac.treasury.gov/recent-actions/20220331",
+      "source_id": "S02",
+      "source_authority": "OFAC"
+    },
+    {
+      "source": "ent_robintreid",
+      "target": "ent_serniya",
+      "relationship_type": "ACTING_ON_BEHALF_OF",
+      "ownership_percentage": null,
+      "provenance_ref": "https://home.treasury.gov/news/press-releases/jy0692",
+      "source_id": "S01",
+      "source_authority": "U.S. Treasury (OFAC)"
+    },
+    {
+      "source": "ent_majory",
+      "target": "ent_serniya",
+      "relationship_type": "ACTING_ON_BEHALF_OF",
+      "ownership_percentage": null,
+      "provenance_ref": "https://home.treasury.gov/news/press-releases/jy0692",
+      "source_id": "S01",
+      "source_authority": "U.S. Treasury (OFAC)"
+    },
+    {
+      "source": "ent_photonpro",
+      "target": "ent_serniya",
+      "relationship_type": "ACTING_ON_BEHALF_OF",
+      "ownership_percentage": null,
+      "provenance_ref": "https://home.treasury.gov/news/press-releases/jy0692",
+      "source_id": "S01",
+      "source_authority": "U.S. Treasury (OFAC)"
+    },
+    {
+      "source": "ent_inventionbridge",
+      "target": "ent_serniya",
+      "relationship_type": "ACTING_ON_BEHALF_OF",
+      "ownership_percentage": null,
+      "provenance_ref": "https://home.treasury.gov/news/press-releases/jy0692",
+      "source_id": "S01",
+      "source_authority": "U.S. Treasury (OFAC)"
+    },
+    {
+      "source": "person_grinin",
+      "target": "ent_photonpro",
+      "relationship_type": "OFFICER_DIRECTOR",
+      "ownership_percentage": null,
+      "provenance_ref": "https://find-and-update.company-information.service.gov.uk/company/OC425116/officers",
+      "source_id": "S13",
+      "source_authority": "Companies House (UK)"
+    },
+    {
+      "source": "person_krugovov",
+      "target": "ent_majory",
+      "relationship_type": "OFFICER_DIRECTOR",
+      "ownership_percentage": null,
+      "provenance_ref": "https://find-and-update.company-information.service.gov.uk/company/OC400827/officers",
+      "source_id": "S12",
+      "source_authority": "Companies House (UK)"
+    },
+    {
+      "source": "person_livshits",
+      "target": "ent_aws",
+      "relationship_type": "OWNS_OR_CONTROLS",
+      "ownership_percentage": null,
+      "provenance_ref": "https://www.federalregister.gov/d/2022-27347",
+      "source_id": "S08",
+      "source_authority": "Bureau of Industry and Security (Federal Register)"
+    },
+    {
+      "source": "person_livshits",
+      "target": "ent_strandway",
+      "relationship_type": "OWNS_OR_CONTROLS",
+      "ownership_percentage": null,
+      "provenance_ref": "https://www.federalregister.gov/d/2022-27347",
+      "source_id": "S08",
+      "source_authority": "Bureau of Industry and Security (Federal Register)"
+    },
+    {
+      "source": "person_livshits",
+      "target": "ent_serniya",
+      "relationship_type": "LINKED_TO",
+      "ownership_percentage": null,
+      "provenance_ref": "https://www.bis.gov/press-release/commerce-cuts-russian-procurement-network-evading-export-controls",
+      "source_id": "S07",
+      "source_authority": "Bureau of Industry and Security"
     }
   ],
   "audit_trail": [
-    { "step": 1, "source": "Tavily", "query_executed": "...", "records_matched": 15 }
-  ]
+    {
+      "step": 1,
+      "source": "Tavily",
+      "query_executed": "Serniya Engineering Photon Pro DOJ indictment export control",
+      "records_matched": 15
+    },
+    {
+      "step": 2,
+      "source": "Tavily",
+      "query_executed": "Serniya Engineering OFAC sanctions Russia procurement network",
+      "records_matched": 15
+    },
+    {
+      "step": 3,
+      "source": "Tavily",
+      "query_executed": "Photon Pro shell company UAE transshipment sanctions evasion",
+      "records_matched": 15
+    },
+    {
+      "step": 4,
+      "source": "Sayari",
+      "query_executed": "NOT EXECUTED - no Sayari connector available",
+      "records_matched": 0
+    },
+    {
+      "step": 5,
+      "source": "Tradeverifyd",
+      "query_executed": "NOT EXECUTED - no Tradeverifyd connector available; T-component forced to 0",
+      "records_matched": 0
+    },
+    {
+      "step": 6,
+      "source": "Citation audit",
+      "query_executed": "research/citation_audit.md applied: tier-3 and wrong-agency citations replaced with primary records from research/sources.json",
+      "records_matched": 8
+    }
+  ],
+  "schema_version": "v2"
 }

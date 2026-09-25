@@ -15,24 +15,35 @@ export type RelationshipType =
   | 'OFFICER_DIRECTOR'
   | 'SUPPLY_CHAIN_SHIPMENT'
   | 'POSSIBLY_SAME_AS'
+  | 'ACTING_ON_BEHALF_OF'
+  | 'OWNS_OR_CONTROLS'
+  | 'LINKED_TO'
 
 export interface RiskSignal {
   signal_name: string
   severity: Severity
   provenance_source: string
   evidence_record: string | null
+  /** research/sources.json ID of evidence_record */
+  source_id?: string
+  /** Who published the record (OFAC, DOJ, Companies House...). provenance_source is the retrieval tool. */
+  source_authority?: string
 }
+
+/** Sayari `possibly_same_as[].match_keys` item; older fixtures used plain strings. */
+export type MatchKey = string | { key: string; normalized: string; original: string }
 
 export interface SayariPassThrough {
   sanctioned: boolean | null
   pep: boolean | null
   closed: boolean | null
   degree: number | null
-  edge_counts: Record<string, number>
+  /** Sayari REST `relationship_count`: related entities per relationship type */
+  relationship_count: Record<string, number>
   shares: unknown[]
   position: unknown[]
   possibly_same_as: unknown[]
-  match_keys: string[]
+  match_keys: MatchKey[]
 }
 
 export interface InvestigationNode {
@@ -51,7 +62,9 @@ export interface InvestigationEdge {
   relationship_type: RelationshipType
   ownership_percentage: number | null
   provenance_ref: string | null
-  match_keys?: string[]
+  match_keys?: MatchKey[]
+  source_id?: string
+  source_authority?: string
 }
 
 export interface AuditStep {

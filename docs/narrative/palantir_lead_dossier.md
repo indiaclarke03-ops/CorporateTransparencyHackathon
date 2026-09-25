@@ -3,13 +3,13 @@
 Identifiers: UEI FSY4LVSBGWB7; CAGE 470F5; SEC CIK 0001321655; LEI 549300UVN46B3BBDHO85  
 Report ID: DRAFT-PALANTIR-20260925  
 Generated: 25 September 2026  
-Content hash: sha256:8c25648c0e55b122  
+Content hash: sha256:e567fbf20784e914  
 
 > This dossier presents a risk lead for human review. It is not a finding of wrongdoing. Every statement is sourced; see the sources appendix.
 
 ## 1. Executive rationale
 
-PALANTIR TECHNOLOGIES INC. received 427 federal contracts totaling $5,335,261,774.62 from the Department of Defense, the Department of Homeland Security, the Department of Health and Human Services, and 15 other agencies between 3 July 2008 and 30 September 2026.[^S15][^S33][^S31][^S32] The recipient was matched to corporate records at grade B using a shared UEI (FSY4LVSBGWB7) and a matching name.[^S16][^S26] The screen produced a composite score of 8 out of 100, with a confidence grade of A. 2 signals could not be assessed because the Tradeverifyd connection returned an authorization error (HTTP 401) and the Sayari two-link matches carry an unnamed 'sanctioned_other' flag that could not be tied to a specific list. This is a risk lead for human review, not a finding of wrongdoing.
+PALANTIR TECHNOLOGIES INC. received 427 federal contracts totaling $5,335,261,774.62 from the Department of Defense, the Department of Homeland Security, the Department of Health and Human Services, and 15 other agencies between 3 July 2008 and 30 September 2026.[^S15][^S33][^S31][^S32] The recipient was matched to corporate records at grade B using a shared UEI (FSY4LVSBGWB7) and a matching name.[^S16][^S26] The screen produced a composite score of 8 out of 100, with a confidence grade of A. 2 signals could not be assessed because Tradeverifyd trade relationships were not retrieved for this entity in this pass and the Sayari two-link matches carry an unnamed 'sanctioned_other' flag that could not be tied to a specific list. This is a risk lead for human review, not a finding of wrongdoing.
 
 ## 2. Why this dossier was prepared
 
@@ -53,7 +53,7 @@ The screen found no signals. Section 6 lists what was checked and what could not
 *What the screen checked without finding a signal, and what it could not check.*
 
 - Listed party: no record found in Sayari (OFAC SDN screening) as of 25 September 2026.[^S26]
-- Trade lanes (Tradeverifyd): not assessable because the Tradeverifyd connection returned an authorization error (HTTP 401) when queried on 25 September 2026.
+- Trade lanes (Tradeverifyd): not assessable because Tradeverifyd trade relationships were not retrieved for this entity in this pass.
 - Proximity to a listed party: not assessable because the nine two-link paths Sayari returned run through a shared institutional shareholder, a shared registered agent, or a trade counterparty, to parties carrying an unnamed 'sanctioned_other' flag that could not be tied to a specific list.[^S26]
 
 ## 7. Graphs

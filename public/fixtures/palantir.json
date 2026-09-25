@@ -1,22 +1,77 @@
 {
   "investigation_summary": {
-    "root_recipient": "Palantir Technologies",
+    "root_recipient": "Palantir Technologies Inc.",
+    "award_id": "Multiple: 427 contracts, FY2008-FY2026 (USAspending), e.g. N0024408C0025. BPA 19AQMM25A1228 went to Palantir USG Inc. (UEI HNN4F9JZWDY8), a separate recipient",
     "composite_risk_score": 8,
     "confidence_rating": "A",
-    "primary_typology": "Clean control",
-    "executive_rationale": "Placeholder — replace with the locked Palantir validation fixture."
+    "primary_typology": "None Detected - Clean Control Case (schema gap, see README)",
+    "executive_rationale": "PALANTIR TECHNOLOGIES INC. received 427 federal contracts totaling $5,335,261,774.62 from the Department of Defense, the Department of Homeland Security, the Department of Health and Human Services, and 15 other agencies between 3 July 2008 and 30 September 2026. The recipient was matched to corporate records at grade B using a shared UEI (FSY4LVSBGWB7) and a matching name. The screen produced a composite score of 8 out of 100, with a confidence grade of A. 2 signals could not be assessed because Tradeverifyd trade relationships were not retrieved for this entity in this pass and the Sayari two-link matches carry an unnamed 'sanctioned_other' flag that could not be tied to a specific list. This is a risk lead for human review, not a finding of wrongdoing.",
+    "citation_audit": "Applied 2026-09-25 (research/citation_audit.md). Every signal cites research/sources.json."
   },
   "nodes": [
     {
       "id": "ent_palantir",
-      "label": "Palantir Technologies",
+      "label": "Palantir Technologies Inc.",
       "type": "public_recipient",
       "jurisdiction": "US",
-      "entity_confidence": null,
-      "risk_signals": [],
-      "sayari_pass_through": null
+      "risk_signals": [
+        {
+          "signal_name": "UEI FSY4LVSBGWB7 matches the USAspending recipient record (grade B: shared UEI and name, spec 7.1)",
+          "severity": "LOW",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://www.usaspending.gov/recipient/1ea8a9a4-3726-3491-9040-66950bb67606-P/all",
+          "source_id": "S16",
+          "source_authority": "USAspending.gov"
+        },
+        {
+          "signal_name": "Nasdaq-listed (PLTR), SEC-disclosed ownership and financials",
+          "severity": "LOW",
+          "provenance_source": "Tavily",
+          "evidence_record": "https://www.sec.gov/edgar/browse/?CIK=0001321655",
+          "source_id": "S18",
+          "source_authority": "U.S. SEC (EDGAR)"
+        }
+      ],
+      "entity_confidence": "B",
+      "sayari_pass_through": {
+        "data_source": "public_record_derived_not_live_sayari_api",
+        "sanctioned": false,
+        "pep": false,
+        "closed": false,
+        "degree": 0,
+        "relationship_count": {},
+        "shares": [],
+        "position": [],
+        "possibly_same_as": [],
+        "match_keys": [
+          {
+            "key": "uei",
+            "normalized": "FSY4LVSBGWB7",
+            "original": "FSY4LVSBGWB7"
+          },
+          {
+            "key": "cage",
+            "normalized": "470F5",
+            "original": "470F5"
+          }
+        ]
+      }
     }
   ],
   "edges": [],
-  "audit_trail": []
+  "audit_trail": [
+    {
+      "step": 1,
+      "source": "Tavily",
+      "query_executed": "Palantir Technologies SAM.gov federal award UEI",
+      "records_matched": 15
+    },
+    {
+      "step": 2,
+      "source": "Citation audit",
+      "query_executed": "research/citation_audit.md applied: tier-3 and wrong-agency citations replaced with primary records from research/sources.json",
+      "records_matched": 2
+    }
+  ],
+  "schema_version": "v2"
 }

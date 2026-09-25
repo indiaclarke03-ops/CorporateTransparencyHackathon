@@ -25,7 +25,7 @@
 
   "not_assessable_count": 2,
   "not_assessable_reasons": [
-    "the Tradeverifyd connection returned an authorization error (HTTP 401)",
+    "Tradeverifyd trade relationships were not retrieved for this entity in this pass",
     "the Sayari two-link matches carry an unnamed 'sanctioned_other' flag that could not be tied to a specific list"
   ],
 
@@ -58,7 +58,7 @@
     {"signal_name": "Listed party", "source_name": "Sayari (OFAC SDN screening)", "as_of_date": "2026-09-25", "sources": ["S26"]}
   ],
   "signals_not_assessable": [
-    {"signal_name": "Trade lanes (Tradeverifyd)", "reason": "the Tradeverifyd connection returned an authorization error (HTTP 401) when queried on 25 September 2026"},
+    {"signal_name": "Trade lanes (Tradeverifyd)", "reason": "Tradeverifyd trade relationships were not retrieved for this entity in this pass"},
     {"signal_name": "Proximity to a listed party", "reason": "the nine two-link paths Sayari returned run through a shared institutional shareholder, a shared registered agent, or a trade counterparty, to parties carrying an unnamed 'sanctioned_other' flag that could not be tied to a specific list", "sources": ["S26"]}
   ],
 

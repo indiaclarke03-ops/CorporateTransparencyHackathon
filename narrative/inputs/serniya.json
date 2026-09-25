@@ -26,7 +26,7 @@
 
   "not_assessable_count": 2,
   "not_assessable_reasons": [
-    "the Tradeverifyd connection returned an authorization error (HTTP 401)",
+    "Tradeverifyd trade relationships were not retrieved for this entity in this pass",
     "the Sayari ownership trace for this entity was not run in this pass"
   ],
 
@@ -110,7 +110,7 @@
     {"signal_name": "Removal of the entity from the OFAC SDN List", "source_name": "OFAC removal notices of 23 June 2026 and 27 July 2026", "as_of_date": "2026-09-25", "sources": ["S03", "S04"]}
   ],
   "signals_not_assessable": [
-    {"signal_name": "Trade lanes (Tradeverifyd)", "reason": "the Tradeverifyd connection returned an authorization error (HTTP 401) when queried on 25 September 2026"},
+    {"signal_name": "Trade lanes (Tradeverifyd)", "reason": "Tradeverifyd trade relationships were not retrieved for this entity in this pass"},
     {"signal_name": "Ownership chain", "reason": "the Sayari ownership trace for this entity was not run in this pass"}
   ],
 

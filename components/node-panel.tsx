@@ -1,6 +1,7 @@
 import { ChevronDown, ExternalLink, X } from 'lucide-react'
 import type { InvestigationNode, SayariPassThrough } from '@/lib/types'
-import { NODE_TYPE_META, SEVERITY_CLASS } from '@/lib/graph-style'
+import Link from 'next/link'
+import { NODE_TYPE_META, SEVERITY_CLASS, formatMatchKey } from '@/lib/graph-style'
 import { cn } from '@/lib/utils'
 
 export function NodePanel({ node, onClose }: { node: InvestigationNode; onClose: () => void }) {
@@ -38,7 +39,25 @@ export function NodePanel({ node, onClose }: { node: InvestigationNode; onClose:
                     {s.severity}
                   </span>
                 </div>
-                <p className="text-xs text-muted-foreground">Source: {s.provenance_source}</p>
+                <p className="text-xs text-muted-foreground">
+                  {s.source_authority ? (
+                    <>
+                      Published by <strong className="text-foreground">{s.source_authority}</strong>
+                      {' · retrieved via '}
+                      {s.provenance_source}
+                    </>
+                  ) : (
+                    <>Source: {s.provenance_source}</>
+                  )}
+                </p>
+                {s.source_id && (
+                  <Link
+                    href={`/traceability#source-${s.source_id}`}
+                    className="w-fit rounded-full bg-background px-2 py-0.5 font-mono text-[11px] font-bold text-accent hover:underline"
+                  >
+                    {s.source_id} in source registry
+                  </Link>
+                )}
                 {s.evidence_record && (
                   <a
                     href={s.evidence_record}
@@ -80,8 +99,11 @@ function SayariBlock({ data }: { data: SayariPassThrough | null }) {
           <Stat label="Closed" value={fmt(data.closed)} />
           <Stat label="Degree" value={fmt(data.degree)} />
         </dl>
-        <ChipList label="Edge counts" items={Object.entries(data.edge_counts).map(([k, v]) => `${k}: ${v}`)} />
-        <ChipList label="Match keys" items={data.match_keys} />
+        <ChipList
+          label="Relationship counts"
+          items={Object.entries(data.relationship_count ?? {}).map(([k, v]) => `${k}: ${v}`)}
+        />
+        <ChipList label="Match keys" items={(data.match_keys ?? []).map(formatMatchKey)} />
         <details className="group/raw">
           <summary className="cursor-pointer text-xs font-semibold text-accent">Raw JSON</summary>
           <pre className="mt-2 max-h-64 overflow-auto rounded-xl bg-background p-3 text-[11px] leading-relaxed">

@@ -35,6 +35,9 @@ class StaticRules(unittest.TestCase):
         self.assertIn("WARN", levels("https://www.bis.gov/press-release/x", "DOJ Indictment"))
         self.assertIn("WARN", levels("https://sam.gov/opp/abc/view", "NYSE-listed"))
 
+    def test_uflpa_entity_list_may_cite_dhs(self):
+        self.assertEqual(levels("https://www.dhs.gov/news/2025/01/14/x", "DHS: addition to the UFLPA Entity List"), [])
+
 
 class Registry(unittest.TestCase):
     def test_registry_has_no_errors(self):

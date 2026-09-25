@@ -1,6 +1,7 @@
 import { ExternalLink } from 'lucide-react'
 import type { InvestigationEdge } from '@/lib/types'
-import { RELATIONSHIP_META } from '@/lib/graph-style'
+import Link from 'next/link'
+import { RELATIONSHIP_META, formatMatchKey } from '@/lib/graph-style'
 import { CloseButton, Stat } from './node-panel'
 
 interface Props {
@@ -38,11 +39,21 @@ export function EdgePanel({ edge, nodeLabel, onClose }: Props) {
 
       <dl className="grid grid-cols-2 gap-2">
         <Stat label="Ownership" value={edge.ownership_percentage != null ? `${edge.ownership_percentage}%` : '—'} />
-        <Stat label="Match keys" value={edge.match_keys?.length ? edge.match_keys.join(', ') : '—'} />
+        <Stat label="Match keys" value={edge.match_keys?.length ? edge.match_keys.map(formatMatchKey).join(', ') : '—'} />
       </dl>
 
       <div className="flex flex-col gap-1">
-        <span className="text-xs text-muted-foreground">Provenance</span>
+        <span className="text-xs text-muted-foreground">
+          Provenance{edge.source_authority ? ` · published by ${edge.source_authority}` : ''}
+        </span>
+        {edge.source_id && (
+          <Link
+            href={`/traceability#source-${edge.source_id}`}
+            className="w-fit rounded-full bg-muted px-2 py-0.5 font-mono text-[11px] font-bold text-accent hover:underline"
+          >
+            {edge.source_id} in source registry
+          </Link>
+        )}
         {edge.provenance_ref ? (
           <a
             href={edge.provenance_ref}

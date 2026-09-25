@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import useSWR from 'swr'
-import { Leaf, ScrollText } from 'lucide-react'
+import Link from 'next/link'
+import { Leaf, Route, ScrollText } from 'lucide-react'
 import {
   INVESTIGATION_OPTIONS,
   fetchInvestigation,
@@ -66,6 +67,13 @@ export function InvestigationExplorer() {
               </option>
             ))}
           </select>
+          <Link
+            href="/traceability"
+            className="flex h-10 items-center gap-2 rounded-full border border-accent px-4 text-sm font-bold text-accent transition hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <Route className="size-4" aria-hidden="true" />
+            Traceability
+          </Link>
           <button
             type="button"
             onClick={() => setAuditOpen(true)}

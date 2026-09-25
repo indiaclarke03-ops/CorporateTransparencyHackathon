@@ -44,6 +44,13 @@ export const RELATIONSHIP_META: Record<RelationshipType, { label: string; color:
   OFFICER_DIRECTOR: { label: 'Officer / director', color: '#7f9bbd', dashed: false },
   SUPPLY_CHAIN_SHIPMENT: { label: 'Supply chain shipment', color: '#d98c3f', dashed: false },
   POSSIBLY_SAME_AS: { label: 'Possibly same as', color: '#f2b544', dashed: true },
+  ACTING_ON_BEHALF_OF: { label: 'Acting on behalf of', color: '#c97b63', dashed: false },
+  OWNS_OR_CONTROLS: { label: 'Owns or controls', color: '#e0a15c', dashed: false },
+  LINKED_TO: { label: 'Linked to', color: '#b5a48e', dashed: true },
+}
+
+export function formatMatchKey(k: string | { key: string; normalized: string; original: string }) {
+  return typeof k === 'string' ? k : `${k.key}: ${k.normalized}`
 }
 
 export function confidenceClass(grade: string) {

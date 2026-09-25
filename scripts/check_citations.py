@@ -46,6 +46,7 @@ RECORD_ID = re.compile(r"^(S\d{2,}|sayari:[A-Za-z0-9_-]{10,}|opensanctions:NK-[A
 AUTHORITY_RULES = [
     (re.compile(r"\b(DOJ|indict|plea|pleaded|sentenced|charged)\b", re.I), {"www.justice.gov"}),
     (re.compile(r"\b(OFAC|SDN|E\.O\. 14024|delist)", re.I), {"home.treasury.gov", "ofac.treasury.gov", "sanctionssearch.ofac.treas.gov"}),
+    (re.compile(r"\b(UFLPA|Uyghur Forced Labor)\b", re.I), {"www.dhs.gov", "www.federalregister.gov", "www.govinfo.gov"}),
     (re.compile(r"\b(BIS|Temporary Denial|TDO|Entity List)\b", re.I), {"www.bis.gov", "www.federalregister.gov", "www.govinfo.gov"}),
     (re.compile(r"\b(SAM\.gov|UEI|CAGE)\b", re.I), {"sam.gov", "www.usaspending.gov", "api.usaspending.gov"}),
     (re.compile(r"\b(NYSE|Nasdaq|SEC)\b", re.I), {"www.sec.gov", "data.sec.gov"}),
@@ -86,9 +87,11 @@ def static_findings(value, context=""):
         out.append(("WARN", "looks like a search page; cite the record itself"))
     if parsed.fragment and not parsed.fragment.startswith(":~:text="):
         out.append(("WARN", "URL fragment will not survive every PDF viewer"))
-    for pattern, hosts in AUTHORITY_RULES:
-        if context and pattern.search(context) and host not in hosts and tier != 2:
-            out.append(("WARN", "claim mentions '%s' but cites %s" % (pattern.search(context).group(0), host)))
+    for pattern, hosts in AUTHORITY_RULES:          # first matching rule decides
+        m = pattern.search(context) if context else None
+        if m:
+            if host not in hosts and tier != 2:
+                out.append(("WARN", "claim mentions '%s' but cites %s" % (m.group(0), host)))
             break
     return out
 

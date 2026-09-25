@@ -3,13 +3,13 @@
 Identifiers: OGRN 1177746132563; OFAC SDN UID 35076  
 Report ID: DRAFT-SERNIYA-20260925  
 Generated: 25 September 2026  
-Content hash: sha256:77d0683c7a18047b  
+Content hash: sha256:d172cbb94546facf  
 
 > This dossier presents a risk lead for human review. It is not a finding of wrongdoing. Every statement is sourced; see the sources appendix.
 
 ## 1. Executive rationale
 
-No federal contract or loan records were found for OOO SERNIYA INZHINIRING in USAspending.gov as of 25 September 2026; OpenSanctions reports SAM.gov exclusion records for the entity under UEIs LF8MULLSH397 and NYCYDYP1RNJ6.[^S15][^S28] The entity was matched to corporate records at grade A using a shared registration number (OGRN 1177746132563).[^S02][^S20] The screen produced a composite score of 65 out of 100, with a confidence grade of B. OOO SERNIYA INZHINIRING is listed on the OFAC SDN List under Executive Order 14024, with a designation date of 31 March 2022.[^S01][^S02] 2 signals could not be assessed because the Tradeverifyd connection returned an authorization error (HTTP 401) and the Sayari ownership trace for this entity was not run in this pass. This is a risk lead for human review, not a finding of wrongdoing.
+No federal contract or loan records were found for OOO SERNIYA INZHINIRING in USAspending.gov as of 25 September 2026; OpenSanctions reports SAM.gov exclusion records for the entity under UEIs LF8MULLSH397 and NYCYDYP1RNJ6.[^S15][^S28] The entity was matched to corporate records at grade A using a shared registration number (OGRN 1177746132563).[^S02][^S20] The screen produced a composite score of 65 out of 100, with a confidence grade of B. OOO SERNIYA INZHINIRING is listed on the OFAC SDN List under Executive Order 14024, with a designation date of 31 March 2022.[^S01][^S02] 2 signals could not be assessed because Tradeverifyd trade relationships were not retrieved for this entity in this pass and the Sayari ownership trace for this entity was not run in this pass. This is a risk lead for human review, not a finding of wrongdoing.
 
 ## 2. Why this dossier was prepared
 
@@ -54,7 +54,7 @@ No federal contract or loan records were found for OOO SERNIYA INZHINIRING in US
 
 - Federal award or loan: no record found in USAspending.gov (searched by both exclusion UEIs and by name) as of 25 September 2026.[^S15]
 - Removal of the entity from the OFAC SDN List: no record found in OFAC removal notices of 23 June 2026 and 27 July 2026 as of 25 September 2026.[^S03][^S04]
-- Trade lanes (Tradeverifyd): not assessable because the Tradeverifyd connection returned an authorization error (HTTP 401) when queried on 25 September 2026.
+- Trade lanes (Tradeverifyd): not assessable because Tradeverifyd trade relationships were not retrieved for this entity in this pass.
 - Ownership chain: not assessable because the Sayari ownership trace for this entity was not run in this pass.
 
 ## 7. Graphs

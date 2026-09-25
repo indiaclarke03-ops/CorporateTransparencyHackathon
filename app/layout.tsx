@@ -1,25 +1,31 @@
 import type { Metadata, Viewport } from 'next'
-import { Fredoka, Nunito } from 'next/font/google'
+import { Public_Sans, Source_Serif_4 } from 'next/font/google'
+import { TooltipProvider } from '@/components/ui/tooltip'
+import { cn } from '@/lib/utils'
 import './globals.css'
 
-const fredoka = Fredoka({ subsets: ['latin'], variable: '--font-fredoka', weight: ['500', '600', '700'] })
-const nunito = Nunito({ subsets: ['latin'], variable: '--font-nunito' })
+const publicSans = Public_Sans({ subsets: ['latin'], variable: '--font-public-sans' })
+const sourceSerif = Source_Serif_4({ subsets: ['latin'], variable: '--font-source-serif' })
 
 export const metadata: Metadata = {
-  title: 'Follow the Public Dollar — Investigation Graph',
-  description:
-    'Explore corporate-transparency sanctions investigations as an interactive force-directed graph with risk signals, provenance, and a full audit trail.',
+  title: 'Follow the Public Dollar',
+  description: 'Tracing public funds through ownership, trade, and payment networks. Outputs are risk leads for review, not findings of wrongdoing.',
 }
 
 export const viewport: Viewport = {
-  themeColor: '#221814',
-  colorScheme: 'dark',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0f1724' },
+  ],
+  colorScheme: 'light dark',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`bg-background ${fredoka.variable} ${nunito.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+    <html lang="en" className={cn(publicSans.variable, sourceSerif.variable)}>
+      <body className="font-sans antialiased">
+        <TooltipProvider>{children}</TooltipProvider>
+      </body>
     </html>
   )
 }

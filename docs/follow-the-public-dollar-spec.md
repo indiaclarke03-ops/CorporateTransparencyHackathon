@@ -257,7 +257,7 @@ The capabilities below were confirmed to exist through each vendor's Claude conn
 | Entity score | The Tradeverifyd Score, shown alongside other evidence |
 | Trade relationships | Suppliers and customers, with HS codes per relationship |
 | Annotated relationship paths | Paths from an entity to flagged entities in its supply chain |
-| Find companies in radius | Detecting clusters of companies at one address |
+| Find companies in radius | Detecting clusters of companies at one address. Not usable yet: needs coordinates and timed out in every pilot call (`docs/data-source-map.md` Q2); use Sayari `mass_address_usage` meanwhile |
 | HS trends | Commodity import trends for the dashboard |
 | Disruptions | Active disaster and weather events for the dashboard |
 
@@ -670,9 +670,9 @@ Demo path for judging: pick one federal contractor, show its award, resolve it, 
 | Item | Needed by |
 |---|---|
 | Obtain Tradeverifyd REST API docs (backlog B1 in `docs/data-source-map.md`). Until then, Tradeverifyd features stay disabled | M1 for Tradeverifyd adapters |
-| Map each vendor capability in section 5.2 to its REST endpoint, auth method, rate limits, and pagination | M1 |
-| Confirm the current SAM.gov Entity Management API version and OFAC list download formats | M1 |
-| Confirm the Tradeverifyd Score scale and method, and the meaning of each Sayari risk flag prefix | M4 |
+| Map each vendor capability in section 5.2 to its REST endpoint, auth method, rate limits, and pagination. Sayari endpoints and auth: done (map); Sayari rate limits (B10) and all Tradeverifyd REST (B1) still open | M1 |
+| ~~Confirm the current SAM.gov Entity Management API version and OFAC list download formats~~ Done 25 Sep 2026: SAM v4; OFAC CSV exports (map B3, B4) | M1 |
+| Confirm the Tradeverifyd Score scale and method. (Sayari risk-flag prefixes: done 25 Sep 2026, see `docs/data-source-map.md` Q4) | M4 |
 | Calibrate the combined-score weights (0.45 / 0.35 / 0.20) and category points on the backtest and false-positive sets | M8 |
 | Confirm with Sayari whether UEI and CAGE are strong or weak identifiers (map backlog B9) | M2 |
 | Confirm vendor licensing terms for caching and for including data in exported reports | M5 |

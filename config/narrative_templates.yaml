@@ -1,0 +1,254 @@
+# Narrative templates for the executive rationale, graph captions and Lead Dossier.
+# Implements narrative-copy-spec sections 1-5.
+#
+# How a template renders (see narrative/render.py):
+#   - Each slot is a list of variants. The first variant whose `requires` fields are all
+#     present (not null, not "", not []) and whose `when` flag (if any) is true renders.
+#     If no variant qualifies, the slot is skipped and the skip is logged.
+#   - Placeholders: {field}, or {field|filter}. Filters:
+#       date            ISO date -> "25 September 2026"
+#       usd             exact amount string -> "$1,250,000.00" (source precision kept)
+#       list            ["a","b","c"] -> "a, b, and c"
+#       semi            ["a","b"] -> "a; b" (for identifiers that contain commas)
+#       plural:one,many picks a word by the numeric (or list length) value of the field
+#       count           list -> its length
+#   - `cite` names a key in the input's `citations` map; its source IDs become footnotes
+#     (PDF/markdown) or links (UI). Every sentence that states a fact must have one.
+#   - Text never contains a value that is not in the input. Wording changes go here,
+#     not in code.
+
+version: 1
+spec: narrative-copy-spec_1.md
+
+vocabulary:
+  # Section 1.1. The lint test fails if any of these appear in rendered narrative outside
+  # the methodology section. Text inside double quotation marks (“...” or "...") is a
+  # quotation from a source and is exempt, because rule 1.1 allows the source's own words.
+  never:
+    - suspicious
+    - fraudulent
+    - criminal
+    - illicit
+    - bad actor
+    - fronting for
+    - controlled by
+    - behind
+    - shell company
+    - shell companies
+    - front company
+    - front companies
+    - same as
+    - identical to
+    - clean
+    - no risk
+    - cleared
+  never_about_named_entities:
+    - shell
+    - front
+  exempt_sections: [methodology]
+
+executive_rationale:
+  # Section 2. Sentences render in this order.
+  order: [money, identity, result, strongest_finding, listed_share, gaps, notice]
+  slots:
+    money:
+      - id: money.awards
+        requires: [entity_name, award_count, award_type_plural, total_obligated, agency_list, first_award_date, last_award_date]
+        text: "{entity_name} received {award_count} federal {award_type_plural} totaling {total_obligated|usd} from {agency_list|list} between {first_award_date|date} and {last_award_date|date}."
+        cite: money
+      - id: money.none_with_exclusion
+        # Extension to the spec: for a party with no awards but a SAM.gov exclusion record,
+        # the exclusion is the public-money fact a suspension-and-debarment reader needs.
+        requires: [entity_name, sources_checked, as_of_date, exclusion_uei_list, exclusion_source]
+        when: no_award_records
+        text: "No federal contract or loan records were found for {entity_name} in {sources_checked|list} as of {as_of_date|date}; {exclusion_source} reports SAM.gov exclusion records for the entity under {exclusion_uei_list|plural:UEI,UEIs} {exclusion_uei_list|list}."
+        cite: money
+      - id: money.none
+        requires: [entity_name, sources_checked, as_of_date]
+        when: no_award_records
+        text: "No federal contract or loan records were found for {entity_name} in {sources_checked|list} as of {as_of_date|date}."
+        cite: money
+    identity:
+      - id: identity.match
+        requires: [subject_role, match_level, match_basis]
+        text: "The {subject_role} was matched to corporate records at the {match_level} level using {match_basis}."
+        cite: identity
+    result:
+      - id: result.families
+        requires: [families_fired_count, families_fired_list, tier]
+        text: "The screen found signals in {families_fired_count} of 7 signal families: {families_fired_list|list}. Overall tier: {tier}."
+        cite: result
+      - id: result.score
+        # Bridge for the current JSON contract (composite_risk_score / confidence_rating)
+        # until the tiered scoring engine ships.
+        requires: [composite_score, confidence_grade]
+        text: "The screen produced a composite score of {composite_score} out of 100, with a confidence grade of {confidence_grade}."
+        cite: result
+    strongest_finding:
+      - id: strongest.proximity
+        requires: [list_name, hop_count, path_summary]
+        text: "A party listed on {list_name} appears {hop_count} {hop_count|plural:link,links} away, through {path_summary}."
+        cite: strongest_finding
+      - id: strongest.self_listed
+        # Extension: the screened entity is itself listed (hop count 0).
+        requires: [entity_name, self_list_name, self_list_program, self_list_date]
+        text: "{entity_name} is listed on the {self_list_name} under {self_list_program}, with a designation date of {self_list_date|date}."
+        cite: strongest_finding
+    listed_share:
+      - id: listed_share.px3
+        requires: [combined_share, ownership_source_name]
+        when: px3_fired
+        text: "Listed parties together hold {combined_share}% of the ownership reported in {ownership_source_name}."
+        cite: listed_share
+    gaps:
+      - id: gaps.not_assessable
+        requires: [not_assessable_count, not_assessable_reasons]
+        text: "{not_assessable_count} {not_assessable_count|plural:signal,signals} could not be assessed because {not_assessable_reasons|list}."
+        cite: gaps
+    notice:
+      - id: notice.always
+        requires: []
+        text: "This is a risk lead for human review, not a finding of wrongdoing."
+
+graph_captions:
+  # Section 3. what / how / why always render; `empty` replaces `what`+`how` when the
+  # graph has no data. `why` never makes a claim about the specific entity.
+  money_trail:
+    what: {requires: [entity_name], text: "The path from a federal award to {entity_name} and onward to any listed or flagged party, one relationship per step."}
+    how: {requires: [], text: "Each step is a relationship recorded in a source. Select a step to see its source record. Dashed steps rely on a possible (unconfirmed) match."}
+    why: {requires: [], text: "This is the core question for oversight: whether federal money reached a company connected to a restricted party."}
+    empty: {requires: [max_hops, sources_checked, as_of_date], text: "No path from this recipient to a listed party was found within {max_hops} {max_hops|plural:link,links} in {sources_checked|list} as of {as_of_date|date}."}
+    # Extension: the screened entity has no federal award, so there is no trail to start.
+    empty_no_award: {requires: [entity_name, sources_checked, as_of_date], text: "No federal award to {entity_name} was found in {sources_checked|list} as of {as_of_date|date}, so this view has no starting point."}
+    reader: "IG intake analyst, auditor"
+  ownership_chain:
+    what: {requires: [entity_name], text: "Reported owners of {entity_name}, traced upward to the ultimate owners where the sources record them."}
+    how: {requires: [], text: "Percentages appear where the source reports them. A chain that ends at a company rather than a person is marked \"ownership ends at a company\"."}
+    why: {requires: [], text: "Oversight bodies need to know who ultimately benefits from a federal award. Chains that never reach a person make that harder to establish."}
+    empty: {requires: [entity_name, sources_checked, as_of_date], text: "No ownership records were found for {entity_name} in {sources_checked|list} as of {as_of_date|date}."}
+    reader: "Investigator, suspension-and-debarment official"
+  network:
+    what: {requires: [hop_count, entity_name], text: "Officers, owners, and linked companies within {hop_count} {hop_count|plural:link,links} of {entity_name}."}
+    how: {requires: [], text: "Node shape and label show the entity type and any list status. Lines show the relationship type recorded in the source."}
+    why: {requires: [], text: "Shared officers and owners can link a recipient to other companies, including ones that have closed or been listed."}
+    empty: {requires: [entity_name, sources_checked, as_of_date], text: "No officers, owners, or linked companies were found for {entity_name} in {sources_checked|list} as of {as_of_date|date}."}
+    reader: "Investigator, researcher"
+  supply_chain:
+    what: {requires: [entity_name], text: "Recorded suppliers and customers of {entity_name}, by tier, with the goods codes (HS codes) on each relationship."}
+    how: {requires: [], text: "Sayari and Tradeverifyd results are shown side by side with their sources. A relationship appearing in both is marked."}
+    why: {requires: [], text: "Trade relationships show where goods and money move beyond ownership, including through intermediaries in other countries."}
+    empty: {requires: [entity_name, sources_checked, as_of_date], text: "No trade records were found for {entity_name} in {sources_checked|list} as of {as_of_date|date}. Trade that is not recorded in customs data would not appear here."}
+    reader: "Investigator, export-control analyst"
+  signal_summary:
+    what: {requires: [], text: "Each signal the screen checks, grouped by family, marked as found, not found, or not assessable."}
+    how: {requires: [], text: "Select a signal to see its evidence and sources. The tier is based on how many families have signals, not on any single signal."}
+    why: {requires: [], text: "No single signal indicates wrongdoing. Signals across several families are a stronger reason for review."}
+    reader: "All readers"
+
+dashboard_panels:
+  # Section 3.6. Every panel ends with the source line.
+  federal_spending: {requires: [sector_list], text: "Federal contract obligations over time in {sector_list|list}.", reader: "Researcher, auditor"}
+  enforcement_actions: {requires: [agency_list], text: "Official notices from {agency_list|list}, by publication date.", reader: "Researcher, compliance"}
+  commodity_inflections: {requires: [], text: "Goods codes whose US import trend is changing, as reported by Tradeverifyd.", reader: "Researcher"}
+  screening_portfolio: {requires: [], text: "Entities screened by your team, by tier, and how that has changed.", reader: "Team lead"}
+  source_line: {requires: [source_name, as_of_date], text: "Source: {source_name}. Data as of {as_of_date|date}."}
+
+lead_dossier:
+  # Section 4.
+  cover:
+    title: {requires: [entity_name], text: "Lead dossier: {entity_name}"}
+    lines:
+      - {requires: [identifier_list], text: "Identifiers: {identifier_list|semi}"}
+      - {requires: [report_id], text: "Report ID: {report_id}"}
+      - {requires: [generated_at], text: "Generated: {generated_at|date}"}
+      - {requires: [content_hash], text: "Content hash: {content_hash}"}
+      - {requires: [analyst_name], text: "Prepared by: {analyst_name}"}
+    notice: {requires: [], text: "This dossier presents a risk lead for human review. It is not a finding of wrongdoing. Every statement is sourced; see the sources appendix."}
+  why_prepared:
+    - {requires: [screening_reason], text: "This entity was screened because {screening_reason}.", cite: why_prepared}
+    - {requires: [], text: "Intended use: to help an oversight body decide whether further review is warranted."}
+  identity_caption: {requires: [], text: "How this entity was identified, and how confident the match is."}
+  awards_caption: {requires: [sources_checked], text: "Federal money received by this entity, as recorded in {sources_checked|list}."}
+  awards_none: {requires: [entity_name, sources_checked, as_of_date], text: "No federal contract or loan records were found for {entity_name} in {sources_checked|list} as of {as_of_date|date}.", cite: awards}
+  awards_sample_note: {requires: [shown_count, award_count, sources_checked], text: "The table shows {shown_count} of {award_count} records. The full list is in {sources_checked|list}."}
+  signal_sentence: {requires: [signal_name, signal_definition, evidence_summary], text: "{signal_name}: {signal_definition} Evidence: {evidence_summary}."}
+  signals_found_none: {requires: [], text: "The screen found no signals. Section 6 lists what was checked and what could not be checked."}
+  not_found_caption: {requires: [], text: "What the screen checked without finding a signal, and what it could not check."}
+  not_found_item: {requires: [signal_name, source_name, as_of_date], text: "{signal_name}: no record found in {source_name} as of {as_of_date|date}."}
+  not_assessable_item: {requires: [signal_name, reason], text: "{signal_name}: not assessable because {reason}."}
+  graph_not_run:
+    # A view that was not produced must say so; it must not read as "no records found".
+    requires: [reason]
+    text: "This view was not produced for this dossier because {reason}."
+  analyst_review:
+    requires: [decision, review_date, analyst_name, analyst_note]
+    text: "Review status: {decision}, {review_date|date}, by {analyst_name}. Note (analyst-written): {analyst_note}"
+  allegation_notice:
+    # Shown under any signal whose evidence is a charging document.
+    requires: []
+    text: "Charges in an indictment are allegations. Every defendant is presumed innocent unless and until proven guilty in a court of law."
+  removal_notice:
+    # Shown under any signal about a person or company removed from a list.
+    requires: []
+    text: "A removal means the party is no longer on the list from that date. The records of the earlier designation remain part of the public record and are cited as historical."
+  methodology:
+    # Fixed text. The only section where "shell" and "front" may appear.
+    - "How signals and tiers work: the screen checks a fixed set of signals grouped into seven families. A tier reflects how many families have at least one signal, not the weight of any single signal. Some signals are designed to detect patterns associated with shell or front companies, such as mass-registration addresses or ownership chains that end at a company; a signal firing does not mean an entity is one."
+    - "Identity matching: a record is linked to the entity only when it shares an identifier (UEI, CAGE, company number, registration number or tax ID) or when an analyst confirms the link. Name-only matches are shown as possible matches (unconfirmed) and never drive a signal on their own."
+    - "Proximity: paths through registered agents, company-formation agents, and institutional asset managers are excluded, because they connect unrelated companies at scale."
+    - "Federal grants passed through state agencies to sub-recipients are not covered."
+    - "Trade not recorded in customs data would not appear."
+    - "A missing list flag means no record was found, not that none exists."
+    - "Aggregator data (Sayari, OpenSanctions) is cited with its record ID and, where possible, corroborated against the government or registry record it was drawn from."
+  sources_appendix_line: {requires: [id, name, record_id, retrieved_at, url], text: "[{id}] {name}. Record: {record_id}. Retrieved {retrieved_at}. {url}"}
+
+evidence_summary:
+  # Section 4, part 5: evidence_summary is itself a template, keyed by evidence type.
+  # Signal IDs map to these types in the signal config (owned by the scoring engine).
+  list_designation:
+    requires: [list_name, program, designation_date, source_short]
+    text: "listed on the {list_name} under {program} on {designation_date|date} ({source_short})"
+  list_designation_basis:
+    requires: [list_name, program, designation_date, basis_quote, source_short]
+    text: "listed on the {list_name} under {program} on {designation_date|date}; the stated basis is “{basis_quote}” ({source_short})"
+  list_removal:
+    requires: [party, list_name, removal_date, source_short]
+    text: "{party} was removed from the {list_name} on {removal_date|date} ({source_short})"
+  export_denial:
+    requires: [order_type, issue_date, duration, fr_citation]
+    text: "subject to a {order_type} issued on {issue_date|date} for {duration} ({fr_citation})"
+  export_denial_renewed:
+    requires: [order_type, issue_date, renewal_date, fr_citation, renewal_fr_citation]
+    text: "subject to a {order_type} issued on {issue_date|date} ({fr_citation}) and renewed on {renewal_date|date} ({renewal_fr_citation})"
+  export_denial_affiliates:
+    # Used when the order names parties other than the screened entity.
+    requires: [parties, agency, affiliated_with, order_type, issue_date, fr_citation, renewal_date, renewal_fr_citation]
+    text: "{parties|list}, which {agency} describes as affiliated with {affiliated_with|list}, {parties|plural:is,are} subject to a {order_type} issued on {issue_date|date} ({fr_citation}) and renewed on {renewal_date|date} ({renewal_fr_citation})"
+  indictment:
+    requires: [court, unsealed_date, count_description, defendant_count, named_party]
+    text: "{named_party} is one of {defendant_count} defendants named in a {count_description} unsealed in the {court} on {unsealed_date|date}"
+  plea:
+    requires: [named_party, plea_month, charges]
+    text: "{named_party} pleaded guilty in {plea_month} to {charges|list}"
+  shared_address:
+    requires: [other_party, address, source_short]
+    text: "shares the address {address} with {other_party} in {source_short}"
+  officer_link:
+    requires: [person, role, company, source_short]
+    text: "{person} is recorded as {role} of {company} in {source_short}"
+  owns_or_controls:
+    requires: [owner, company_list, source_short]
+    text: "{source_short} states that {owner} owns or controls {company_list|list}"
+  registry_status:
+    requires: [registry, status_text, as_of_date]
+    text: "{registry} shows {status_text} as of {as_of_date|date}"
+  procurement_exclusion:
+    requires: [uei_list, reporting_source]
+    text: "{reporting_source} reports SAM.gov exclusion records under {uei_list|plural:UEI,UEIs} {uei_list|list}"
+  lc1_registration_gap:
+    # Example from the spec for signal LC1.
+    requires: [registration_date, first_award_date, days_between]
+    text: "registered on {registration_date|date}; first award on {first_award_date|date}, {days_between} days later"
+  trade_records:
+    requires: [shipment_count, source_short]
+    text: "{source_short} records {shipment_count} received {shipment_count|plural:shipment,shipments}"

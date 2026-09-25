@@ -1,0 +1,138 @@
+{
+  "_about": "Narrative inputs for the Serniya validation case. Every value is taken from a source in research/sources.json. Signal names and definitions are provisional until the scoring engine's signal config is final. composite_score and confidence_grade are copied from fixtures/serniya_investigation.json and are owned by the scoring engine.",
+  "entity_name": "OOO SERNIYA INZHINIRING",
+  "subject_role": "entity",
+  "as_of_date": "2026-09-25",
+  "generated_at": "2026-09-25",
+  "report_id": "DRAFT-SERNIYA-20260925",
+  "config_version": "narrative_templates.yaml v1",
+  "identifier_list": ["OGRN 1177746132563", "OFAC SDN UID 35076"],
+  "screening_reason": "an analyst selected it as a validation case: a procurement network with published US sanctions, export-control, and law-enforcement actions",
+
+  "no_award_records": true,
+  "sources_checked": ["USAspending.gov"],
+  "exclusion_uei_list": ["LF8MULLSH397", "NYCYDYP1RNJ6"],
+  "exclusion_source": "OpenSanctions",
+
+  "match_level": "Confirmed",
+  "match_basis": "a shared registration number (OGRN 1177746132563)",
+
+  "composite_score": 65,
+  "confidence_grade": "B",
+
+  "self_list_name": "OFAC SDN List",
+  "self_list_program": "Executive Order 14024",
+  "self_list_date": "2022-03-31",
+
+  "not_assessable_count": 2,
+  "not_assessable_reasons": [
+    "the Tradeverifyd connection returned an authorization error (HTTP 401)",
+    "the Sayari ownership trace for this entity was not run in this pass"
+  ],
+
+  "citations": {
+    "money": ["S15", "S28"],
+    "identity": ["S02", "S20"],
+    "strongest_finding": ["S01", "S02"],
+    "awards": ["S15"],
+    "why_prepared": []
+  },
+
+  "identity_rows": [
+    {"field": "Canonical name", "value": "OOO SERNIYA INZHINIRING", "sources": ["S02"]},
+    {"field": "Other names", "value": "Serniya Engineering; Sernia Engineering; ООО Серния Инжиниринг", "sources": ["S01", "S20"]},
+    {"field": "Registration number (OGRN)", "value": "1177746132563", "sources": ["S02", "S20"]},
+    {"field": "Tax ID", "value": "971529478 as listed by OFAC; 9715292478 in the Russian registry as reported by OpenSanctions. The two differ by one digit, so matching uses the OGRN.", "sources": ["S02", "S28"]},
+    {"field": "Address (OFAC listing)", "value": "d. 57A etazh 2 pom. 211 kom. 211-13, ul. Vavilova, Moscow 117292, Russia", "sources": ["S02"]},
+    {"field": "Registration date", "value": "10 February 2017", "sources": ["S20"]},
+    {"field": "OFAC SDN UID", "value": "35076", "sources": ["S20"]},
+    {"field": "Matched records", "value": "Sayari entity 7-U98RGw67tUi01ILV4CCQ (Confirmed, shared OGRN); OpenSanctions NK-m5uxh7GMpRei95QkP8qEUA (Confirmed, shared OGRN)", "sources": ["S20", "S28"]}
+  ],
+
+  "awards": [],
+
+  "signals_found": [
+    {
+      "signal_name": "Listed party",
+      "signal_definition": "The entity itself appears on a US sanctions list.",
+      "evidence_type": "list_designation_basis",
+      "evidence": {"list_name": "OFAC SDN List", "program": "Executive Order 14024", "designation_date": "2022-03-31", "basis_quote": "owned or controlled by, or having acted or purporting to act for or on behalf of, directly or indirectly, the GoR", "source_short": "Treasury press release JY0692"},
+      "sources": ["S01", "S02"]
+    },
+    {
+      "signal_name": "Procurement exclusion",
+      "signal_definition": "The entity appears in SAM.gov exclusion records.",
+      "evidence_type": "procurement_exclusion",
+      "evidence": {"uei_list": ["LF8MULLSH397", "NYCYDYP1RNJ6"], "reporting_source": "OpenSanctions"},
+      "sources": ["S28"]
+    },
+    {
+      "signal_name": "Federal charges against a linked person",
+      "signal_definition": "A person linked to the entity in a sanctions listing is named in a federal charging document.",
+      "evidence_type": "indictment",
+      "evidence": {"named_party": "Yevgeniy Aleksandrovich Grinin, whom OFAC lists as linked to the entity,", "defendant_count": 7, "count_description": "16-count superseding indictment", "court": "U.S. District Court for the Eastern District of New York", "unsealed_date": "2022-12-13"},
+      "sources": ["S02", "S05", "S07"],
+      "notices": ["allegation"]
+    },
+    {
+      "signal_name": "Guilty plea in a linked case",
+      "signal_definition": "A defendant in a case about the entity's network has pleaded guilty.",
+      "evidence_type": "plea",
+      "evidence": {"named_party": "Co-defendant Vadim Yermolenko", "plea_month": "November 2024", "charges": ["conspiracy to violate the Export Control Reform Act", "bank fraud conspiracy", "conspiracy to defraud the United States"]},
+      "sources": ["S10"]
+    },
+    {
+      "signal_name": "Export-control action against affiliated parties",
+      "signal_definition": "Parties that a US agency describes as affiliated with the entity are subject to an export-control order.",
+      "evidence_type": "export_denial_affiliates",
+      "evidence": {"parties": ["Boris Livshits", "Svetlana Skvortsova", "Aleksey Ippolitov", "Advanced Web Services", "Strandway, LLC"], "agency": "BIS", "affiliated_with": ["Serniya", "Sertal"], "order_type": "Temporary Denial Order", "issue_date": "2022-12-13", "fr_citation": "FR Doc. 2022-27347", "renewal_date": "2023-06-14", "renewal_fr_citation": "FR Doc. 2023-12679"},
+      "sources": ["S07", "S08", "S09"]
+    },
+    {
+      "signal_name": "Status change of a linked person",
+      "signal_definition": "A person listed as linked to the entity has been removed from a sanctions list.",
+      "evidence_type": "list_removal",
+      "evidence": {"party": "Anton Alekseevich Krugovov, listed in 2022 as linked to the entity and to Majory LLP,", "list_name": "OFAC SDN List", "removal_date": "2026-06-23", "source_short": "OFAC Recent Actions 20260623"},
+      "sources": ["S02", "S03"],
+      "notices": ["removal"]
+    },
+    {
+      "signal_name": "Recorded trade activity",
+      "signal_definition": "The entity is a recorded party to international shipments.",
+      "evidence_type": "trade_records",
+      "evidence": {"shipment_count": 47, "source_short": "Sayari"},
+      "sources": ["S20"]
+    }
+  ],
+
+  "signals_not_found": [
+    {"signal_name": "Federal award or loan", "source_name": "USAspending.gov (searched by both exclusion UEIs and by name)", "as_of_date": "2026-09-25", "sources": ["S15"]},
+    {"signal_name": "Removal of the entity from the OFAC SDN List", "source_name": "OFAC removal notices of 23 June 2026 and 27 July 2026", "as_of_date": "2026-09-25", "sources": ["S03", "S04"]}
+  ],
+  "signals_not_assessable": [
+    {"signal_name": "Trade lanes (Tradeverifyd)", "reason": "the Tradeverifyd connection returned an authorization error (HTTP 401) when queried on 25 September 2026"},
+    {"signal_name": "Ownership chain", "reason": "the Sayari ownership trace for this entity was not run in this pass"}
+  ],
+
+  "graphs": {
+    "money_trail": {"empty": true, "empty_reason": "no_award"},
+    "ownership_chain": {"not_run": true, "reason": "the Sayari ownership trace for this entity was not run in this pass"},
+    "network": {
+      "hop_count": 2,
+      "table": [
+        {"from": "Yevgeniy Aleksandrovich Grinin", "relationship": "listed by OFAC as linked to", "to": "OOO SERNIYA INZHINIRING; PHOTON PRO LLP", "sources": ["S02"]},
+        {"from": "Evgeny Grinin", "relationship": "officer of (Companies House)", "to": "PHOTON PRO LLP (OC425116)", "sources": ["S13"]},
+        {"from": "Anton Alekseevich Krugovov", "relationship": "senior executive officer of (OFAC); removed from SDN List 23 June 2026", "to": "MAJORY LLP (OC400827)", "sources": ["S01", "S03", "S12"]},
+        {"from": "OOO ROBIN TREID; MAJORY LLP; PHOTON PRO LLP; INVENTION BRIDGE SL", "relationship": "described by Treasury as “utilized by Serniya to facilitate its procurement”", "to": "OOO SERNIYA INZHINIRING", "sources": ["S01"]},
+        {"from": "OOO SERTAL", "relationship": "shares a listed street address with", "to": "OOO ROBIN TREID", "sources": ["S02"]},
+        {"from": "MAJORY LLP", "relationship": "shares both listed London addresses with", "to": "PHOTON PRO LLP", "sources": ["S02"]},
+        {"from": "ALEXSONG PTE LTD", "relationship": "described by Treasury as having “facilitated transactions in support of sanctions evasion by the Serniya network”", "to": "OOO SERNIYA INZHINIRING", "sources": ["S01"]},
+        {"from": "Boris Livshits", "relationship": "owns or controls (BIS Temporary Denial Order)", "to": "Advanced Web Services; STRANDWAY, LLC", "sources": ["S08"]}
+      ]
+    },
+    "supply_chain": {"not_run": true, "reason": "Sayari reports 47 received shipments for the entity that have not yet been reviewed, and Tradeverifyd was unavailable", "sources": ["S20"]},
+    "signal_summary": {}
+  },
+
+  "analyst_review": null
+}

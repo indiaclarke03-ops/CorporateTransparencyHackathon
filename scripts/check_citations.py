@@ -30,6 +30,7 @@ TIER1_DOMAINS = {
     "find-and-update.company-information.service.gov.uk",
     "api.company-information.service.gov.uk", "www.gov.uk",
     "www.boe.es", "eur-lex.europa.eu",
+    "www.fincen.gov", "www.dhs.gov",
 }
 # Tier 2: aggregators that expose a stable per-record ID.
 TIER2_DOMAINS = {"graph.sayari.com", "www.opensanctions.org", "opensanctions.org"}

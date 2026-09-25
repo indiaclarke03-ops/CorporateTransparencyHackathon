@@ -21,6 +21,8 @@ This document is the source of truth for the build. It is written so that a deve
 
 "Did US federal money reach a company whose owners, officers, or trade partners connect to sanctioned, export-controlled, or otherwise high-risk parties?"
 
+Sanctions are one route, not the only one. The scoring also covers shell and front companies that appear on no list, using the typologies in section 9.5 (for example pandemic loan fraud and sham charities).
+
 Most due-diligence tools start from a known bad actor and look outward. This tool starts from public money and looks for risk.
 
 ### 1.2 Primary users
@@ -184,6 +186,7 @@ flowchart LR
 /config
   signals.yaml         Signal weights and thresholds
   news_topics.yaml     News queries and typology keyword rules
+  typologies.yaml      Typology profiles: indicator signals, anchor signals, HS code lists, validation cases (section 9.5)
   sources.yaml         Source metadata and refresh intervals
 /fixtures              Recorded API responses for tests and offline demo
 /tests
@@ -448,6 +451,7 @@ Every signal stores: fired, not fired, or not assessable, plus its evidence and 
 | PM4 Pass-through | Prime passes most of the award to subawardees | USAspending subawards |
 | PM5 Shared principals across bidders | Same officers or addresses behind competing firms | Sayari, Companies House |
 | PM6 Excluded party | Entity or a grade A match appears in SAM.gov Exclusions | SAM.gov |
+| PM7 Loan versus profile | Pandemic or SBA loan amount, or reported jobs, far exceed what the entity's age, size and registration history support | Sayari (PPP and SBA loan sources), SAM.gov |
 
 **Structure**
 
@@ -484,6 +488,9 @@ The "shells close within about two years" figure from the brainstorm is not used
 | TR2 High-priority goods | HS codes on the multilateral Common High Priority List **[VERIFY current list]** | Sayari, Tradeverifyd |
 | TR3 Transshipment routing | Goods pass through configured hubs | Sayari, Tradeverifyd |
 | TR4 Partner churn | Abrupt changes in trade counterparties | Sayari, Tradeverifyd |
+| TR5 Conflict-commodity corridor | Gold (HS 7108) or other configured commodities from conflict-affected origins, routed through configured hubs | Sayari shipments, config |
+| TR6 Precursor chemicals | HS codes on a configured fentanyl-precursor list **[VERIFY list against DEA and FinCEN sources]** | Sayari shipments, config |
+| TR7 Forced-labor or critical-mineral exposure | Supplier on the UFLPA Entity List, or Sayari forced-labor factors (not `psa_`), on configured critical-mineral HS codes (cobalt 8105, natural graphite 2504, artificial graphite 3801, rare earths 2805 and 2846; gallium and germanium **[VERIFY HS codes]**) | Sayari, DHS UFLPA Entity List, config |
 
 **Presence**
 
@@ -491,6 +498,13 @@ The "shells close within about two years" figure from the brainstorm is not used
 |---|---|---|
 | PR1 No footprint | No company website or media, only registry or aggregator listings | Tavily |
 | PR2 Adverse media | Enforcement or investigative coverage | Tavily, Sayari adverse media |
+
+**Nonprofit**
+
+| Code | Red flag | Data |
+|---|---|---|
+| NP1 Mission mismatch | Stated charitable purpose does not match spending, grants or partners (backlog B8 in `docs/data-source-map.md`) | ProPublica Nonprofit Explorer (IRS 990), Sayari |
+| NP2 High-risk grantmaking | Grants or transfers to configured high-risk regions or to grantees near listed parties **[VERIFY which 990 fields carry foreign grants]** | IRS 990, Sayari |
 
 **Proximity**
 
@@ -511,12 +525,13 @@ The "shells close within about two years" figure from the brainstorm is not used
 
 | Tier | Rule (provisional) |
 |---|---|
-| High | Signals fired in at least two different families, and at least one is in Proximity or PM6 |
-| Elevated | Signals fired in at least two different families, none in Proximity |
+| High | Signals fired in at least two different families, and at least one is an **anchor signal**: Proximity (PX1–PX3), PM6, or an anchor of a typology in section 9.5 |
+| Elevated | Signals fired in at least two different families, none of them an anchor |
 | Low | Zero or one family fired |
 | Not assessable | Resolution below grade B, or core sources unavailable |
 
 - Proximity and trade mismatch carry the highest weights, because they are the hardest to explain innocently.
+- Anchors exist so that a front company with no sanctions link (for example a pandemic-loan front) can still reach High when the evidence is strong, while principle 6 still holds: an anchor alone never makes High.
 - The display always lists the signals that fired. The tier never appears without them.
 - Config changes create a new config version. Assessments record the version used.
 
@@ -534,7 +549,7 @@ The weights are **provisional** until calibrated (section 12.4). Each version of
 
 | Component | Built from | Indicator categories |
 |---|---|---|
-| `S_Sayari` (0–100) | Sayari entity, ownership, network, watchlist and trade data | Listed or majority-owned by listed (PX1, PX3); proximity (PX2); nominee or formation patterns (ST1–ST3, LO1); lifecycle (LC1–LC4); trade controls (TR1–TR4 from Sayari shipments); enforcement and adverse media from Sayari risk factors |
+| `S_Sayari` (0–100) | Sayari entity, ownership, network, watchlist and trade data, plus the public-money and nonprofit records Sayari and the free government APIs hold | Listed or majority-owned by listed (PX1, PX3); proximity (PX2); nominee or formation patterns (ST1–ST4, LO1); lifecycle (LC1–LC4); trade controls (TR1–TR7 from Sayari shipments); public money (PM1–PM7); nonprofit (NP1–NP2); enforcement and adverse media from Sayari risk factors |
 | `T_Tradeverifyd` (0–100) | Tradeverifyd annotations, trade relationships, annotated paths, companies in radius | Flagged-entity annotations; supply-chain paths to flagged parties; address clusters; trade relationships with HS codes |
 | `P_Presence` (0–100) | Tavily results (and Sayari negative news for the media part) | No footprint (PR1); adverse media (PR2); virtual office (LO2) |
 
@@ -554,6 +569,29 @@ While Tradeverifyd is blocked (backlog B1), `T_Tradeverifyd` is unassessed for e
 - The score never appears without the signals that fired, its range, and the tier.
 - The tier rules in 9.3 still govern the High tier: a high score with only one family fired stays below High.
 - Scores and tiers record the config version used.
+
+### 9.5 Typologies
+
+The engine looks for shell and front companies across several known patterns, not only sanctions evasion. A **typology** is a named pattern with its own indicator signals, anchor signals and validation cases. Typologies live in `config/typologies.yaml` and are versioned with the signal config.
+
+**How typologies affect scoring.**
+
+- Every signal in 9.1 is computed for every entity, whatever the typology. Typologies do not hide or add points; they decide which signals can act as **anchors** for the High tier (9.3) and which pattern the report names.
+- An entity **matches** a typology when at least one of its anchors and one other indicator from a different family fire.
+- The report names each matched typology in the form "indicators consistent with [typology] patterns", and lists the validation cases so a reviewer can compare. It never says the entity *is* part of that scheme.
+- Listing rules from 9.2 still apply: only US, UN, EU and UK lists make a listed party. Chinese export-control announcements on critical minerals are supply-risk context, not a listing.
+
+| Typology | Indicator signals | Anchor signals | Validation cases |
+|---|---|---|---|
+| Russia sanctions evasion | ST1, ST2, LC1, LC4, TR1–TR4, PX1–PX3 | PX1–PX3; TR2 together with TR3 | Serniya Engineering network: DOJ superseding indictment, E.D.N.Y., 13 Dec 2022, and OFAC designations of 31 Mar 2022 (`research/sources.json` S01, S02, S05) |
+| Pandemic loan fraud | PM1, PM2, PM7, LC1, LC2, LO1, LO2, ST3, PR1 | PM7; LC2 together with PM2 or PM7; PM6 | Feeding Our Future (appendix A.2); DOJ and SBA OIG PPP prosecutions, e.g. DOJ, "Co-Founder of Paycheck Protection Program Lender Service Provider Sentenced for $65M COVID-19 Relief Fraud Scheme" |
+| Sudan and UAE arms and gold | ST4, LC3, LO1, TR5, PX1–PX3 | PX1–PX3; TR5 | AZ Gold (appendix A.1); OFAC action on the RSF leader and linked companies, Treasury press release JY2772 (Jan 2025) **[VERIFY which UAE-based companies it names]** |
+| Fentanyl precursors | TR1, TR6, ST1, LO1, PR1, PX1–PX3 | TR6 together with TR1; PX1–PX3 | OFAC sanctions on a Los Chapitos precursor supply network, Treasury press release SB0272; FinCEN supplemental advisory on fentanyl (20 Jun 2024), which notes that front companies "may also appear to be associated with entirely unrelated business sectors" |
+| Humanitarian fronts | NP1, NP2, PR1, PR2, ST3, PX1–PX3 | NP1 together with PX2; PX1 | OFAC designation of Samidoun as a sham charity, 15 Oct 2024 (Treasury press release JY2646); OFAC action on five sham charities, SB0162. FATF Recommendation 8 covers the sector risk |
+| Xinjiang and critical minerals | TR1, TR4, TR7, ST1, ST2 | TR7 (UFLPA Entity List match at grade A) | DHS additions of 37 PRC-based companies, including critical-mineral miners, to the UFLPA Entity List (14 Jan 2025) |
+| Gold | ST4, LC3, TR5, TR3, PX1–PX3 | PX1–PX3; TR5 | OFAC sanctions on Wagner-linked gold companies including Midas Ressources SARLU (Treasury press release JY1581); Wagner-linked companies in CAR (JY2384) |
+
+**Data limits by typology.** The pilot showed that informal trade leaves no shipment records (section 3.2), so TR5 will often be not assessable for gold, and pandemic-fraud money that passed through state agencies has no award record (section 3.3). The report must show "not assessable" for these, not "clear".
 
 ---
 
@@ -628,7 +666,7 @@ The subject is public spending and official records, so the design takes its cue
 
 ### 12.2 Backtest
 
-Primary typology: federal contractors and sanctions.
+Primary typology: federal contractors and sanctions. Each typology in 9.5 also needs at least three backtest cases drawn from official records; the validation cases in 9.5 are the starting set. Cases without a public-money record (for example AZ Gold) are network fixtures, not public-money backtests.
 
 1. Assemble a validation set of entities with documented enforcement: SAM.gov exclusions tied to sanctions or export-control actions, and OFAC or BIS designations of entities with prior federal registrations or awards. The specific cases must be selected from official records **[VERIFY: no case has been selected yet]**.
 2. For each case, run the pipeline using only data dated before the enforcement action where timestamps allow.
@@ -679,6 +717,9 @@ Demo path for judging: pick one federal contractor, show its award, resolve it, 
 | Confirm the current Common High Priority List HS codes | M4 |
 | Select backtest cases from official enforcement records | M8 |
 | Find a source for the "shells close within about two years" figure, or keep it out | Before pitch |
+| Verify the HS code lists for TR6 (fentanyl precursors) and TR7 (gallium, germanium), and the IRS 990 fields for NP2 | M4 |
+| Confirm which UAE-based companies Treasury press release JY2772 names (Sudan and UAE typology) | M8 |
+| Implement typologies and anchor signals in the scoring engine (`scoring/engine.py` has no tiers or typologies yet) | M4 |
 | Confirm the current status of the US Corporate Transparency Act and UK Companies House identity verification before citing them | Before pitch |
 | Decide the configured NAICS or PSC codes for the dashboard's watched sectors | M7 |
 

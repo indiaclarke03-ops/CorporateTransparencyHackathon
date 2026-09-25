@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { Loader2, Route } from 'lucide-react'
 import { DemoBadge } from '@/components/common/DemoBadge'
+import { EntityPanel } from '@/components/entity/EntityPanel'
+import { EdgePanel } from '@/components/network/EdgePanel'
 import { TopBar } from '@/components/layout/TopBar'
 import { NetworkGraph } from '@/components/network/NetworkGraph'
 import { CaseOverview } from '@/components/overview/CaseOverview'
@@ -78,6 +80,9 @@ export function Workspace() {
               </h2>
               <NetworkGraph key={caseFile.id} caseFile={caseFile} />
             </section>
+
+            <EntityPanel caseFile={caseFile} />
+            <EdgePanel caseFile={caseFile} />
           </>
         )}
       </main>

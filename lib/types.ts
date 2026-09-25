@@ -322,3 +322,47 @@ export interface CaseFile {
   audit: AuditEntry[]
   manifest: RunManifest | null
 }
+
+// --- Attribution (who operates a shell) ------------------------------------
+
+export type AttributionBand = 'documented' | 'high' | 'probable' | 'possible' | 'unattributed'
+
+export type EvidenceGroup =
+  | 'registry'
+  | 'trade_commodity'
+  | 'public_money'
+  | 'logistics'
+  | 'digital'
+  | 'list_identifiers'
+  | 'public_reporting'
+
+export interface EvidenceGroupResult {
+  group: EvidenceGroup
+  state: SignalState
+  evidence: string | null
+  sourceUrl: string | null
+  sourceId?: string
+}
+
+export interface AttributionCandidate {
+  id: string
+  name: string
+  kind: 'person' | 'company' | 'network'
+  naturalPerson: boolean
+  band: AttributionBand
+  rationale: string
+  evidence: EvidenceGroupResult[]
+  /** Candidate ids this one conflicts with; conflicting candidates are shown side by side, never merged */
+  conflictsWith: string[]
+}
+
+export interface AttributionAnalysis {
+  entityId: string
+  candidates: AttributionCandidate[]
+  /** Other shells in the case whose evidence points to the same candidate */
+  convergence: { candidateId: string; shellIds: string[] }[]
+  /** List screening of the candidates, kept apart from attribution */
+  screening: { candidateId: string; result: string; sourceUrl: string | null; sourceId?: string }[]
+  leadPriority: { likelihood: 'higher' | 'lower'; exposure: 'higher' | 'lower' }
+  demo: boolean
+}

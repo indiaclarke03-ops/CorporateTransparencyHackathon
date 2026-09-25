@@ -25,82 +25,86 @@ and UK OFSI each aggregate differently. Tag every propagated block with which re
 **Flag categories:**
 | Category | Legal basis | Example |
 |---|---|---|
-| State-sponsor / country programs | E.O.-based (Russia, Iran, North Korea, Cuba, Syria) | Serniya Engineering, E.O. 14024 |
-| Non-state terrorist actors | SDGT / FTO, added to SDN List | Hamas, Hezbollah-linked entities |
-| Cartels / international crime syndicates | FTO designations extended to cartels (2025), SDNTK narcotics program | Sinaloa Cartel, CJNG, Tren de Aragua |
+| State-sponsor / country programs | Executive-Order based (Russia, Iran, North Korea, Cuba, Syria) | Serniya Engineering, E.O. 14024 |
+| Non-state terrorist actors | Specially Designated Global Terrorist / Foreign Terrorist Organization designation, added to the Specially Designated Nationals List | Hamas, Hezbollah-linked entities |
+| Cartels / international crime syndicates | Foreign Terrorist Organization designations extended to cartels in 2025, narcotics trafficking program | Sinaloa Cartel, CJNG, Tren de Aragua |
 
-Once any of these three lands an entity on the SDN List, propagation math is identical - only the
-category tag differs for display purposes.
+Once any of these three categories lands an entity on the Specially Designated Nationals List, the
+propagation math is identical - only the category tag differs for display purposes.
 
 ## 2. Person-Centric Tracing (Board Notes, LinkedIn, Public Releases)
 
 **Pipeline:**
-1. Extract raw officer names from every entity's registry record (Sayari, Companies House
-   officers/PSC, SEC DEF 14A proxy filings).
-2. Disambiguate before trusting the name - anchor with secondary identifiers (date of birth,
-   co-officer overlap, shared address, corroborating LinkedIn profile). Without a secondary anchor,
-   treat a name match as Grade D/F.
-3. Corroborate via LinkedIn and press releases - board-appointment press releases and LinkedIn
-   employment history validate the person is real and the appointment is real, not just a registry entry.
-4. Flag nominee patterns - count active directorships per disambiguated person across unrelated
-   entities (>=10 triggers the existing +15 point nominee-director scoring rule).
-5. Propagate risk through the person - if a person is an officer of a blocked entity anywhere in the
-   graph, every other directorship they hold inherits a lower-severity "proximity via shared officer" flag.
+1. Extract raw officer names from every entity's registry record (Sayari, UK Companies House
+   officer/Person with Significant Control records, SEC proxy statement filings).
+2. Confirm identity before trusting the name - anchor with a second identifier (date of birth,
+   overlapping co-officer, shared address, a corroborating LinkedIn profile). Without a second anchor,
+   treat a name match as a low-confidence grade only.
+3. Confirm through LinkedIn and press releases - board-appointment press releases and LinkedIn work
+   history confirm the person is real and the appointment is real, not just a registry entry.
+4. Flag reused-director patterns - count active board seats per confirmed person across unrelated
+   companies. Ten or more active seats triggers the existing scoring bonus for a reused director.
+5. Spread risk through the person - if a person is an officer of a blocked company anywhere in the
+   graph, every other board seat they hold gets a lower-severity "linked through a shared officer" flag.
 
-**Schema additions needed:** `corroboration_sources` array on nominee_person nodes (LinkedIn URL, press
-release URL, board minutes citation, each independently provenance-linked); `directorship_count` field;
-new edge type `SHARED_OFFICER` distinct from `OFFICER_DIRECTOR`.
+**Schema additions needed:** a list field for corroborating sources on person nodes (LinkedIn link,
+press release link, board minutes citation, each with its own source link); a board-seat count field;
+a new connection type for "shares an officer with," kept separate from "is an officer or director of."
 
-**Sayari fuzzy-matching note:** Sayari's entity-matching can resolve a differently-named front company
-to the same real underlying company/person. Treat these matches as confidence-scored, not binary -
-e.g., shared registered agent alone ~30-40%, shared registered agent + shared officer + incorporation
-timing ~60-70% (Grade B/C), exact address + officer + name-similarity match approaches Grade A/B. Never
-treat a Sayari fuzzy match as automatically Grade A without independent corroboration.
+**Sayari matching note:** Sayari's matching feature can connect a differently-named front company to
+the same real underlying company or person. Treat these matches as a confidence percentage, not a yes
+or no answer - for example, sharing only a registered agent might be about 30 to 40 percent confidence,
+while sharing a registered agent plus an officer plus matching incorporation timing moves that to about
+60 to 70 percent. Never treat a Sayari match as fully confirmed without a second, independent source.
 
-## 3. Addresses, Registered Agents & Formation Law Firms
+## 3. Addresses, Registered Agents and Formation Law Firms
 
-**Why this matters:** Registered agents and formation law firms are literal gatekeepers who form
-shells in bulk. Real example: in Wyoming, two firms - Registered Agents Inc. and Cloud Peak Law (a law
-firm acting as a mass registered agent) - together registered 55% of all Wyoming incorporations in
-2023, and 40% of Wyoming LLCs list an address at those two buildings. This is a structural-opacity
-signal about the jurisdiction, not evidence any specific entity is illicit.
+**Why this matters:** Registered agents and formation law firms set up shell companies in bulk. Real
+example: in the state of Wyoming, two firms - Registered Agents Inc. and Cloud Peak Law, a law firm
+acting as a mass registered agent - together registered 55 percent of all Wyoming companies formed in
+2023, and 40 percent of Wyoming limited liability companies list an address at those two buildings.
+This points to the state's rules being loose, not to any one specific company being illicit.
 
 **New node types:**
-- `address_hub` - first-class node with `entity_count` field (distinct entities sharing the exact
-  address). Powers the existing "+20 points: mass-registration address, >=50 distinct entities" rule.
-- `facilitator` - registered agents, formation law firms, CSPs. Distinct from `shell_intermediary` -
-  these form shells for many mostly-legitimate clients; score the concentration pattern, never the
-  facilitator itself.
+- An address node with a count of how many separate companies share that exact address. This powers
+  the existing scoring bonus for a mass-registration address with fifty or more companies.
+- A facilitator node type for registered agents, formation law firms, and corporate service providers.
+  Kept separate from the shell-company node type, since these firms set up shells for many mostly
+  legitimate clients. Score the pattern of concentration, never the facilitator itself.
 
-**New edge types:**
-- `REGISTERED_AGENT_FOR` (facilitator -> every entity it formed)
-- `SHARED_ADDRESS` (now points at an address_hub node instead of flat entity-to-entity string match)
+**New connection types:**
+- "Is the registered agent for" (facilitator to every company it formed)
+- "Shares an address with" (now pointing at the address node instead of a plain text match between
+  two companies)
 
-**Facilitator-fan-out metric:** same registered agent used 3 times = normal. Same registered agent used
-across every entity in a single investigation's ownership chain = a pattern worth flagging independent
-of any individual entity's score.
+**Facilitator concentration check:** the same registered agent used three times is normal. The same
+registered agent used across every company in one investigation's ownership chain is worth flagging on
+its own, apart from any individual company's score.
 
-## 4. The Three-Link Chain (Shell Detection -> Bad-Actor Connection)
+## 4. The Three-Link Chain (Shell Detection to Bad-Actor Connection)
 
-**Link 1 - Detect the shell.** Address hub, registered agent concentration, nominee director fan-out,
-no web presence. This is a pattern, not a connection. Grade C/D at best on its own.
+**Link 1 - Detect the shell.** Address concentration, registered agent concentration, reused director
+pattern, no real-world presence online. This is a pattern, not a confirmed connection. Low confidence
+grade on its own.
 
-**Link 2 - Resolve the legal person or successor entity.** Front company matched to real company via
-Sayari fuzzy matching or shared registered agent/officer/incorporation-timing signals. Score as a
-confidence percentage (30-70%+), mapped to the schema's A-F grades - never treat as binary.
+**Link 2 - Resolve the legal person or successor company.** A front company matched to a real company
+through Sayari's matching feature or through shared registered agent, officer, or incorporation-timing
+signals. Score this as a confidence percentage, mapped to the existing letter grades - never treat it
+as a simple yes or no.
 
-**Link 3 - Propagate to a known bad actor.** Check whether the resolved person/entity appears anywhere
-in the ownership graph as an officer of, or owned 50%+ by, an entity on a sanctions list (Section 1
-logic). If yes: proximity flag with exact citation of sanctioned party and hop count. If no: the honest
-output is "shell-pattern detected, no confirmed bad-actor link found" - a legitimate finding, not a
-tool failure.
+**Link 3 - Connect to a known bad actor.** Check whether the resolved person or company appears
+anywhere in the ownership graph as an officer of, or owner of fifty percent or more of, a company on a
+sanctions list (using the Section 1 logic). If yes: add a proximity flag naming the exact sanctioned
+party and how many steps away. If no: the honest result is "shell pattern found, no confirmed link to a
+bad actor" - a real and useful finding on its own, not a failure of the tool.
 
-**Critical discipline:** Links 1 and 2 never independently claim a bad-actor connection. A shell
-pattern with no Link 3 hit stays labeled structural-opacity lead only. The executive_rationale must
-state confidence at every hop, not just the final composite score.
+**Important discipline:** Links 1 and 2 never get to claim a bad-actor connection by themselves. A
+shell pattern with no Link 3 match stays labeled as a structural-opacity lead only. The written summary
+for each case must state the confidence at every step, not just the final combined score.
 
 ## 5. Open Questions (Unresolved)
 
-- "New website to reference off an API" mentioned in team notes - source/name not yet confirmed.
-  Needs identification before it can be evaluated as a data source addition.
-- Hackathon logistics (coupon/credits) tracked separately by the team, not a research item for this doc.
+- A "new website to reference off an API" was mentioned in team notes - the name has not been
+  confirmed yet. It needs to be identified before it can be evaluated as a new data source.
+- Hackathon logistics (gift codes and credits) are tracked separately by the team and are not a
+  research item for this document.

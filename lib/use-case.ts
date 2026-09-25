@@ -13,5 +13,5 @@ async function loadCase(id: CaseId): Promise<CaseFile> {
 
 /** Loads a case: the demo scenario from lib/mock, real cases from the audited fixtures. */
 export function useCaseFile(id: CaseId) {
-  return useSWR(['case', id], () => loadCase(id), { revalidateOnFocus: false })
+  return useSWR(id === '__none__' ? null : ['case', id], () => loadCase(id), { revalidateOnFocus: false, keepPreviousData: true })
 }

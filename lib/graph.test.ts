@@ -29,8 +29,8 @@ describe('filterGraph', () => {
 
   it('limits entities by hops and removes their edges', () => {
     const f = filterGraph(entities, edges, { kinds: new Set(EDGE_KINDS), maxHops: 1 })
-    expect(f.entities.map((e) => e.id).sort()).toEqual(['demo_prime', 'demo_sub1', 'demo_sub2'])
-    expect(f.edges.every((e) => ['demo_prime', 'demo_sub1', 'demo_sub2'].includes(e.target))).toBe(true)
+    expect(f.entities.map((e) => e.id).sort()).toEqual(['demo_np', 'demo_prime', 'demo_sub1', 'demo_sub2'])
+    expect(f.edges.every((e) => ['demo_np', 'demo_prime', 'demo_sub1', 'demo_sub2'].includes(e.target))).toBe(true)
   })
 })
 

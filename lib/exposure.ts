@@ -38,35 +38,38 @@ export interface ExposureSummary {
 }
 
 /**
- * Attributable inflow per entity. Each flow is capped at the payer's inflow, processed in
- * order of distance from the recipient so upstream caps apply first.
+ * Attributable inflow per entity. A payer can never pass on more, in total, than it received:
+ * payments are taken in date order and each is capped at what the payer still has. Iterates
+ * to a fixed point so payers with several sources are settled with their full inflow.
+ * Flows that never connect to the award (or only circulate in a cycle) are left out.
  */
 export function computeFlows(c: Pick<CaseFile, 'award' | 'recipientId' | 'subawards' | 'purchases'>): { flows: Flow[]; inflow: Record<string, number> } {
-  const inflow: Record<string, number> = {}
-  if (c.award && c.recipientId) inflow[c.recipientId] = c.award.obligated
+  const all = [
+    ...c.subawards.map((s) => ({ id: s.id, payerId: s.payerId, payeeId: s.payeeId, amount: s.amount, date: s.date, kind: 'subaward' as const })),
+    ...c.purchases.map((p) => ({ id: p.id, payerId: p.payerId, payeeId: p.payeeId, amount: p.amount, date: p.date, kind: 'purchase' as const })),
+  ].sort((a, b) => (a.date ?? '').localeCompare(b.date ?? '') || a.id.localeCompare(b.id))
+  const base: Record<string, number> = {}
+  if (c.award && c.recipientId) base[c.recipientId] = c.award.obligated
 
-  const pending = [
-    ...c.subawards.map((s) => ({ id: s.id, payerId: s.payerId, payeeId: s.payeeId, amount: s.amount, kind: 'subaward' as const })),
-    ...c.purchases.map((p) => ({ id: p.id, payerId: p.payerId, payeeId: p.payeeId, amount: p.amount, kind: 'purchase' as const })),
-  ]
-  const flows: Flow[] = []
-  // Repeatedly settle flows whose payer already has a known inflow. Flows that never
-  // connect to the award (or sit in a cycle) are left out: they are not public money.
-  let progress = true
-  while (pending.length && progress) {
-    progress = false
-    for (let i = 0; i < pending.length; i++) {
-      const f = pending[i]
+  let inflow: Record<string, number> = { ...base }
+  let flows: Flow[] = []
+  for (let iter = 0; iter <= all.length + 1; iter++) {
+    const spent: Record<string, number> = {}
+    const next: Record<string, number> = { ...base }
+    flows = []
+    for (const f of all) {
       if (!(f.payerId in inflow)) continue
-      const attributable = Math.min(f.amount, inflow[f.payerId])
-      flows.push({ ...f, attributable, capped: attributable < f.amount })
-      inflow[f.payeeId] = (inflow[f.payeeId] ?? 0) + attributable
-      pending.splice(i, 1)
-      i--
-      progress = true
+      const available = Math.max(0, inflow[f.payerId] - (spent[f.payerId] ?? 0))
+      const attributable = Math.min(f.amount, available)
+      spent[f.payerId] = (spent[f.payerId] ?? 0) + attributable
+      next[f.payeeId] = (next[f.payeeId] ?? 0) + attributable
+      flows.push({ id: f.id, payerId: f.payerId, payeeId: f.payeeId, amount: f.amount, kind: f.kind, attributable, capped: attributable < f.amount })
     }
+    const stable = Object.keys(next).length === Object.keys(inflow).length && Object.entries(next).every(([k, v]) => Math.abs((inflow[k] ?? -1) - v) < 0.005)
+    inflow = next
+    if (stable) break
   }
-  return { flows, inflow }
+  return { flows: flows.filter((f) => f.attributable > 0 || !f.capped), inflow }
 }
 
 function weights(e: Entity | undefined): { point: number | null; lower: number; upper: number } {

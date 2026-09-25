@@ -7,7 +7,7 @@
  * "(Demo)", the award, every dollar amount, score, tier, shipment and every edge marked
  * `demo: true` are invented to exercise the interface.
  */
-import type { AuditEntry, CaseFile, Edge, Entity, Indicator, ListedStatus, Shipment, SignalFamily, SignalState } from '../types'
+import type { AuditEntry, CaseFile, Edge, Entity, Indicator, ListedStatus, Nonprofit, Shipment, SignalFamily, SignalState, TimelineEvent } from '../types'
 
 const S01 = 'https://home.treasury.gov/news/press-releases/jy0692'
 const S02 = 'https://ofac.treasury.gov/recent-actions/20220331'
@@ -153,6 +153,33 @@ const entities: Entity[] = [
       ind('LO2', 'Virtual office', 'location', 'not_assessable', { evidence: 'Analyst confirmation pending.' }),
     ],
   }),
+  company({
+    id: 'demo_np',
+    name: 'Northern Light Relief Foundation (Demo)',
+    entityType: 'Nonprofit corporation',
+    jurisdiction: 'US-NV',
+    incorporated: '2023-06-12',
+    address: '5 Example Plaza, Reno, NV (demo)',
+    identifiers: [{ type: 'EIN', value: 'DEMO-00-0000004' }],
+    tier: 'elevated',
+    score: { point: 52, lower: 38, upper: 71 },
+    coverage: 0.55,
+    matchGrade: 'B',
+    matchedAttributes: ['EIN', 'Name'],
+    hopsFromRecipient: 1,
+    indicators: [
+      ind('NP1', 'Mission mismatch', 'nonprofit', 'fired', {
+        evidence: 'Stated mission is disaster relief in the Americas; 61% of grants went to a region outside it (demo).',
+        innocentExplanations: ['Missions are often written broadly; the charity may have widened its program.'],
+      }),
+      ind('NP2', 'High-risk grantmaking', 'nonprofit', 'fired', {
+        evidence: 'Grants to a grantee one hop from a listed party (demo).',
+        innocentExplanations: ['Humanitarian work in conflict areas often involves unavoidable contact with listed parties; licenses may apply.'],
+      }),
+      ind('LC1', 'Recent incorporation then activity', 'lifecycle', 'fired', { evidence: 'Incorporated 8 months before its subaward (demo).' }),
+      ind('PR1', 'No footprint', 'presence', 'not_fired', { evidence: 'Website with annual reports (demo).' }),
+    ],
+  }),
   company({ id: 'ent_serniya', name: 'OOO Serniya Engineering', entityType: 'sanctioned_entity', jurisdiction: 'RU', listedStatus: OFAC_LISTED, tier: 'high', score: { point: 91, lower: 84, upper: 97 }, coverage: 0.4, matchGrade: 'A', matchedAttributes: ['OGRN'], identifiers: [{ type: 'OGRN', value: '1177746132563' }], hopsFromRecipient: 3, indicators: [px1, ind('PR2', 'Adverse media', 'presence', 'fired', { evidence: 'Named in the DOJ superseding indictment (E.D.N.Y., 13 Dec 2022).', provider: 'U.S. Department of Justice', sourceUrl: S05, sourceId: 'S05' })] }),
   company({ id: 'ent_sertal', name: 'OOO Sertal', entityType: 'sanctioned_entity', jurisdiction: 'RU', listedStatus: OFAC_LISTED, tier: 'high', score: { point: 82, lower: 70, upper: 94 }, coverage: 0.3, matchGrade: 'A', hopsFromRecipient: null, indicators: [px1] }),
   company({ id: 'ent_majory', name: 'Majory LLP', entityType: 'sanctioned_entity', jurisdiction: 'GB', listedStatus: OFAC_LISTED, tier: 'high', score: { point: 84, lower: 73, upper: 95 }, coverage: 0.5, matchGrade: 'A', identifiers: [{ type: 'Companies House', value: 'OC400827' }], hopsFromRecipient: 3, indicators: [px1, ind('LC4', 'Lifecycle: strike-off after designation', 'lifecycle', 'fired', { evidence: 'No accounts after 31 Aug 2022; voluntary strike-off notice 6 Dec 2022.', provider: 'Companies House', sourceUrl: S12, sourceId: 'S12' })] }),
@@ -188,6 +215,7 @@ function edge(p: Partial<Edge> & Pick<Edge, 'id' | 'source' | 'target' | 'kind' 
 const edges: Edge[] = [
   edge({ id: 'e_sub1', source: 'demo_prime', target: 'demo_sub1', kind: 'payment', relationship: 'Subaward', amount: 1_200_000, activeFrom: '2024-03-18', strength: 'strong', strengthFactors: ['Reported subaward (demo)'] }),
   edge({ id: 'e_sub2', source: 'demo_prime', target: 'demo_sub2', kind: 'payment', relationship: 'Subaward', amount: 850_000, activeFrom: '2024-06-03', strength: 'strong', strengthFactors: ['Reported subaward (demo)'] }),
+  edge({ id: 'e_sub3', source: 'demo_prime', target: 'demo_np', kind: 'payment', relationship: 'Subaward', amount: 300_000, activeFrom: '2024-02-28', strength: 'strong', strengthFactors: ['Reported subaward (demo)'] }),
   edge({ id: 'e_own', source: 'demo_sub1', target: 'demo_sub2', kind: 'ownership', relationship: 'Shareholder', share: 60, activeFrom: '2024-01-19', strength: 'moderate', strengthFactors: ['Single registry filing (demo)'] }),
   edge({ id: 'e_pay_pp', source: 'demo_sub1', target: 'ent_photonpro', kind: 'payment', relationship: 'Purchase', amount: 410_000, activeFrom: '2024-09-10', strength: 'moderate', strengthFactors: ['Declared value on trade record (demo)'] }),
   edge({ id: 'e_trade_pp', source: 'ent_photonpro', target: 'demo_sub1', kind: 'trade', relationship: 'Supply chain shipment', activeFrom: '2024-09-02', strength: 'moderate', strengthFactors: ['Two shipment records (demo)'] }),
@@ -216,6 +244,49 @@ const audit: AuditEntry[] = [
   { seq: 6, timestamp: '2026-09-25T15:02:40Z', provider: 'Tavily', query: '"Northgate Components LLC" website OR news', recordsReturned: 0, responseHash: 'demo-c0ffee01', cache: 'live' },
 ]
 
+const designated = (id: string, source = S01, sourceId = 'S01'): TimelineEvent => ({ id: `des_${id}`, entityId: id, date: '2022-03-31', kind: 'designation', label: 'Designated by OFAC (E.O. 14024)', certainty: 'documented', sourceUrl: source, sourceId })
+
+const timeline: TimelineEvent[] = [
+  { id: 'inc_prime', entityId: 'demo_prime', date: '2009-04-14', kind: 'incorporation', label: 'Incorporated (demo)', certainty: 'documented', sourceUrl: null },
+  { id: 'sam_prime', entityId: 'demo_prime', date: '2010-01-20', kind: 'sam_registration', label: 'SAM.gov registration (demo)', certainty: 'documented', sourceUrl: null },
+  { id: 'inc_np', entityId: 'demo_np', date: '2023-06-12', kind: 'incorporation', label: 'Incorporated (demo)', certainty: 'documented', sourceUrl: null },
+  { id: 'inc_sub1', entityId: 'demo_sub1', date: '2023-11-02', kind: 'incorporation', label: 'Incorporated (demo)', certainty: 'documented', sourceUrl: null },
+  { id: 'inc_sub2', entityId: 'demo_sub2', date: '2024-01-19', kind: 'incorporation', label: 'Incorporated (demo)', certainty: 'documented', sourceUrl: null },
+  { id: 'award', entityId: 'demo_prime', date: '2024-02-26', kind: 'award', label: 'Award DEMO-AWD-0001, $4.5M (demo)', certainty: 'documented', sourceUrl: null },
+  { id: 'sub3', entityId: 'demo_np', date: '2024-02-28', kind: 'subaward', label: 'Subaward $300K (demo)', certainty: 'documented', sourceUrl: null },
+  { id: 'sub1', entityId: 'demo_sub1', date: '2024-03-18', kind: 'subaward', label: 'Subaward $1.2M (demo)', certainty: 'documented', sourceUrl: null },
+  { id: 'sub2', entityId: 'demo_sub2', date: '2024-06-03', kind: 'subaward', label: 'Subaward $850K (demo)', certainty: 'documented', sourceUrl: null },
+  { id: 'sh1', entityId: 'demo_sub1', date: '2024-09-02', kind: 'shipment', label: 'Shipment from Photon Pro LLP, HS 903039 (demo)', certainty: 'estimated', sourceUrl: null },
+  { id: 'sh2', entityId: 'demo_sub2', date: '2024-10-05', kind: 'shipment', label: 'Shipment to Alexsong Pte Ltd, HS 903039 (demo)', certainty: 'estimated', sourceUrl: null },
+  { id: 'sh3', entityId: 'ent_alexsong', date: '2024-10-09', kind: 'shipment', label: 'Shipment to OOO Serniya Engineering via AE (demo)', certainty: 'estimated', sourceUrl: null },
+  designated('ent_serniya'),
+  designated('ent_photonpro'),
+  designated('ent_majory'),
+  designated('ent_inventionbridge'),
+  designated('ent_alexsong'),
+  designated('ent_sertal'),
+  designated('person_grinin', S02, 'S02'),
+  { id: 'strike_majory', entityId: 'ent_majory', date: '2022-12-06', kind: 'dissolution', label: 'Voluntary strike-off notice', certainty: 'documented', sourceUrl: S12, sourceId: 'S12' },
+]
+
+const nonprofits: Nonprofit[] = [
+  {
+    entityId: 'demo_np',
+    statedMission: 'Disaster relief in the Americas (demo)',
+    publicMoney: 300_000,
+    foreignGrants: [
+      { region: 'Americas', amount: 90_000, recipientType: 'Local relief groups' },
+      { region: 'Middle East', amount: 140_000, recipientType: 'Intermediary foundation' },
+      { region: 'Europe', amount: 10_000, recipientType: 'Consultancy' },
+    ],
+    programShare: 0.58,
+    filingYear: 2024,
+    missionRegions: ['Americas'],
+    certainty: 'documented',
+    demo: true,
+  },
+]
+
 export const demoCase: CaseFile = {
   id: 'demo',
   title: 'Demo scenario (hypothetical)',
@@ -223,20 +294,34 @@ export const demoCase: CaseFile = {
   note: 'Hypothetical award to show the interface. Companies ending in "(Demo)", all dollars, scores and marked connections are invented; list status and sourced links for the Serniya network are real.',
   typology: 'Russia sanctions evasion',
   summary: null,
+  rootId: 'demo_prime',
   recipientId: 'demo_prime',
-  award: { id: 'DEMO-AWD-0001', agency: 'Example Agency (Demo)', recipientId: 'demo_prime', obligated: 4_500_000, url: null, demo: true },
+  award: { id: 'DEMO-AWD-0001', agency: 'Example Agency (Demo)', recipientId: 'demo_prime', obligated: 4_500_000, date: '2024-02-26', url: null, certainty: 'documented', demo: true },
   awardNote: null,
   subawards: [
-    { id: 'DEMO-SUB-01', primeAwardId: 'DEMO-AWD-0001', payerId: 'demo_prime', payeeId: 'demo_sub1', amount: 1_200_000, date: '2024-03-18', url: null, demo: true },
-    { id: 'DEMO-SUB-02', primeAwardId: 'DEMO-AWD-0001', payerId: 'demo_prime', payeeId: 'demo_sub2', amount: 850_000, date: '2024-06-03', url: null, demo: true },
+    { id: 'DEMO-SUB-01', primeAwardId: 'DEMO-AWD-0001', payerId: 'demo_prime', payeeId: 'demo_sub1', amount: 1_200_000, date: '2024-03-18', url: null, certainty: 'documented', demo: true },
+    { id: 'DEMO-SUB-02', primeAwardId: 'DEMO-AWD-0001', payerId: 'demo_prime', payeeId: 'demo_sub2', amount: 850_000, date: '2024-06-03', url: null, certainty: 'documented', demo: true },
+    { id: 'DEMO-SUB-03', primeAwardId: 'DEMO-AWD-0001', payerId: 'demo_prime', payeeId: 'demo_np', amount: 300_000, date: '2024-02-28', url: null, certainty: 'documented', demo: true },
   ],
   purchases: [
-    { id: 'DEMO-PUR-01', payerId: 'demo_sub1', payeeId: 'ent_photonpro', amount: 410_000, date: '2024-09-10', hsCode: '903039', demo: true },
-    { id: 'DEMO-PUR-02', payerId: 'demo_sub2', payeeId: 'ent_alexsong', amount: 920_000, date: '2024-10-01', hsCode: '903039', demo: true },
+    { id: 'DEMO-PUR-01', payerId: 'demo_sub1', payeeId: 'ent_photonpro', amount: 410_000, date: '2024-09-10', hsCode: '903039', certainty: 'estimated', demo: true },
+    { id: 'DEMO-PUR-02', payerId: 'demo_sub2', payeeId: 'ent_alexsong', amount: 920_000, date: '2024-10-01', hsCode: '903039', certainty: 'estimated', demo: true },
   ],
   entities,
   edges,
   shipments,
   audit,
   manifest: { runId: 'demo-run-0001', codeVersion: 'demo', weightsHash: 'demo-weights-v0', retrievalWindow: '25 Sep 2026, 15:02–15:03 UTC', reviewer: 'Demo reviewer' },
+  typologyIds: ['russia_evasion', 'humanitarian_fronts'],
+  sources: [
+    { id: 'S01', name: 'Treasury press release JY0692 (Serniya network designations)', url: S01, publisher: 'U.S. Department of the Treasury' },
+    { id: 'S02', name: 'OFAC Recent Actions 20220331', url: S02, publisher: 'OFAC' },
+    { id: 'S05', name: 'Superseding indictment, United States v. Grinin et al.', url: S05, publisher: 'U.S. Department of Justice' },
+    { id: 'S12', name: 'Companies House: Majory LLP', url: S12, publisher: 'Companies House' },
+    { id: 'S13', name: 'Companies House: Photon Pro LLP', url: S13, publisher: 'Companies House' },
+  ],
+  publicMoneyNote: 'Hypothetical award DEMO-AWD-0001 (demo).',
+  timeline,
+  nonprofits,
+  compositeScore: null,
 }

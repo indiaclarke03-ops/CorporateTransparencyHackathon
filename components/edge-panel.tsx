@@ -31,6 +31,16 @@ export function EdgePanel({ edge, nodeLabel, onClose }: Props) {
         <strong>{nodeLabel(edge.source)}</strong> {'→'} <strong>{nodeLabel(edge.target)}</strong>
       </p>
 
+      {edge.label && (
+        <blockquote className="rounded-2xl border-l-4 border-accent bg-muted p-3 text-sm italic leading-relaxed">
+          &ldquo;{edge.label}&rdquo;
+          <span className="mt-1 block text-xs not-italic text-muted-foreground">
+            As stated in the {edge.source_authority ?? 'source'} record{edge.sayari_relationship ? ` (relationship type: ${edge.sayari_relationship.replace(/_/g, ' ')})` : ''}
+            {edge.former ? ' · former relationship' : ''}
+          </span>
+        </blockquote>
+      )}
+
       {isProbabilistic && (
         <p className="rounded-2xl border border-dashed border-accent p-3 text-sm leading-relaxed text-muted-foreground">
           Probabilistic identity resolution, not a confirmed relationship.

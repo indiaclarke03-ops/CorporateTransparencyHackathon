@@ -23,17 +23,28 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
   const [size, setSize] = useState({ width: 0, height: 0 })
   const [hoverEdge, setHoverEdge] = useState<InvestigationEdge | null>(null)
   const [fontFamily, setFontFamily] = useState('sans-serif')
+  const [textColor, setTextColor] = useState('#1b2a41')
 
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
     setFontFamily(getComputedStyle(document.body).fontFamily)
+    setTextColor(getComputedStyle(document.body).color)
     const observer = new ResizeObserver(([entry]) => {
       setSize({ width: entry.contentRect.width, height: entry.contentRect.height })
     })
     observer.observe(el)
     return () => observer.disconnect()
   }, [])
+
+  // Spread the layout so labels and link names stay readable on dense networks.
+  useEffect(() => {
+    const g = graphRef.current
+    if (!g) return
+    g.d3Force('charge')?.strength(-420)
+    ;(g.d3Force('link') as unknown as { distance?: (d: number) => void } | undefined)?.distance?.(110)
+    g.d3ReheatSimulation()
+  }, [size.width > 0, investigation])
 
   const graphData = useMemo(
     () => ({
@@ -52,7 +63,8 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
           height={size.height}
           graphData={graphData}
           backgroundColor="rgba(0,0,0,0)"
-          cooldownTicks={80}
+          cooldownTicks={120}
+          d3VelocityDecay={0.3}
           onEngineStop={() => graphRef.current?.zoomToFit(400, 80)}
           nodeRelSize={6}
           nodeLabel={(n) => n.label}
@@ -91,8 +103,9 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
             ctx.font = `700 ${fontSize}px ${fontFamily}`
             ctx.textAlign = 'center'
             ctx.textBaseline = 'top'
-            ctx.fillStyle = '#f7e9d7'
-            ctx.fillText(node.label, x, y + r + 6)
+            ctx.fillStyle = textColor
+            const label = node.label.length > 30 ? node.label.slice(0, 28) + '…' : node.label
+            ctx.fillText(label, x, y + r + 6)
           }}
           nodePointerAreaPaint={(node, color, ctx) => {
             ctx.beginPath()
@@ -103,8 +116,28 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
           linkColor={(l) => RELATIONSHIP_META[l.relationship_type]?.color ?? '#c9ad93'}
           linkWidth={(l) => (l.edge === selectedEdge || l.edge === hoverEdge ? 4 : 2)}
           linkLineDash={(l) => (RELATIONSHIP_META[l.relationship_type]?.dashed ? [4, 3] : null)}
-          linkDirectionalArrowLength={5}
-          linkDirectionalArrowRelPos={0.85}
+          linkDirectionalArrowLength={6}
+          linkDirectionalArrowRelPos={0.9}
+          linkCanvasObjectMode={() => 'after'}
+          linkCanvasObject={(link, ctx, scale) => {
+            // Label every link with its relationship type, so connections read without hovering.
+            const s = link.source as GNode
+            const t = link.target as GNode
+            if (typeof s !== 'object' || typeof t !== 'object' || scale < 0.6) return
+            const meta = RELATIONSHIP_META[link.relationship_type]
+            const text = link.ownership_percentage != null ? `${meta?.label ?? ''} ${Math.round(link.ownership_percentage)}%` : meta?.label ?? ''
+            const x = ((s.x ?? 0) + (t.x ?? 0)) / 2
+            const y = ((s.y ?? 0) + (t.y ?? 0)) / 2
+            const fontSize = Math.max(8 / scale, 2)
+            ctx.font = `600 ${fontSize}px ${fontFamily}`
+            const w = ctx.measureText(text).width
+            ctx.fillStyle = 'rgba(34, 24, 20, 0.85)'
+            ctx.fillRect(x - w / 2 - 2, y - fontSize / 2 - 1, w + 4, fontSize + 2)
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
+            ctx.fillStyle = meta?.color ?? '#c9ad93'
+            ctx.fillText(text, x, y)
+          }}
           linkHoverPrecision={8}
           onNodeClick={(n) => onNodeSelect(String(n.id))}
           onLinkClick={(l) => onEdgeSelect(l.edge)}
@@ -118,6 +151,8 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
           <p className="text-muted-foreground">
             {nodeLabel(hoverEdge.source)} {'→'} {nodeLabel(hoverEdge.target)}
           </p>
+          {hoverEdge.label && <p className="pt-1 italic text-foreground">&ldquo;{hoverEdge.label}&rdquo;</p>}
+          {hoverEdge.former && <p className="text-sev-medium">Former relationship</p>}
           {hoverEdge.ownership_percentage != null && <p>Ownership: {hoverEdge.ownership_percentage}%</p>}
           {hoverEdge.provenance_ref && <p className="truncate text-muted-foreground">{hoverEdge.provenance_ref}</p>}
           <p className="pt-1 text-muted-foreground">Click to pin details</p>

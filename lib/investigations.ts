@@ -1,11 +1,10 @@
-import type { Investigation } from './types'
+import type { CaseIndexEntry, Investigation } from './types'
+import cases from './generated/cases.json'
 
-export const INVESTIGATION_OPTIONS = [
-  { id: 'serniya', label: 'Serniya Engineering (high-risk)' },
-  { id: 'palantir', label: 'Palantir Technologies (clean control)' },
-] as const
+/** One case per risk typology, written by scripts/build_cases.py. */
+export const CASES = cases as CaseIndexEntry[]
 
-export type InvestigationId = (typeof INVESTIGATION_OPTIONS)[number]['id']
+export type InvestigationId = string
 
 // Swap this resolver for a real API endpoint later; UI components only consume the Investigation contract.
 export function resolveInvestigationUrl(id: InvestigationId) {

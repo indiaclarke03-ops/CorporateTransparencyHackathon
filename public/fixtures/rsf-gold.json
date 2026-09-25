@@ -1,0 +1,1785 @@
+{
+ "investigation_summary": {
+  "root_recipient": "AL ZUMOROUD AND AL YAQOOT GOLD & JEWELLERS TRADING L.L.C.",
+  "composite_risk_score": 88,
+  "confidence_rating": "A",
+  "primary_typology": "Sudan / UAE Arms & Gold",
+  "executive_rationale": "A Dubai gold trader whose shareholder, Abu Dharr Ahmmed, is sanctioned and sits behind four other UAE general-trading companies, alongside links to RSF commander Algoney Hamdan Dagalo. The shared shareholder across a cluster of young trading firms is the classic front-company pattern. Tradeverifyd scores the entity High (258) with OFAC Sudan and SAM exclusion annotations. This is a risk lead for human review, not a finding of wrongdoing.[^S36]"
+ },
+ "case": {
+  "id": "rsf-gold",
+  "title": "AZ Gold and the RSF trading network (UAE)",
+  "root_id": "RoWARA0BHg-GoWvDJFBOSg",
+  "sources": [
+   {
+    "id": "S36",
+    "name": "Treasury press release JY2772: sanctions on the RSF leader (Hemedti) and linked companies",
+    "url": "https://home.treasury.gov/news/press-releases/jy2772",
+    "publisher": "U.S. Department of the Treasury"
+   }
+  ],
+  "tools_used": [
+   "Sayari",
+   "Tradeverifyd",
+   "Tavily"
+  ],
+  "public_money": "No USAspending awards found; SAM.gov exclusion record present (Tradeverifyd annotation)."
+ },
+ "nodes": [
+  {
+   "id": "RoWARA0BHg-GoWvDJFBOSg",
+   "label": "AL ZUMOROUD AND AL YAQOOT GOLD & JEWELLERS TRADING L.L.C.",
+   "type": "sanctioned_entity",
+   "jurisdiction": "ARE",
+   "entity_confidence": "A",
+   "risk_signals": [
+    {
+     "signal_name": "On an export-control list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/RoWARA0BHg-GoWvDJFBOSg",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Owned by a sanctioned entity",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/RoWARA0BHg-GoWvDJFBOSg",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/RoWARA0BHg-GoWvDJFBOSg",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Tradeverifyd score 258 (High)",
+     "severity": "HIGH",
+     "provenance_source": "Tradeverifyd entity_score (recorded)",
+     "evidence_record": null,
+     "source_authority": "Tradeverifyd"
+    },
+    {
+     "signal_name": "Shareholder is sanctioned: Abu Dharr Ahmmed holds shares in 4 UAE trading companies",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari get_entity_profile",
+     "evidence_record": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg",
+     "source_authority": "Sayari"
+    },
+    {
+     "signal_name": "Designated with the RSF leadership network (Treasury JY2772)",
+     "severity": "CRITICAL",
+     "provenance_source": "Treasury press release",
+     "evidence_record": "https://home.treasury.gov/news/press-releases/jy2772",
+     "source_id": "S36",
+     "source_authority": "U.S. Department of the Treasury"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": false,
+    "closed": false,
+    "degree": null,
+    "relationship_count": {
+     "has_shareholder": 1,
+     "linked_to": 2
+    },
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/RoWARA0BHg-GoWvDJFBOSg",
+    "entity_kind": "company",
+    "countries": [
+     "ARE"
+    ],
+    "aliases": [
+     "AZ Gold",
+     "AL ZUMOROUD AND AL YAQOOT GOLD AND JEWELLERS TRADING L.L.C.",
+     "الزمرد و اليقوت للتجارة الذهب و المجو مرات ش.ذ.م.م",
+     "الزمرد و اليقوت للتجارة الذهب و المجو مرات ش.ذ.م.م"
+    ],
+    "addresses": [
+     "Office M-10, M-11, M-12 - King of Ghaith Hamel bin Khadim al Ghaith al Qubaisi, Al Daghaya, PO Box 90928, Dubai, AE",
+     "Dubai, United Arab Emirates",
+     "Office M-10, M-11, M-12 - King of Ghaith Hamel bin Khadim al Ghaith al Qubaisi, Al Daghaya, PO Box 90928, Dubai, United Arab Emirates",
+     "Dubai, ARE"
+    ],
+    "identifiers": [
+     {
+      "type": "unknown",
+      "value": "1708681"
+     },
+     {
+      "type": "unknown",
+      "value": "880169"
+     },
+     {
+      "type": "usa_ofac_sdn_number",
+      "value": "49144"
+     },
+     {
+      "type": "xxx_acuris_id",
+      "value": "C1843155"
+     },
+     {
+      "type": "unknown_commercial_register_id",
+      "value": "1708681"
+     }
+    ],
+    "registration_date": "2020-02-20",
+    "company_type": "LLC",
+    "business_purpose": [
+     "Wholesale and retail trade"
+    ],
+    "sayari_sources": [
+     "Acuris Risk Intelligence - Entities & Relationships (3rd Party Data)",
+     "Acuris Risk Intelligence - Risk Information and Articles (3rd Party Data)",
+     "UAE Cedar Rose Company Database (3rd Party Data)",
+     "USA Treasury OFAC Specially Designated Nationals (SDN) List",
+     "OpenSanctions - Global Sanctions List"
+    ],
+    "trade_count": {
+     "sent": 0,
+     "received": 0
+    },
+    "relationship_summary": {
+     "has_shareholder": 1,
+     "linked_to": 2
+    },
+    "risk_flag_count": 13,
+    "tradeverifyd": {
+     "entity_id": "256a4cc6-d8f4-4799-b31f-31afd3eb090d",
+     "name": "Al Zumoroud and Al Yaqoot Gold & Jewellers L.L.C.",
+     "aliases": [
+      "Al Zumoroud and Al Yaqoot Gold & Jewellers L.L.C.",
+      "الزمرد و اليقوت للتجارة الذهب و المجو مرات شذمم",
+      "AZ Gold",
+      "الزمرد و اليقوت للتجارة الذهب و المجو مرات ش.ذ.م.م"
+     ],
+     "score": 258,
+     "score_level": "High",
+     "annotations": [
+      {
+       "name": "Sudan and Darfur Sanctions",
+       "description": "Executive Order 14098 (Sudan)",
+       "url": "https://sanctionssearch.ofac.treas.gov/"
+      },
+      {
+       "name": "US SAM Procurement Exclusions",
+       "description": "US SAM Procurement Exclusions. Publisher: General Services Administration. Country: United States",
+       "url": "https://www.opensanctions.org/datasets/us_sam_exclusions/"
+      },
+      {
+       "name": "US OFAC Specially Designated Nationals (SDN) List",
+       "description": "Executive Order 14098 (Sudan)",
+       "url": "https://sanctionssearch.ofac.treas.gov/"
+      },
+      {
+       "name": "Specially Designated Nationals (SDN) - Treasury Department",
+       "description": "SUDAN-EO14098",
+       "url": "https://sanctionslist.ofac.treas.gov/Home/SdnList"
+      }
+     ],
+     "trade_relationships": 0
+    }
+   }
+  },
+  {
+   "id": "sAgA0QVKr-gjEAqoJvf0zg",
+   "label": "Abu Dharr Abdul Nabi Habiballa AHMMED",
+   "type": "sanctioned_entity",
+   "jurisdiction": "SDN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On an export-control list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the UK sanctions list",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg",
+    "entity_kind": "person",
+    "countries": [
+     "SDN",
+     "ARE"
+    ],
+    "risk_flag_count": 13,
+    "aliases": [
+     "Abo Zer Abdelnabi Habiballa Ahmmed",
+     "أبو ذر عبد النبي حبيب الله أحمد",
+     "Abozer Habib",
+     "Abo Zer Abdelnabi Habiballa Ahmmed"
+    ],
+    "addresses": [
+     "SD",
+     "AE",
+     "United Arab Emirates"
+    ],
+    "identifiers": [
+     {
+      "type": "usa_ofac_sdn_number",
+      "value": "52511"
+     },
+     {
+      "type": "unknown_passport",
+      "value": "P08160513"
+     },
+     {
+      "type": "gbr_uk_sanctions_id",
+      "value": "SUD0051"
+     },
+     {
+      "type": "xxx_acuris_id",
+      "value": "I12423313"
+     },
+     {
+      "type": "open_sanctions_internal_id",
+      "value": "NK-Bydyqjjn98xXMiXx8hmrdo"
+     }
+    ],
+    "sayari_sources": [
+     "Acuris Risk Intelligence - Entities & Relationships (3rd Party Data)",
+     "Acuris Risk Intelligence - Risk Information and Articles (3rd Party Data)",
+     "UK Consolidated Sanctions List",
+     "USA Treasury OFAC Specially Designated Nationals (SDN) List",
+     "OpenSanctions - Global Sanctions List"
+    ],
+    "trade_count": {
+     "sent": 0,
+     "received": 0
+    },
+    "relationship_summary": {
+     "linked_to": 6,
+     "shareholder_of": 4
+    }
+   }
+  },
+  {
+   "id": "50fd__JaDZdfJRjWZl1DlA",
+   "label": "Algoney Hamdan Daglo Musa",
+   "type": "sanctioned_entity",
+   "jurisdiction": "SDN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On an export-control list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/50fd__JaDZdfJRjWZl1DlA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On Canada's sanctions list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/50fd__JaDZdfJRjWZl1DlA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the EU sanctions list",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/50fd__JaDZdfJRjWZl1DlA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the UK sanctions list",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/50fd__JaDZdfJRjWZl1DlA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/50fd__JaDZdfJRjWZl1DlA",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/50fd__JaDZdfJRjWZl1DlA",
+    "entity_kind": "person",
+    "countries": [
+     "SDN",
+     "ARE",
+     "KEN"
+    ],
+    "risk_flag_count": 42
+   }
+  },
+  {
+   "id": "l-hTG9hSLd7dA4za2B7CRw",
+   "label": "Capital Tap Holding L.L.C.",
+   "type": "sanctioned_entity",
+   "jurisdiction": "ARE",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On an export-control list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/l-hTG9hSLd7dA4za2B7CRw",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Subject of a regulatory action",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/l-hTG9hSLd7dA4za2B7CRw",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/l-hTG9hSLd7dA4za2B7CRw",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/l-hTG9hSLd7dA4za2B7CRw",
+    "entity_kind": "company",
+    "countries": [
+     "ARE"
+    ],
+    "risk_flag_count": 13,
+    "aliases": [
+     "كابيتال تاب القابضة ذ.م.م",
+     "كابيتال تاب القابضة ذ.م.م",
+     "Capital Tap",
+     "CTH"
+    ],
+    "addresses": [
+     "P.O. Box, 54116, Dubai, AE",
+     "Office 2602, U-Bora Towers, Business Bay, Dubai, United Arab Emirates",
+     "PO Box 54116, 2602 UBora Commercial Tower, Dubai, ARE"
+    ],
+    "identifiers": [
+     {
+      "type": "unknown",
+      "value": "11651015"
+     },
+     {
+      "type": "unknown",
+      "value": "947727"
+     },
+     {
+      "type": "usa_ofac_sdn_number",
+      "value": "48960"
+     },
+     {
+      "type": "unknown_chamber_of_commerce_id",
+      "value": "359507"
+     },
+     {
+      "type": "xxx_cedar_rose_uid",
+      "value": "AEC119826994"
+     }
+    ],
+    "registration_date": "2019",
+    "company_type": "LLC",
+    "business_purpose": [
+     "Financial and Insurance Activities",
+     "funds and similar financial entities",
+     "Trusts, funds and similar financial entities"
+    ],
+    "sayari_sources": [
+     "Acuris Risk Intelligence - Entities & Relationships (3rd Party Data)",
+     "Acuris Risk Intelligence - Risk Information and Articles (3rd Party Data)",
+     "UAE Cedar Rose Company Database (3rd Party Data)",
+     "USA Treasury OFAC Specially Designated Nationals (SDN) List",
+     "OpenSanctions - Global Sanctions List"
+    ],
+    "trade_count": {
+     "sent": 0,
+     "received": 0
+    },
+    "relationship_summary": {
+     "linked_to": 4,
+     "has_officer": 2,
+     "has_manager": 1,
+     "has_member_of_the_board": 1,
+     "has_subsidiary": 3
+    }
+   }
+  },
+  {
+   "id": "dFB7YowXog_6EwiEur43RQ",
+   "label": "Prodigious Real Estate Management Supervision Services",
+   "type": "related_company",
+   "jurisdiction": "ARE",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "One hop from an export-controlled party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/dFB7YowXog_6EwiEur43RQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/dFB7YowXog_6EwiEur43RQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/dFB7YowXog_6EwiEur43RQ",
+    "entity_kind": "company",
+    "countries": [
+     "ARE",
+     "SDN"
+    ],
+    "risk_flag_count": 6,
+    "aliases": [
+     "Prodiqis Real Estate Administrative Supervision Service"
+    ],
+    "addresses": [
+     "Dubai, AE",
+     "SD"
+    ],
+    "identifiers": [
+     {
+      "type": "xxx_acuris_id",
+      "value": "C2291109"
+     }
+    ],
+    "sayari_sources": [
+     "Acuris Risk Intelligence - Entities & Relationships (3rd Party Data)",
+     "Acuris Risk Intelligence - Risk Information and Articles (3rd Party Data)"
+    ],
+    "trade_count": {
+     "sent": 0,
+     "received": 0
+    },
+    "relationship_summary": {
+     "linked_to": 2
+    }
+   }
+  },
+  {
+   "id": "XtartWzEze9a18ZDKVad8A",
+   "label": "Capital Tap General Trading L.L.C.",
+   "type": "sanctioned_entity",
+   "jurisdiction": "ARE",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On an export-control list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/XtartWzEze9a18ZDKVad8A",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "OFAC 50% rule: owned 50%+ by blocked persons",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/XtartWzEze9a18ZDKVad8A",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Owned by a sanctioned entity",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/XtartWzEze9a18ZDKVad8A",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Subject of a regulatory action",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/XtartWzEze9a18ZDKVad8A",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/XtartWzEze9a18ZDKVad8A",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/XtartWzEze9a18ZDKVad8A",
+    "entity_kind": "company",
+    "countries": [
+     "ARE"
+    ],
+    "risk_flag_count": 17,
+    "aliases": [
+     "M I N S General Trading L.L.C.",
+     "كابيتال تاب للتجارة العامة ش.ذ.م.م",
+     "Elrakiza General Trading L.L.C.",
+     "ELRAKIZA GENERAL TRADING L.L.C."
+    ],
+    "addresses": [
+     "406, Business Bay, Royal Class Business Centre, Dubai, AE",
+     "406, BUSINESS BAY, ROYAL CLASS BUSINESS CENTRE, DUBAI, ARE",
+     "PO Box 416657, 44 & 43, Dubai Municipality, Dubai, AE",
+     "PO Box 416657, 44 & 43 Dubai Municipality, Dubai, ARE"
+    ],
+    "identifiers": [
+     {
+      "type": "unknown",
+      "value": "11337684"
+     },
+     {
+      "type": "unknown",
+      "value": "826794"
+     },
+     {
+      "type": "usa_ofac_sdn_number",
+      "value": "48962"
+     },
+     {
+      "type": "unknown_commercial_register_id",
+      "value": "1393657"
+     },
+     {
+      "type": "xxx_cedar_rose_uid",
+      "value": "AEC74445682"
+     }
+    ],
+    "registration_date": "2019-02-18",
+    "company_type": "LLC",
+    "business_purpose": [
+     "Wholesale and retail trade"
+    ],
+    "sayari_sources": [
+     "Acuris Risk Intelligence - Entities & Relationships (3rd Party Data)",
+     "Acuris Risk Intelligence - Risk Information and Articles (3rd Party Data)",
+     "UAE Cedar Rose Company Database (3rd Party Data)",
+     "USA Treasury OFAC Specially Designated Nationals (SDN) List",
+     "OpenSanctions - Global Sanctions List"
+    ],
+    "trade_count": {
+     "sent": 0,
+     "received": 0
+    },
+    "relationship_summary": {
+     "has_shareholder": 1,
+     "subsidiary_of": 1,
+     "has_manager": 2,
+     "linked_to": 1
+    }
+   }
+  },
+  {
+   "id": "GpzoSlwJiKSXyY0Rl51-6w",
+   "label": "Creative Python L.L.C.",
+   "type": "sanctioned_entity",
+   "jurisdiction": "ARE",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On an export-control list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/GpzoSlwJiKSXyY0Rl51-6w",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Owned by a sanctioned entity",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/GpzoSlwJiKSXyY0Rl51-6w",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Subject of a regulatory action",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/GpzoSlwJiKSXyY0Rl51-6w",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/GpzoSlwJiKSXyY0Rl51-6w",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/GpzoSlwJiKSXyY0Rl51-6w",
+    "entity_kind": "company",
+    "countries": [
+     "ARE"
+    ],
+    "risk_flag_count": 13,
+    "aliases": [
+     "كرييتف بايثون ش.ذ.م.م",
+     "Creative Python",
+     "كرييتف بايثون ش.ذ.م.م"
+    ],
+    "addresses": [
+     "Burlington Tower, 2806, Business Bay, Dubai, AE",
+     "Dubai, ARE",
+     "Burlington Tower, 2806, Business Bay, Dubai, AE"
+    ],
+    "identifiers": [
+     {
+      "type": "unknown",
+      "value": "11504889"
+     },
+     {
+      "type": "unknown",
+      "value": "882080"
+     },
+     {
+      "type": "usa_ofac_sdn_number",
+      "value": "48963"
+     },
+     {
+      "type": "unknown_commercial_register_id",
+      "value": "1488185"
+     },
+     {
+      "type": "unknown_chamber_of_commerce_id",
+      "value": "364077"
+     }
+    ],
+    "registration_date": "2020-02-29",
+    "company_type": "LLC",
+    "business_purpose": [
+     "Professional, scientific, and technical activities"
+    ],
+    "sayari_sources": [
+     "Acuris Risk Intelligence - Entities & Relationships (3rd Party Data)",
+     "Acuris Risk Intelligence - Risk Information and Articles (3rd Party Data)",
+     "UAE Cedar Rose Company Database (3rd Party Data)",
+     "USA Treasury OFAC Specially Designated Nationals (SDN) List",
+     "OpenSanctions - Global Sanctions List"
+    ],
+    "trade_count": {
+     "sent": 0,
+     "received": 0
+    },
+    "relationship_summary": {
+     "linked_to": 2,
+     "has_shareholder": 1
+    }
+   }
+  },
+  {
+   "id": "Aq8D2ZKjaHPMSp7ZQdQ3-w",
+   "label": "AL JIL ALQADEM GENERAL TRADING L.L.C.",
+   "type": "sanctioned_entity",
+   "jurisdiction": "ARE",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On an export-control list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/Aq8D2ZKjaHPMSp7ZQdQ3-w",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Owned by a sanctioned entity",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/Aq8D2ZKjaHPMSp7ZQdQ3-w",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/Aq8D2ZKjaHPMSp7ZQdQ3-w",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/Aq8D2ZKjaHPMSp7ZQdQ3-w",
+    "entity_kind": "company",
+    "countries": [
+     "ARE"
+    ],
+    "risk_flag_count": 13,
+    "aliases": [
+     "الجيل القادم للتجارة العامة ش.ذ.م.م",
+     "الجيل القادم للتجارة العامة ش.ذ.م.م"
+    ],
+    "addresses": [
+     "Dubai, United Arab Emirates",
+     "No. 76, Khalid Mohammed Abdullah Al Zahid Property, Deira, Hor al Anz, Dubai, AE",
+     "No. 76, Khalid Mohammed Abdullah Al Zahid Property, Deira, Hor al Anz, Dubai, United Arab Emirates",
+     "Dubai, ARE"
+    ],
+    "identifiers": [
+     {
+      "type": "unknown",
+      "value": "10946303"
+     },
+     {
+      "type": "unknown",
+      "value": "767427"
+     },
+     {
+      "type": "usa_ofac_sdn_number",
+      "value": "49142"
+     },
+     {
+      "type": "xxx_cedar_rose_uid",
+      "value": "AEC74877506"
+     },
+     {
+      "type": "unknown_chamber_of_commerce_id",
+      "value": "276588"
+     }
+    ],
+    "registration_date": "2016-10-05",
+    "company_type": "LLC",
+    "business_purpose": [
+     "Wholesale and retail trade"
+    ],
+    "sayari_sources": [
+     "Acuris Risk Intelligence - Entities & Relationships (3rd Party Data)",
+     "Acuris Risk Intelligence - Risk Information and Articles (3rd Party Data)",
+     "UAE Cedar Rose Company Database (3rd Party Data)",
+     "USA Treasury OFAC Specially Designated Nationals (SDN) List",
+     "OpenSanctions - Global Sanctions List"
+    ],
+    "trade_count": {
+     "sent": 0,
+     "received": 0
+    },
+    "relationship_summary": {
+     "has_manager": 1,
+     "linked_to": 4,
+     "has_shareholder": 1
+    }
+   }
+  },
+  {
+   "id": "QwJxDWpsENhhpo5R6BgRRA",
+   "label": "Naser Helal Abdullah Hammadi",
+   "type": "associated_person",
+   "jurisdiction": "ARE",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "One hop from an export-controlled party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/QwJxDWpsENhhpo5R6BgRRA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/QwJxDWpsENhhpo5R6BgRRA",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/QwJxDWpsENhhpo5R6BgRRA",
+    "entity_kind": "person",
+    "countries": [
+     "ARE"
+    ],
+    "risk_flag_count": 4
+   }
+  },
+  {
+   "id": "4jGmEWn103i4b33hvh5t9A",
+   "label": "Eslam Badruddine Mohammed Abdullah",
+   "type": "associated_person",
+   "jurisdiction": "ARE",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "One hop from an export-controlled party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/4jGmEWn103i4b33hvh5t9A",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/4jGmEWn103i4b33hvh5t9A",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/4jGmEWn103i4b33hvh5t9A",
+    "entity_kind": "person",
+    "countries": [
+     "ARE"
+    ],
+    "risk_flag_count": 4
+   }
+  },
+  {
+   "id": "vmtgCZaOQqwkhq1e3gOY4g",
+   "label": "Islam Mahmoud",
+   "type": "associated_person",
+   "jurisdiction": "ARE",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "One hop from an export-controlled party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/vmtgCZaOQqwkhq1e3gOY4g",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/vmtgCZaOQqwkhq1e3gOY4g",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/vmtgCZaOQqwkhq1e3gOY4g",
+    "entity_kind": "person",
+    "countries": [
+     "ARE"
+    ],
+    "risk_flag_count": 4
+   }
+  },
+  {
+   "id": "O7r0g-q-FJSWi1jxsNaM0A",
+   "label": "Christy Hanna",
+   "type": "associated_person",
+   "jurisdiction": "ARE",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "One hop from an export-controlled party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/O7r0g-q-FJSWi1jxsNaM0A",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/O7r0g-q-FJSWi1jxsNaM0A",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/O7r0g-q-FJSWi1jxsNaM0A",
+    "entity_kind": "person",
+    "countries": [
+     "ARE"
+    ],
+    "risk_flag_count": 4
+   }
+  },
+  {
+   "id": "v-5udvS12QLe4EwEid8oew",
+   "label": "CAPITAL TAB MANAGEMENT CONSULTANCY LIMITED LIABILITY COMPANY",
+   "type": "sanctioned_entity",
+   "jurisdiction": "ARE",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On an export-control list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/v-5udvS12QLe4EwEid8oew",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "OFAC 50% rule: owned 50%+ by blocked persons",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/v-5udvS12QLe4EwEid8oew",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Owned by a sanctioned entity",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/v-5udvS12QLe4EwEid8oew",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Subject of a regulatory action",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/v-5udvS12QLe4EwEid8oew",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/v-5udvS12QLe4EwEid8oew",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/v-5udvS12QLe4EwEid8oew",
+    "entity_kind": "company",
+    "countries": [
+     "ARE"
+    ],
+    "risk_flag_count": 15
+   }
+  },
+  {
+   "id": "VAVQ9aoHYG1lurLNt7K1tA",
+   "label": "HORIZON ADVANCED SOLUTIONS GENERAL TRADING - LLC SO",
+   "type": "sanctioned_entity",
+   "jurisdiction": "ARE",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On an export-control list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/VAVQ9aoHYG1lurLNt7K1tA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "OFAC 50% rule: owned 50%+ by blocked persons",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/VAVQ9aoHYG1lurLNt7K1tA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Owned by a sanctioned entity",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/VAVQ9aoHYG1lurLNt7K1tA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/VAVQ9aoHYG1lurLNt7K1tA",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/VAVQ9aoHYG1lurLNt7K1tA",
+    "entity_kind": "company",
+    "countries": [
+     "ARE"
+    ],
+    "risk_flag_count": 15
+   }
+  },
+  {
+   "id": "NNmQGoINAI9uIqPK9gAjDA",
+   "label": "Anas Jannoud",
+   "type": "associated_person",
+   "jurisdiction": "ARE",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "One hop from an export-controlled party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/NNmQGoINAI9uIqPK9gAjDA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/NNmQGoINAI9uIqPK9gAjDA",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/NNmQGoINAI9uIqPK9gAjDA",
+    "entity_kind": "person",
+    "countries": [
+     "ARE"
+    ],
+    "risk_flag_count": 4
+   }
+  },
+  {
+   "id": "Ba_RpmYMDqabZk_S6NLteA",
+   "label": "Islam Badredine Mohammed Abdullah",
+   "type": "associated_person",
+   "jurisdiction": "ARE",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "One hop from an export-controlled party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/Ba_RpmYMDqabZk_S6NLteA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/Ba_RpmYMDqabZk_S6NLteA",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/Ba_RpmYMDqabZk_S6NLteA",
+    "entity_kind": "person",
+    "countries": [
+     "ARE"
+    ],
+    "risk_flag_count": 4
+   }
+  },
+  {
+   "id": "yvDibAVXyeKqdv6I9JFczA",
+   "label": "Abdulraheem Hamdan Mossa",
+   "type": "associated_person",
+   "jurisdiction": "ARE",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "One hop from an export-controlled party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/yvDibAVXyeKqdv6I9JFczA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/yvDibAVXyeKqdv6I9JFczA",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/yvDibAVXyeKqdv6I9JFczA",
+    "entity_kind": "person",
+    "countries": [
+     "ARE"
+    ],
+    "risk_flag_count": 4
+   }
+  },
+  {
+   "id": "g2MeK6gX0AUG_gONaxlSqA",
+   "label": "Mazin Gamareldin Mohamed Fadlalla",
+   "type": "associated_person",
+   "jurisdiction": "LBY",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "One hop from an export-controlled party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/g2MeK6gX0AUG_gONaxlSqA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/g2MeK6gX0AUG_gONaxlSqA",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/g2MeK6gX0AUG_gONaxlSqA",
+    "entity_kind": "person",
+    "countries": [
+     "LBY",
+     "SDN"
+    ],
+    "risk_flag_count": 4
+   }
+  },
+  {
+   "id": "5S9-R7b7IiVKkCwLMwEBVA",
+   "label": "Abdelrahim Hamdan Dagalo",
+   "type": "sanctioned_entity",
+   "jurisdiction": "SDN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On an export-control list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/5S9-R7b7IiVKkCwLMwEBVA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On Canada's sanctions list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/5S9-R7b7IiVKkCwLMwEBVA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the EU sanctions list",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/5S9-R7b7IiVKkCwLMwEBVA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the UK sanctions list",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/5S9-R7b7IiVKkCwLMwEBVA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/5S9-R7b7IiVKkCwLMwEBVA",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/5S9-R7b7IiVKkCwLMwEBVA",
+    "entity_kind": "person",
+    "countries": [
+     "SDN"
+    ],
+    "risk_flag_count": 43
+   }
+  },
+  {
+   "id": "0G1FdPA_2rGv5Q1fw_grvQ",
+   "label": "Alkhaleej Bank Co Ltd",
+   "type": "sanctioned_entity",
+   "jurisdiction": "SDN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On an export-control list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/0G1FdPA_2rGv5Q1fw_grvQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Recent organised-crime adverse media",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/0G1FdPA_2rGv5Q1fw_grvQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Recent terrorism-related adverse media",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/0G1FdPA_2rGv5Q1fw_grvQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On Canada's sanctions list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/0G1FdPA_2rGv5Q1fw_grvQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the EU sanctions list",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/0G1FdPA_2rGv5Q1fw_grvQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the UK sanctions list",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/0G1FdPA_2rGv5Q1fw_grvQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/0G1FdPA_2rGv5Q1fw_grvQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/0G1FdPA_2rGv5Q1fw_grvQ",
+    "entity_kind": "company",
+    "countries": [
+     "SDN"
+    ],
+    "risk_flag_count": 16
+   }
+  }
+ ],
+ "edges": [
+  {
+   "source": "sAgA0QVKr-gjEAqoJvf0zg",
+   "target": "RoWARA0BHg-GoWvDJFBOSg",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/RoWARA0BHg-GoWvDJFBOSg",
+   "label": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Al Zumoroud And Al Yaqoot Gold and Jewellers Trading L.L.C.",
+   "sayari_relationship": "has_shareholder",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "sAgA0QVKr-gjEAqoJvf0zg",
+   "target": "RoWARA0BHg-GoWvDJFBOSg",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/RoWARA0BHg-GoWvDJFBOSg",
+   "label": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Al Zumoroud And Al Yaqoot Gold and Jewellers Trading L.L.C.",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "50fd__JaDZdfJRjWZl1DlA",
+   "target": "RoWARA0BHg-GoWvDJFBOSg",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/RoWARA0BHg-GoWvDJFBOSg",
+   "label": "Algoney Hamdan Dagalo is Linked to Al Zumoroud And Al Yaqoot Gold and Jewellers Trading L.L.C.",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "l-hTG9hSLd7dA4za2B7CRw",
+   "target": "sAgA0QVKr-gjEAqoJvf0zg",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg",
+   "label": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Capital Tap Holding L.L.C.",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "dFB7YowXog_6EwiEur43RQ",
+   "target": "sAgA0QVKr-gjEAqoJvf0zg",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg",
+   "label": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Prodigious Real Estate Management Supervision Services",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "XtartWzEze9a18ZDKVad8A",
+   "target": "sAgA0QVKr-gjEAqoJvf0zg",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg",
+   "label": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Capital Tap General Trading L.L.C.",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "GpzoSlwJiKSXyY0Rl51-6w",
+   "target": "sAgA0QVKr-gjEAqoJvf0zg",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg",
+   "label": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Creative Python L.L.C.",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "Aq8D2ZKjaHPMSp7ZQdQ3-w",
+   "target": "sAgA0QVKr-gjEAqoJvf0zg",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg",
+   "label": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Al Jil Alqadem General Trading L.L.C.",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "sAgA0QVKr-gjEAqoJvf0zg",
+   "target": "XtartWzEze9a18ZDKVad8A",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg",
+   "label": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Capital Tap General Trading L.L.C.",
+   "sayari_relationship": "shareholder_of",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "sAgA0QVKr-gjEAqoJvf0zg",
+   "target": "GpzoSlwJiKSXyY0Rl51-6w",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg",
+   "label": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Creative Python L.L.C.",
+   "sayari_relationship": "shareholder_of",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "sAgA0QVKr-gjEAqoJvf0zg",
+   "target": "Aq8D2ZKjaHPMSp7ZQdQ3-w",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/sAgA0QVKr-gjEAqoJvf0zg",
+   "label": "Abu Dharr Abdul Nabi Habiballa Ahmmed is Linked to Al Jil Alqadem General Trading L.L.C.",
+   "sayari_relationship": "shareholder_of",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "l-hTG9hSLd7dA4za2B7CRw",
+   "target": "XtartWzEze9a18ZDKVad8A",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/XtartWzEze9a18ZDKVad8A",
+   "label": "Capital Tap Holding L.L.C. is the parent of Capital Tap General Trading L.L.C.",
+   "sayari_relationship": "subsidiary_of",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "QwJxDWpsENhhpo5R6BgRRA",
+   "target": "XtartWzEze9a18ZDKVad8A",
+   "relationship_type": "OFFICER_DIRECTOR",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/XtartWzEze9a18ZDKVad8A",
+   "label": "Manager",
+   "sayari_relationship": "has_manager",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "4jGmEWn103i4b33hvh5t9A",
+   "target": "XtartWzEze9a18ZDKVad8A",
+   "relationship_type": "OFFICER_DIRECTOR",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/XtartWzEze9a18ZDKVad8A",
+   "label": "Manager",
+   "sayari_relationship": "has_manager",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "vmtgCZaOQqwkhq1e3gOY4g",
+   "target": "l-hTG9hSLd7dA4za2B7CRw",
+   "relationship_type": "OFFICER_DIRECTOR",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/l-hTG9hSLd7dA4za2B7CRw",
+   "label": "Chief Executive Officer",
+   "sayari_relationship": "has_officer",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "O7r0g-q-FJSWi1jxsNaM0A",
+   "target": "l-hTG9hSLd7dA4za2B7CRw",
+   "relationship_type": "OFFICER_DIRECTOR",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/l-hTG9hSLd7dA4za2B7CRw",
+   "label": "Chief Operating Officer",
+   "sayari_relationship": "has_officer",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "l-hTG9hSLd7dA4za2B7CRw",
+   "target": "v-5udvS12QLe4EwEid8oew",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/l-hTG9hSLd7dA4za2B7CRw",
+   "label": "CAPITAL TAB MANAGEMENT CONSULTANCY LIMITED LIABILITY COMPANY is the parent of Capital Tap Holding L.L.C.",
+   "sayari_relationship": "has_subsidiary",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "l-hTG9hSLd7dA4za2B7CRw",
+   "target": "VAVQ9aoHYG1lurLNt7K1tA",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/l-hTG9hSLd7dA4za2B7CRw",
+   "label": "HORIZON ADVANCED SOLUTIONS GENERAL TRADING - LLC SO is the parent of Capital Tap Holding L.L.C.",
+   "sayari_relationship": "has_subsidiary",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "v-5udvS12QLe4EwEid8oew",
+   "target": "l-hTG9hSLd7dA4za2B7CRw",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/l-hTG9hSLd7dA4za2B7CRw",
+   "label": "CAPITAL TAB MANAGEMENT CONSULTANCY LIMITED LIABILITY COMPANY is linked to Capital Tap Holding L.L.C.",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "dFB7YowXog_6EwiEur43RQ",
+   "target": "l-hTG9hSLd7dA4za2B7CRw",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/l-hTG9hSLd7dA4za2B7CRw",
+   "label": "Capital Tap Holding L.L.C. is linked to Prodigious Real Estate Management Supervision Services",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "VAVQ9aoHYG1lurLNt7K1tA",
+   "target": "l-hTG9hSLd7dA4za2B7CRw",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/l-hTG9hSLd7dA4za2B7CRw",
+   "label": "HORIZON ADVANCED SOLUTIONS GENERAL TRADING - LLC SO is linked to Capital Tap Holding L.L.C.",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "NNmQGoINAI9uIqPK9gAjDA",
+   "target": "l-hTG9hSLd7dA4za2B7CRw",
+   "relationship_type": "OFFICER_DIRECTOR",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/l-hTG9hSLd7dA4za2B7CRw",
+   "label": "Human Resources Manager",
+   "sayari_relationship": "has_manager",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "Ba_RpmYMDqabZk_S6NLteA",
+   "target": "l-hTG9hSLd7dA4za2B7CRw",
+   "relationship_type": "OFFICER_DIRECTOR",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/l-hTG9hSLd7dA4za2B7CRw",
+   "label": "Chairman",
+   "sayari_relationship": "has_member_of_the_board",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "50fd__JaDZdfJRjWZl1DlA",
+   "target": "GpzoSlwJiKSXyY0Rl51-6w",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/GpzoSlwJiKSXyY0Rl51-6w",
+   "label": "Algoney Hamdan Dagalo is Linked to Creative Python L.L.C.",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "yvDibAVXyeKqdv6I9JFczA",
+   "target": "Aq8D2ZKjaHPMSp7ZQdQ3-w",
+   "relationship_type": "OFFICER_DIRECTOR",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/Aq8D2ZKjaHPMSp7ZQdQ3-w",
+   "label": "Manager",
+   "sayari_relationship": "has_manager",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "g2MeK6gX0AUG_gONaxlSqA",
+   "target": "Aq8D2ZKjaHPMSp7ZQdQ3-w",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/Aq8D2ZKjaHPMSp7ZQdQ3-w",
+   "label": "Mazin Gamareldin Mohamed Fadlalla is Linked to Al Jil Alqadem General Trading L.L.C.",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "5S9-R7b7IiVKkCwLMwEBVA",
+   "target": "Aq8D2ZKjaHPMSp7ZQdQ3-w",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/Aq8D2ZKjaHPMSp7ZQdQ3-w",
+   "label": "Abdul Rahim Hamdan Dagalo is Linked to Al Jil Alqadem General Trading L.L.C.",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "0G1FdPA_2rGv5Q1fw_grvQ",
+   "target": "Aq8D2ZKjaHPMSp7ZQdQ3-w",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/Aq8D2ZKjaHPMSp7ZQdQ3-w",
+   "label": "Alkhaleej Bank Co Ltd is linked to Al Jil Alqadem General Trading L.L.C.",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  }
+ ],
+ "audit_trail": [
+  {
+   "step": 1,
+   "source": "Sayari",
+   "query_executed": "get_entity_profile AZ Gold + 6 linked entities (recorded)",
+   "records_matched": 7
+  },
+  {
+   "step": 2,
+   "source": "Tradeverifyd",
+   "query_executed": "search_entities / entity_details / entity_annotations / entity_score (recorded)",
+   "records_matched": 1
+  },
+  {
+   "step": 3,
+   "source": "Tavily",
+   "query_executed": "Treasury press release for RSF designations",
+   "records_matched": 1
+  }
+ ]
+}

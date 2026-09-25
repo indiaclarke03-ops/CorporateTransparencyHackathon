@@ -1,5 +1,5 @@
-import { Workspace } from '@/components/workspace/Workspace'
+import { InvestigationExplorer } from '@/components/investigation-explorer'
 
 export default function Page() {
-  return <Workspace />
+  return <InvestigationExplorer />
 }

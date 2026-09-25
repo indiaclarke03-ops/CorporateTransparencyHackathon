@@ -8,6 +8,8 @@ export const NODE_TYPE_META: Record<NodeType, { label: string; color: string }> 
   transshipment_hub: { label: 'Transshipment hub', color: '#d98c3f' },
   address_hub: { label: 'Address hub', color: '#a3b18a' },
   facilitator: { label: 'Facilitator', color: '#7f9bbd' },
+  associated_person: { label: 'Linked person', color: '#e9c4a0' },
+  related_company: { label: 'Linked company', color: '#b9a88f' },
 }
 
 export const SEVERITY_COLOR: Record<Severity, string> = {

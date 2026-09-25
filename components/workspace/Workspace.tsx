@@ -35,6 +35,12 @@ export function Workspace() {
           ))}
         </select>
         <Link
+          href="/"
+          className="flex h-9 items-center rounded-md border border-border px-3 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          Case explorer
+        </Link>
+        <Link
           href="/traceability"
           className="flex h-9 items-center gap-1.5 rounded-md border border-border px-3 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >

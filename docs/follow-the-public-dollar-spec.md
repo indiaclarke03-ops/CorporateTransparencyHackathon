@@ -717,8 +717,7 @@ Demo path for judging: pick one federal contractor, show its award, resolve it, 
 | Confirm the current Common High Priority List HS codes | M4 |
 | Select backtest cases from official enforcement records | M8 |
 | Find a source for the "shells close within about two years" figure, or keep it out | Before pitch |
-| Verify the HS code lists for TR6 (fentanyl precursors) and TR7 (gallium, germanium), and the IRS 990 fields for NP2 | M4 |
-| Confirm which UAE-based companies Treasury press release JY2772 names (Sudan and UAE typology) | M8 |
+| Typology data to confirm: HS codes for TR6 and TR7, UAE companies in JY2772, IRS 990 fields for NP2 (backlog B30–B32 in `docs/data-source-map.md`) | M4 |
 | Implement typologies and anchor signals in the scoring engine (`scoring/engine.py` has no tiers or typologies yet) | M4 |
 | Confirm the current status of the US Corporate Transparency Act and UK Companies House identity verification before citing them | Before pitch |
 | Decide the configured NAICS or PSC codes for the dashboard's watched sectors | M7 |

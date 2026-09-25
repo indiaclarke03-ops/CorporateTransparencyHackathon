@@ -1,0 +1,22 @@
+{
+  "investigation_summary": {
+    "root_recipient": "Palantir Technologies",
+    "composite_risk_score": 8,
+    "confidence_rating": "A",
+    "primary_typology": "Clean control",
+    "executive_rationale": "Placeholder — replace with the locked Palantir validation fixture."
+  },
+  "nodes": [
+    {
+      "id": "ent_palantir",
+      "label": "Palantir Technologies",
+      "type": "public_recipient",
+      "jurisdiction": "US",
+      "entity_confidence": null,
+      "risk_signals": [],
+      "sayari_pass_through": null
+    }
+  ],
+  "edges": [],
+  "audit_trail": []
+}

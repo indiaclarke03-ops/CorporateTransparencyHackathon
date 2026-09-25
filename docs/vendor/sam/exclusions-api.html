@@ -1,0 +1,1679 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>SAM.gov Exclusions  API | GSA Open Technology</title>
+  <meta name="description" content="OverviewThe Exclusions API will allow users to request Public Exclusion Information based on various optional request parameters.The response will be provide...">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="SAM.gov Exclusions  API | GSA Open Technology" />
+  <meta name="twitter:title" content="SAM.gov Exclusions  API | GSA Open Technology">
+  <meta property="og:url" content="https://open.gsa.gov/api/exclusions-api/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image" content="https://open.gsa.gov/assets/img/feature-background.jpg">
+  <meta name="twitter:image" content="https://open.gsa.gov/assets/img/feature-background.jpg">
+  <meta property="og:description" content="OverviewThe Exclusions API will allow users to request Public Exclusion Information based on various optional request parameters.The response will be provide...">
+  <meta name="twitter:description" content="OverviewThe Exclusions API will allow users to request Public Exclusion Information based on various optional request parameters.The response will be provide...">
+  <meta name="google-site-verification" content="1mdRfaEaI19uCixYkGGmRsv2iA_si1n44fNtk4jzixQ" />
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/img/favicon.ico" />
+
+  <link rel="canonical" href="https://open.gsa.gov/api/exclusions-api/">
+
+  <script>
+    if (/^www\./.test(window.location.hostname)) {
+      window.location = window.location.href.replace('www.', '');
+    }
+  </script>
+</head>
+
+
+<body>
+    <div id="wrapper">
+        <div id="header"><div class="skip-nav">
+    <a href="#content" class="skips">Skip to main content</a>
+</div>
+
+<header class="usa-header usa-header-extended" role="banner">
+  <!-- Gov banner BEGIN -->
+<div class="usa-banner">
+<div class="usa-accordion">
+  <header class="usa-banner-header">
+    <div class="usa-grid usa-banner-inner">
+    <img src="/assets/uswds/img/favicons/favicon-57.png" alt="U.S. flag">
+    <p>An official website of the United States government</p>
+    <button class="usa-accordion-button usa-banner-button"
+      aria-expanded="false" aria-controls="gov-banner">
+      <span class="usa-banner-button-text">Here's how you know</span>
+    </button>
+    </div>
+  </header>
+  <div class="usa-banner-content usa-grid usa-accordion-content" id="gov-banner">
+    <div class="usa-banner-guidance-gov usa-width-one-half">
+      <img class="usa-banner-icon usa-media_block-img" src="/assets/uswds/img/icon-dot-gov.svg" alt="Dot gov">
+      <div class="usa-media_block-body">
+        <p>
+          <strong>The .gov means it’s official.</strong>
+          <br>
+          Federal government websites always use a .gov or .mil domain. Before sharing sensitive information online, make sure you’re on a .gov or .mil site by inspecting your browser’s address (or “location”) bar.
+        </p>
+      </div>
+    </div>
+    <div class="usa-banner-guidance-ssl usa-width-one-half">
+      <img class="usa-banner-icon usa-media_block-img" src="/assets/uswds/img/icon-https.svg" alt="SSL">
+      <div class="usa-media_block-body">
+        <p>This site is also protected by an SSL (Secure Sockets Layer) certificate that’s been signed by the U.S. government. The <strong>https://</strong> means all transmitted data is encrypted  — in other words, any information or browsing history that you provide is transmitted securely.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<!-- Gov banner END -->
+  <nav class="usa-site-navbar" aria-label="primary navigation">
+    <div class="usa-grid top-nav">
+      <div id="logo">
+        <a href="/" accesskey="1" title="Home" aria-label="Home">
+          <img class="header-logo" src="/assets/img/gsa_logo.svg" alt="GSA Open Technology">
+          <span class="header-title">U.S. General Services Administration</span>
+        </a>
+      </div>
+      <ul class="usa-nav-list usa-unstyled-list">
+        <li class="usa-menu-item"><a href="/search.html"> <i class="fa fa-search"></i> Search</a></li>
+        <li class="usa-menu-item"><a href="/data">Data</a></li>
+        <li class="usa-menu-item"><a href="/api">APIs</a></li>
+        <li class="usa-menu-item"><a href="/code">Code</a></li>
+      </ul>
+    </div>
+    <br/>
+  </nav>
+</header>
+</div>
+        <div id="content">
+  <section class="usa-section usa-section-dark banner-header">
+    <div class="usa-grid">
+        <div class="usa-width-one-whole usa-end-row">
+            <h2>SAM.gov Exclusions API</h2>  
+        </div>
+    </div>
+</section>
+
+
+
+<main class="usa-grid" id="main" tabindex="-1">
+  <section>
+    <aside class="usa-width-one-fourth sidebar-sticky" style="word-wrap: break-word;">
+  <ul id="toc" class="usa-sidenav-list">
+<li class="toc-entry toc-h2"><a href="#overview">Overview</a></li>
+<li class="toc-entry toc-h2"><a href="#getting-started">Getting Started</a></li>
+<li class="toc-entry toc-h2"><a href="#api-description">API Description</a></li>
+<li class="toc-entry toc-h2"><a href="#openapi-specification-file">OpenAPI Specification File</a></li>
+<li class="toc-entry toc-h2"><a href="#http-response-codes">HTTP Response Codes</a></li>
+<li class="toc-entry toc-h2"><a href="#examples">Examples</a>
+<ul class="usa-sidenav-sub_list">
+<li class="toc-entry toc-h3"><a href="#example-1-post-april-3-2022-get-me-all-the-firms-whose-physical-address-is-in-virginia">Example 1: Post April 3, 2022, get me all the firms whose physical address is in Virginia.</a></li>
+<li class="toc-entry toc-h3"><a href="#example-2-post-april-3-2022-get-me-all-the-firms-in-a-csv-file-format">Example 2: Post April 3, 2022, get me all the firms in a CSV file format.</a></li>
+<li class="toc-entry toc-h3"><a href="#example-3-get-individual-or-special-entity-designation-exclusion-records-that-are-not-excluded-by-doj-that-belong-to-korea-and-that-contain-chong-anywhere-in-the-response">Example 3: Get individual or special entity designation exclusion records that are not excluded by DOJ, that belong to Korea and that contain CHONG anywhere in the response.</a></li>
+<li class="toc-entry toc-h3"><a href="#example-4-get-details-and-address-of-the-ineligible-proceedings-completed-or-prohibitionrestriction-type-of-firm-exclusion-records-that-belong-to-korea-china-or-germany-by-using-the-q-parameter">Example 4: Get details and address of the ineligible (proceedings completed) or prohibition/restriction type of firm exclusion records that belong to Korea, China or Germany, by using the “q” parameter.</a></li>
+<li class="toc-entry toc-h3"><a href="#example-5-get-details-for-fascsa-order-exclusion-records-only">Example 5: Get details for FASCSA order exclusion records only.</a></li>
+<li class="toc-entry toc-h3"><a href="#example-6-to-receive-a-file-downloadable-link-in-the-email-for-the-requested-csv-results">Example 6: To receive a file downloadable link in the email for the requested CSV results.</a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#additional-information">Additional Information</a></li>
+<li class="toc-entry toc-h2"><a href="#contact-us">Contact Us</a></li>
+<li class="toc-entry toc-h2"><a href="#change-log">Change Log</a></li>
+</ul>
+</aside>
+
+<div class="usa-width-three-fourths">
+  <h2 id="overview">Overview</h2>
+<p>The Exclusions API will allow users to request Public Exclusion Information based on various optional request parameters.
+The response will be provided in the JSON format in a paginated manner.</p>
+
+<p><strong>Key Features of the Exclusion API:</strong></p>
+<ul>
+  <li>It offers several optional search parameters, filtering by sections, AND (&amp;), OR (~), NOT (!), WILD CARD(*) conditions and a free text search q to obtain the desired data. Please note that q does not support null (‘’), not-null (!’’) or not (!) searches. Additionally, q accepts only AND, OR, :, =, * (denotes wild card) operators.</li>
+  <li>It returns synchronous responses directly in the browser.</li>
+  <li>It returns ten records per page in the JSON format.</li>
+  <li>It can return only the first 10,000 records.</li>
+  <li>The following characters are not allowed to be sent in the parameter values with the API request: &amp; | { } ^ \</li>
+  <li>Values involving / must be enclosed within double quotes if they are to be requested via a search parameter.</li>
+</ul>
+
+<p><strong>Additional Features of the Exclusion API:</strong> It can serve as an Extract API with the addition of “format” parameter in the request. Following are the key features of the Exclusion Extract API:</p>
+<ul>
+  <li>It offers several optional search parameters, filtering by sections, AND (&amp;), OR (~), NOT (!), WILD CARD(*) conditions and a free text search q to obtain the desired data. Please note that q does not support null (‘’), not-null (!’’) or not (!) searches. Additionally, q accepts only AND, OR, :, =, * (denotes wild card) operators.</li>
+  <li>It returns asynchronous responses by sending file downloadable links in the browser and in the user emails.</li>
+  <li>It returns data in the JSON or CSV format as selected by the user.</li>
+  <li>It can return only the first 1,000,000 records.</li>
+</ul>
+
+<p><small><a href="#">Back to top</a></small></p>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<p>Exclusions API can be accessed from Production or Alpha with the following version 4 endpoints:</p>
+<ul>
+  <li>Production Version 4: https://api.sam.gov/entity-information/v4/exclusions?api_key=&lt; value &gt;</li>
+  <li>Alpha Version 4: https://api-alpha.sam.gov/entity-information/v4/exclusions?api_key=&lt; value &gt;<br /><br /></li>
+</ul>
+
+<p>Generating a personal API Key:</p>
+<ul>
+  <li>Registered users can request for a public API on ‘Account Details’ page. This page can be accessed here: <a href="https://sam.gov/workspace/profile/account-details" target="_blank">Account Details page on sam.gov</a></li>
+  <li>Users must enter their password on ‘Account Details’ page to view the API Key information. If an incorrect password is entered, an error will be returned.</li>
+  <li>After the API Key is generated on ‘Account Details’ page, the API Key can be viewed on the Account Details page immediately. The API Key is visible until users navigate to a different page.</li>
+  <li>If an error is encountered during the API Key generation/retrieval, then users will receive an error message and they can try again.</li>
+</ul>
+
+<p>Generating a System Account API Key:</p>
+<ul>
+  <li>Users registered with a non-government email address and associated with an entity OR users registered with a government email address may request a system account for public data access.</li>
+  <li>If a user satisfies the above registration criteria they will be able to access the System Accounts widget from their Workspace page after logging in.</li>
+  <li>The user can then select ‘Go to System Accounts’ from the widget and fill out the required sections.</li>
+  <li>The requested system account will then need to be approved.  After approval the user will be notified via email and they can also see the updated status in the System Account widget.</li>
+  <li>The user can select ‘Go to System Accounts’ again in the widget from their workspace and enter a new system account password.</li>
+  <li>After setting up the password the user will see a new section for retrieving a system account API Key.</li>
+  <li>The user must enter their password again to retrieve the key.</li>
+</ul>
+
+<p>Type of Connections and Rate Limits</p>
+<table>
+<tr>
+<th style="background-color: #f1f1f1;"><b>Connecting Source</b></th>
+<th style="background-color: #f1f1f1;"><b>Type of Connection</b></th>
+<th style="background-color: #f1f1f1;"><b>Default Rate Limit</b></th>
+</tr>
+<tr>
+<td>Non-federal user with no role</td>
+<td>Personal API key</td>
+<td>10 requests/day</td>
+</tr>
+<tr>
+<td>Non-federal user with a role</td>
+<td>Personal API key</td>
+<td>1,000 requests/day</td>
+</tr>
+<tr>
+<td>Federal User</td>
+<td>Personal API key</td>
+<td>1,000 requests/day</td>
+</tr>
+<tr>
+<td>Non-federal system</td>
+<td>System account API key</td>
+<td>1,000 requests/day</td>
+</tr>
+<tr>
+<td>Federal system</td>
+<td>System account API key</td>
+<td>10,000 requests/day</td>
+</tr>
+</table>
+
+<p>Utilizing the Exclusion API as an extract:</p>
+<ul>
+  <li>To utilize this API as an Extract an additional parameter called ‘format’ has been implemented.</li>
+  <li>To retrieve Exclusion data in a CSV format, the parameter ‘&amp;format=csv’ must be provided in the request.</li>
+  <li>To retrieve Exclusion data in a JSON format, the parameter ‘&amp;format=json’ must be provided in the request.</li>
+  <li>If the requests that contain the ‘format’ parameter are executed successfully, then they will provide the user with a file downloadable URL in the response.</li>
+  <li>In the file downloadable URL, the phrase REPLACE_WITH_API_KEY must be deleted and replaced with a valid API Key and sent as another request.</li>
+  <li>If the file is ready for download, then the users can retrieve it. If the file is not ready for download, then the users will need to try again in some time.</li>
+  <li>Users can also provide another parameter, “emailId” with a valid email address if they choose to receive the file downloadable link in their emails.</li>
+</ul>
+
+<p><small><a href="#">Back to top</a></small></p>
+
+<h2 id="api-description">API Description</h2>
+
+<p><strong>Query String Parameters</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter Name</th>
+      <th>Description</th>
+      <th>Applicable Versions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>classification</td>
+      <td>Allows a partial text or a complete text (Individual, Firm, Vessel, Special Entity Designation).<br /><br /> This parameter can be used inside the ‘q’ parameter. <br /><br /> Example: ‘classification=Firm’, ‘classification=!INDIVIDUAL’, ‘classification=[Vessel~Special]’, ‘q=((classification:Vessel) OR (classification:Special))’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>exclusionName</td>
+      <td>Allows a partial text or a complete text.<br /><br /> This parameter must not be used inside the ‘q’ parameter.<br /><br /> This parameter accepts multi-text values in any order and in any case, and will apply the AND operator between the texts.<br /><br /> Examples: ‘exclusionName=J Roy’, ‘exclusionName=ROY j’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>exclusionType</td>
+      <td>Allows a partial text or a complete text (a string).<br /><br /> Allowable values are: Ineligible (Proceedings Pending), Ineligible (Proceedings Completed), Prohibition/Restriction and Voluntary Exclusion.<br /><br /> This parameter can be used inside the ‘q’ parameter. When not used inside the ‘q’ parameter, this parameter will apply the AND operator if a multi-text value is provided in any order and in any case.<br /><br /> Examples: ‘q=exclusionType:Ineligible (Proceedings Pending)’, ‘exclusionType=Ineligible PENDING’, ‘exclusionType=[Pending~Voluntary]’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>exclusionProgram</td>
+      <td>Allows a complete text (a string).<br /><br /> Allowable values are: Reciprocal, NonProcurement and Procurement.<br /><br /> This parameter can be used inside the ‘q’ parameter.<br /><br /> Examples: ‘q=((exclusionProgram:Reciprocal) OR (exclusionProgram:Procurement))’, ‘exclusionProgram=[NonProcurement~RECIPROCAL]’, ‘exclusionProgram=!NonProcurement’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>addressLine1</td>
+      <td>Mainly used to search Individuals with their address. Allows a partial text, a complete text and null.<br /><br /> This parameter must not be used inside the ‘q’ parameter. <br /><br /> Examples: ‘addressLine1=””’, ‘addressLine1=”7th Floor, Buraengdang Building 530-14”‘<br /><br /> NOTE: If addressLine1 is used in a request with exclusionName, it must match 85% of an Individual’s address in order for the address information to be returned in the response (not case sensitive).</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>addressLine2</td>
+      <td>Mainly used to search Individuals with their address. Allows a partial text, a complete text and null.<br /><br /> This parameter must not be used inside the ‘q’ parameter. <br /><br /> Examples: ‘addressLine2=””’, ‘addressLine2=”Dapsipri, 5 Dong, Dongdaemun-K”‘<br /><br /> NOTE: If addressLine2 is used in a request with exclusionName, it must match 85% of an Individual’s address in order for the address information to be returned in the response (not case sensitive).</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>stateProvince</td>
+      <td>Allows 2-character codes for the USA, names for foreign countries and null (a string).<br /><br /> Examples: ‘stateProvince=AR’, ‘stateProvince=[VA~MICHOACÁN]’, ‘stateProvince=””’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>country</td>
+      <td>Allows 3-character codes, numerical values and null (a string).<br /><br /> Examples: ‘country=USA’ ‘country=[RUS~292~mex]’, ‘country=!””’, ‘q=((country:RUS) OR (country:292) OR (country:mex))’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>zipCode</td>
+      <td>Allows 5-digit values for the USA, any value as it was provided for foreign countries and null (a string).<br /><br /> Example: ‘zipCode=20171’, ‘zipCode=[901-2132~V3M 5P8~C.P. 44890]’, ‘zipCode=””’, ‘q=((zipCode:901-2132) OR (zipCode:20147))’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>ueiSAM</td>
+      <td>Denotes Unique Entity Identifier SAM.<br /><br /> Allows 12-character values, null and also wildcard searches.<br /><br /> Examples: ‘ueiSAM=””’, ‘ueiSAM=!””’, ‘ueiSAM=P<em>X</em>1’, ‘q=((ueiSAM:PMC9YQMXJZU1) OR (ueiSAM:PG4XZ77WRC21))’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>excludingAgencyCode</td>
+      <td>Allows a partial text, a complete text and null (a string).<br /><br /> Examples: ‘excludingAgencyCode=ICE’, ‘excludingAgencyCode=DHS-ICE’, ‘excludingAgencyCode=[AF~HUD~””]’, ‘q=((excludingAgencyCode:AF) OR (excludingAgencyCode:HUD))’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>excludingAgencyName</td>
+      <td>Allows a partial text, a complete text and null (a string).<br /><br /> This parameter can be used inside the ‘q’ parameter. When not used inside the ‘q’ parameter, this parameter will apply the AND operator if a multi-text value is provided in any order and in any case<br /><br /> Examples: ‘excludingAgencyName=Of URBAN housing’,  ‘excludingAgencyName=[Geological~Navy]’, q=((excludingAgencyName:Geological) OR (excludingAgencyName:Navy))</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>ctCode</td>
+      <td>Allows a complete text, null and also wild card searches (a string).<br /><br /> Examples: ‘ctCode=<em>SDN</em>’, ‘ctCode=[AA~””], ‘q=((ctCode:AA) OR (ctCode:03-SDN-01))’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>activationDate</td>
+      <td>Allows a single Date or Date range. <br />Formats: MM/DD/YYYY or [MM/DD/YYYY,MM/DD/YYYY]<br /><br /> Examples: ‘activationDate=01/01/2019’, ‘activationDate=[01/01/2019,05/29/2019]’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>creationDate</td>
+      <td>Allows a single Date or Date range. <br />Formats: MM/DD/YYYY or [MM/DD/YYYY,MM/DD/YYYY]<br /><br /> Examples: ‘creationDate=01/01/2019’, ‘creationDate=[01/01/2019,05/29/2019]’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>updateDate</td>
+      <td>Allows a single Date or Date range. <br />Formats: MM/DD/YYYY or [MM/DD/YYYY,MM/DD/YYYY]<br /><br />  Examples: ‘updateDate=01/01/2019’, ‘updateDate=[01/01/2019,05/29/2019]’’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>terminationDate</td>
+      <td>Allows a single Date or Date range. <br />Formats: MM/DD/YYYY or [MM/DD/YYYY,MM/DD/YYYY]<br /><br /> Examples: ‘terminationDate=01/01/2019’, ‘terminationDate=[01/01/2019,05/29/2019]’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>cageCode</td>
+      <td>Allows a complete value, null and also wild card searches (a string).<br /><br /> Examples: ‘cageCode=0*0’, ‘cageCode=[0XLE0~1CM51~””]’, ‘q=((cageCode:0XLE0) OR (cageCode:1CM51))’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>npi</td>
+      <td>Allows 1234567890 (this is masked data) and null (a string).<br /><br /> Examples: ‘npi=1234567890’, ‘npi=””’, ‘npi=!””’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>recordStatus</td>
+      <td>The API returns only Active records.<br /><br /> Allows a complete text (a string).<br /><br /> Allowable value is: Active, active <br /><br /> Example: ‘recordStatus=active’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>page</td>
+      <td>Denotes a page number.<br /><br /> Allowable values are 0 to 999.<br /><br /> Example: ‘page=0’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>size</td>
+      <td>Denotes the number of records returned per page.<br /><br /> Allowable values are 1 to 10.<br /><br /> Example: ‘size=1’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>includeSections</td>
+      <td>Allows to filter data by sections, exclusionDetails, exclusionIdentification, exclusionActions, exclusionAddress, exclusionOtherInformation and vesselDetails.<br /><br /> Example: ‘includeSections=exclusionOtherInformation,exclusionDetails’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>format</td>
+      <td>Allows user to download different file formats(csv and json are allowable values) .<br /><br /> Example: ‘format=csv’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>emailId</td>
+      <td>Allows user to get file download links sent to the email address associated to the API key used in the request. Email ID must be provided in conjunction with the format parameter.<br />Example: emailId= Yes<br />Applicable to non-SAM registrants.</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>ssnOrTinOrEin</td>
+      <td>Allows a 9-digit value or null.<br /><br /> This parameter must not be used inside the ‘q’ parameter.<br /><br /> This parameter must be used in conjunction with the exclusionName parameter.<br /><br /> Example: ‘ssnOrTinOrEin=123456789’</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>fascsaOrder</td>
+      <td>Allows Yes and No.<br /><br /> This parameter accepts either value, in any case.<br /><br /> Examples: fascsaOrder=Yes, fascsaOrder=yes, fascsaOrder=No, fascsaOrder=no</td>
+      <td>v4</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Expected Result</strong></p>
+
+<p>API response consists of Sections, Sub-sections and Tags underneath each of the Sections or Sub-sections. There are a few placeholder elements that return ‘Currently Not Available’ until they are made available in the database. Additionally,</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Section/Sub-section/Tag</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Applicable Versions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>exclusionDetails</strong></td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>classificationType</td>
+      <td>string</td>
+      <td>Classification Type</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>exclusionType</td>
+      <td>string</td>
+      <td>Exclusion Type</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>exclusionProgram</td>
+      <td>string</td>
+      <td>Exclusion Program</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>excludingAgencyCode</td>
+      <td>string</td>
+      <td>Excluding Agency Code</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>excludingAgencyName</td>
+      <td>string</td>
+      <td>Excluding Agency Name</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td><strong>exclusionIdentification</strong></td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>ueiSAM</td>
+      <td>string</td>
+      <td>Unique Entity Identifier SAM</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>cageCode</td>
+      <td>string</td>
+      <td>CAGE Code</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>npi</td>
+      <td>string</td>
+      <td>NPI</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>prefix</td>
+      <td>string</td>
+      <td>Prefix</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>firstName</td>
+      <td>string</td>
+      <td>First Name</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>middleName</td>
+      <td>string</td>
+      <td>Middle Name</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>lastName</td>
+      <td>string</td>
+      <td>Last Name</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>suffix</td>
+      <td>string</td>
+      <td>Suffix</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>name/entityName</td>
+      <td>string</td>
+      <td>Firm Name <br /><br /> NOTE: This parameter is being renamed.  name is in V1 and entityName will be V2.</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>dnbOpenData</td>
+      <td>string</td>
+      <td>DNB Open Data</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td><strong>exclusionActions  –&gt; listOfActions</strong></td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>createDate</td>
+      <td>string</td>
+      <td>Create Date</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>updateDate</td>
+      <td>string</td>
+      <td>Update Date</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>activateDate</td>
+      <td>string</td>
+      <td>Activate Date</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>terminationDate</td>
+      <td>string</td>
+      <td>Termination Date</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>terminationType</td>
+      <td>string</td>
+      <td>Termination Type</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>recordStatus</td>
+      <td>string</td>
+      <td>Record Status</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td><strong>exclusionAddress/exclusionPrimaryAddress</strong></td>
+      <td> </td>
+      <td>NOTE: This section is being renamed. It is exclusionAddress in V1 and will be exclusionPrimaryAddress in V2.</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>addressLine1</td>
+      <td>string</td>
+      <td>Address Line 1</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>addressLine2</td>
+      <td>string</td>
+      <td>Address Line 2</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>city</td>
+      <td>string</td>
+      <td>Address City</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>stateOrProvinceCode</td>
+      <td>string</td>
+      <td>Address State or Province Code</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>zipCode</td>
+      <td>string</td>
+      <td>Address Zip OR Postal Code</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>zipCodePlus4</td>
+      <td>string</td>
+      <td>Address Zip Plus 4</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>countryCode</td>
+      <td>string</td>
+      <td>Country Code</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td><strong>exclusionSecondaryAddress</strong></td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>addressLine1</td>
+      <td>string</td>
+      <td>Address Line 1</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>addressLine2</td>
+      <td>string</td>
+      <td>Address Line 2</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>city</td>
+      <td>string</td>
+      <td>Address City</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>stateOrProvinceCode</td>
+      <td>string</td>
+      <td>Address State or Province Code</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>zipCode</td>
+      <td>string</td>
+      <td>Address Zip OR Postal Code</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>zipCodePlus4</td>
+      <td>string</td>
+      <td>Address Zip Plus 4</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>countryCode</td>
+      <td>string</td>
+      <td>Country Code</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td><strong>exclusionOtherInformation</strong></td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>isFASCSAOrder</td>
+      <td>string</td>
+      <td>FASCSA Order Exclusion Indicator</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>additionalComments</td>
+      <td>string</td>
+      <td>Additional Comments</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>ctCode</td>
+      <td>string</td>
+      <td>CT Code</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>dnbInvestigationStatus/evsInvestigationStatus</td>
+      <td>string</td>
+      <td>EVS Investigation Status  <br /><br />NOTE: This parameter is being renamed. dnbInvestigationStatus is in V1 and evsInvestigationStatus will be V2.</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td><strong>exclusionOtherInformation  –&gt; references –&gt; referencesList</strong></td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>name/exclusionName</td>
+      <td>string</td>
+      <td>Exclusion Name <br /><br />NOTE:  This parameter is being renamed.  name is in V1 and exclusionName will be V2.</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>type</td>
+      <td>string</td>
+      <td>Type</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td><strong>exclusionOtherInformation –&gt; moreLocations</strong></td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>exclusionName</td>
+      <td>string</td>
+      <td>Exclusion Name</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>ueiSAM</td>
+      <td>string</td>
+      <td>ueiSAM</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>cageCode</td>
+      <td>string</td>
+      <td>CAGE Code</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>npi</td>
+      <td>string</td>
+      <td>NPI</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td><strong>exclusionOtherInformation –&gt; moreLocations –&gt; primaryAddress</strong></td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>addressLine1</td>
+      <td>string</td>
+      <td>Address Line 1</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>addressLine2</td>
+      <td>string</td>
+      <td>Address Line 2</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>city</td>
+      <td>string</td>
+      <td>City</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>stateOrProvinceCode</td>
+      <td>string</td>
+      <td>State or Province Code</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>zipCode</td>
+      <td>string</td>
+      <td>Zip Code</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>zipCodePlus4</td>
+      <td>string</td>
+      <td>Zip Code Plus 4</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>countryCode</td>
+      <td>string</td>
+      <td>Country Code</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td><strong>exclusionOtherInformation –&gt; moreLocations –&gt; secondaryAddress</strong></td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>addressLine1</td>
+      <td>string</td>
+      <td>Address Line 1</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>addressLine2</td>
+      <td>string</td>
+      <td>Address Line 2</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>city</td>
+      <td>string</td>
+      <td>City</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>stateOrProvinceCode</td>
+      <td>string</td>
+      <td>State or Province Code</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>zipCode</td>
+      <td>string</td>
+      <td>Zip Code</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>zipCodePlus4</td>
+      <td>string</td>
+      <td>Zip Code Plus 4</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>countryCode</td>
+      <td>string</td>
+      <td>Country Code</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td><strong>vesselDetails</strong></td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>callSign</td>
+      <td>string</td>
+      <td>Call Sign</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>type</td>
+      <td>string</td>
+      <td>Type</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>tonnage</td>
+      <td>string</td>
+      <td>Tonnage</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>grt</td>
+      <td>string</td>
+      <td>GRT</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>flag</td>
+      <td>string</td>
+      <td>Flag</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td>owner</td>
+      <td>string</td>
+      <td>Owner</td>
+      <td>v4</td>
+    </tr>
+    <tr>
+      <td><strong>vesselDetails –&gt; secondaryAddress</strong></td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>addressLine1</td>
+      <td>string</td>
+      <td>Address Line 1</td>
+      <td>v4 Production only</td>
+    </tr>
+    <tr>
+      <td>addressLine2</td>
+      <td>string</td>
+      <td>Address Line 2</td>
+      <td>v4 Production only</td>
+    </tr>
+    <tr>
+      <td>city</td>
+      <td>string</td>
+      <td>Address City</td>
+      <td>v4 Production only</td>
+    </tr>
+    <tr>
+      <td>stateOrProvinceCode</td>
+      <td>string</td>
+      <td>Address State or Province Code</td>
+      <td>v4 Production only</td>
+    </tr>
+    <tr>
+      <td>zipCode</td>
+      <td>string</td>
+      <td>Address Zip OR Postal Code</td>
+      <td>v4 Production only</td>
+    </tr>
+    <tr>
+      <td>zipCodePlus4</td>
+      <td>string</td>
+      <td>Address Zip Plus 4</td>
+      <td>v4 Production only</td>
+    </tr>
+    <tr>
+      <td>countryCode</td>
+      <td>string</td>
+      <td>Country Code</td>
+      <td>v4 Production only</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><small><a href="#">Back to top</a></small></p>
+
+<h2 id="openapi-specification-file">OpenAPI Specification File</h2>
+
+<p>You can view the full details of this API in the OpenAPI Specification file available here:
+<a href="v1/openapi.yaml">Open API specification file for the Exclusion API</a></p>
+
+<p><small><a href="#">Back to top</a></small></p>
+
+<h2 id="http-response-codes">HTTP Response Codes</h2>
+
+<p>The API will return one of the following responses:</p>
+
+<table>
+  <tr>
+    <th style="background-color: #f1f1f1; width:33%"><b>HTTP Response Code</b></th>
+    <th style="background-color: #f1f1f1;"><b>Description</b></th>
+  </tr>
+  <tr>
+    <td>200</td>
+    <td>The API call is successful.</td>
+  </tr>
+  <tr>
+    <td>400</td>
+    <td>Application Level Error Messages:<br /><br />1. Invalid "Date" format:<br />v4: "message":"Dates must be specified in the MM/DD/YYYY format.", "detail":"Any Date parameter must be provided in the MM/DD/YYYY format.".<br /><br />2. Invalid Input Parameters:<br /> v4: "message":"The search parameter, &lt; user-provided invalid parameter &gt; does not exist.","detail":"Please refer to https://open.gsa.gov/api/exclusions-api/ for a list of allowable search parameters.".<br /><br />3. If ‘includeSections’, ‘emailId’, ‘format’, ‘exclusionName’, ‘includeSections’, ‘addressLine1’, ‘addressLine2’, or ‘ssnOrTinOrEin’ is sent in the "q" parameter:<br />v4: "message":"The search parameters 'emailId', 'format', 'exclusionName', 'includeSections', 'addressLine1', 'addressLine2', and 'ssnOrTinOrEin' are not permitted inside Query Param(q)","detail":"Please provide these parameters separately.".<br /><br />4. A null or an empty value is sent in the "q" parameter:<br />v4: "message":"Invalid input","detail":"The value null/empty is not valid for parameter ‘Query Param (q)’".<br /><br />5. More than 100 "cageCode" values are sent:<br />v4: "message":"More than 100 CAGE Codes are not allowed.","detail":"Please limit the number of CAGE Codes to 100."<br /><br />6. If "emailId" is sent on its own:<br />v4: "message":"The search parameter 'emailId' must be provided in conjunction with the search parameter 'format'.","detail":"Users can opt for receiving the requested JSON/CSV files in their emails."<br /><br />7. If "includeSections" contains an invalid value:<br />v4: "message":"The search parameter 'includeSections' contains an invalid value - &lt; user-provided invalid parameter &gt;,"detail":"Please refer to https://open.gsa.gov/api/exclusions-api/ for a list of allowable values.".<br /><br />8. If "ssnOrTinOrEin" is provided on its own:<br />v4: "message":"The search parameter 'ssnOrTinOrEin' must be provided in conjunction with the search parameter 'exclusionName'.","detail":"The 'ssnOrTinOrEin' parameter cannot be provided on its own.".<br /><br />9. Invalid "ssnOrTinOrEin" length or "ssnOrTinOrEin" has more than one value:<br />v4: "message":"The search parameter 'ssnOrTinOrEin' will only accept one complete 9 digit value.","detail":"An example value is 000000000.".<br /><br />10. More than one "exclusionName" value is provided with "addressLine1" and "addressLine2":<br />v4: "message":"The search parameter 'exclusionName' will only accept one value when it is provided in conjunction with 'addressLine1' and 'addressLine2'.","detail":"Use 'exclusionName' on its own or in conjunction with non-address search parameters.".<br /><br />11.  Invalid "recordStatus" value: <br />v4: "message":"The search parameter 'recordStatus' will only accept Active as the value.","detail":"Only Active records are returned.<br /><br />12. "Invalid "format" value:<br />v4: "message":"Invalid input value for format","detail":"The allowable values are JSON and CSV."<br /><br />13. JSON or CSV file generation is in-progress:<br />v4: "message":"The requested JSON or CSV file is not generated yet. Please try again later.","detail":"Larger files will take some time to process.".<br /><br />14. A non-existent token is used for downloading a JSON or a CSV file:<br />v4: "message":"The requested JSON or CSV file token could not be found.","detail":"Please verify the token number."<br /><br />15. An expired token is used for downloading a JSON or a CSV file:<br />v4: "message":"The requested JSON or CSV file token is expired.","detail":"Please verify the token number."</td> 
+  </tr>
+  <tr>
+    <td>403</td>
+    <td>1. Missing API Key:<br />v4: No api_key was supplied in request body. Please submit with a valid API key.<br /><br />2. An invalid API Key:<br />v4: An invalid API key was supplied. Please submit with a valid API key.</td>
+  </tr>
+  <tr>
+    <td>405</td>
+    <td>If any method other than "GET" is used:<br />v4: Method Not Allowed.</td>
+  </tr>
+  <tr>
+    <td colspan="2"> NOTE:<br />Error messages in v4 are returned in this fashion: Status, timestamp, message, detail, errorCode, transaction_id</td>
+  </tr>
+</table>
+
+<p><small><a href="#">Back to top</a></small></p>
+
+<h2 id="examples">Examples</h2>
+
+<h3 id="example-1-post-april-3-2022-get-me-all-the-firms-whose-physical-address-is-in-virginia">Example 1: Post April 3, 2022, get me all the firms whose physical address is in Virginia.</h3>
+<details>
+<summary>Request URL</summary>
+<b>Production URL:</b> https://api.sam.gov/entity-information/v4/exclusions?api_key=&lt; PUBLIC API Key &gt;&amp;classification=Firm&amp;stateProvince=VA<br />
+<br />
+<b>Alpha URL:</b> https://api-alpha.sam.gov/entity-information/v4/exclusions?api_key=&lt; PUBLIC API Key &gt;&amp;classification=Firm&amp;stateProvince=VA<br />
+<br />
+</details>
+
+<details>
+<summary>Response (JSON Output)</summary>
+This is an example public response for one record.
+<p>
+<code>
+<pre>
+{
+  "totalRecords": 1,
+  "excludedEntity": [
+    {
+      "exclusionDetails": {
+        "classificationType": "Firm",
+        "exclusionType": "Ineligible (Proceedings Pending)",
+        "exclusionProgram": "Reciprocal",
+        "excludingAgencyCode": "DLA",
+        "excludingAgencyName": "DEFENSE LOGISTICS AGENCY"
+      },
+      "exclusionIdentification": {
+        "ueiSAM": "KQKWLLDBMDL5",
+        "cageCode": null,
+        "npi": null,
+        "prefix": null,
+        "firstName": null,
+        "middleName": null,
+        "lastName": null,
+        "suffix": null,
+        "entityName": "Supreme Fuels GmbH &amp; Co. KG",
+        "dnbOpenData": null
+      },
+      "exclusionActions": {
+        "listOfActions": [
+          {
+            "createDate": "03-19-2015",
+            "updateDate": "03-19-2015",
+            "activateDate": "03-13-2015",
+            "terminationDate": null,
+            "terminationType": "Indefinite",
+            "recordStatus": "Active"
+          }
+        ]
+      },
+      "exclusionPrimaryAddress": {
+        "addressLine1": "Rembrandtstr. 17",
+        "addressLine2": null,
+        "city": "Frankfurt am Main",
+        "stateOrProvinceCode": null,
+        "zipCode": "60596",
+        "zipCodePlus4": null,
+        "countryCode": "DEU"
+      },
+      "exclusionSecondaryAddress": [],
+      "exclusionOtherInformation": {
+        "isFASCSAOrder": "No",
+        "additionalComments": "Supreme Foodservice GmbH and Supreme Foodservice FZE",
+        "ctCode": null,
+        "evsInvestigationStatus": null,
+        "references": {
+          "referencesList": [
+            {
+              "exclusionName": "Supreme Fuels GmbH &amp; Co. KG, Frankfurt am Main (D), Zweigniederlassung Glarus (480015629)- Zwinglistrasse 6 , GLARUS , GL ,8750,CHE",
+              "type": "Cross-Reference"
+            }
+          ]
+        },
+        "moreLocations": [
+          {
+            "exclusionName": "Supreme Fuels GmbH &amp; Co. KG, Frankfurt am Main (D), Zweigniederlassung Glarus (480015629)- Zwinglistrasse 6 , GLARUS , GL ,8750,CHE",
+            "ueiSAM": "XLLLJD1L9SE3",
+            "cageCode": null,
+            "npi": null,
+            "primaryAddress": {
+              "addressLine1": "Zwinglistrasse 6",
+              "addressLine2": null,
+              "city": "GLARUS",
+              "stateOrProvinceCode": "GL",
+              "zipCode": "8750",
+              "zipCodePlus4": null,
+              "countryCode": "CHE"
+            },
+            "secondaryAddress": [
+              {
+                "addressLine1": null,
+                "addressLine2": null,
+                "city": null,
+                "stateOrProvinceCode": null,
+                "zipCode": null,
+                "zipCodePlus4": null,
+                "countryCode": null
+              }
+            ]
+          }
+        ]
+      },
+      "vesselDetails": {
+        "callSign": null,
+        "type": null,
+        "tonnage": null,
+        "grt": null,
+        "flag": null,
+        "owner": null
+      }
+    }
+  ],
+</pre>
+</code>
+</p>
+</details>
+
+<h3 id="example-2-post-april-3-2022-get-me-all-the-firms-in-a-csv-file-format">Example 2: Post April 3, 2022, get me all the firms in a CSV file format.</h3>
+<details>
+<summary>Request URL</summary>
+<b>Production URL:</b> https://api.sam.gov/entity-information/v4/exclusions?api_key=&lt; PUBLIC API Key &gt;&amp;classification=Firm&amp;format=CSV<br /><br />
+<br />
+<b>Alpha URL:</b> https://api-alpha.sam.gov/entity-information/v4/exclusions?api_key=&lt; PUBLIC API Key &gt;&amp;classification=Firm&amp;format=CSV<br />
+<br />
+</details>
+
+<details>
+<summary>Response</summary>
+This is an example public response for one record.
+<p>
+Extract File will be available for download with url: https://api.sam.gov/entity-information/v4/download-exclusions?api_key=REPLACE_WITH_API_KEY&amp;token=&lt; TOKEN &gt; in some time. If you have requested for an email notification, you will receive it once the file is ready for download.<br /><br />
+Download the CSV file using the token:
+https://api.sam.gov/entity-information/v4/download-exclusions?api_key=&lt; PUBLIC API KEY &gt;&amp;token=&lt; TOKEN &gt;<br /><br />
+</p>
+<p>
+View an example CSV response for one record <a href="v4/v4-CSV.xlsx" taget="_blank">Sample CSV Response.</a>
+</p>
+</details>
+
+<h3 id="example-3-get-individual-or-special-entity-designation-exclusion-records-that-are-not-excluded-by-doj-that-belong-to-korea-and-that-contain-chong-anywhere-in-the-response">Example 3: Get individual or special entity designation exclusion records that are not excluded by DOJ, that belong to Korea and that contain CHONG anywhere in the response.</h3>
+<details>
+<summary>Request URL</summary>
+<b>Production URL:</b>   https://api.sam.gov/entity-information/v4/exclusions?api_key=&lt; a valid Public API Key &gt;&amp;classification=[Individual~Special Entity Designation]&amp;excludingAgencyCode=!DOJ&amp;country=KOR&amp;q=CHONG<br />
+<br />
+<b>Alpha URL:</b>  https://api-alpha.sam.gov/entity-information/v4/exclusions?api_key=&lt; a valid Public API Key &gt;&amp;classification=[Individual~Special Entity Designation]&amp;excludingAgencyCode=!DOJ&amp;country=KOR&amp;q=CHONG<br />
+<br />
+</details>
+
+<details>
+<summary>Response (JSON Output)</summary>
+This is an example public response for one record.
+<p>
+<code>
+<pre>
+{
+  "totalRecords": 5,
+  "excludedEntity": [
+    {
+      "exclusionDetails": {
+        "classificationType": "Individual",
+        "exclusionType": "Ineligible (Proceedings Completed)",
+        "exclusionProgram": "Reciprocal",
+        "excludingAgencyCode": "ARMY",
+        "excludingAgencyName": "DEPT OF THE ARMY"
+      },
+      "exclusionIdentification": {
+        "ueiSAM": null,
+        "cageCode": null,
+        "npi": null,
+        "prefix": "Ms.",
+        "firstName": "Chong",
+        "middleName": "Sun",
+        "lastName": "Hwang",
+        "suffix": null,
+        "entityName": "Ms. Chong Sun Hwang",
+        "dnbOpenData": null
+      },
+      "exclusionActions": {
+        "listOfActions": [
+          {
+            "createDate": "07-27-2012",
+            "updateDate": "07-27-2012",
+            "activateDate": "12-12-2011",
+            "terminationDate": "11-08-2029",
+            "terminationType": "Definite",
+            "recordStatus": "Active"
+          }
+        ]
+      },
+      "exclusionPrimaryAddress": {
+        "addressLine1": null,
+        "addressLine2": null,
+        "city": "Dongjak-gu, Seoul",
+        "stateOrProvinceCode": null,
+        "zipCode": null,
+        "zipCodePlus4": null,
+        "countryCode": "KOR"
+      },
+      "exclusionSecondaryAddress": [],
+      "exclusionOtherInformation": {
+        "additionalComments": null,
+        "ctCode": "A",
+        "evsInvestigationStatus": null,
+        "references": {
+          "referencesList": [
+            {
+              "exclusionName": null,
+              "type": null
+            }
+          ]
+        },
+        "moreLocations": [
+          {
+            "exclusionName": null,
+            "duns": null,
+            "cageCode": null,
+            "npi": null,
+            "primaryAddress": {
+              "addressLine1": null,
+              "addressLine2": null,
+              "city": null,
+              "stateOrProvinceCode": null,
+              "zipCode": null,
+              "zipCodePlus4": null,
+              "countryCode": null
+            },
+            "secondaryAddress": [
+              {
+                "addressLine1": null,
+                "addressLine2": null,
+                "city": null,
+                "stateOrProvinceCode": null,
+                "zipCode": null,
+                "zipCodePlus4": null,
+                "countryCode": null
+              }
+            ]
+          }
+        ]
+      },
+      "vesselDetails": {
+        "callSign": null,
+        "type": null,
+        "tonnage": null,
+        "grt": null,
+        "flag": null,
+        "owner": null
+      }
+    }
+  ],
+  "links": {
+    "selfLink": "https://api.sam.gov/entity-information/v4/exclusions?api_key=REPLACE_WITH_API_KEY&amp;classification=[Individual~Special%20Entity%20Designation]&amp;excludingAgencyCode=!DOJ&amp;country=KOR&amp;q=CHONG&amp;page=0&amp;size=10"
+  }
+}
+</pre>
+</code>
+</p>
+</details>
+
+<h3 id="example-4-get-details-and-address-of-the-ineligible-proceedings-completed-or-prohibitionrestriction-type-of-firm-exclusion-records-that-belong-to-korea-china-or-germany-by-using-the-q-parameter">Example 4: Get details and address of the ineligible (proceedings completed) or prohibition/restriction type of firm exclusion records that belong to Korea, China or Germany, by using the “q” parameter.</h3>
+<details>
+<summary>Request URL</summary>
+<b>Production URL:</b>   https://api.sam.gov/entity-information/v4/exclusions?api_key= &lt; a valid Public API Key &gt;&amp;q=(country=KOR OR country=CHN OR country=DEU)&amp;classification=Firm&amp;exclusionType=[Ineligible (Proceedings Completed)~Prohibition/Restriction]&amp;includeSections=exclusionDetails,exclusionIdentification,exclusionAddress<br />
+<br />
+<b>Alpha URL:</b>  https://api-alpha.sam.gov/entity-information/v4/exclusions?api_key=&lt; a valid Public API Key &gt;&amp;q=(country=KOR OR country=CHN OR country=DEU)&amp;classification=Firm&amp;exclusionType=[Ineligible (Proceedings Completed)~Prohibition/Restriction]&amp;includeSections=exclusionDetails,exclusionIdentification,exclusionAddress<br />
+<br />
+</details>
+
+<details>
+<summary>Response (JSON Output)</summary>
+This is an example public response for one record. <br />
+<p>
+<code>
+<pre>
+{
+  "totalRecords": 63,
+  "excludedEntity": [
+    {
+      "exclusionDetails": {
+        "classificationType": "Firm",
+        "exclusionType": "Ineligible (Proceedings Completed)",
+        "exclusionProgram": "Reciprocal",
+        "excludingAgencyCode": "AF",
+        "excludingAgencyName": "DEPT OF THE AIR FORCE"
+      },
+      "exclusionIdentification": {
+        "ueiSAM": "H2XFNNKK2NZ9",
+        "cageCode": null,
+        "npi": null,
+        "prefix": null,
+        "firstName": null,
+        "middleName": null,
+        "lastName": null,
+        "suffix": null,
+        "entityName": "Shenzhen Hongdark Electronics Co., Ltd.",
+        "dnbOpenData": null
+      },
+      "exclusionPrimaryAddress": {
+        "addressLine1": null,
+        "addressLine2": null,
+        "city": "Shenzhen",
+        "stateOrProvinceCode": null,
+        "zipCode": null,
+        "zipCodePlus4": null,
+        "countryCode": "CHN"
+      },
+      "exclusionSecondaryAddress": []
+    }
+  ],
+  "links": {
+    "selfLink": "https://api.sam.gov/entity-information/v4/exclusions?api_key=REPLACE_WITH_API_KEY&amp;q=(country=KOR%20OR%20country=CHN%20OR%20country=DEU)&amp;classification=Firm&amp;exclusionType=[Ineligible%20(Proceedings%20Completed)~Prohibition/Restriction]&amp;includeSections=exclusionDetails,exclusionIdentification,exclusionAddress&amp;page=0&amp;size=10",
+    "nextLink": "https://api.sam.gov/entity-information/v4/exclusions?api_key=REPLACE_WITH_API_KEY&amp;q=(country=KOR%20OR%20country=CHN%20OR%20country=DEU)&amp;classification=Firm&amp;exclusionType=[Ineligible%20(Proceedings%20Completed)~Prohibition/Restriction]&amp;includeSections=exclusionDetails,exclusionIdentification,exclusionAddress&amp;page=1&amp;size=10"
+  }
+}
+</pre>
+</code>
+</p>
+</details>
+
+<h3 id="example-5-get-details-for-fascsa-order-exclusion-records-only">Example 5: Get details for FASCSA order exclusion records only.</h3>
+
+<details>
+<summary>Request URL</summary>
+<b>Production URL:</b>  https://api.sam.gov/entity-information/v4/exclusions?api_key=&lt; a valid Public API Key &gt;&amp;fascsaOrder=Yes<br />
+<br />
+<b>Alpha URL:</b> https://api-alpha.sam.gov/entity-information/v4/exclusions?api_key=&lt; a valid Public API Key &gt;&amp;fascsaOrder=Yes<br />
+<br />
+</details>
+
+<details>
+<summary>Response (JSON Output)</summary>
+This is an example public response for one record.<br />
+<p>
+<code>
+<pre>
+{
+    "totalRecords": 16,
+    "excludedEntity": [
+    {
+            "exclusionDetails": {
+                "classificationType": "Firm",
+                "exclusionType": "Prohibition/Restriction",
+                "exclusionProgram": "Reciprocal",
+                "excludingAgencyCode": "AF",
+                "excludingAgencyName": "DEPT OF THE AIR FORCE"
+            },
+            "exclusionIdentification": {
+                "ueiSAM": "J27QHBBBL1V3",
+                "cageCode": null,
+                "npi": null,
+                "prefix": null,
+                "firstName": null,
+                "middleName": null,
+                "lastName": null,
+                "suffix": null,
+                "entityName": "Foxtrot Research Corp",
+                "dnbOpenData": null
+            },
+            "exclusionActions": {
+                "listOfActions": [
+                    {
+                        "createDate": "10-31-2023",
+                        "updateDate": "10-31-2023",
+                        "activateDate": "10-30-2023",
+                        "terminationDate": null,
+                        "terminationType": "Indefinite",
+                        "recordStatus": "Active"
+                    }
+                ]
+            },
+            "exclusionPrimaryAddress": {
+                "addressLine1": null,
+                "addressLine2": null,
+                "city": null,
+                "stateOrProvinceCode": "FL",
+                "zipCode": null,
+                "zipCodePlus4": null,
+                "countryCode": "USA"
+            },
+            "exclusionSecondaryAddress": [],
+            "exclusionOtherInformation": {
+                "isFASCSAOrder": "Yes",
+                "additionalComments": null,
+                "ctCode": null,
+                "evsInvestigationStatus": null,
+                "references": {
+                    "referencesList": [
+                        {
+                            "exclusionName": null,
+                            "type": null
+                        }
+                    ]
+                },
+                "moreLocations": [
+                    {
+                        "exclusionName": null,
+                        "ueiSAM": null,
+                        "cageCode": null,
+                        "npi": null,
+                        "primaryAddress": {
+                            "addressLine1": null,
+                            "addressLine2": null,
+                            "city": null,
+                            "stateOrProvinceCode": null,
+                            "zipCode": null,
+                            "zipCodePlus4": null,
+                            "countryCode": null
+                        },
+                        "secondaryAddress": [
+                            {
+                                "addressLine1": null,
+                                "addressLine2": null,
+                                "city": null,
+                                "stateOrProvinceCode": null,
+                                "zipCode": null,
+                                "zipCodePlus4": null,
+                                "countryCode": null
+                            }
+                        ]
+                    }
+                ]
+            },
+            "vesselDetails": {
+                "callSign": null,
+                "type": null,
+                "tonnage": null,
+                "grt": null,
+                "flag": null,
+                "owner": null
+            }
+        },
+    ],
+    "links": {
+        "selfLink": "https://api.sam.gov/entity-information/v4/exclusions?api_key=REPLACE_WITH_API_KEY&amp;fascsaOrder=Yes&amp;page=0&amp;size=10",
+        "nextLink": "https://api.sam.gov/entity-information/v4/exclusions?api_key=REPLACE_WITH_API_KEY&amp;fascsaOrder=Yes&amp;page=1&amp;size=10"
+    }
+}
+</pre>
+</code>
+</p>
+</details>
+
+<h3 id="example-6-to-receive-a-file-downloadable-link-in-the-email-for-the-requested-csv-results">Example 6: To receive a file downloadable link in the email for the requested CSV results.</h3>
+<details>
+<summary>Request URL</summary>
+<b>Production URL:</b>   https://api.sam.gov/entity-information/v4/exclusions?api_key=&lt; a valid Public API Key &gt;&amp;q=(country=KOR OR country=CHN OR country=DEU)&amp;classification=Firm&amp;exclusionType=[Ineligible (Proceedings Completed)~Prohibition/Restriction]&amp;includeSections=exclusionDetails,exclusionIdentification,exclusionAddress&amp;format=CSV&amp;emailId=Y<br />
+<br />
+<b>Alpha URL:</b>  https://api-alpha.sam.gov/entity-information/v4/exclusions?api_key=&lt; a valid Public API Key &gt;&amp;q=(country=KOR OR country=CHN OR country=DEU)&amp;classification=Firm&amp;exclusionType=[Ineligible (Proceedings Completed)~Prohibition/Restriction]&amp;includeSections=exclusionDetails,exclusionIdentification,exclusionAddress&amp;format=CSV&amp;emailId=Y<br />
+<br />
+</details>
+
+<details>
+<summary>Response</summary>
+View an example CSV response for one record <a href="v4/exclusion-sample-csv-1.xlsx">Sample CSV Response.</a><br />
+</details>
+
+<p><small><a href="#">Back to top</a></small></p>
+
+<h2 id="additional-information">Additional Information</h2>
+<p>You can view the full details of the differences between the SAM legacy API and SAM.gov API
+<br /> available here: <a href="LegacySAMvsBetaSAM-ExclusionsAPI.pdf">Variance Document</a><br /></p>
+
+<p>Disclaimer:
+<strong>Limitation on Permissible Use of Dun &amp; Bradstreet, Inc. (D&amp;B) Data</strong></p>
+<ul>
+  <li>This website contains data supplied by third party information suppliers, including Dun &amp; Bradstreet (D&amp;B). For the purposes of the following limitation on permissible use of D&amp;B data, which includes each entity’s DUNS Number and its associated business information, “D&amp;B Open Data” is defined as the following data elements: Legal Business Name, Street Address, City Name, State/Province Name, Country Name, County Code, State/Province Code, State/Province Abbreviation, ZIP/Postal Code, Country Name and Country Code.  Entity registration, exclusion, or contract award records in SAM may contain D&amp;B-supplied data. Applicable records containing D&amp;B data include all entity registration records with a last updated date earlier than 4/4/2022, all exclusions records with a created date earlier than 4/4/2022, and all base award notices with an award date earlier than 4/4/2022. These records show the Entity Validation Service (EVS) Source as D&amp;B in outbound data streams.</li>
+  <li>D&amp;B hereby grants you, the user, a license for a limited, non-exclusive right to use D&amp;B Open Data within the limitations set forth herein. By using this website you agree that you shall not use D&amp;B Open Data without giving written attribution to the source of such data (i.e., D&amp;B) and shall not access, use or disseminate D&amp;B Open Data in bulk, (i.e., in amounts sufficient for use as an original source or as a substitute for the product and/or service being licensed hereunder).</li>
+  <li>Except for data elements identified above as D&amp;B Open Data, under no circumstances are you authorized to use any other D&amp;B data for commercial, resale or marketing purposes (e.g., identifying, quantifying, segmenting and/or analyzing customers and prospective customers). Systematic access (electronic harvesting) or extraction of content from the website, including the use of “bots” or “spiders”, is prohibited. Federal government entities are authorized to use the D&amp;B data for purposes of acquisition as defined in FAR 2.101 and for the purpose of managing Federal awards, including sub-awards, or reporting Federal award information.</li>
+  <li>GSA assumes no liability for the use of the D&amp;B data once it is downloaded or accessed. The D&amp;B data is provided “as is” without warranty of any kind. The D&amp;B data is the intellectual property of D&amp;B. In no event will D&amp;B or any third party information supplier be liable in any way with regard to the use of the D&amp;B data. For more information about the scope of permissible use of D&amp;B data licensed hereunder, please contact D&amp;B at datause_govt@dnb.com.</li>
+</ul>
+
+<p><small><a href="#">Back to top</a></small></p>
+
+<h2 id="contact-us">Contact Us</h2>
+
+<ul>
+  <li>Reach out to the SAM.gov team at <a href="https://www.fsd.gov" target="_blank">www.fsd.gov</a> for inquiries and help desk support.
+    <ul>
+      <li>Before contacting the help desk, conduct your own initial troubleshooting
+        <ul>
+          <li>Conduct a recent review of the open.gsa.gov/api specifications</li>
+          <li>Confirm you are using an API tool, not a browser to send the request. (FOUO &amp; Sensitive Calls)</li>
+          <li>Confirm you are using the username/password for the system account that created the API key in the authentication header. (Sensitive Calls)</li>
+          <li>Confirm you used POST and not GET for this request (Sensitive Calls)</li>
+          <li>Confirm that the API key is from a system account (FOUO &amp; Sensitive Calls)</li>
+          <li>Confirm that the API key being used is still active</li>
+          <li>Confirm that the system account you are using has “read fouo” or “read sensitive” permissions as applicable (FOUO &amp; Sensitive Calls)</li>
+          <li><b>Confirm that the IP addresses registered with your system account are current</b></li>
+        </ul>
+      </li>
+      <li>When submitting help desk tickets for API or system connection issues, provide the following:
+        <ul>
+          <li>The exact API requests that you were trying to send</li>
+          <li>The exact error messages that you were receiving</li>
+          <li>The exact dates and times when you received the errors</li>
+          <li>Screenshots (with the actual API request and the error)  [Attach to the ticket]</li>
+          <li>The System Account ID/Name that was trying to make API calls</li>
+          <li>Screenshots of the parameters used for API call   [Attach to the ticket]</li>
+          <li>Screenshots of the Headers used for the API call   [Attach to the ticket]</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Users requesting access to the test site (alpha.sam.gov) should follow the below steps.  These steps ONLY apply to alpha.sam.gov access requests.
+    <ol>
+      <li>Navigate to <a href="https://www.fsd.gov" target="_blank">www.fsd.gov</a></li>
+      <li>Sign into the FSD platform using your FSD credentials</li>
+      <li>Select “Create an Incident”</li>
+      <li>Create an Incident
+        <ol type="a">
+ <li><b>System Name:</b> System for Award Management (SAM)</li>
+ <li><b>Is this related to the American Rescue Plan Act?:</b> No</li>
+ <li><b>Issue Type:</b> Other</li>
+ <li><b>Business Type:</b> Other</li>
+ <li><b>Subject (select 1):</b>
+    <ol type="i">
+    <li><b>Option A:</b> I need a role to test in alpha.sam.gov.</li>
+    <li><b>Option B:</b> System account approval in alpha.sam.gov</li>
+    </ol>
+ </li>
+ <li><b>Please describe the issue:</b> (Copy and paste the below information into the ticket, filling in your information within the brackets)
+    <ol type="i">
+    <li><b>Option A:</b> I have already navigated to alpha.sam.gov and created a user account, following the same steps for <a href="https://www.fsd.gov/gsafsd_sp?id=gsafsd_kb_articles&amp;sys_id=81d067071b80b0109ac5ddb6bc4bcb63" target="_blank">creating an account</a> in sam.gov.  I would like to conduct testing but do not have the necessary role(s) in alpha.sam.gov.   The account that needs role assignment is associated with [EMAIL ADDRESS].  I request a [ROLE] role for the  [DOMAIN] domain in alpha.sam.gov.</li>
+    <li><b>Option B:</b> I am creating/editing a system account and have submitted my account in alpha.sam.gov for approval.   I would like to request alpha.sam.gov system account review and approval for [Name of the alpha.sam.gov system account].</li>
+    </ol>
+ </li>
+ </ol>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<p><small><a href="#">Back to top</a></small></p>
+
+<h2 id="change-log">Change Log</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Version</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>06/03/2019</td>
+      <td>v1.0</td>
+      <td>Base Version</td>
+    </tr>
+    <tr>
+      <td>08/15/2019</td>
+      <td>v1.1</td>
+      <td>* Added Beta.SAM.Gov to the page title. <br /><br /> *Updated the Alpha endpoint to v1. <br /><br /> *Added Secondary Address fields.</td>
+    </tr>
+    <tr>
+      <td>09/25/2019</td>
+      <td>v1.2</td>
+      <td>Beta endpoints for public FOUO and Sensitive API were updated from version 0.9 to version 1.0.</td>
+    </tr>
+    <tr>
+      <td>11/25/2019</td>
+      <td>v1.3</td>
+      <td>* Added D&amp;B Disclaimer in the Additional Information section.<br /><br /> * Updated the specifications to include parameters and fields that will be included in v2 of the API.</td>
+    </tr>
+    <tr>
+      <td>12/20/2019</td>
+      <td>v1.4</td>
+      <td>Added “COMING SOON” section for upcoming changes to Alpha and Beta endpoints to meet new API standards.</td>
+    </tr>
+    <tr>
+      <td>02/25/2020</td>
+      <td>v1.5</td>
+      <td>* Added Examples for v2 requests and responses. <br /><br /> * Updated Alpha endpoint to meet new API standards.</td>
+    </tr>
+    <tr>
+      <td>02/28/2020</td>
+      <td>v1.6</td>
+      <td>* Updated Beta endpoint to meet new API standards. <br /><br /> * Removed “COMING SOON” information in Getting Started section.</td>
+    </tr>
+    <tr>
+      <td>05/04/2020</td>
+      <td>v1.7</td>
+      <td>* Added V2 endpoint information.</td>
+    </tr>
+    <tr>
+      <td>10/15/2020</td>
+      <td>v1.8</td>
+      <td>* Updated the Beta V1 endpoint</td>
+    </tr>
+    <tr>
+      <td>12/07/2020</td>
+      <td>v1.9</td>
+      <td>* Updated moreLocations for API response.<br /><br /> * Updated vesselDetails –&gt; secondaryAddress to mention v2 Beta only. <br /><br /> * Added exclusionSecondaryAddress to API response.<br /><br /> * Changed exclusionAddress to exclusionAddress/exclusionPrimaryAddress in the API response.</td>
+    </tr>
+    <tr>
+      <td>01/22/2021</td>
+      <td>v2.0</td>
+      <td>* Added the highlighted changes message under the “Getting Started” section.<br /><br /> * Added Beta V2 endpoint.</td>
+    </tr>
+    <tr>
+      <td>02/05/2021</td>
+      <td>v2.1</td>
+      <td>* Updated description for emailId parameter. <br /><br /> * Updated parameter definitions and examples.<br /><br /> * Added message about non-allowable characters.<br /><br /> * Removed tin and ssn parameters.<br /><br /> * Added addressLine1 and addressLine2 parameters.</td>
+    </tr>
+    <tr>
+      <td>03/12/2021</td>
+      <td>v2.2</td>
+      <td>* Added ssnOrTinOrEin parameter to the Query String Parameters table.<br /><br /> * Added note to addressLine1 and addressLine2 parameters regarding use with exclusionName parameter.<br /><br /> * Updated error messages</td>
+    </tr>
+    <tr>
+      <td>04/08/2021</td>
+      <td>v2.3</td>
+      <td>Updated Contact Us information.</td>
+    </tr>
+    <tr>
+      <td>04/29/2021</td>
+      <td>v2.4</td>
+      <td>* Updated openapi spec file.</td>
+    </tr>
+    <tr>
+      <td>05/12/2021</td>
+      <td>v2.5</td>
+      <td>* Updated instances of beta.sam.gov to SAM.gov.<br /><br /> * Removed non-relevant information for Beta api.</td>
+    </tr>
+    <tr>
+      <td>07/16/2021</td>
+      <td>v2.6</td>
+      <td>* Updated description for recordStatus parameter.<br /><br /> * Added message stating that the slash character must be enclosed with double quotes if being used inside of a search parameter.<br /><br /> * Added the Type of Connections and Rate Limits table<br /><br /> * Updated the examples<br /><br /> * Updated the Contact Us information</td>
+    </tr>
+    <tr>
+      <td>10/06/2021</td>
+      <td>v2.7</td>
+      <td>* Updated the “Contact Us” section.</td>
+    </tr>
+    <tr>
+      <td>10/21/2021</td>
+      <td>v2.8</td>
+      <td>* Updated Examples - Added Example 1 and Example 2 to indicate the post April 3rd, 2022 behavior.<br /><br /> * Added notes in the Query String Parameters, Expected Result and HTTP Response Codes sections to highlight the until and after April 3rd, 2022 behavior.</td>
+    </tr>
+    <tr>
+      <td>02/01/2022</td>
+      <td>v2.9</td>
+      <td>* Added exclusions V3 endpoint information to the Getting Started section. <br /><br /> * Updated the Query String Parameters and Expected Results sections to reflect available parameters and response fields in V3.<br /><br /> * Updated the Example 1 and Example 2 to indicate the V3 behavior.<br /><br /> * Updated the section, “HTTP Response Codes” to indicate the v3 behavior.<br /><br /> * Update the OpenAPI Specification File to include the V3 endpoints.</td>
+    </tr>
+    <tr>
+      <td>04/04/2022</td>
+      <td>v3.0</td>
+      <td>* Provided the v3 end point for Production.<br /><br /> * Removed ueiDUNS occurrences from the sections, Query String Parameters, Expected Result, HTTP Response Codes and Examples.</td>
+    </tr>
+    <tr>
+      <td>12/01/2023</td>
+      <td>v4.0</td>
+      <td>A new V4 Exclusions API has been created, enabling the search and response for FASCSA Order Exclusion records. As part of this change, below are the associated changes made to this OpenGSA page: <br /><br /> * Added exclusions V4 endpoint information to the Getting Started section.<br /><br /> * Updated the Query String Parameters and Expected Results sections to reflect available parameters and response fields in V4.<br /><br /> * Moved the existing Example 5 to Example 6; inserted a new Example 5 to indicate V4 behavior.<br /><br /> * Updated the section, “HTTP Response Codes” to indicate the v4 behavior.<br /><br /> * Updated the OpenAPI Specification File to include the V4 endpoints.</td>
+    </tr>
+    <tr>
+      <td>02/29/2024</td>
+      <td>v4.1</td>
+      <td>* Updated Getting Started section to remove deprecated endpoint versions.</td>
+    </tr>
+    <tr>
+      <td>03/14/2024</td>
+      <td>v4.2</td>
+      <td>* Replaced Examples section with v4 requests and responses.</td>
+    </tr>
+    <tr>
+      <td>08/29/2024</td>
+      <td>v4.3</td>
+      <td>* Update decommission timelines for v1 v2 and v3 versions.</td>
+    </tr>
+    <tr>
+      <td>09/13/2024</td>
+      <td>v4.4</td>
+      <td>* Exclusions API V1/2/3 have been retired, and are no longer available.<br /><br /> * Removed references of V1/2/3 Exclusions API from the following sections: API Description (Query String Parameters, Expected Result), OpenAPI Specification File, HTTP Response Codes, Change Log.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><small><a href="#">Back to top</a></small></p>
+
+</div>
+
+  </section>
+  <div class="fixed-page-height"></div>
+</main>
+</div>
+        <div id="footer">  <footer class="usa-identifier usa-footer usa-background-dark">
+    <div class="usa-grid">
+      <nav aria-label="footer navigation">
+        <div class="usa-width-one-whole" style="margin-bottom: 1em; color: white;">
+          <div>open.gsa.gov / GSA Office of Office of Enterprise Data & Privacy Management</div>
+          <div style="font-weight: bold;">An official website of the U.S. General Services Administration</div>
+        </div>
+        <div class="usa-width-one-fourth">
+          <ul class="usa-unstyled-list">
+            <li><a href="https://www.gsa.gov/about-us">About us</a></li>
+            <li><a href="https://www.gsa.gov/website-information/accessibility-aids">Accessibility support</a></li>
+          </ul>
+        </div>
+        <div class="usa-width-one-fourth">
+          <ul class="usa-unstyled-list">
+            <li><a href="https://www.gsa.gov/reference/freedom-of-information-act-foia">FOIA requests</a></li>
+            <li><a href="https://www.gsa.gov/reference/civil-rights-programs/notification-and-federal-employee-antidiscrimination-and-retaliation-act-of-2002">No FEAR Act data</a></li>
+          </ul>
+        </div>
+        <div class="usa-width-one-fourth">
+          <ul class="usa-unstyled-list">
+            <li><a href="https://www.gsa.gov/website-information/website-policies">Privacy policy</a></li>
+            <li><a href="/contact">Contact us</a></li>
+          </ul>
+        </div>
+        <div class="usa-width-one-fourth">
+          <ul class="usa-unstyled-list">
+            <li><a href="https://www.gsaig.gov/">Office of the Inspector General</a></li>
+            <li><a href="https://www.gsa.gov/reference/reports/budget-performance">Performance reports</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </footer>
+</div>
+
+    </div>
+      <script src="/assets/js/lib/jquery.min.js"></script>
+<script src="/assets/js/lib/details-polyfill.js"></script>
+<script async src="/assets/uswds/js/uswds.js"></script>
+<script src="https://use.fontawesome.com/2982e64340.js"></script>
+<!-- We participate in the US government's analytics program. See the data at analytics.usa.gov. -->
+<script async type="text/javascript" src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=GSA&subagency=CTO&sitetopic=IT&sp=term&dclink=true&enhlink=true&cto=12" id="_fed_an_ua_tag"></script>
+</body>
+
+</html>

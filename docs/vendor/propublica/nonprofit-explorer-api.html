@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en" class="
+  force-light-mode p-force-light-mode
+  
+">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="en" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="author" content="Andrea Suozzo, Alec Glassford, Ash Ngu, Brandon Roberts" />
+    <meta name="scope" content="" />
+    <meta name="keywords" content="nonprofit explorer, 990, 990 filings, non profit explorer, non-profit explorer, research non-profits, non-profit data, non-profit pdfs, irs pdfs, irs 990s, irs 990, irs nonprofit, irs nonprofit data, propublica nonprofits, propublica nonprofit explorer, topline data on nonprofits, look up corporation, lookup corporation" />
+    <meta name="project" content="" />
+    <meta name="type" content="project" />
+    <meta name="description" content="Since 2013, the IRS has released data culled from millions of nonprofit tax filings. Use this database to find organizations and see details like their executive compensation, revenue and expenses, as well as download tax filings going back as far as 2001." />
+    <link rel="canonical" href="https://projects.propublica.org/nonprofits/api" />
+
+    <script src="https://static.propublica.org/rails/assets/nonprofits/base/config-8c3c1e0d.js" defer="defer"></script>
+    <script src="https://static.propublica.org/rails/assets/nonprofits/base/utils-84843ede.js" defer="defer"></script>
+    <script src="https://static.propublica.org/rails/assets/nonprofits/underscore.min-69713657.js"></script>
+
+    <meta name="google-site-verification" content="xPf4zxBdgQHZIRLVMiZyNYR1igMQUhsHogunEnOtD1k" />
+
+    <!--[if IE]>
+      <link rel="stylesheet" href="https://assets.propublica.org/legacy/css/ie.css?1495207717" type="text/css" media="screen" charset="utf-8" />
+    <![endif]-->
+
+  <script>
+    window.dataLayer = [{
+      pageType: 'Externals',
+      storyType:  'Database',
+      authorName:  'Andrea Suozzo, Alec Glassford, Ash Ngu, Brandon Roberts',
+      publicationDate:  'May 9, 2013',
+      contentRegion:  'National',
+      articleTitle:  'Nonprofit Explorer',
+      contentLanguage: 'en',
+    }];
+  </script>
+
+  <title>Nonprofit Explorer: API v2 - ProPublica</title>
+  <link rel="stylesheet" href="https://static.propublica.org/rails/assets/nonprofits/application-a6b445a9.css" media="all" />
+  <link rel="stylesheet" href="https://static.propublica.org/rails/assets/nonprofits/svelte-styles-623ea887.css" media="all" />
+  <script src="https://static.propublica.org/rails/assets/nonprofits/application-45df9fa2.js" defer="defer"></script>
+  <script src="https://static.propublica.org/rails/assets/nonprofits/hydrate-svelte-components-129d04a0.js" type="module"></script>
+
+  
+
+
+  <meta property="og:title" content="Nonprofit Explorer - ProPublica"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://projects.propublica.org/nonprofits/api"/>
+  <meta property="og:image" content="https://assets-d.propublica.org/v5/2023-nonprofit-explorer-og-image-990.jpeg"/>
+  <meta property="og:site_name" content="ProPublica"/>
+  <meta property="fb:admins" content="383965056549"/>
+  <meta property="fb:app_id" content="229862657130557"/>
+  <meta property="og:description" content="Since 2013, the IRS has released data culled from millions of nonprofit tax filings. Use this database to find organizations and see details like their executive compensation, revenue and expenses, as well as download tax filings going back as far as 2001."/>
+  <meta property="og:article:published_time" content="2013-05-09">
+  <meta property="og:article:modified_time" content="2026-09-23">
+
+
+  <meta name="twitter:creator" content="@ProPublica">
+  <meta property="twitter:site" content="@ProPublica">
+  <meta property="twitter:card" content="summary">
+  <meta property="twitter:url" content="https://projects.propublica.org/nonprofits/">
+  <meta property="twitter:title" content="Nonprofit Explorer - ProPublica">
+  <meta property="twitter:description" content="Since 2013, the IRS has released data culled from over 1.8 million nonprofit tax filings. Use this database to find organizations and see details like their executive compensation, revenue and expenses, as well as download tax filings going back as far as 2001.">
+  <meta property="twitter:image" content="https://assets-d.propublica.org/v5/2023-nonprofit-explorer-og-image-990.jpeg">
+
+  <meta name="thumbnail" content="https://assets-d.propublica.org/v5/2023-nonprofit-explorer-og-image-990.jpeg">
+
+  <script>
+      RAILS_ENV = "production";
+      RAILS_ROOT = "/nonprofits/";
+      PP_SHARING_URL = "https://projects.propublica.org/nonprofits/"
+  </script>
+
+  <meta name="parsely-section" content="News Apps" />
+
+</head>
+<body class="text-dark neutral-cool accent-blue">
+    <!--promo-bar-placeholder-->
+    
+      <script type="application/json" class="svelte-config">
+        {"componentName":"LookupSiteHeader","props":{"showSubnav":false,"donateText":"Donate to ProPublica","donateUrl":"https://give.propublica.org/give/498623/#!/donation/checkout"}}
+      </script>
+      <div style="display: contents">
+        
+      </div>
+    
+      <div class="subnav">
+    <div class="subnav__inner grid-container stack stack--row stack--justify-between stack--align-center">
+        <nav class="breadcrumbs stack__item-no-shrink">
+
+            <span class="breadcrumbs__item text-hed-900">
+                <a class="breadcrumbs__item-link"
+                    href="/nonprofits/">
+                    Nonprofit Explorer
+                </a>
+            </span>
+            
+            
+
+
+        </nav>
+
+        <div class="stack stack--row stack--align-center stack--spacing-1">
+                <a class="manage-notifications-link text-sans" href="/nonprofits/subscriptions">
+                    <div class="manage-notifications-btn btn ">
+                        <svg class="icon-bell" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                    </div>
+                </a>
+
+                
+      <script type="application/json" class="svelte-config">
+        {"componentName":"SubnavSearch","props":{"orgEndpoint":"/nonprofits/search","peopleEndpoint":"/nonprofits/name_search","fullTextEndpoint":"/nonprofits/full_text_search"}}
+      </script>
+      <div style="display: contents">
+        
+      </div>
+    
+        </div>
+    </div>
+</div>
+
+
+    <main class="grid-container" id="main">
+        <article class="newsapp newsapp--lookup center">
+
+            <div class="newsapp-body">
+                
+<h1 class="text-hed-900">Nonprofit Explorer API</h1>
+
+<div class="readable-paragraph-width static-intro">
+  <p>ProPublica provides an application programming interface (API) to the search engine and database that powers Nonprofit Explorer.</p>
+</div>
+
+<section class="api-docs">
+  <div class="category_container blurb_container">
+    <h5 class="category">Requests</h5>
+    <p>The Nonprofit Explorer API uses a RESTful style. See <a href="#methods">individual methods below</a> for permitted requests.</p>
+  </div>
+
+  <div class="category_container blurb_container">
+    <h5 class="category">Constructing a Request</h5>
+    <p>The Nonprofit Explorer API only accepts <code>GET</code> requests. All requests begin with <code>https://projects.propublica.org/nonprofits/api/v2</code></p>
+  </div>
+
+  <div class="category_container blurb_container">
+    <h5 class="category">Response Formats</h5>
+    <p>The Nonprofit Explorer API responses are available in the <code>json</code> format. Responses are also available as <code>jsonp</code> by passing in a <code>callback</code> parameter.</p>
+    <p style="margin-top:1em">The format of the JSON/JSONP response may sometimes be modified with the <code>output</code> parameter. (See the /search.json endpoint parameters, below.)</p>
+  </div>
+
+  <div class="category_container blurb_container">
+    <h5 class="category">Parameters</h5>
+    <p>Parameters are optional. Parameters vary by method. See <a href="#methods">individual methods below</a> for valid parameters. Parameters, if provided, must be URL-encoded ("percent encoded").</p>
+  </div>
+
+  <div class="category_container blurb_container">
+    <h5 class="category">Caveats</h5>
+    <p>The Nonprofit Explorer API is a work in progress and is subject to change. Please consult this documentation page for the latest API developments.</p>
+  </div>
+
+  <a id="methods"></a>
+
+  <div class="category_container">
+    <h5 class="category" id="endpoint-search">Search Method</h5>
+    <p class="endpoint">
+      GET /search.json
+    </p>
+
+    <div class="api_response" id="endpoint-search-example">
+      <a href="search.json?q=propublica"></a>
+    </div>
+
+    <p>Returns a list of organizations matching the given search terms.</p>
+
+
+    <p><strong>Parameters</strong></p>
+    <p>All parameters are optional</p>
+    <div class="definitions_container category_container">
+      <table>
+        <tr>
+          <th style="width:160px">Parameter</th>
+          <th style="width:100%">Description</th>
+        </tr>
+          <tr>
+            <td class="field_method"><code>q</code></td>
+            <td>
+              <p>A keyword search string. Searches using this parameter will search (in order) organization name, organization alternate name, city.</p>
+              <p>Advanced queries can be crafted using the following rules. Parameters must be URL encoded.</p>
+              <ul class="keyword-search">
+                <li>phrases in quotation marks will search for results containing the exact word order: <code>q=%22Delta%20Dental%22</code> ("Delta Dental")</li>
+                <li>words or phases prepended by a plus sign will be required (only helps in cases where the default "OR" search returns poor results): <code>q=delta%20alpha%20%2Bevanston</code> (delta alpha +evanston)</li>
+                <li>words or phases prepended by a minus sign will be excluded from search results: <code>q=delta%20-dental</code> (delta -dental) or <code>q=fraternity%20-%22delta%20tau%22</code> (fraternity -"delta tau")</code></li>
+                <li>words or phrases not modified by any of the above will be executed as an "OR" search; if you need multiple tokens matched ("AND"), use the "+" modifier as above.</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="field_method"><code>page</code></td>
+            <td>The (zero-indexed) page number of the request. Default is <code>0</code>.</td>
+          </tr>
+
+          <tr>
+            <td class="field_method"><code>state[id]</code></td>
+            <td>If provided, only return results from the given state or US Territory. Must use the two-letter U.S. Postal Service abbreviation. Code "ZZ" is used for entities based outside the United States required to file a Form 990 in the U.S. (Brackets should be URL encoded, i.e. <code>state%5Bid%5D=NY</code>)</td>
+          </tr>
+
+          <tr>
+            <td class="field_method"><code>ntee[id]</code></td>
+            <td>If provided, only return results from the given <a href="http://nccs.urban.org/classification/NTEE.cfm">National Taxonomy of Exempt Entities (NTEE) Major Group</a>. Must be an integer, 1-10 &mdash; see codes below. (Brackets should be URL encoded, i.e. <code>ntee%5Bid%5D=7</code>)
+
+            <table class="param-values">
+              <tr>
+                <th>Value</th>
+                <th>NTEE Category</th>
+              </tr>
+              <tr><td class="field_method"><code>1</code></td><td>Arts, Culture &amp; Humanities</td></tr>
+              <tr><td class="field_method"><code>2</code></td><td>Education</td></tr>
+              <tr><td class="field_method"><code>3</code></td><td>Environment and Animals</td></tr>
+              <tr><td class="field_method"><code>4</code></td><td>Health</td></tr>
+              <tr><td class="field_method"><code>5</code></td><td>Human Services</td></tr>
+              <tr><td class="field_method"><code>6</code></td><td>International, Foreign Affairs</td></tr>
+              <tr><td class="field_method"><code>7</code></td><td>Public, Societal Benefit</td></tr>
+              <tr><td class="field_method"><code>8</code></td><td>Religion Related</td></tr>
+              <tr><td class="field_method"><code>9</code></td><td>Mutual/Membership Benefit</td></tr>
+              <tr><td class="field_method"><code>10</code></td><td>Unknown, Unclassified</td></tr>
+            </table>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="field_method"><code>c_code[id]</code></td>
+            <td>If provided, return only organizations categorized under the given subsection of section 501(c) of the tax code, with one special case for section 4947(a)(1). Must be an integer &mdash; see codes below. (Brackets should be URL encoded, i.e. <code>c_code%5Bid%5D=3</code> for 501(c)(3) )
+            <table class="param-values">
+              <tr>
+                <th>Value</th>
+                <th>Tax Section</th>
+              </tr>
+                <tr><td class="field_method"><code>2</code></td><td>501(c)(2)</td></tr>
+                <tr>
+                  <td class="field_method"><code>3</code></td><td>501(c)(3)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>4</code></td><td>501(c)(4)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>5</code></td><td>501(c)(5)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>6</code></td><td>501(c)(6)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>7</code></td><td>501(c)(7)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>8</code></td><td>501(c)(8)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>9</code></td><td>501(c)(9)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>10</code></td><td>501(c)(10)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>11</code></td><td>501(c)(11)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>12</code></td><td>501(c)(12)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>13</code></td><td>501(c)(13)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>14</code></td><td>501(c)(14)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>15</code></td><td>501(c)(15)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>16</code></td><td>501(c)(16)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>17</code></td><td>501(c)(17)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>18</code></td><td>501(c)(18)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>19</code></td><td>501(c)(19)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>21</code></td><td>501(c)(21)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>22</code></td><td>501(c)(22)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>23</code></td><td>501(c)(23)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>25</code></td><td>501(c)(25)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>26</code></td><td>501(c)(26)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>27</code></td><td>501(c)(27)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>28</code></td><td>501(c)(28)</td>
+                </tr>
+                <tr>
+                  <td class="field_method"><code>92</code></td><td>4947(a)(1)</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="category_container">
+    <h5 class="category">/search.json Result</h5>
+  </div>
+
+  <div class="definitions_container category_container">
+    <table>
+      <tr>
+        <th style="width:120px">Field</th>
+        <th style="width:220px">Description</th>
+        <th>Example values</th>
+      </tr>
+
+      <tr>
+        <td class="field_method"><code>total_results</code></td>
+        <td >Total number organizations which match the search.</td>
+        <td><code>615836</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>num_pages</code></td>
+        <td>Number of pages in the result set.</td>
+        <td><code>1</code>, <code>3857</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>cur_page</code></td>
+        <td >Zero-indexed number of the current page.</td>
+        <td><code>0</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>per_page</code></td>
+        <td >Number of results that the API is returning per page.</td>
+        <td><code>25</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>page_offset</code></td>
+        <td >Number of results on previous pages, useful as a running counter for listing results.</td>
+        <td><code>125</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>search_query</code></td>
+        <td >The search query, if any. (See Parameters, under the <a href="#endpoint-search"><code>/search.json</code> section, above</a>.)</td>
+        <td><code>null</code>, <code>"delta -delta"</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>selected_state</code></td>
+        <td >The state filter, if any. (See Parameters, under the <a href="#endpoint-search"><code>/search.json</code> section, above</a>.)</td>
+        <td><code>null</code>, <code>"NY"</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>selected_ntee</code></td>
+        <td >The NTEE (category) filter, if any. (See Parameters, under the <a href="#endpoint-search"><code>/search.json</code> section, above</a>.)</td>
+        <td><code>null</code>, <code>1</code>, <code>10</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>selected_code</code></td>
+        <td >The subsection code (501(c)(___) or 4947(a)(1)) filter, if any. (See Parameters, under the <a href="#endpoint-search"><code>/search.json</code> section, above</a>.)</td>
+        <td><code>null</code>, <code>3</code>, <code>10</code>, <code>92</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>data_source</code></td>
+        <td >Plain text citation of data sources.</td>
+        <td><code>"ProPublica Nonprofit Explorer API: https://projects.propublica.org/nonprofits/api/\nIRS Exempt Organizations Business Master File Extract (EO BMF): https://www.irs.gov/charities-non-profits/exempt-organizations-business-master-file-extract-eo-bmf\nIRS Annual Extract of Tax-Exempt Organization Financial Data: https://www.irs.gov/uac/soi-tax-stats-annual-extract-of-tax-exempt-organization-financial-data"</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>api_version</code></td>
+        <td >Version of the Nonprofit Explorer API that generated the JSON.</td>
+        <td><code>1</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>organizations</code></td>
+        <td >A Javascript array containing <a href="#organization-object">Organization objects</a> that match the search. Note that results are paginated.</td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="category_container">
+    <h5 class="category">Organization Method</h5>
+
+    <p class="endpoint">
+        GET /organizations/<span>:ein</span>.json
+    </p>
+    <div class="api_response">
+      <a href="organizations/142007220.json"></a>
+    </div>
+
+    <p>Returns all available data for a given organization, by the organization's integer EIN.</p>
+
+    <p>The Organization endpoint does not accept any query parameters, only the <code>:ein</code> value in the URL.</p>
+  </div>
+
+  <div class="category_container">
+    <h5 class="category">/organizations/:ein.json Result</h5>
+  </div>
+
+  <div class="definitions_container category_container">
+    <table>
+      <tr>
+        <th style="width:120px">Field</th>
+        <th style="width:220px">Description</th>
+        <th>Example values</th>
+      </tr>
+
+      <tr>
+        <td class="field_method"><code>organization</code></td>
+        <td ><a href="#organization-object">Organization object</a> containing profile data for the nonprofit with the given Employment Identification Number (EIN).</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>data_source</code></td>
+        <td >Plain text citation of data sources.</td>
+        <td><code>"ProPublica Nonprofit Explorer API: https://projects.propublica.org/nonprofits/api/\nIRS Exempt Organizations Business Master File Extract (EO BMF): https://www.irs.gov/charities-non-profits/exempt-organizations-business-master-file-extract-eo-bmf\nIRS Annual Extract of Tax-Exempt Organization Financial Data: https://www.irs.gov/uac/soi-tax-stats-annual-extract-of-tax-exempt-organization-financial-data"</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>api_version</code></td>
+        <td >Version of the Nonprofit Explorer API that generated the JSON.</td>
+        <td><code>1</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>filings_with_data</code></td>
+        <td >A Javascript array containing <a href="#filing-object">Filing objects</a>. These represent Form 990 filings by the organization, from various fiscal years.</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>filings_without_data</code></td>
+        <td >As above, but the Filing objects returned only contain the following fields: <code>tax_prd</code>, <code>tax_prd_yr</code>, <code>pdf_url</code>, <code>formtype</code>. These records represent raw filing documents available as PDF files, without the corresponding extracted numerical data.</td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="category_container">
+    <h5 class="category" id="filing-object">Filing Object</h5>
+
+    <p>The following fields exist in all Filing objects. An additional 40-120 rows of data are returned depending on which form type (Form 990, Form 990-EZ, Form 990-PF) is associated with the Filing.</p>
+
+    <p>An organization EIN may contain records for several years of filings processed by the IRS. Therefore, Filing objects are unique combinations of <code>ein</code> and <code>tax_prd</code>.</p>
+  </div>
+
+  <div class="definitions_container category_container">
+    <table>
+      <tr>
+        <th>Field</th>
+        <th>Description</th>
+        <th>Example values</th>
+      </tr>
+      <tr>
+        <td class="field_method"><code>ein</code></td>
+        <td >The employer identification number (EIN) for the organization associated with this tax filing. (Note: This value represents an integer value, so EIN values with leading zeroes will have the leading zeroes trimmed.)</td>
+        <td><code>142007220</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>tax_prd</code></td>
+        <td >The tax period (month that the organization’s fiscal year ended) for the given Filing data. Integer in YYYYMM format.</td>
+        <td><code>201206</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>tax_prd_yr</code></td>
+        <td >As above, but only the year portion.</td>
+        <td><code>2012</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>formtype</code></td>
+        <td >Which Form 990 type this filing used.</td>
+        <td><code>0</code> (Form 990), <code>1</code> (Form 990_EZ), <code>2</code> (Form 990-PF)</td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>pdf_url</code></td>
+        <td >If available, a link to the original scanned Form 990 for the filing in question. Note that these download links are rate limited. If you would like to download Form 990 document PDFs in bulk, filings processed since 2017 are available from <a href="https://www.irs.gov/charities-non-profits/form-990-series-downloads">the IRS</a>.</td>
+        <td><code>null</code>, <code>"https://projects.propublica.org/nonprofits&#8203;/download-filing?path=2013_08_T%2F14-2007220_990T_201212.pdf"</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>updated</code></td>
+        <td >Date that this filing data was updated in Nonprofit Explorer. Data is extracted from the <a href="https://www.irs.gov/uac/soi-tax-stats-annual-extract-of-tax-exempt-organization-financial-data">IRS Annual Extract of Tax-Exempt Organization Financial Data</a>.</td>
+        <td><code>"2013-04-11T16:18:36Z"</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>organization</code></td>
+        <td >An <a href="#organization-object">Organization object</a>, representing the entity that filed this Form 990 with the IRS. Contains profile data such as name, EIN, address, nonprofit subsection category, etc. (<strong>Note:</strong> Only returned when using the Search endpoint. May not be returned if using a custom <code>output</code> option, see below.)</td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+
+    <p>If using <code>output=flat</code>, the "organization" field will not be returned. Instead, the keys listed under "Organization Object" (below) will be included as part of the Filing's data.</p>
+    <p>If using <code>output=noorg</code>, the "organization" field will not be returned. This metadata can be retrieved by using the Organization endpoint (see above).</p>
+    <p>Example uses of the various <code>output</code> options <a href="https://gist.github.com/mtigas/69736b755e7422204694">can be viewed here</a>.</p>
+
+    <p><strong>Filing Object: Basic financial data</strong></p>
+
+    <p>The following fields are convenience aliases to common data points. (For example, total revenue (book value) is listed under one of "totrevnue", "totrevenue", or "totrcptperbks", depending on which form type is in question.)</p>
+
+    <table>
+      <tr>
+        <th>Field</th>
+        <th>Description</th>
+        <th>Example values</th>
+      </tr>
+
+      <tr>
+        <td class="field_method"><code>totrevenue</code></td>
+        <td >Total revenue</td>
+        <td><code>-129347</code>, <code>0</code>, <code>1035696</code></td>
+      </tr>
+
+      <tr>
+        <td class="field_method"><code>totfuncexpns</code></td>
+        <td >Total expenses ("Total functional expenses" for Form 990)</td>
+        <td><code>-40281</code>, <code>0</code>, <code>983566</code></td>
+      </tr>
+
+      <tr>
+        <td class="field_method"><code>totassetsend</code></td>
+        <td >Total assets, end of year</td>
+        <td><code>743704</code></td>
+      </tr>
+
+      <tr>
+        <td class="field_method"><code>totliabend</code></td>
+        <td >Total liabilities, end of year</td>
+        <td><code>168361</code></td>
+      </tr>
+
+      <tr>
+        <td class="field_method"><code>pct_compnsatncurrofcr</code></td>
+        <td >Percent of expenses marked as "Compensation of current officers, directors, etc"</td>
+        <td><code>0.023585</code></td>
+      </tr>
+    </table>
+
+    <p><strong>Filing Object: More financial data (<code>formtype</code> dependent)</strong></p>
+    <p>An additional 40-120 rows are included on the Filing object. The exact fields depend on the form type (Form 990, Form 990EZ, Form 990PF), of the Filing object being returned. These rows contain all available data for the Filing in being returned.</p>
+    <p>Please consult <a href="https://www.irs.gov/pub/irs-soi/12eofinextractdoc.xls">the IRS' description of available fields</a> if you need to work with these values; our API uses the "element name" described in that document.</p>
+    <p>Please remember that a search that doesn&rsquo;t include a <code>formtype</code> will return Filings of all form types, so fields from Filing to Filing will be a mixed bag.</p>
+    <p><strong>Example:</strong> You can look at <a href="#endpoint-search-example">the API result for <code>q=propublica</code></a> for a small (one result) example of what this looks like in practice.</p>
+  </div>
+
+  <div class="category_container">
+    <h5 class="category" id="organization-object">Organization Object</h5>
+  </div>
+
+  <div class="definitions_container category_container">
+    <table>
+      <tr>
+        <th style="width:120px">Field</th>
+        <th style="width:220px">Description</th>
+        <th>Example values</th>
+      </tr>
+      <tr>
+        <td class="field_method"><code>ein</code></td>
+        <td >The employer identification number (EIN) for the organization associated with this tax filing. (Note: This value represents an integer value, so EIN values with leading zeroes will have the leading zeroes trimmed.)</td>
+        <td><code>142007220</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>strein</code></td>
+        <td >Version of the EIN in the "XX-XXXXXXX" format, containing leading zeroes if applicable.</td>
+        <td><code>14-2007220</code>, <code>01-0191203</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>name</code></td>
+        <td >Organization name, as provided by the IRS</td>
+        <td><code>"PRO PUBLICA"</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>sub_name</code></td>
+        <td >Secondary name, as provided by the IRS. This is generally used to provide an alias or a "subtitle" to an organization name. For sub-entities of national organizations, this may also be used to provide an identifier for the chapter.</td>
+        <td><code>""</code>, <code>"LOCAL 342"</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>address</code></td>
+        <td ></td>
+        <td><code>""</code>, <code>"55 BROADWAY"</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>city</code></td>
+        <td ></td>
+        <td><code>""</code>, <code>"NEW YORK"</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>state</code></td>
+        <td ></td>
+        <td><code>""</code>, <code>"NY"</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>zipcode</code></td>
+        <td ></td>
+        <td><code>""</code>, <code>"10006-3008"</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>subseccd</code></td>
+        <td >The subsection code (501(c)(___) or 4947(a)(1)) for this organization. For code values, see Parameters, under the <a href="#endpoint-search"><code>/search.json</code> section, above</a>.</td>
+        <td><code>3</code>, <code>92</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>ntee_code</code></td>
+        <td >National Taxonomy of Exempt Entities (NTEE) category for this organization. <a href="https://www.irs.gov/pub/irs-soi/eobk13.doc">See IRS documentation</a> for possible values.</td>
+        <td><code>"A20"</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>guidestar_url</code></td>
+        <td >A link to the <a href="https://www.guidestar.org/">GuideStar</a> profile for this organization.</td>
+        <td><code>"https://www.guidestar.org&#8203;/organizations&#8203;/14-2007220/.aspx"</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>nccs_url</code></td>
+        <td >A link to the <a href="http://nccs.urban.org/">National Center for Charitable Statistics</a> profile for this organization.</td>
+        <td><code>"http://nccsweb.urban.org&#8203;/communityplatform&#8203;/nccs/organization/profile&#8203;/id/142007220/"</code></td>
+      </tr>
+      <tr>
+        <td class="field_method"><code>updated</code></td>
+        <td >Date that the Organization profile (name fields, address data, subsection code) was updated in Nonprofit Explorer. Data comes from the <a href="https://www.irs.gov/charities-non-profits/exempt-organizations-business-master-file-extract-eo-bmf">IRS Business Master File</a>.</td>
+        <td><code>"2013-04-11T15:41:23Z"</code></td>
+      </tr>
+    </table>
+
+    <p>An additional 20 rows are included on the Organization object. These are further categorization and status codes within the <a href="https://www.irs.gov/charities-non-profits/exempt-organizations-business-master-file-extract-eo-bmf">IRS Exempt Organizations Business Master File Extract (EO BMF)</a> that Nonprofit Explorer utilizes. A list of fields and possible values <a href="https://www.irs.gov/pub/irs-soi/eobk13.doc">is available in the EO-BMF documentation</a>.</p>
+  </div>
+
+  <div class="category_container blurb_container">
+    <h5 class="category">Legal</h5>
+    <p>Usage constitues agreement to our <a href="https://www.propublica.org/about/propublica-data-terms-of-use">Data Terms of Use</a>.</p>
+  </div>
+
+  <div class="category_container blurb_container">
+    <h5 class="category">Questions? Comments?</h5>
+    <p>Contact us at <a href="/cdn-cgi/l/email-protection#cf81a0a1bfbda0a9a6bb8ab7bfa3a0bdaabd8fbfbda0bfbaada3a6acaee1a0bda8"><span class="__cf_email__" data-cfemail="f9b79697898b969f908dbc818995968b9c8bb9898b96898c9b95909a98d7968b9e">[email&#160;protected]</span></a></p>
+  </div>
+
+  <div class="category_container blurb_container">
+    <h5 class="category">Changelog</h5>
+    <ul>
+      <li>September 12, 2023. Reduced the number of results per page on the search endpoint from 100 to 25.</li>
+      <li>July 13, 2023. The deprecated v1 API has been removed.</li>
+      <li>July 13, 2017. Database update. <a href="https://www.irs.gov/uac/soi-tax-stats-annual-extract-of-tax-exempt-organization-financial-data">Raw filing data</a> has been updated to latest IRS release (May 25, 2017), including filings processed in 2016. (This does not include filings for private foundations processed in 2016, which are not yet available.) <a href="https://www.irs.gov/charities-non-profits/exempt-organizations-business-master-file-extract-eo-bmf">Organization data</a> has been updated to latest IRS release (June 14, 2017).</li>
+      <li>February 7, 2017. Database update. More <code>pdf_file</code> links are now available, including documents processed by the IRS through December 2016.</li>
+      <li>January 9, 2017. Database update. More <code>pdf_file</code> links are now available, including documents processed by the IRS through October 2016.</li>
+      <li>December 21, 2016. <strong>Important: Backwards-incompatible changes.</strong> The API has been updated to "version 2"; the previous API is now deprecated. The search endpoint now only returns Organization objects; it does not return Filings or any financial data. <a href="https://www.irs.gov/uac/soi-tax-stats-annual-extract-of-tax-exempt-organization-financial-data">Raw filing data</a> has been updated to latest IRS release (April 27, 2016), including filings processed in 2015. <a href="https://www.irs.gov/charities-non-profits/exempt-organizations-business-master-file-extract-eo-bmf">Organization data</a> has been updated to latest IRS release (December 5, 2016). More <code>pdf_file</code> links are now available, including documents processed by the IRS through June 2016.</li>
+      <li>August 18, 2015. Database update. <a href="https://www.irs.gov/uac/soi-tax-stats-annual-extract-of-tax-exempt-organization-financial-data">Raw filing data</a> updated to latest IRS release (May 8, 2015), including filings processed in 2014. <a href="https://www.irs.gov/charities-non-profits/exempt-organizations-business-master-file-extract-eo-bmf">Organization data</a> updated to latest IRS release (August 10, 2015). More <code>pdf_file</code> links are now available, including documents processed by the IRS through June 2015.</li>
+      <li>February 18, 2015. Database update. More <code>pdf_file</code> links are now available, including documents processed by the IRS through December 2014.</li>
+      <li>February 3, 2015. Database update. <a href="https://www.irs.gov/charities-non-profits/exempt-organizations-business-master-file-extract-eo-bmf">Organization data</a> updated to latest IRS release (08-Dec-2014). Access to <code>pdf_url</code> restored. <a href="https://www.propublica.org/nerds/item/form-990-documents-return-to-nonprofit-explorer">Read more about this update.</a></li>
+      <li>July 9, 2014. Added <code>output=flat</code> and <code>output=noorg</code> output formats. Documented <code>page</code> pagination option (now zero-indexed), and added "<code>num_pages</code>" to output. <code>pdf_url</code> removed - public.resource.org has removed public access to these files <a href="https://www.propublica.org/nerds/item/why-we-removed-form-990-pdfs-from-nonprofit-explorer">because of a dispute involving unredacted social security numbers</a>.</li>
+      <li>June 11, 2014. Database update. More <code>pdf_file</code> links are now available.</li>
+      <li>April 30, 2014. Database update. New filing records based on newly-released <a href="https://www.irs.gov/uac/soi-tax-stats-annual-extract-of-tax-exempt-organization-financial-data">raw filing data from the IRS</a> ("Exempt Organization Returns Filed in Calendar Year 2013").</li>
+      <li>December 13, 2013. Database update. More <code>pdf_file</code> links now available.</li>
+      <li>September 26, 2013. Initial API release.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="bottom-matter">
+    <section class="about-new readable-paragraph-width" id="about-this-data">
+    <h2>About This Data</h2>
+
+    <details>
+        <summary><h3>What Is This Data?</h3></summary>
+        <div class="about-expanded">
+        <p>
+            Nonprofit Explorer includes summary data for nonprofit tax returns and
+            full Form 990 documents, in both PDF and digital formats.
+        </p>
+        <p>
+            The summary data contains information processed by the IRS during the
+            2012-2019 calendar years; this generally consists of filings for the
+            2011-2018 fiscal years, but may include older records. This data release
+            includes only a subset of what can be found in the full Form 990s.
+        </p>
+        <p>
+            In addition to the raw summary data, we link to PDFs and digital copies
+            of full Form 990 documents wherever possible. This consists of separate
+            releases by the IRS of Form 990 documents processed by the agency, which
+            we update regularly.
+        </p>
+        <p>
+            We also link to copies of audits nonprofit organizations that spent
+            $750,000 or more in Federal grant money in a single fiscal year since
+            2016. These audits are copied from the Federal Audit Clearinghouse.
+        </p>
+        </div>
+    </details>
+
+    <details>
+        <summary><h3>Which Organizations Are Here?</h3></summary>
+        <div class="about-expanded">
+            <p>
+                Every organization that has been recognized as tax exempt by the IRS
+                has to file Form 990 every year, unless they make less than $200,000
+                in revenue and have less than $500,000 in assets, in which case they
+                have to file form 990-EZ. Organizations making less than $50,000
+                don’t have to file either form but do have to let the IRS they’re
+                still in business via a
+                <a
+                    href="https://www.irs.gov/charities-non-profits/annual-electronic-filing-requirement-for-small-exempt-organizations-form-990-n-e-postcard"
+                    >Form 990N "e-Postcard."</a
+                >
+            </p>
+            <p>
+                Nonprofit Explorer has organizations claiming tax exemption in each
+                of the 27 subsections of the 501(c) section of the tax code, and
+                which have filed a Form 990, Form 990EZ or Form 990PF. Taxable
+                trusts and private foundations that are required to file a form
+                990PF are also included. Small organizations filing a Form 990N
+                "e-Postcard" are not included in this data.
+            </p>
+        </div>
+    </details>
+
+    <details>
+        <summary><h3>Types of Nonprofits</h3></summary>
+        <div class="about-expanded">
+            <p>
+                There are 27 nonprofit designations based on the numbered
+                subsections of section 501(c) of the tax code.
+                <a href="/nonprofits/ctypes">See the list »</a>
+            </p>
+        </div>
+    </details>
+
+    <details>
+        <summary><h3>Get the Data</h3></summary>
+        <div class="about-expanded">
+            <p>
+                For those interested in acquiring the original data from the source,
+                here’s where our data comes from:
+            </p>
+            <ul>
+                <li>
+                    <a
+                        href="https://www.irs.gov/uac/soi-tax-stats-annual-extract-of-tax-exempt-organization-financial-data"
+                        >Raw filing data</a
+                    >. Includes EINs and summary financials as structured data.
+                </li>
+                <li>
+                    <a
+                        href="https://www.irs.gov/charities-non-profits/exempt-organizations-business-master-file-extract-eo-bmf"
+                        >Exempt Organization profiles</a
+                    >. Includes organization names, addresses, etc. You can merge
+                    this with the raw filing data using EIN numbers.
+                </li>
+                <li>
+                    <a
+                        href="https://www.irs.gov/charities-non-profits/form-990-series-downloads"
+                        >Form 990 documents</a
+                    >. Prior to 2017, these documents were obtained and processed by
+                    <a href="https://public.resource.org/">Public.Resource.org</a>
+                    and ProPublica. Bulk PDF downloads since 2017 are available from
+                    <a
+                        href="https://www.irs.gov/charities-non-profits/form-990-series-downloads"
+                        >the IRS</a
+                    >.
+                </li>
+                <li>
+                    <a
+                        href="https://www.irs.gov/charities-non-profits/form-990-series-downloads"
+                        >Form 990 documents as XML files</a
+                    >. Includes complete filing data (financial details, names of
+                    officers, tax schedules, etc.) in machine-readable format. Only
+                    available for electronically filed documents. Electronic data
+                    released prior to October 2021 is also available
+                    <a href="https://registry.opendata.aws/irs990/"
+                        >through Amazon Web Services.</a
+                    >
+                </li>
+                <li>
+                    <a href="https://harvester.census.gov/facdissem/Main.aspx"
+                        >Audits</a
+                    >. PDFs of single or program-specific audits for nonprofit
+                    organizations that spent $750,000 or more in Federal grant money
+                    in a single fiscal year. Available for fiscal year 2015 and
+                    later.
+                </li>
+            </ul>
+        </div>
+    </details>
+
+    <details>
+        <summary><h3>API</h3></summary>
+        <div class="about-expanded">
+            <p>
+                The data powering this website is available programmatically, via an
+                API. <a href="/nonprofits/api">Read the API documentation »</a>
+            </p>
+        </div>
+    </details>
+
+        <div
+            class="stack stack--row stack--justify-between stack--align-center
+            contact-funnel contact-funnel--in-about"
+        >
+            <p class="contact-funnel__graf">See an issue with the data?</p>
+<a class="btn btn--doc btn--blue-doc" href="/nonprofits/contact">Contact Us</a>
+
+        </div>
+
+</section>
+
+    
+<section class="byline-footer">
+    <h2 class="a11y">About Nonprofit Explorer</h2>
+    <span class="byline-footer__hed">Nonprofit Explorer</span>
+    <p class="byline-footer__dek">
+        Browse millions of annual returns filed by tax-exempt organizations with
+ProPublica’s Nonprofit Explorer. See details like executive compensation,
+revenue, expenses and more. Search for an organization or a person, or search
+the full text of filings.
+
+    </p>
+    <p class="byline-footer__byline">
+        By
+        <a href="https://www.propublica.org/people/andrea-suozzo">Andrea Suozzo</a>,
+        <a href="https://www.propublica.org/people/alec-glassford">Alec Glassford</a>,
+        <a href="https://www.propublica.org/people/ash-ngu">Ash Ngu</a> and
+        <a href="https://www.propublica.org/people/brandon-roberts">Brandon Roberts</a>.
+    </p>
+    <p class="byline-footer__byline">
+        Design by Jeff Frankl. Additional development by Ken Schwencke, Mike Tigas, and Sisi Wei.
+    </p>
+    <p class="byline-footer__citations">
+        E-file viewer adapted from
+        <a href="https://github.com/betson/irs-efile-viewer"
+            >IRS e-File Viewer</a
+        > by Ben Getson. Code for scraping audit documents adapated from
+        <a href="https://github.com/govwiki/SingleAuditRepo"
+            >Govwiki</a
+        >.
+    </p>
+    <p class="byline-footer__pubdate">
+        Updated <time>September 23, 2026</time>
+    </p>
+</section>
+
+</div>
+
+
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  var production_prefix = "https://projects.propublica.org/nonprofits/api/v2/";
+      var relative_prefix = "/nonprofits/api/v2/";
+
+    document.querySelectorAll(".api_response").forEach((el) => {
+      const href = el.querySelector("a")?.getAttribute("href");
+      if (!href) return;
+      fetch(relative_prefix + href).then(res => res.text()).then((bodyStr) => {
+        const preEl = document.createElement("pre");
+        preEl.textContent = "$ curl " + production_prefix + href + "\n\n----\n\n" + bodyStr;
+        el.append(preEl);
+      });
+    });
+</script>
+
+            </div>
+
+        </article>
+    </main>
+
+
+<div class="snackbar-target"></div>
+
+
+      <script type="application/json" class="svelte-config">
+        {"componentName":"SiteFooter","props":{"donateUrl":"https://give.propublica.org/give/498623/#!/donation/checkout","hideNewsletterSignup":true}}
+      </script>
+      <div style="display: contents">
+        
+      </div>
+    
+
+
+  <script type="text/javascript" src="https://www.propublica.org/js/public/assets/beacons.js" async></script>
+
+  <script type="text/javascript">
+    (function(){
+      var bsa_optimize=document.createElement('script');
+      bsa_optimize.type='text/javascript';
+      bsa_optimize.async=true;
+      bsa_optimize.src='https://cdn4.buysellads.net/pub/propublica.js?'+(new Date()-new Date()%600000);
+      (document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(bsa_optimize);
+    })();
+  </script>
+
+  
+      <script type="application/json" class="svelte-config">
+        {"componentName":"NewsletterModal","props":{}}
+      </script>
+      <div style="display: contents">
+        
+      </div>
+    
+    <script src="https://cdn.parsely.com/keys/propublica.org/p.js"></script>
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebPage",
+      "creator": ["Andrea Suozzo", "Alec Glassford", "Ash Ngu", "Brandon Roberts"],
+      "datePublished": "2013-05-09T12:00:00Z",
+      "headline": "Nonprofit Explorer: API v2",
+      "thumbnailUrl": "https://assets-d.propublica.org/v5/2023-nonprofit-explorer-og-image-990.jpeg",
+      "url": "https://projects.propublica.org/nonprofits/api/",
+      "keywords": ["newsApp:Nonprofit Explorer"]
+    }
+  </script>
+  <script type="application/json" class="csrf-token-endpoint">
+    "/nonprofits/csrf-token.json"
+  </script>
+
+  <!-- begin Convert Experiences code-->
+  <script>
+    // This variable prevents Convert from creating an overlay that can cover the page. Because we use deferred loading, we never want this overlay.
+    // https://support.convert.com/hc/en-us/articles/205160025-Disable-Body-Hiding-in-Convert-Experiences
+    var _conv_prevent_bodyhide = true;
+  </script>
+  <script type="text/javascript" defer src="https://cdn-4.convertexperiments.com/js/1004759-10046278.js"></script>
+  <!-- end Convert Experiences code -->
+
+</body>
+</html>

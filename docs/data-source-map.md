@@ -4,16 +4,23 @@ Which datasets answer each question the project sets out to investigate, which t
 
 Built from `follow-the-public-dollar-spec.md` (section 9) and the team's brainstorm notes. If the repo lists questions not covered here, add rows in the same format.
 
+**Last verified: 25 September 2026** against the files in `docs/vendor/` (see `docs/vendor/README.md` for source URLs and dates). File references below are relative to `docs/vendor/`. Anything not found in those files is marked `UNCONFIRMED`.
+
 ## Status key
 
 | Status | Meaning |
 |---|---|
-| **Pilot** | Seen in real responses during the 25 September 2026 test runs through the vendor connectors |
+| **Confirmed** | Endpoint and field names checked in a vendor or agency doc file in `docs/vendor/` (file named in the row) |
+| **Pilot** | Seen in real responses during the 25 September 2026 test runs through the vendor connectors or a live API call |
 | **Docs** | Described in the vendor's or agency's own documentation, not yet seen in a response |
 | **Unconfirmed** | Believed to exist; must be checked before code depends on it |
 | **Blocked** | Waiting on a backlog item |
+| **Design** | Computed by the application; no external source |
+| **Gap** | Needed by the repo, but no available tool provides it |
 
 All Tradeverifyd rows are **Blocked** on backlog item B1 (REST API docs). The capabilities are confirmed through the connector, but the REST endpoints are not.
+
+Sayari REST calls authenticate with `POST /oauth/token` (`client_id`, `client_secret`, `grant_type: client_credentials`) and a Bearer token; server `https://api.sayari.com` (`sayari/openapi.yml`). Rate limits: a `429 Rate limit exceeded` response is documented, but the limits themselves are not (B10).
 
 ---
 
@@ -21,17 +28,19 @@ All Tradeverifyd rows are **Blocked** on backlog item B1 (REST API docs). The ca
 
 | Need | Tool / dataset | Fields | Status |
 |---|---|---|---|
-| Federal contract awards to a recipient | USAspending API, award search (POST `/api/v2/search/spending_by_award/`, free, no key) | Award ID, recipient name and UEI, amount, dates, awarding agency, NAICS, PSC | Docs |
-| Whether the award was competed | USAspending award detail endpoint (competition fields are not in award search) | Extent competed, number of offers received, solicitation procedures | Unconfirmed: exact field names |
-| Where the prime sent the money | USAspending subaward data | Subaward amount, date, subrecipient name and UEI, prime award ID | Unconfirmed: endpoint path |
-| SAM.gov registration | Sayari entity profile (SAM.gov Entity Registration source); SAM.gov Entity API (free key via api.data.gov) | UEI, registration date, business types | Pilot (Sayari identifier `usa_sam_uei_number`); SAM API version Unconfirmed |
-| Excluded or debarred parties | Sayari (SAM.gov Entity Exclusions source); SAM.gov Exclusions | Exclusion record, UEI | Pilot |
-| PPP and SBA loans | Sayari (PPP Loan Recipient Database; SBA 504 and 7(a) sources) | Loan amount, lender, date | Docs (listed in Sayari source catalog) |
-| Contract awards via Sayari | Sayari (USASpending.gov Profiles source) | Contractor profile, corporate hierarchy | Docs (listed in Sayari source catalog) |
+| Federal contract awards to a recipient | USAspending API, award search: `POST https://api.usaspending.gov/api/v2/search/spending_by_award/` (free, no key). Filters: `recipient_search_text`, `time_period`, `award_type_codes`, `agencies`, `naics_codes`, `psc_codes`, `award_amounts` | `Award ID`, `Recipient Name`, `Recipient UEI`, `Award Amount`, `Awarding Agency`, `Start Date`, `End Date`, `NAICS`, `PSC`, `generated_internal_id` | **Confirmed** (`usaspending/search_spending_by_award.md`); **Pilot** (live calls 25 Sep 2026, `research/sources.json` S15). Note: `recipient_search_text` matches substrings, e.g. "Sertal" returned "LASERTALK INC" (`research/false_positive_log.csv`) |
+| Whether the award was competed | USAspending award detail: `GET /api/v2/awards/{award_id}/` | Under `latest_transaction_contract_data`: `extent_competed`, `extent_competed_description`, `number_of_offers_received`, `solicitation_procedures`, `solicitation_procedures_description`, `other_than_full_and_open`, `other_than_full_and_open_description` | **Confirmed** (`usaspending/awards_award_id.md`). Resolves B2 |
+| Where the prime sent the money | USAspending award search with `"subawards": true` (same endpoint as row 1). Corrected: the separate `POST /api/v2/subawards/` returns no subrecipient UEI (fields: `subaward_number`, `description`, `action_date`, `amount`, `recipient_name`) | `Sub-Award ID`, `Sub-Award Amount`, `Sub-Award Date`, `Sub-Awardee Name`, `Sub-Recipient UEI`, `Prime Award ID`, `Prime Award Recipient UEI` | **Confirmed** (`usaspending/search_spending_by_award.md` "Contract Subawards"; `usaspending/subawards.md`). Resolves B2 |
+| SAM.gov registration | Sayari entity profile (SAM.gov Entity Registration source); SAM.gov Entity Management API `GET https://api.sam.gov/entity-information/v4/entities` (free key via api.data.gov; public data needs a SAM.gov account) | Sayari: identifier type `usa_sam_uei_number`. SAM API parameters and field names: `ueiSAM`, `cageCode`, `registrationDate`, `activationDate`, `registrationStatus`, `businessTypeList`, `entityStructureDesc`, `purposeOfRegistrationDesc` | Sayari **Pilot** + **Confirmed** (`IdentifierType` enum, `sayari/openapi.yml`; source "USA SAM.gov Entity Registration Database" in the live source catalogue). SAM API **Confirmed**: v1–v4 are documented and v4 is the latest (`sam/entity-management-api.html`), which resolves B3. JSON nesting of the fields is `UNCONFIRMED` until a response is recorded. Sayari also lists `usa_sam_uei_number` as a weak identifier (B9) |
+| Excluded or debarred parties | Sayari (SAM.gov Entity Exclusions source); SAM.gov Exclusions API `GET https://api.sam.gov/entity-information/v4/exclusions` | Sayari identifier type `usa_sam_exclusions_number`. SAM API: `ueiSAM`, `exclusionType`, `exclusionProgram`, `excludingAgencyName`, `classificationType`, `activateDate`, `terminationDate` | **Pilot** (Sayari source "USA SAM.gov Entity Exclusions Database"; research F29–F30) + **Confirmed** (`sam/exclusions-api.html`, `sayari/openapi.yml`) |
+| PPP and SBA loans | Sayari (sources "USA Paycheck Protection Program (PPP) Loan Recipient Database", "USA SBA 504 and 7(a) Loan Program Database", "USA SBA Dynamic Small Business Database") | Loan amount, lender, date: `UNCONFIRMED` (the spec does not name the fields on the entity where these records appear; B14) | **Pilot** (live Sayari source catalogue, 25 Sep 2026; REST equivalent `GET /v1/ontology/sources?country=USA`, **Confirmed** in `sayari/openapi.yml`) |
+| Contract awards via Sayari | Sayari (source "USA USASpending.gov Profiles Database"); contracts appear as entities of type `contract` linked by `recipient_of` | Contractor profile, corporate hierarchy: `UNCONFIRMED` field names (B14) | **Pilot** (source catalogue; `recipient_of` contract relationships seen on the Serniya entity, research F34); entity type `contract` **Confirmed** (`Entities` enum) |
+| Firm size and age, for award size versus profile (PM2) *(new row; spec §9.1 "PM2 Award size versus profile … SAM.gov, USAspending")* | Sayari `registration_date`; SAM `businessTypeList`, `registrationDate`; SBA Dynamic Small Business Database via Sayari | Registration date, business types | **Confirmed** (fields above); SBA field names `UNCONFIRMED` (B14) |
+| Competing bidders on the same solicitation, for shared principals (PM5) *(new row; spec §9.1 "PM5 Shared principals across bidders … Same officers or addresses behind competing firms")* | None. USAspending gives `number_of_offers_received`, not who bid | Bidder identities | **Gap** (B11) |
 
 **Not covered:** grants passed through state agencies to sub-recipients. The Feeding Our Future pilot showed these money paths do not appear.
 
-**Signals powered:** PM1 registration-to-award gap, PM2 award size vs profile, PM3 non-competitive award, PM4 pass-through, PM6 excluded party.
+**Signals powered:** PM1 registration-to-award gap, PM2 award size vs profile, PM3 non-competitive award, PM4 pass-through, PM6 excluded party. PM5 shared principals across bidders is **not powered** until B11 is resolved.
 
 ---
 
@@ -41,32 +50,33 @@ All Tradeverifyd rows are **Blocked** on backlog item B1 (REST API docs). The ca
 
 | Need | Tool / dataset | Fields | Status |
 |---|---|---|---|
-| Owners and ultimate owners | Sayari UBO and ownership endpoints | Owner chain, share percentages where reported, owner entity type | Docs; relationship `has_shareholder` seen in Pilot |
-| Chain ends at a company, not a person | Sayari UBO | Entity type of the last node | Docs |
-| Layered or circular ownership | Sayari ownership and traversal | Path length, repeated entities in a path | Docs |
-| Secrecy jurisdiction | Sayari entity profile | Countries; compare to a jurisdiction list in config | Pilot |
+| Owners and ultimate owners | Sayari `GET /v1/ubo/{id}` (upward); `GET /v1/downstream/{id}` (owned entities). Parameters: `min_depth`, `max_depth` (default 4), `limit` (default 10, max 50), `psa`, `min_shares`, `include_unknown_shares`, `exclude_former_relationships`, `relationships` | Response `data[]` of `source`, `target`, `path`. Relationship types include `has_shareholder`, `shareholder_of`, `has_beneficial_owner`, `beneficial_owner_of`, `has_owner`, `owner_of`. Percentages come from the `shares` attribute; its exact position inside a path hop is `UNCONFIRMED` until a response is recorded | **Confirmed** (`sayari/openapi.yml`: `traversal_ubo`, `traversal_ownership`, `Relationships` enum, `AttributeDetails.shares`); `has_shareholder` seen in **Pilot** |
+| Chain ends at a company, not a person | Sayari UBO | `type` of the last entity in the path (`company`, `person`, …) | **Confirmed** (`Entities` enum) |
+| Layered or circular ownership | Sayari ownership and traversal (`GET /v1/traversal/{id}`) | Path length, repeated entity `id` in a path (loop detection is application logic) | **Confirmed** |
+| Secrecy jurisdiction | Sayari entity profile | `countries`; compare to a jurisdiction list in config | **Pilot** + **Confirmed** (`EntityDetails.countries`) |
 
 ### Lifecycle
 
 | Need | Tool / dataset | Fields | Status |
 |---|---|---|---|
-| Registration date and status | Sayari entity profile | `registration_date`, `status`, `closed` | Pilot |
-| Registered around a funding program | Sayari registration date plus program start dates in config | Date comparison | Pilot (dates), config needed |
-| Prior names | Tradeverifyd entity search; Sayari entity names | Aliases and former names | Pilot (Tradeverifyd `aliases`; Sayari `names`), Blocked for Tradeverifyd REST |
+| Registration date and status | Sayari entity profile `GET /v1/entity/{id}` | `registration_date`, `latest_status`, `closed`. Corrected: the field is `latest_status` (with `attributes.status` for history), not `status` | **Pilot** + **Confirmed** (`EntityDetails`) |
+| Registered around a funding program | Sayari registration date plus program start dates in config | Date comparison | **Confirmed** (dates); config needed |
+| Prior names | Tradeverifyd entity search; Sayari entity names | Tradeverifyd `aliases`; Sayari `attributes.name`, `label`, `translated_label` | Sayari **Confirmed**; Tradeverifyd **Pilot**, **Blocked** for REST (B1) |
 
 ### Location
 
 | Need | Tool / dataset | Fields | Status |
 |---|---|---|---|
-| Many companies at one address | Tradeverifyd find companies in radius; Sayari search by address | Count of entities at or near the address | Blocked (Tradeverifyd); Sayari address search Docs |
-| Mailbox or coworking address | Tavily search on the address | Result domains and titles, reviewed by an analyst | Docs |
+| Many companies at one address | Tradeverifyd find companies in radius; Sayari entity search `GET /v1/search/entity` (`q`, `fields`, `facets`) | Count of entities at or near the address. Sayari has **no `address` entity type** (`Entities` enum), so an address cluster must be counted from search results, not read from an address node | Tradeverifyd **Blocked** (B1); Sayari search **Confirmed**, but the searchable `fields` value for address is `UNCONFIRMED` (B12) |
+| Mailbox or coworking address | Tavily search on the address: `POST /search`, `topic: general` | `results[].url`, `title`, `content`, `score`; reviewed by an analyst | **Confirmed** (`tavily/search.md`) |
+| Registered agent or formation firm behind many companies *(new row; `docs/tracing_methodology.md` §3 "Addresses, Registered Agents and Formation Law Firms")* | Sayari relationship types `has_registered_agent` / `registered_agent_of`; fan-out from `degree` or `relationship_count` on the agent entity | `degree`, `relationship_count` | **Confirmed** (`Relationships` enum, `EntityDetails`) |
 
 ### Presence
 
 | Need | Tool / dataset | Fields | Status |
 |---|---|---|---|
-| Company website and footprint | Tavily search, topic `general` | Result URLs, titles, domains; classify as official site, registry or aggregator, or media | Pilot |
-| Adverse media | Tavily search; Sayari adverse-media risk factors | Tavily results; Sayari risk flags such as `law_enforcement_action`, `reputational_risk_terrorism` | Pilot |
+| Company website and footprint | Tavily search, `topic: general` | `results[].url`, `title`, `content`, `score`, `favicon`; classify as official site, registry or aggregator, or media. Tavily returns **no publisher field**, so derive the publisher from the URL domain | **Pilot** + **Confirmed** (`tavily/search.md`) |
+| Adverse media | Tavily search, `topic: news`; Sayari `GET /v1/negative_news` (`name`, `topic`, `until`); Sayari adverse-media risk factors | Tavily results with `published_date`: Tavily's estimate, which "can be later than the original publish date", returned when `include_published_date` is true (automatic for `news`). Sayari risk flags such as `law_enforcement_action`, `reputational_risk_terrorism` | **Pilot** + **Confirmed** (`tavily/search.md`; `sayari/openapi.yml` `negativeNews_NegativeNews`, new) |
 
 **Signals powered:** ST1–ST4, LC1–LC3, LO1–LO2, PR1–PR2.
 
@@ -76,13 +86,13 @@ All Tradeverifyd rows are **Blocked** on backlog item B1 (REST API docs). The ca
 
 | Need | Tool / dataset | Fields | Status |
 |---|---|---|---|
-| Shipments | Sayari trade search: shipments, suppliers, buyers | Dates, departure and arrival locations, HS codes, descriptions, weight and other measures, party risks | Docs |
-| Upstream suppliers by tier | Sayari upstream trade traversal | Supplier paths | Docs |
-| Trade relationships with goods codes | Tradeverifyd trade relationships (both directions) | Counterparty, HS codes per relationship | Blocked |
-| Declared business vs goods shipped | Sayari entity `business_purpose` or USAspending NAICS, compared with shipment HS codes | Text and code comparison | Pilot (`business_purpose` seen) |
-| High-priority goods | Shipment HS codes compared with the Common High Priority List | HS codes | Unconfirmed: current list version |
-| Transshipment routing | Sayari shipment departure and arrival countries, compared with a hub list in config | Countries | Docs |
-| Partner churn | Sayari shipments over time | Counterparties by period | Docs |
+| Shipments | Sayari `POST /v1/trade/search/shipments`, `/v1/trade/search/suppliers`, `/v1/trade/search/buyers`. Body: `q`, `filter`, `facets`. Filters include `hs_code`, `departure_country`, `arrival_country`, `transit_country`, `supplier_id`, `buyer_id`, `departure_date`, `arrival_date` | Shipment: `id`, `departure_date`, `arrival_date`, `departure_country`, `arrival_country`, `transit_country`, `hs_codes`, `product_descriptions`, `product_origin`, `weight`, `monetary_value`, `supplier`, `buyer`, `sources`, `record` | **Confirmed** (`sayari/openapi.yml` `TradeFilter`, `Shipment`) |
+| Upstream suppliers by tier | Sayari `GET /v1/supply_chain/upstream/{id}` | Parameters `product`, `risk`, `countries`, `max_depth`, `min_date`, `max_date`, `component`, `tier1_shipment_country`…`tier5_shipment_country`, `limit`; supplier paths | **Confirmed** |
+| Trade relationships with goods codes | Tradeverifyd trade relationships (both directions) | Counterparty, HS codes per relationship | **Blocked** (B1) |
+| Declared business vs goods shipped | Sayari entity `attributes.business_purpose` or USAspending `NAICS`, compared with shipment `hs_codes` | Text and code comparison | **Pilot** (`business_purpose` seen) + **Confirmed** |
+| High-priority goods | Shipment `hs_codes` compared with the BIS Common High Priority Items List | 50 HS codes in tiers (`bis/common-high-priority-items-list.html`) | List source **Confirmed**; version date `UNCONFIRMED`, since the page gives none (B5) |
+| Transshipment routing | Sayari shipment `departure_country`, `arrival_country` and `transit_country`, compared with a hub list in config | Countries | **Confirmed** (`transit_country` exists as a field and filter) |
+| Partner churn | Sayari shipments over time | `supplier`, `buyer` by `departure_date` / `arrival_date` period | **Confirmed** |
 
 **Limits seen in the pilot:** neither vendor showed trade records for the AZ Gold network, although gold flows were alleged. Informal trade does not appear.
 
@@ -94,16 +104,21 @@ All Tradeverifyd rows are **Blocked** on backlog item B1 (REST API docs). The ca
 
 | Need | Tool / dataset | Fields | Status |
 |---|---|---|---|
-| The company itself is listed | Sayari risk flags | e.g. `sanctioned_usa_ofac_sdn`, `export_controls`, `regulatory_action` | Pilot |
-| Official cross-check | Consolidated Screening List API (free key from developer.trade.gov; combines Commerce, State, and Treasury lists; updated daily) | Name, list, source link | Docs |
-| Official cross-check | OFAC Sanctions List Service downloads | SDN entries | Unconfirmed: download format |
-| Forced-labor exposure | Sayari (DHS UFLPA Entity List source) | List membership | Docs |
-| Paths to listed parties | Sayari watchlist endpoint | Paths up to the configured depth | Docs |
-| Paths to flagged parties in the supply chain | Tradeverifyd annotated relationship paths | Hop-by-hop path with HS codes | Blocked |
-| Tradeverifyd flags | Tradeverifyd entity annotations | Annotation categories (pilot showed `US OFAC`, `US GSA`) | Pilot, Blocked for REST |
-| OFAC 50% rule | Sayari ownership percentages; Sayari risk flag `ofac_50_percent_rule` | Percentages, flag | Pilot (flag seen) |
+| The company itself is listed | Sayari entity profile | `sanctioned` (boolean), `pep` (boolean), `risk`; risk-factor IDs such as `sanctioned_usa_ofac_sdn`, `export_controls`, `regulatory_action` | **Pilot** + **Confirmed** (`EntityDetails`) |
+| Risk-factor definitions *(new row; spec §5.3 "Sayari risk flags are displayed with the definition returned by the risk-factor lookup")* | Sayari `GET /v1/ontology/risk_factors` (`id`, `risk_category`, `level`, `risk_type`) | Definition per flag | **Confirmed** |
+| Official cross-check | Consolidated Screening List. Downloads (no key): `https://data.trade.gov/downloadable_consolidated_screening_list/v1/consolidated.{json,csv,tsv}`, updated daily at 5:00 AM ET. Search API on developer.trade.gov (key required; its docs page renders only in a browser) | CSV columns: `_id`, `source`, `entity_number`, `type`, `programs`, `name`, `title`, `addresses`, `federal_register_notice`, `start_date`, `end_date`, `standard_order`, `license_requirement`, `license_policy`, `remarks`, `source_list_url`, `alt_names`, `citizenships`, `dates_of_birth`, `nationalities`, `places_of_birth`, `source_information_url`, `ids` (plus vessel fields) | Downloads **Confirmed** (`trade_gov_csl/consolidated-screening-list.html`, `consolidated-csv-header.txt`); search API path `UNCONFIRMED` (B7) |
+| Official cross-check | OFAC Sanctions List Service downloads (`https://sanctionslist.ofac.treas.gov`) | SDN entries | **Unconfirmed**: download format, because the service pages render only in a browser (B4). Until then, the CSL files above carry the SDN entries |
+| Forced-labor exposure | Sayari (source "USA DHS Uyghur Forced Labor Prevention Act List") | List membership | **Pilot** (live source catalogue) |
+| Paths to listed parties | Sayari `GET /v1/watchlist/{id}`. `psa` **defaults to true** ("Defaults to traversing possibly same as relationships"); `sanctioned` filters paths to those ending at a listed entity; `max_depth` default 4; `limit` default 10, max 50 | Response: `data[]` of `source`, `target`, `path`, plus `partial_results`, `explored_count` | **Confirmed** (`traversal_watchlist`) |
+| Shortest path to a named listed party *(new row; spec §8.3 "7. Paths to flagged parties")* | Sayari `GET /v1/shortest_path?entities=` | Path between two entities | **Confirmed** |
+| Paths to flagged parties in the supply chain | Tradeverifyd annotated relationship paths | Hop-by-hop path with HS codes | **Blocked** (B1) |
+| Tradeverifyd flags | Tradeverifyd entity annotations | Annotation categories (pilot showed `US OFAC`, `US GSA`) | **Pilot**, **Blocked** for REST (B1) |
+| OFAC 50% rule | Sayari ownership percentages (`shares` attribute; `min_shares`, `include_unknown_shares` parameters); Sayari risk flag `ofac_50_percent_rule` | Percentages, flag | **Pilot** (flag seen) + **Confirmed** (parameters) |
+| Listing date and program, for narrative templates *(new row; `docs/narrative-copy-spec.md` §4 evidence templates `list_designation`, `list_removal`)* | CSL `start_date`, `end_date`, `programs`, `federal_register_notice`; OFAC recent-actions pages (tier-1 sources in `research/sources.json`) | Designation date, program, removal date | CSL **Confirmed**; Sayari listing dates `UNCONFIRMED` |
 
-**Important setting:** the Sayari watchlist endpoint also follows "possibly same as" links by default. The spec says unconfirmed matches cannot satisfy sanctions proximity on their own. The adapter must set this parameter explicitly for every call and record which paths depended on it.
+**Important setting:** the Sayari watchlist endpoint follows "possibly same as" links **by default** (confirmed in `sayari/openapi.yml`). The spec says unconfirmed matches cannot satisfy sanctions proximity on their own. The adapter must send `psa=false` explicitly for the scoring run, and run separately with `psa=true` to label which paths depend on possibly-same-as links. The same parameter and default apply to `/v1/traversal`, `/v1/ubo` and `/v1/downstream`.
+
+**Exclusions for proximity:** paths through registered agents (`registered_agent_of`) and institutional asset managers connect unrelated companies at scale. The Palantir control case produced nine such paths (`research/evidence_ledger.csv` F41).
 
 **Signals powered:** PX1–PX3.
 
@@ -113,9 +128,10 @@ All Tradeverifyd rows are **Blocked** on backlog item B1 (REST API docs). The ca
 
 | Need | Tool / dataset | Fields | Status |
 |---|---|---|---|
-| Closed companies and their officers and addresses | Sayari entity profile and traversal | `closed`, `status`, officers, addresses | Pilot |
-| Previously flagged entities | Application database (assessments and analyst reviews) | Entity IDs, identifiers, addresses, officers | Built by the app |
-| Match new companies to closed flagged ones | Compare shared officers, owners, addresses, trade partners | At least two shared identifiers required | Design |
+| Closed companies and their officers and addresses | Sayari entity profile (`relationships.type` filter on `GET /v1/entity/{id}`) and traversal | `closed`, `latest_status`, `addresses`; officer relationships `has_officer`, `has_director`, `has_manager`, `has_legal_representative`; `position` attribute for titles | **Pilot** + **Confirmed** |
+| Previously flagged entities | Application database (assessments and analyst reviews) | Entity IDs, identifiers, addresses, officers | **Design** |
+| Match new companies to closed flagged ones | Compare shared officers, owners, addresses, trade partners | At least two shared identifiers required | **Design** |
+| Possible-same records and why *(new row; `docs/tracing_methodology.md` §2 "Sayari `possibly_same_as` mechanism")* | Sayari entity profile `possibly_same_as` (paged with `possibly_same_as.limit`) | `PSA`: `psa_id`, `label`, `count`, `match_keys[]` (`key`, `normalized`, `original`); also relationship type `possibly_same_as` | **Confirmed** |
 
 The pilot showed person records are often split across filings, so matching must use addresses and identifiers as well as names.
 
@@ -127,12 +143,12 @@ The pilot showed person records are often split across filings, so matching must
 
 | Need | Tool / dataset | Fields | Status |
 |---|---|---|---|
-| Nonprofit filings | Sayari (IRS 990 source) | Officers, related entities | Docs |
-| Nonprofit finances and grants | ProPublica Nonprofit Explorer API (free) | Revenue, expenses, filing history | Unconfirmed: terms and fields |
-| Designated sham charities | Sayari OFAC flags; Consolidated Screening List | List membership | Docs |
-| Adverse media | Tavily | Results | Docs |
+| Nonprofit filings | Sayari (source "USA IRS 990 Filings") | Officers, related entities | **Pilot** (live source catalogue) |
+| Nonprofit finances and grants | ProPublica Nonprofit Explorer API: `GET /nonprofits/api/v2/search.json`, `GET /nonprofits/api/v2/organizations/:ein.json` | `totrevenue`, `totfuncexpns`, `totassetsend`, `totliabend`, filing history | Endpoints and fields **Confirmed** (`propublica/nonprofit-explorer-api.html`); terms `UNCONFIRMED`, since the page links a separate "Data Terms of Use" that has not been read (B6) |
+| Designated sham charities | Sayari OFAC flags; Consolidated Screening List | List membership | **Confirmed** (CSL files; Sayari `sanctioned`) |
+| Adverse media | Tavily | Results | **Confirmed** |
 
-**Signal powered:** PM5-style mission mismatch (to be defined as its own signal).
+**Signal powered:** a mission-mismatch signal, to be defined as its own signal (B8). Corrected: the previous text said "PM5-style", but PM5 in spec §9.1 is shared principals across bidders.
 
 ---
 
@@ -140,14 +156,30 @@ The pilot showed person records are often split across filings, so matching must
 
 | Panel or lane | Tool / dataset | Status |
 |---|---|---|
-| Federal spending in watched sectors | USAspending API | Docs |
-| Sanctions and export-control actions | Federal Register API (free, no key); Consolidated Screening List | Docs |
-| Commodity trade inflections | Tradeverifyd HS trends | Blocked |
-| Supply-chain disruptions | Tradeverifyd disruptions | Blocked |
-| Official news lane | Federal Register API | Docs |
-| Media news lane | Tavily search with topic `news` | Docs |
+| Federal spending in watched sectors | USAspending `POST /api/v2/search/spending_over_time/` (`group`, `filters`; results `time_period`, `aggregated_amount`) | **Confirmed** (`usaspending/search_spending_over_time.md`) |
+| Sanctions and export-control actions | Federal Register API `GET https://www.federalregister.gov/api/v1/documents.json` with `conditions[agencies][]` (e.g. `industry-and-security-bureau`), no key; Consolidated Screening List | **Pilot** (live call 25 Sep 2026; fields `document_number`, `type`, `title`, `publication_date`, `html_url`, `pdf_url`, `agencies`, `abstract`, `excerpts`; `federal_register/api-sample-documents.json`). The docs page blocks automated download (B13) |
+| Commodity trade inflections | Tradeverifyd HS trends | **Blocked** (B1) |
+| Supply-chain disruptions | Tradeverifyd disruptions | **Blocked** (B1) |
+| Screening portfolio; newly flagged award recipients *(new row; spec §8.1)* | Application database | **Design** |
+| Official news lane | Federal Register API | **Pilot** |
+| OFAC list changes *(new row; spec §8.2 "OFAC list changes, detected by comparing successive official list downloads")* | Daily diff of CSL downloads (Treasury entries); OFAC SLS downloads once B4 is resolved | CSL **Confirmed**; SLS **Unconfirmed** (B4) |
+| Media news lane | Tavily search with `topic: news` | **Confirmed** |
 
 Until B1 is resolved, the dashboard ships without the two Tradeverifyd panels.
+
+---
+
+## Q8. Evidence trail, identity cross-checks and validation *(new section)*
+
+| Need | Tool / dataset | Fields | Status |
+|---|---|---|---|
+| Original source document for a fact *(spec §5.2 "Record retrieval: Original source documents for the evidence trail")* | Sayari `GET /v1/record/{id}` | Record | **Confirmed** |
+| Which registries back a record *(spec §5.2 "Data source catalog")* | Sayari `GET /v1/ontology/sources` (`id`, `country`, `source_type`) | Source ID, label | **Confirmed** + **Pilot** |
+| Name or identifier resolution *(spec §7.2 "Search flow")* | Sayari `GET`/`POST /v1/resolution` (`name`, `address`, `city`, `state`, `country`, `identifier`, `date_of_birth`, `type`, `minimum_score_threshold`, …); `GET /v1/search/entity` (`q`) | Candidate entities | **Confirmed** |
+| LEI and parent-child links *(spec §5.4 "GLEIF API")* | GLEIF `GET https://api.gleif.org/api/v1/lei-records/{lei}` (no key) | `data.attributes.entity.legalName.name`, `jurisdiction`, `status`; relationships `direct-parent`, `ultimate-parent`, `direct-children`, `ultimate-children` | **Pilot** (live call, `gleif/sample-lei-record-palantir.json`) |
+| UK officers and persons with significant control *(spec §5.4 "UK Companies House API")* | Companies House Public Data API: `/company/{company_number}/officers`, `/persons-with-significant-control`, `/filing-history`, `/registered-office-address` | Officers, PSCs, filings | Paths **Confirmed** (`companies_house/api-overview.html`); base URL and key header `UNCONFIRMED` (B16) |
+| Aggregated sanctions and PEP cross-check *(spec §5.4 "OpenSanctions")* | OpenSanctions | Entity, datasets | **Unconfirmed**: API docs not collected; licence [VERIFY] (B17) |
+| Random control sample for the false-positive study *(`docs/control-rows-guide.md` §1; spec §12.3)* | USAspending award search with `award_amounts` bands and random `page` | Fields as in Q1 row 1 | **Confirmed**; paging depth cap `UNCONFIRMED` (the guide's own CONFIRM note) |
 
 ---
 
@@ -155,20 +187,29 @@ Until B1 is resolved, the dashboard ships without the two Tradeverifyd panels.
 
 The agent plans which of these to call. It cannot call anything else.
 
-| Agent tool | Backed by | Returns |
-|---|---|---|
-| `find_awards` | USAspending award search | Awards matching filters (agency, NAICS, PSC, dates, amount) |
-| `award_detail` | USAspending award detail | Competition fields for one award |
-| `find_subawards` | USAspending subawards | Subawards under one prime award |
-| `resolve_entity` | Sayari resolution or search, plus identifier lookups | Candidate entities with match levels |
-| `entity_profile` | Sayari entity | Identity, status, dates, risk flags, sources |
-| `ownership` | Sayari UBO and ownership | Owner chains with percentages |
-| `network` | Sayari traversal | Officers and linked entities within N hops |
-| `listed_party_paths` | Sayari watchlist (explicit possibly-same-as setting) | Paths to listed parties |
-| `trade` | Sayari shipments, suppliers, buyers, upstream traversal | Trade records with HS codes |
-| `screen_official_lists` | Consolidated Screening List API | Official list matches |
-| `web_presence` | Tavily search | Results classified by type |
-| `tradeverifyd_*` | Tradeverifyd | Disabled until B1 |
+| Agent tool | Backed by | Returns | Status |
+|---|---|---|---|
+| `find_awards` | USAspending `POST /api/v2/search/spending_by_award/` | Awards matching filters (agency, NAICS, PSC, dates, amount) | Confirmed |
+| `award_detail` | USAspending `GET /api/v2/awards/{award_id}/` | Competition fields for one award | Confirmed |
+| `find_subawards` | USAspending `POST /api/v2/search/spending_by_award/` with `subawards: true` | Subawards under one prime award, with `Sub-Recipient UEI` | Confirmed |
+| `spending_over_time` *(new)* | USAspending `POST /api/v2/search/spending_over_time/` | Aggregated amounts by period | Confirmed |
+| `sam_exclusions` *(new)* | SAM.gov `GET /entity-information/v4/exclusions` | Exclusion records by UEI or name | Confirmed (key needed) |
+| `resolve_entity` | Sayari `/v1/resolution` or `/v1/search/entity`, plus identifier lookups | Candidate entities with match levels | Confirmed |
+| `entity_profile` | Sayari `GET /v1/entity/{id}` | Identity, status, dates, risk flags, sources, possibly-same-as with match keys | Confirmed |
+| `ownership` | Sayari `GET /v1/ubo/{id}`, `GET /v1/downstream/{id}` | Owner chains with percentages | Confirmed |
+| `network` | Sayari `GET /v1/traversal/{id}` | Officers and linked entities within N hops | Confirmed |
+| `listed_party_paths` | Sayari `GET /v1/watchlist/{id}` (explicit `psa` setting on every call) | Paths to listed parties | Confirmed |
+| `shortest_path` *(new)* | Sayari `GET /v1/shortest_path` | Path between two entities | Confirmed |
+| `trade` | Sayari shipments, suppliers, buyers, upstream traversal | Trade records with HS codes | Confirmed |
+| `source_record` *(new)* | Sayari `GET /v1/record/{id}` | Original record for a cited fact | Confirmed |
+| `risk_factor_definitions` *(new)* | Sayari `GET /v1/ontology/risk_factors` | Definition of each risk flag | Confirmed |
+| `negative_news` *(new)* | Sayari `GET /v1/negative_news` | Sayari adverse-media results | Confirmed |
+| `screen_official_lists` | Consolidated Screening List downloads (daily file) or search API | Official list matches | Downloads confirmed; API path unconfirmed (B7) |
+| `federal_register_documents` *(new)* | Federal Register `GET /api/v1/documents.json` | Official notices | Pilot |
+| `lei_record` *(new)* | GLEIF `GET /api/v1/lei-records/{lei}` | LEI record and parent links | Pilot |
+| `web_presence` | Tavily `POST /search` | Results classified by type | Confirmed |
+| `extract_page` *(new)* | Tavily `POST /extract` (`urls`, `extract_depth`, `format`, `query`) | Text of one cited page, returned as `results[].raw_content` | Confirmed (`tavily/extract.md`) |
+| `tradeverifyd_*` | Tradeverifyd | Disabled until B1 | Blocked |
 
 Every call goes through the adapters, so each result is stored as a source record with provenance.
 
@@ -176,13 +217,22 @@ Every call goes through the adapters, so each result is stored as a source recor
 
 ## Backlog items raised by this map
 
-| ID | Item |
-|---|---|
-| B1 | Obtain Tradeverifyd REST API docs: OpenAPI spec, auth method, rate limits, MCP-to-REST mapping, score method, annotation categories, licensing, sample responses |
-| B2 | Confirm USAspending competition field names and the subaward endpoint in the official API docs at api.usaspending.gov |
-| B3 | Confirm the current SAM.gov Entity API version |
-| B4 | Confirm the OFAC Sanctions List Service download format |
-| B5 | Confirm the current Common High Priority List HS codes |
-| B6 | Confirm ProPublica Nonprofit Explorer API terms and fields |
-| B7 | Register for a free trade.gov API key for the Consolidated Screening List |
-| B8 | Define the mission-mismatch signal for nonprofits |
+| ID | Item | Status (25 Sep 2026) |
+|---|---|---|
+| B1 | Obtain Tradeverifyd REST API docs: OpenAPI spec, auth method, rate limits, MCP-to-REST mapping, score method, annotation categories, licensing, sample responses | Open. Awaiting vendor files in `docs/vendor/tradeverifyd/`. The Tradeverifyd connector was also returning HTTP 401 (auth header rejected) on 25 Sep |
+| B2 | Confirm USAspending competition field names and the subaward endpoint in the official API docs at api.usaspending.gov | **Resolved**: see Q1 rows 2–3 |
+| B3 | Confirm the current SAM.gov Entity API version | **Resolved**: v4 |
+| B4 | Confirm the OFAC Sanctions List Service download format | Open. SLS pages render only in a browser; check manually. Interim: CSL files |
+| B5 | Confirm the current Common High Priority List HS codes | Partly resolved: list source saved (50 HS codes); the page gives no version date |
+| B6 | Confirm ProPublica Nonprofit Explorer API terms and fields | Partly resolved: fields and endpoints confirmed; "Data Terms of Use" not yet read |
+| B7 | Register for a free trade.gov API key for the Consolidated Screening List | Narrowed: needed only for the search API. The daily downloads need no key |
+| B8 | Define the mission-mismatch signal for nonprofits | Open |
+| B9 | Sayari lists `cage` and `usa_sam_uei_number` under both `IdentifierType` and `WeakIdentifierType` ("weak (non-unique) identifiers"). Spec §7.1 treats UEI and CAGE as strong identifiers for Confirmed merges. Ask Sayari which applies | New |
+| B10 | Sayari rate limits and pagination limits: `429` is documented, the limits are not (spec §5.1 [VERIFY]) | New |
+| B11 | PM5 needs the identities of competing bidders. USAspending publishes only `number_of_offers_received`. Redefine PM5 (e.g. shared principals among recipients in the same NAICS and agency) or mark it not assessable | New |
+| B12 | `docs/tracing_methodology.md` uses Sayari fields `edge_counts` and `label_en` and an address-entity node. None appear in the Sayari spec (use `degree` / `relationship_count`, `label` / `translated_label`; there is no `address` entity type). Also confirm which `fields` value searches addresses | New |
+| B13 | Federal Register API documentation page blocks automated download. Save it manually into `docs/vendor/federal_register/` | New |
+| B14 | How Sayari exposes PPP, SBA and USAspending record values (amount, lender, date, award ID) on an entity. Record a fixture response | New |
+| B15 | Tavily returns no publisher field, and `published_date` is an estimate. Spec §5.3 and §8.2 ("publisher, title, date") need a domain-to-publisher rule and a "date as estimated by Tavily" label | New |
+| B16 | Companies House API base URL, auth header and free key registration | New |
+| B17 | OpenSanctions API docs and licence terms for this use | New |

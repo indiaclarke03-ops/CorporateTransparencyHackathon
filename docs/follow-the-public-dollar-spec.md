@@ -496,7 +496,7 @@ The "shells close within about two years" figure from the brainstorm is not used
 
 | Code | Red flag | Data |
 |---|---|---|
-| PX1 Listed entity | Entity is itself on an official list (grade A match only) | Sayari, OFAC, BIS, UFLPA |
+| PX1 Listed entity | Entity is itself on an official US, UN, EU or UK list (grade A match only; see 9.2) | Sayari, OFAC, BIS, UFLPA |
 | PX2 Sanctions proximity | Listed party within 1 to 3 hops, weighted by distance | Sayari, Tradeverifyd |
 | PX3 OFAC 50% rule | Listed parties together own 50% or more | Sayari ownership percentages |
 
@@ -504,6 +504,7 @@ The "shells close within about two years" figure from the brainstorm is not used
 
 - A signal can fire only with at least one stored source record as evidence.
 - PX1 and PX2 require the listed party to match at grade A. "Possibly same as" flags produce a separate, visible note, not a firing signal.
+- **Which lists count.** For PX1, PX2 and PX3, a "listed party" is one on a US (OFAC, BIS, Consolidated Screening List, UFLPA), UN Security Council, EU or UK list. Listings elsewhere, including China's Anti-Foreign Sanctions Law countermeasure lists and Unreliable Entity List, are shown as context and never fire a signal or appear as "sanctioned". Reason: China lists US defense contractors over arms sales to Taiwan, including Northrop Grumman Systems Corporation, a control row in `research/ground_truth_entities.csv`. Sayari's `sanctioned` flag is true for any list, so the code reads the specific risk-factor IDs (`SCORED_SANCTION_FACTORS` in `scoring/engine.py`; Sayari files China's lists under `sanctioned_other`).
 - PR1 requires that the Tavily search was actually run and returned results. A failed search makes PR1 not assessable.
 
 ### 9.3 Tiers

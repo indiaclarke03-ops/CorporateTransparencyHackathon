@@ -155,13 +155,13 @@
  },
  {
   "id": "samidoun",
-  "title": "Samidoun (sham charity for the PFLP)",
+  "title": "Samidoun and Addameer (sham charities for the PFLP)",
   "typology": "Humanitarian Front",
   "root": "Samidoun Palestinian Prisoner Solidarity Network",
   "score": 90,
   "grade": "A",
-  "nodes": 13,
-  "edges": 12,
+  "nodes": 15,
+  "edges": 14,
   "tools": [
    "Sayari",
    "Tavily"
@@ -178,7 +178,9 @@
    "Mohammed Khatib (SDGT record)",
    "Hamas incl. Izz al-Din al-Qassam Brigades",
    "Masar Badil",
-   "Jaldia Abubakra Aueda"
+   "Jaldia Abubakra Aueda",
+   "Addameer Prisoner Support and Human Rights Association",
+   "POPULAR FRONT FOR THE LIBERATION OF PALESTINE"
   ],
   "money_status": "none",
   "headline": "A registered not-for-profit whose leadership and affiliations run to three designated terrorist organisations"

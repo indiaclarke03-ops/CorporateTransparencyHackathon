@@ -317,11 +317,24 @@ def samidoun():
                  {"entity_id": "i1N7JuvZdNKgkc4wyFjF6w", "label": "Jaldia Abubakra Aueda", "type": "person", "countries": ["ESP"],
                   "risk_flags": {"sanctioned": True, "risk_levels": ["sanctioned_usa_ofac_sdn", "ofac_sdgt_sanctioned"]}, "position": "Jaldia Abubakra Aueda is Linked to Samidoun"}]}}
     add_profile(nodes, edges, p, root=True)
+    # Sibling charity: Addameer shares the same PFLP record (Sayari search + traverse_network, live MCP 25 Sep 2026).
+    add_profile(nodes, edges, {"entity_id": "DLqaU0QbIEQTxDN8AWShiw", "label": "Addameer Prisoner Support and Human Rights Association", "type": "company",
+        "countries": ["ISR", "PSE"], "attributes": {"countries": ["PSE", "ISR"], "identifiers": [{"type": "usa_ofac_sdn_number", "value": "53920"}]},
+        "risk": {"sanctioned": True, "risk_levels": ["sanctioned_usa_ofac_sdn", "ofac_sdgt_sanctioned", "sanctioned_isr_mod_nbctf"]},
+        "relationships": {"linked_to": [
+            {"entity_id": "jMzsf620xw_EUsPl44BrOA", "label": "Popular Front for the Liberation of Palestine", "type": "company", "countries": ["LBN", "PSE", "SYR"],
+             "risk_flags": {"sanctioned": True, "risk_levels": ["sanctioned_usa_ofac_sdn", "ofac_fto_sanctioned"]}, "position": "Addameer is linked to the PFLP (same Sayari record as Samidoun's parent)"},
+            {"entity_id": "OYqciTpswLiD79NGaYl-Ug", "label": "POPULAR FRONT FOR THE LIBERATION OF PALESTINE", "type": "company", "countries": ["SYR", "LBN", "PSE"],
+             "risk_flags": {"sanctioned": True, "risk_levels": ["sanctioned_usa_ofac_sdn", "ofac_fto_sanctioned"]}, "position": "Addameer is linked to the PFLP"}]}})
+    nodes["DLqaU0QbIEQTxDN8AWShiw"]["risk_signals"].insert(0, {
+        "signal_name": "Designated by Treasury for acting for or on behalf of the PFLP (sham charity network)", "severity": "CRITICAL",
+        "provenance_source": "Treasury press release SB0162 (found with Tavily)", "evidence_record": SOURCES["S35"]["url"], "source_id": "S35",
+        "source_authority": "U.S. Department of the Treasury"})
     nodes[p["entity_id"]]["risk_signals"].insert(0, {
         "signal_name": "Designated by OFAC as a sham charity fundraising for the PFLP (joint action with Canada)", "severity": "CRITICAL",
         "provenance_source": "Treasury press release (found with Tavily)", "evidence_record": SOURCES["S34"]["url"], "source_id": "S34",
         "source_authority": "U.S. Department of the Treasury"})
-    return case("samidoun", "Samidoun (sham charity for the PFLP)", "Humanitarian Front", p["entity_id"], nodes, edges, 90, "A",
+    return case("samidoun", "Samidoun and Addameer (sham charities for the PFLP)", "Humanitarian Front", p["entity_id"], nodes, edges, 90, "A",
                 "A Canadian not-for-profit, also registered at UK Companies House, that OFAC designated in October 2024 as a sham charity "
                 "acting as an international fundraiser for the PFLP. Sayari links it to the PFLP as parent and to Hamas, Masar Badil and "
                 "SDGT-listed individuals, and records it at a mass-registration address. This is the FATF Recommendation 8 risk: a "
@@ -530,6 +543,7 @@ INSIGHTS = {
             "Routing through Turkey (71 transits), South Korea (50) and Cyprus (22) matches known transshipment hubs.",
             "Buyers include Unilever's Russian, Brazilian and Mexican arms. Sayari flags OOO Unilever Rus as owned by a sanctioned entity and as an importer of BIS Common High Priority List items.",
             "Upstream: Ningbo Hoshine Group owns 46.24%, and Hoshine owns 100% of three subsidiaries, two in Xinjiang.",
+            "Public-money check: USAspending returns 0 federal contracts for Unilever United States, FY2020–26 (queried 25 Sep 2026). The direct federal path doesn't run through Unilever's US arm, so the exposure to trace is buyers re-exporting silicones and sealants to US federal suppliers.",
         ],
         "implications": [
             "The UFLPA presumption covers goods made wholly or partly by listed entities, so silicones processed in Vietnam, Indonesia or Mexico and shipped on to the US are still in scope.",
@@ -577,6 +591,7 @@ INSIGHTS = {
             "Sayari records the PFLP as its parent and Hamas as an affiliate. Manager Khaled Barakat is OFAC-sanctioned.",
             "It is linked to Masar Badil and to SDGT-listed individuals in Spain and Belgium: a fundraising network across four jurisdictions.",
             "It is flagged for a mass-registration address, the same shell signal we see in commercial fronts.",
+            "Cross-network link: Addameer (OFAC SDN 53920, designated in Treasury SB0162) is linked to the same PFLP record Sayari lists as Samidoun's parent. Two 'human rights' charities feed one designated organisation.",
         ],
         "implications": [
             "FATF Recommendation 8: charity registration gives legitimacy and banking access. Grantmakers and payment platforms need owner and officer screening, not just a charity-number check.",
@@ -634,9 +649,9 @@ PUBLIC_MONEY = {
     "rsf-gold": ("SAM.gov: excluded from federal awards", "blocked", "US SAM Procurement Exclusions annotation (Tradeverifyd); 0 awards found", None,
                  "https://www.opensanctions.org/datasets/us_sam_exclusions/"),
     "hoshine": ("US federal procurement of silicon-based goods", "potential",
-                "Exposure through suppliers: 26 direct US shipments 2020–21, then indirect routes via Mexico, Vietnam and Indonesia. Not yet traced to a federal award.", None, None),
+                "Exposure through suppliers: 26 direct US shipments 2020–21, then indirect routes via Mexico, Vietnam and Indonesia. USAspending: 0 contracts to Unilever United States (FY2020–26). Not yet traced to a federal award.", None, None),
     "meroe-gold": ("USAspending / SAM.gov screen", "none", "Screened: no federal awards; foreign mining company (validation case)", None, None),
-    "samidoun": ("USAspending / SAM.gov screen", "none", "Screened: no federal awards; nonprofit registered in Canada and the UK", None, None),
+    "samidoun": ("USAspending / SAM.gov screen", "none", "Screened: no federal awards to Samidoun or Addameer. Next: foreign-assistance grants to partner NGOs (USAID) and IRS 990 filings of US donors", None, None),
     "amarvel": ("USAspending / SAM.gov screen", "none", "Screened: no awards found for the parent. The 11 US front companies are not yet resolved, so they have not been checked", None, None),
 }
 

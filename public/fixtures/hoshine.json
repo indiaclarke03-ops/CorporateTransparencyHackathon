@@ -43,7 +43,8 @@
     "Shipments continued elsewhere: Russia 483, Indonesia 321, Ukraine 287, Vietnam 181, India 105, Turkey 93, Pakistan 87, Mexico 54.",
     "Routing through Turkey (71 transits), South Korea (50) and Cyprus (22) matches known transshipment hubs.",
     "Buyers include Unilever's Russian, Brazilian and Mexican arms. Sayari flags OOO Unilever Rus as owned by a sanctioned entity and as an importer of BIS Common High Priority List items.",
-    "Upstream: Ningbo Hoshine Group owns 46.24%, and Hoshine owns 100% of three subsidiaries, two in Xinjiang."
+    "Upstream: Ningbo Hoshine Group owns 46.24%, and Hoshine owns 100% of three subsidiaries, two in Xinjiang.",
+    "Public-money check: USAspending returns 0 federal contracts for Unilever United States, FY2020–26 (queried 25 Sep 2026). The direct federal path doesn't run through Unilever's US arm, so the exposure to trace is buyers re-exporting silicones and sealants to US federal suppliers."
    ],
    "implications": [
     "The UFLPA presumption covers goods made wholly or partly by listed entities, so silicones processed in Vietnam, Indonesia or Mexico and shipped on to the US are still in scope.",
@@ -68,7 +69,7 @@
    "sayari_pass_through": null,
    "details": {
     "money_status": "potential",
-    "money_text": "Exposure through suppliers: 26 direct US shipments 2020–21, then indirect routes via Mexico, Vietnam and Indonesia. Not yet traced to a federal award."
+    "money_text": "Exposure through suppliers: 26 direct US shipments 2020–21, then indirect routes via Mexico, Vietnam and Indonesia. USAspending: 0 contracts to Unilever United States (FY2020–26). Not yet traced to a federal award."
    }
   },
   {
@@ -784,7 +785,7 @@
    "relationship_type": "PUBLIC_MONEY",
    "ownership_percentage": null,
    "provenance_ref": null,
-   "label": "Exposure through suppliers: 26 direct US shipments 2020–21, then indirect routes via Mexico, Vietnam and Indonesia. Not yet traced to a federal award.",
+   "label": "Exposure through suppliers: 26 direct US shipments 2020–21, then indirect routes via Mexico, Vietnam and Indonesia. USAspending: 0 contracts to Unilever United States (FY2020–26). Not yet traced to a federal award.",
    "money_status": "potential",
    "source_authority": "USAspending / SAM.gov"
   },

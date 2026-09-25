@@ -34,9 +34,43 @@
    "Sayari",
    "Tavily"
   ],
-  "public_money": "Supplier-tier exposure: US imports of silicon products (Sayari shipment CN → US)."
+  "public_money": "Supplier-tier exposure: US imports of silicon products (Sayari shipment CN → US).",
+  "insights": {
+   "headline": "Sanctions redirected the flow rather than stopping it: forced-labour silicon stopped going to the US and went to Russia and other intermediaries",
+   "findings": [
+    "Sayari holds 1,822 shipments from Hoshine-named shippers, Jan 2019 – Aug 2026; 886 declare Chinese product origin.",
+    "26 went straight to the United States between 14 Feb 2020 and 15 Jul 2021, then stop, around the June 2021 CBP Withhold Release Order.",
+    "Shipments continued elsewhere: Russia 483, Indonesia 321, Ukraine 287, Vietnam 181, India 105, Turkey 93, Pakistan 87, Mexico 54.",
+    "Routing through Turkey (71 transits), South Korea (50) and Cyprus (22) matches known transshipment hubs.",
+    "Buyers include Unilever's Russian, Brazilian and Mexican arms. Sayari flags OOO Unilever Rus as owned by a sanctioned entity and as an importer of BIS Common High Priority List items.",
+    "Upstream: Ningbo Hoshine Group owns 46.24%, and Hoshine owns 100% of three subsidiaries, two in Xinjiang."
+   ],
+   "implications": [
+    "The UFLPA presumption covers goods made wholly or partly by listed entities, so silicones processed in Vietnam, Indonesia or Mexico and shipped on to the US are still in scope.",
+    "A federal buyer of sealants, electronics or solar inputs can inherit this exposure two tiers down. Prime contractors need supplier-tier tracing, not first-tier screening.",
+    "The Russia flow joins two typologies: forced-labour inputs reaching a sanctioned-adjacent Russian buyer of high-priority items."
+   ],
+   "next_steps": [
+    "Pull the post-2021 shipments to Mexico and Vietnam and look for re-export to the US",
+    "Screen US federal contractors that buy from the Unilever and Roxane entities (USAspending subawards)"
+   ]
+  },
+  "money_status": "potential"
  },
  "nodes": [
+  {
+   "id": "public-money",
+   "label": "US federal procurement of silicon-based goods",
+   "type": "public_money",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": null,
+   "details": {
+    "money_status": "potential",
+    "money_text": "Exposure through suppliers: 26 direct US shipments 2020–21, then indirect routes via Mexico, Vietnam and Indonesia. Not yet traced to a federal award."
+   }
+  },
   {
    "id": "1XuabHffKPzSurnyE-YlvA",
    "label": "Hoshine Silicon Industry Co., Ltd.",
@@ -387,9 +421,373 @@
     ],
     "risk_flag_count": 0
    }
+  },
+  {
+   "id": "1_Nv3m23DZbsYTuvMBQGlQ",
+   "label": "Zavod DK Orisil (TOV)",
+   "type": "related_company",
+   "jurisdiction": "UKR",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Buys from a UFLPA-listed entity",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/1_Nv3m23DZbsYTuvMBQGlQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/1_Nv3m23DZbsYTuvMBQGlQ",
+    "entity_kind": "company",
+    "countries": [
+     "UKR",
+     "FIN",
+     "POL"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "KhJOHLUQF9Ol3J0oLvP3MQ",
+   "label": "Graha Pertiwi Mandiri",
+   "type": "related_company",
+   "jurisdiction": "IDN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Receives goods of Xinjiang origin (direct)",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/KhJOHLUQF9Ol3J0oLvP3MQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/KhJOHLUQF9Ol3J0oLvP3MQ",
+    "entity_kind": "company",
+    "countries": [
+     "IDN"
+    ],
+    "risk_flag_count": 1
+   }
+  },
+  {
+   "id": "UoQhKo2AJhV2mS4Vguiylg",
+   "label": "OOO Sinotekh",
+   "type": "related_company",
+   "jurisdiction": "RUS",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Buys from a UFLPA-listed entity",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/UoQhKo2AJhV2mS4Vguiylg",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/UoQhKo2AJhV2mS4Vguiylg",
+    "entity_kind": "company",
+    "countries": [
+     "RUS"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "rtqG2Bja1NNooUPAEDVA2Q",
+   "label": "Roxane Co., Ltd.",
+   "type": "related_company",
+   "jurisdiction": "VNM",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Buys from a UFLPA-listed entity",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/rtqG2Bja1NNooUPAEDVA2Q",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/rtqG2Bja1NNooUPAEDVA2Q",
+    "entity_kind": "company",
+    "countries": [
+     "VNM",
+     "HKG"
+    ],
+    "risk_flag_count": 1
+   }
+  },
+  {
+   "id": "WLoYplNdllbp3X0TESnuNg",
+   "label": "Sarana Luasmaju Kimia",
+   "type": "related_company",
+   "jurisdiction": "IDN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Buys from a UFLPA-listed entity",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/WLoYplNdllbp3X0TESnuNg",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "One hop from a state-owned enterprise",
+     "severity": "LOW",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/WLoYplNdllbp3X0TESnuNg",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/WLoYplNdllbp3X0TESnuNg",
+    "entity_kind": "company",
+    "countries": [
+     "IDN"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "sJiQwSC-gfly6z-SQdXKyw",
+   "label": "OOO Unilever Rus",
+   "type": "facilitator",
+   "jurisdiction": "RUS",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Owned by a sanctioned entity",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/sJiQwSC-gfly6z-SQdXKyw",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/sJiQwSC-gfly6z-SQdXKyw",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Imports BIS Common High Priority List items",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/sJiQwSC-gfly6z-SQdXKyw",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Buys from a UFLPA-listed entity",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/sJiQwSC-gfly6z-SQdXKyw",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/sJiQwSC-gfly6z-SQdXKyw",
+    "entity_kind": "company",
+    "countries": [
+     "RUS"
+    ],
+    "risk_flag_count": 4
+   }
+  },
+  {
+   "id": "PSTgIpsyiLpJmSACt-uOOw",
+   "label": "Unilever Brasil Industrial Ltda",
+   "type": "related_company",
+   "jurisdiction": "BRA",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Xinjiang-origin inputs at a sub-tier supplier",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/PSTgIpsyiLpJmSACt-uOOw",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/PSTgIpsyiLpJmSACt-uOOw",
+    "entity_kind": "company",
+    "countries": [
+     "BRA"
+    ],
+    "risk_flag_count": 1
+   }
+  },
+  {
+   "id": "8RIWkpFn4AdxAT-t2tQ92g",
+   "label": "Unilever Manufacturera S de RL de CV",
+   "type": "related_company",
+   "jurisdiction": "MEX",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Receives goods of Xinjiang origin (direct)",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/8RIWkpFn4AdxAT-t2tQ92g",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/8RIWkpFn4AdxAT-t2tQ92g",
+    "entity_kind": "company",
+    "countries": [
+     "MEX",
+     "USA"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "tCKH2RY6TGtwN1NFgI7t2A",
+   "label": "OOO Oriental Bridge",
+   "type": "related_company",
+   "jurisdiction": "RUS",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Contractor linked to a BIS Military End-User",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/tCKH2RY6TGtwN1NFgI7t2A",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Buys from a UFLPA-listed entity",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/tCKH2RY6TGtwN1NFgI7t2A",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/tCKH2RY6TGtwN1NFgI7t2A",
+    "entity_kind": "company",
+    "countries": [
+     "RUS"
+    ],
+    "risk_flag_count": 2
+   }
   }
  ],
  "edges": [
+  {
+   "source": "public-money",
+   "target": "1XuabHffKPzSurnyE-YlvA",
+   "relationship_type": "PUBLIC_MONEY",
+   "ownership_percentage": null,
+   "provenance_ref": null,
+   "label": "Exposure through suppliers: 26 direct US shipments 2020–21, then indirect routes via Mexico, Vietnam and Indonesia. Not yet traced to a federal award.",
+   "money_status": "potential",
+   "source_authority": "USAspending / SAM.gov"
+  },
   {
    "source": "xEY0aKglS5OcZb8QHzMZUQ",
    "target": "1XuabHffKPzSurnyE-YlvA",
@@ -455,6 +853,105 @@
    "sayari_relationship": "carrier_of",
    "former": false,
    "source_authority": "Sayari"
+  },
+  {
+   "source": "1XuabHffKPzSurnyE-YlvA",
+   "target": "1_Nv3m23DZbsYTuvMBQGlQ",
+   "relationship_type": "SUPPLY_CHAIN_SHIPMENT",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/1_Nv3m23DZbsYTuvMBQGlQ",
+   "source_authority": "Sayari trade data",
+   "label": "204 shipments from Hoshine-named shippers: organo-inorganic silicon compounds (HS 2931); latest 2026-02-02",
+   "sayari_relationship": "ships_to",
+   "shipments": 204
+  },
+  {
+   "source": "1XuabHffKPzSurnyE-YlvA",
+   "target": "KhJOHLUQF9Ol3J0oLvP3MQ",
+   "relationship_type": "SUPPLY_CHAIN_SHIPMENT",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/KhJOHLUQF9Ol3J0oLvP3MQ",
+   "source_authority": "Sayari trade data",
+   "label": "162 shipments from Hoshine-named shippers: mastics / sealants (HS 3214); latest 2025-10-06",
+   "sayari_relationship": "ships_to",
+   "shipments": 162
+  },
+  {
+   "source": "1XuabHffKPzSurnyE-YlvA",
+   "target": "UoQhKo2AJhV2mS4Vguiylg",
+   "relationship_type": "SUPPLY_CHAIN_SHIPMENT",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/UoQhKo2AJhV2mS4Vguiylg",
+   "source_authority": "Sayari trade data",
+   "label": "83 shipments from Hoshine-named shippers: silicones in primary forms (HS 3910); latest 2023-06-03",
+   "sayari_relationship": "ships_to",
+   "shipments": 83
+  },
+  {
+   "source": "1XuabHffKPzSurnyE-YlvA",
+   "target": "rtqG2Bja1NNooUPAEDVA2Q",
+   "relationship_type": "SUPPLY_CHAIN_SHIPMENT",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/rtqG2Bja1NNooUPAEDVA2Q",
+   "source_authority": "Sayari trade data",
+   "label": "82 shipments from Hoshine-named shippers: silicones in primary forms (HS 3910); latest 2026-07-14",
+   "sayari_relationship": "ships_to",
+   "shipments": 82
+  },
+  {
+   "source": "1XuabHffKPzSurnyE-YlvA",
+   "target": "WLoYplNdllbp3X0TESnuNg",
+   "relationship_type": "SUPPLY_CHAIN_SHIPMENT",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/WLoYplNdllbp3X0TESnuNg",
+   "source_authority": "Sayari trade data",
+   "label": "80 shipments from Hoshine-named shippers: silicones in primary forms (HS 3910); latest 2026-05-15",
+   "sayari_relationship": "ships_to",
+   "shipments": 80
+  },
+  {
+   "source": "1XuabHffKPzSurnyE-YlvA",
+   "target": "sJiQwSC-gfly6z-SQdXKyw",
+   "relationship_type": "SUPPLY_CHAIN_SHIPMENT",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/sJiQwSC-gfly6z-SQdXKyw",
+   "source_authority": "Sayari trade data",
+   "label": "52 shipments from Hoshine-named shippers: organo-inorganic silicon compounds (HS 2931); latest 2024-05-30",
+   "sayari_relationship": "ships_to",
+   "shipments": 52
+  },
+  {
+   "source": "1XuabHffKPzSurnyE-YlvA",
+   "target": "PSTgIpsyiLpJmSACt-uOOw",
+   "relationship_type": "SUPPLY_CHAIN_SHIPMENT",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/PSTgIpsyiLpJmSACt-uOOw",
+   "source_authority": "Sayari trade data",
+   "label": "40 shipments from Hoshine-named shippers: silicones in primary forms (HS 3910); latest 2022-12",
+   "sayari_relationship": "ships_to",
+   "shipments": 40
+  },
+  {
+   "source": "1XuabHffKPzSurnyE-YlvA",
+   "target": "8RIWkpFn4AdxAT-t2tQ92g",
+   "relationship_type": "SUPPLY_CHAIN_SHIPMENT",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/8RIWkpFn4AdxAT-t2tQ92g",
+   "source_authority": "Sayari trade data",
+   "label": "32 shipments from Hoshine-named shippers: organo-inorganic silicon compounds (HS 2931)",
+   "sayari_relationship": "ships_to",
+   "shipments": 32
+  },
+  {
+   "source": "1XuabHffKPzSurnyE-YlvA",
+   "target": "tCKH2RY6TGtwN1NFgI7t2A",
+   "relationship_type": "SUPPLY_CHAIN_SHIPMENT",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/tCKH2RY6TGtwN1NFgI7t2A",
+   "source_authority": "Sayari trade data",
+   "label": "36 shipments from Hoshine-named shippers: silicones and textiles; latest 2023-06-06",
+   "sayari_relationship": "ships_to",
+   "shipments": 36
   }
  ],
  "audit_trail": [

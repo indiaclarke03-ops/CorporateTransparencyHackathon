@@ -34,9 +34,38 @@
    "Sayari",
    "Tavily"
   ],
-  "public_money": "None found. Front companies are US-registered, so SAM.gov and USAspending checks are the next step."
+  "public_money": "None found. Front companies are US-registered, so SAM.gov and USAspending checks are the next step.",
+  "insights": {
+   "headline": "A Chinese precursor seller tied to 11 unnamed US companies: the front-entity pattern for fentanyl inputs",
+   "findings": [
+    "Sayari's law-enforcement records link Hubei Amarvel Biotech to three individuals (two with US addresses) and 11 US companies known only by Acuris IDs.",
+    "It has no street address or registry identifier on record: a thin footprint."
+   ],
+   "implications": [
+    "US-registered fronts can appear in SAM.gov or payment systems, so cross-check the 11 against SAM and state registries.",
+    "FinCEN's advisory red flags (chemical purchases paid via third parties or crypto) apply to the US fronts."
+   ],
+   "next_steps": [
+    "Resolve the 11 Acuris-ID companies",
+    "Read the DOJ release to upgrade the grade from B"
+   ]
+  },
+  "money_status": "none"
  },
  "nodes": [
+  {
+   "id": "public-money",
+   "label": "USAspending / SAM.gov screen",
+   "type": "public_money",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": null,
+   "details": {
+    "money_status": "none",
+    "money_text": "Screened: no awards found for the parent. The 11 US front companies are not yet resolved, so they have not been checked"
+   }
+  },
   {
    "id": "yre7QJIV48_qZndIue1DyA",
    "label": "Hubei Amarvel Biotech Co., Ltd.",
@@ -418,6 +447,16 @@
   }
  ],
  "edges": [
+  {
+   "source": "public-money",
+   "target": "yre7QJIV48_qZndIue1DyA",
+   "relationship_type": "PUBLIC_MONEY",
+   "ownership_percentage": null,
+   "provenance_ref": null,
+   "label": "Screened: no awards found for the parent. The 11 US front companies are not yet resolved, so they have not been checked",
+   "money_status": "none",
+   "source_authority": "USAspending / SAM.gov"
+  },
   {
    "source": "VuM5_39bXPK47ev7YwEuCw",
    "target": "yre7QJIV48_qZndIue1DyA",

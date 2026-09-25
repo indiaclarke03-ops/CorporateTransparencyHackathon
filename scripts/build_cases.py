@@ -363,6 +363,21 @@ def meroe():
                  {"entity_id": "CNYKORUtrtGPdruPiicUYw", "label": "OOO DM", "type": "company", "countries": ["RUS"],
                   "risk_flags": sdn(), "position": "Former trading partner of Meroe Gold", "former": True}]}}
     add_profile(nodes, edges, p, root=True)
+    # Upstream: who owns M Invest (Sayari traverse_network depth 1, live MCP 25 Sep 2026).
+    minv = {"entity_id": "_YvD5i5TDV4_YJ7y4d8soQ", "label": "M Invest, OOO", "type": "company", "countries": ["RUS", "SDN"],
+            "risk": {"sanctioned": True, "risk_levels": ["sanctioned_usa_ofac_sdn", "sanctioned_eu_sanctions"]}, "relationships": {
+        "has_shareholder": [
+            {"entity_id": "YiVasIW7ik0tQ5wRaP9d3g", "label": "Andrey Sergeyevich Mandel", "type": "person", "countries": ["RUS", "DEU", "SDN"], "risk_flags": sdn()},
+            {"entity_id": "MPnKxkRGFIhcfTrsgIMfGQ", "label": "AO Perspektiva", "type": "company", "countries": ["RUS"],
+             "risk_flags": {"sanctioned": True, "risk_levels": ["sanctioned_ukr_nsdc"]}},
+            {"entity_id": "QMUjkE7szzIkOJVDrURsLA", "label": "AO Delta (St Petersburg)", "type": "company", "countries": ["RUS"], "risk_flags": {"sanctioned": False, "risk_levels": []}},
+            {"entity_id": "uAFXDF4B1z4-7D5MSpJDuQ", "label": "Lyubov Dmitriyevna Vashkevich", "type": "person", "countries": ["RUS"],
+             "risk_flags": {"sanctioned": False, "risk_levels": ["sanctioned_adjacent"]}}],
+        "linked_to": [{"entity_id": "jFarO0pByL57QWjF8AE_xw", "label": "Yevgeniy Viktorovich Prigozhin", "type": "person", "countries": ["RUS"],
+                       "risk_flags": sdn("export_controls"), "position": "Yevgeniy Prigozhin is linked to M Invest"}],
+        "subsidiary_of": [{"entity_id": "PBkhb3K3ywLrajHG6tFesw", "label": "Megaline, JSC Delta", "type": "company", "countries": [],
+                           "risk_flags": {"sanctioned": False, "risk_levels": ["sanctioned_adjacent"]}}]}}
+    add_profile(nodes, edges, minv)
     for e in edges:
         if e["source"] in ("5KAdnYVYxtHIeLfVeG6XQQ", "CNYKORUtrtGPdruPiicUYw"):
             e["relationship_type"] = "SUPPLY_CHAIN_SHIPMENT"
@@ -415,6 +430,32 @@ def hoshine():
     add_profile(nodes, edges, p, root=True)
     for sid in ("ugfX4h2imqo-l6FkXrXLMg", "zmIofgPAJUrQogBt9FEoQQ"):
         nodes[sid]["type"] = "transshipment_hub"
+    # Downstream: top buyers of Hoshine-shipped goods (Sayari search_buyers, live MCP 25 Sep 2026).
+    fl = lambda *f: {"sanctioned": False, "risk_levels": list(f)}
+    buyers = [
+        ("1_Nv3m23DZbsYTuvMBQGlQ", "Zavod DK Orisil (TOV)", ["UKR", "FIN", "POL"], 204, "2026-02-02", "organo-inorganic silicon compounds (HS 2931)", fl("forced_labor_xinjiang_uflpa_adjacent", "wro_entity_adjacent")),
+        ("KhJOHLUQF9Ol3J0oLvP3MQ", "Graha Pertiwi Mandiri", ["IDN"], 162, "2025-10-06", "mastics / sealants (HS 3214)", fl("forced_labor_xinjiang_origin_direct")),
+        ("UoQhKo2AJhV2mS4Vguiylg", "OOO Sinotekh", ["RUS"], 83, "2023-06-03", "silicones in primary forms (HS 3910)", fl("forced_labor_xinjiang_uflpa_adjacent", "wro_entity_adjacent")),
+        ("rtqG2Bja1NNooUPAEDVA2Q", "Roxane Co., Ltd.", ["VNM", "HKG"], 82, "2026-07-14", "silicones in primary forms (HS 3910)", fl("forced_labor_xinjiang_uflpa_adjacent")),
+        ("WLoYplNdllbp3X0TESnuNg", "Sarana Luasmaju Kimia", ["IDN"], 80, "2026-05-15", "silicones in primary forms (HS 3910)", fl("forced_labor_xinjiang_uflpa_adjacent", "soe_adjacent")),
+        ("sJiQwSC-gfly6z-SQdXKyw", "OOO Unilever Rus", ["RUS"], 52, "2024-05-30", "organo-inorganic silicon compounds (HS 2931)",
+         fl("owned_by_sanctioned_entity", "sanctioned_adjacent", "imports_bis_high_priority_items", "forced_labor_xinjiang_uflpa_adjacent")),
+        ("PSTgIpsyiLpJmSACt-uOOw", "Unilever Brasil Industrial Ltda", ["BRA"], 40, "2022-12", "silicones in primary forms (HS 3910)", fl("forced_labor_xinjiang_origin_subtier")),
+        ("8RIWkpFn4AdxAT-t2tQ92g", "Unilever Manufacturera S de RL de CV", ["MEX", "USA"], 32, None, "organo-inorganic silicon compounds (HS 2931)", fl("forced_labor_xinjiang_origin_direct", "forced_labor_uflpa_origin_subtier")),
+        ("tCKH2RY6TGtwN1NFgI7t2A", "OOO Oriental Bridge", ["RUS"], 36, "2023-06-06", "silicones and textiles", fl("meu_list_contractors", "forced_labor_xinjiang_uflpa_adjacent")),
+    ]
+    FLAG_TEXT.setdefault("imports_bis_high_priority_items", ("Imports BIS Common High Priority List items", "HIGH"))
+    FLAG_TEXT.setdefault("meu_list_contractors", ("Contractor linked to a BIS Military End-User", "HIGH"))
+    FLAG_TEXT.setdefault("forced_labor_xinjiang_uflpa_adjacent", ("Buys from a UFLPA-listed entity", "HIGH"))
+    FLAG_TEXT.setdefault("forced_labor_xinjiang_origin_direct", ("Receives goods of Xinjiang origin (direct)", "HIGH"))
+    FLAG_TEXT.setdefault("forced_labor_xinjiang_origin_subtier", ("Xinjiang-origin inputs at a sub-tier supplier", "MEDIUM"))
+    for bid, label, c, n, last, goods, risk in buyers:
+        nodes[bid] = make_node({"entity_id": bid, "label": label, "type": "company", "countries": c, "risk_flags": risk})
+        nodes[bid]["type"] = "related_company" if not risk["risk_levels"] or "owned_by_sanctioned_entity" not in risk["risk_levels"] else "facilitator"
+        edges.append({"source": p["entity_id"], "target": bid, "relationship_type": "SUPPLY_CHAIN_SHIPMENT", "ownership_percentage": None,
+                      "provenance_ref": SAYARI + bid, "source_authority": "Sayari trade data",
+                      "label": f"{n} shipments from Hoshine-named shippers: {goods}" + (f"; latest {last}" if last else ""),
+                      "sayari_relationship": "ships_to", "shipments": n})
     nodes[p["entity_id"]]["risk_signals"][:0] = [
         {"signal_name": "CBP Withhold Release Order on silica-based products (forced-labour indicators found)", "severity": "CRITICAL",
          "provenance_source": "CBP press release (found with Tavily)", "evidence_record": EXTRA_SOURCES["S45"]["url"], "source_id": "S45",
@@ -478,6 +519,140 @@ def existing(cid, file, title, tools, public_money, sources):
     return cid, d
 
 
+# What each case uncovers, and what it means for the typology. Every number comes from the case data above.
+INSIGHTS = {
+    "hoshine": {
+        "headline": "Sanctions redirected the flow rather than stopping it: forced-labour silicon stopped going to the US and went to Russia and other intermediaries",
+        "findings": [
+            "Sayari holds 1,822 shipments from Hoshine-named shippers, Jan 2019 – Aug 2026; 886 declare Chinese product origin.",
+            "26 went straight to the United States between 14 Feb 2020 and 15 Jul 2021, then stop, around the June 2021 CBP Withhold Release Order.",
+            "Shipments continued elsewhere: Russia 483, Indonesia 321, Ukraine 287, Vietnam 181, India 105, Turkey 93, Pakistan 87, Mexico 54.",
+            "Routing through Turkey (71 transits), South Korea (50) and Cyprus (22) matches known transshipment hubs.",
+            "Buyers include Unilever's Russian, Brazilian and Mexican arms. Sayari flags OOO Unilever Rus as owned by a sanctioned entity and as an importer of BIS Common High Priority List items.",
+            "Upstream: Ningbo Hoshine Group owns 46.24%, and Hoshine owns 100% of three subsidiaries, two in Xinjiang.",
+        ],
+        "implications": [
+            "The UFLPA presumption covers goods made wholly or partly by listed entities, so silicones processed in Vietnam, Indonesia or Mexico and shipped on to the US are still in scope.",
+            "A federal buyer of sealants, electronics or solar inputs can inherit this exposure two tiers down. Prime contractors need supplier-tier tracing, not first-tier screening.",
+            "The Russia flow joins two typologies: forced-labour inputs reaching a sanctioned-adjacent Russian buyer of high-priority items.",
+        ],
+        "next_steps": ["Pull the post-2021 shipments to Mexico and Vietnam and look for re-export to the US",
+                       "Screen US federal contractors that buy from the Unilever and Roxane entities (USAspending subawards)"],
+    },
+    "meroe-gold": {
+        "headline": "Two ownership hops from a Sudanese gold mine to Prigozhin, with Russian trading partners who supplied it",
+        "findings": [
+            "Upstream: Meroe Gold → M Invest (parent, OFAC SDN) → shareholders Andrey Mandel (OFAC SDN), AO Perspektiva (Ukraine-sanctioned), AO Delta and Lyubov Vashkevich.",
+            "Sayari links Yevgeniy Prigozhin directly to M Invest, which completes the chain from the mine to the Wagner financier.",
+            "Director Mikhail Potepkin is OFAC-sanctioned and sits on both Meroe Gold and M Invest.",
+            "Downstream: former trading partners Broker Expert and OOO DM are both OFAC-sanctioned. Treasury says Broker Expert supplied Meroe Gold and moved cash for Prigozhin's enterprise.",
+        ],
+        "implications": [
+            "Gold is portable and hard to trace: Meroe's output can fund Wagner operations without passing through a sanctioned bank.",
+            "Under the OFAC 50% rule, any entity that M Invest's sanctioned shareholders together own 50% or more of is blocked, even if it is not listed. Screen owners, not just names.",
+            "Refiners and bullion buyers in the UAE and Russia are the choke point. Buyer-side trade data is the next pull.",
+        ],
+        "next_steps": ["Trace AO Delta and Megaline's other holdings", "Search gold (HS 7108) shipments from Sudan to the UAE and Russia"],
+    },
+    "rsf-gold": {
+        "headline": "One sanctioned shareholder behind five UAE trading companies: the front-company cluster financing the RSF",
+        "findings": [
+            "Abu Dharr Ahmmed (OFAC SDN 52511) is a shareholder of AZ Gold, Capital Tap General Trading, Creative Python and Al Jil Alqadem.",
+            "Capital Tap Holding owns Capital Tap General Trading, Capital Tab Management Consultancy and Horizon Advanced Solutions. All are sanctioned.",
+            "RSF leaders Algoney Hamdan Dagalo and Abdelrahim Hamdan Dagalo are linked to the same companies, as is Sudan's Alkhaleej Bank.",
+            "The companies were incorporated between 2016 and 2020 and describe themselves as general trading: generic purposes that can front for any goods.",
+            "Tradeverifyd scores AZ Gold High (258), with OFAC Sudan and SAM.gov exclusion annotations.",
+        ],
+        "implications": [
+            "Designating one company is not enough. The shared shareholder and holding company let the network keep trading through siblings.",
+            "A SAM.gov exclusion means this network has already touched US procurement screening. Name-only screening misses the siblings.",
+            "Arms and gold typology: gold exported from RSF-held areas can be sold through Dubai trading fronts, and the proceeds fund procurement.",
+        ],
+        "next_steps": ["Screen every company registered at the same Dubai addresses", "Check USAspending subawards for UAE general-trading vendors"],
+    },
+    "samidoun": {
+        "headline": "A registered not-for-profit whose leadership and affiliations run to three designated terrorist organisations",
+        "findings": [
+            "Registered as a Canadian not-for-profit (CRA account 774927545RC0001) and at UK Companies House (13885242). The UK entity closed on 27 Mar 2026.",
+            "Sayari records the PFLP as its parent and Hamas as an affiliate. Manager Khaled Barakat is OFAC-sanctioned.",
+            "It is linked to Masar Badil and to SDGT-listed individuals in Spain and Belgium: a fundraising network across four jurisdictions.",
+            "It is flagged for a mass-registration address, the same shell signal we see in commercial fronts.",
+        ],
+        "implications": [
+            "FATF Recommendation 8: charity registration gives legitimacy and banking access. Grantmakers and payment platforms need owner and officer screening, not just a charity-number check.",
+            "Closing a registry entity (UK, 2026) doesn't end the network. Watch for new registrations with the same officers (the phoenix pattern).",
+        ],
+        "next_steps": ["Search registries for new entities with the same officers", "Check IRS 990 filings for US-registered affiliates"],
+    },
+    "feeding-our-future": {
+        "headline": "Public money straight into shell sites: new entities claiming thousands of meals within days of forming",
+        "findings": [
+            "Feeding Our Future sponsored federally funded child-nutrition sites. DOJ proved a $250M fraud, and its founder was sentenced to 500 months.",
+            "Site operators such as Empire Cuisine And Market were incorporated in April 2020, weeks into the pandemic relief programmes.",
+            "Sayari shows each operator with only 2–3 organisers or co-owners: thin, newly formed entities.",
+        ],
+        "implications": [
+            "The registration-to-award gap signal would have caught these: entities formed in 2020 billing for large meal counts immediately.",
+            "The sponsor acts as a pass-through. Inspectors general need to see sponsor → site → bank links, not just the prime recipient.",
+        ],
+        "next_steps": ["Pull the other site operators' registration dates", "Match site addresses for mass-registration clusters"],
+    },
+    "amarvel": {
+        "headline": "A Chinese precursor seller tied to 11 unnamed US companies: the front-entity pattern for fentanyl inputs",
+        "findings": [
+            "Sayari's law-enforcement records link Hubei Amarvel Biotech to three individuals (two with US addresses) and 11 US companies known only by Acuris IDs.",
+            "It has no street address or registry identifier on record: a thin footprint.",
+        ],
+        "implications": [
+            "US-registered fronts can appear in SAM.gov or payment systems, so cross-check the 11 against SAM and state registries.",
+            "FinCEN's advisory red flags (chemical purchases paid via third parties or crypto) apply to the US fronts.",
+        ],
+        "next_steps": ["Resolve the 11 Acuris-ID companies", "Read the DOJ release to upgrade the grade from B"],
+    },
+    "serniya": {
+        "headline": "Russian military procurement routed through UK LLPs and a New York shell",
+        "findings": ["Fronts shared addresses and acted on behalf of Serniya. Livshits owned or controlled AWS and Strandway (New York)."],
+        "implications": ["UK LLPs and US LLCs give Russian buyers Western-looking fronts. Check officer and address overlaps, not just names."],
+        "next_steps": ["Pull trade data for the UK LLPs"],
+    },
+    "palantir": {
+        "headline": "Clean control: $5.34B in federal contracts, fully disclosed ownership, no risk paths",
+        "findings": ["427 contracts matched at grade B by UEI; listed company with SEC filings."],
+        "implications": ["Shows the score doesn't produce false positives on a large, transparent contractor."],
+        "next_steps": [],
+    },
+}
+
+
+# Where public money enters each case graph. status: paid | blocked | potential | none (screened, nothing found).
+PUBLIC_MONEY = {
+    "feeding-our-future": ("Federal Child Nutrition Program (USDA, via Minnesota Dept. of Education)", "paid",
+                           "Paid as a sponsor of child-nutrition sites; DOJ proved $250M was obtained by fraud", "S48", "https://www.justice.gov/opa/pr/feeding-our-future-ringleader-sentenced-500-months"),
+    "palantir": ("US federal contracts: 427 awards, $5.34B (USAspending)", "paid", "427 contracts, 3 Jul 2008 – 30 Sep 2026", "S16",
+                 "https://www.usaspending.gov/recipient/1ea8a9a4-3726-3491-9040-66950bb67606-P/all"),
+    "serniya": ("SAM.gov: excluded from federal awards", "blocked", "SAM.gov exclusion records under 2 UEIs (via OpenSanctions); 0 awards in USAspending", "S28", None),
+    "rsf-gold": ("SAM.gov: excluded from federal awards", "blocked", "US SAM Procurement Exclusions annotation (Tradeverifyd); 0 awards found", None,
+                 "https://www.opensanctions.org/datasets/us_sam_exclusions/"),
+    "hoshine": ("US federal procurement of silicon-based goods", "potential",
+                "Exposure through suppliers: 26 direct US shipments 2020–21, then indirect routes via Mexico, Vietnam and Indonesia. Not yet traced to a federal award.", None, None),
+    "meroe-gold": ("USAspending / SAM.gov screen", "none", "Screened: no federal awards; foreign mining company (validation case)", None, None),
+    "samidoun": ("USAspending / SAM.gov screen", "none", "Screened: no federal awards; nonprofit registered in Canada and the UK", None, None),
+    "amarvel": ("USAspending / SAM.gov screen", "none", "Screened: no awards found for the parent. The 11 US front companies are not yet resolved, so they have not been checked", None, None),
+}
+
+
+def add_public_money(cid, d):
+    label, status, text, sid, url = PUBLIC_MONEY[cid]
+    mid = "public-money"
+    d["nodes"].insert(0, {"id": mid, "label": label, "type": "public_money", "jurisdiction": "USA", "entity_confidence": None,
+                          "risk_signals": [], "sayari_pass_through": None,
+                          "details": {"money_status": status, "money_text": text, **({"sayari_url": url} if url else {})}})
+    d["edges"].insert(0, {"source": mid, "target": d["case"]["root_id"], "relationship_type": "PUBLIC_MONEY", "ownership_percentage": None,
+                          "provenance_ref": url, "label": text, "money_status": status,
+                          **({"source_id": sid} if sid else {}), "source_authority": "USAspending / SAM.gov"})
+    d["case"]["money_status"] = status
+
+
 def main():
     cases = dict([
         existing("serniya", "serniya_investigation.json", "Serniya Engineering (Russian military procurement)",
@@ -489,12 +664,16 @@ def main():
     typ = {"serniya": "Russia Sanctions Evasion", "palantir": "Control (no material risk)"}
     index = []
     for cid, d in cases.items():
+        d["case"]["insights"] = INSIGHTS.get(cid)
+        if not any(n["id"] == "public-money" for n in d["nodes"]):
+            add_public_money(cid, d)
         (OUT / f"{cid}.json").write_text(json.dumps(d, ensure_ascii=False, indent=1))
         s = d["investigation_summary"]
         index.append({"id": cid, "title": d["case"]["title"], "typology": typ.get(cid, s["primary_typology"]),
                       "root": s["root_recipient"], "score": s["composite_risk_score"], "grade": s["confidence_rating"],
                       "nodes": len(d["nodes"]), "edges": len(d["edges"]), "tools": d["case"]["tools_used"],
-                      "entities": [n["label"] for n in d["nodes"]]})
+                      "entities": [n["label"] for n in d["nodes"] if n["id"] != "public-money"],
+                      "money_status": d["case"]["money_status"], "headline": (d["case"]["insights"] or {}).get("headline")})
     (ROOT / "lib" / "generated" / "cases.json").write_text(json.dumps(index, ensure_ascii=False, indent=1))
     for c in index:
         print(f"{c['id']:20} {c['typology']:30} nodes={c['nodes']:3} edges={c['edges']:3} score={c['score']}")

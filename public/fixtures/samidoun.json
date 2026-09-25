@@ -28,9 +28,40 @@
    "Sayari",
    "Tavily"
   ],
-  "public_money": "No USAspending awards; nonprofit (Canada CRA account 774927545RC0001)."
+  "public_money": "No USAspending awards; nonprofit (Canada CRA account 774927545RC0001).",
+  "insights": {
+   "headline": "A registered not-for-profit whose leadership and affiliations run to three designated terrorist organisations",
+   "findings": [
+    "Registered as a Canadian not-for-profit (CRA account 774927545RC0001) and at UK Companies House (13885242). The UK entity closed on 27 Mar 2026.",
+    "Sayari records the PFLP as its parent and Hamas as an affiliate. Manager Khaled Barakat is OFAC-sanctioned.",
+    "It is linked to Masar Badil and to SDGT-listed individuals in Spain and Belgium: a fundraising network across four jurisdictions.",
+    "It is flagged for a mass-registration address, the same shell signal we see in commercial fronts."
+   ],
+   "implications": [
+    "FATF Recommendation 8: charity registration gives legitimacy and banking access. Grantmakers and payment platforms need owner and officer screening, not just a charity-number check.",
+    "Closing a registry entity (UK, 2026) doesn't end the network. Watch for new registrations with the same officers (the phoenix pattern)."
+   ],
+   "next_steps": [
+    "Search registries for new entities with the same officers",
+    "Check IRS 990 filings for US-registered affiliates"
+   ]
+  },
+  "money_status": "none"
  },
  "nodes": [
+  {
+   "id": "public-money",
+   "label": "USAspending / SAM.gov screen",
+   "type": "public_money",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": null,
+   "details": {
+    "money_status": "none",
+    "money_text": "Screened: no federal awards; nonprofit registered in Canada and the UK"
+   }
+  },
   {
    "id": "OUoSxNzYidNtzc0gtXxRMQ",
    "label": "Samidoun Palestinian Prisoner Solidarity Network",
@@ -627,6 +658,16 @@
   }
  ],
  "edges": [
+  {
+   "source": "public-money",
+   "target": "OUoSxNzYidNtzc0gtXxRMQ",
+   "relationship_type": "PUBLIC_MONEY",
+   "ownership_percentage": null,
+   "provenance_ref": null,
+   "label": "Screened: no federal awards; nonprofit registered in Canada and the UK",
+   "money_status": "none",
+   "source_authority": "USAspending / SAM.gov"
+  },
   {
    "source": "jMzsf620xw_EUsPl44BrOA",
    "target": "OUoSxNzYidNtzc0gtXxRMQ",

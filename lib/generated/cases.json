@@ -6,8 +6,8 @@
   "root": "UNRESOLVED - no SAM.gov federal award or UEI identified in public record for this network; case study uses OFAC/DOJ export-control action, not a traced public procurement dollar",
   "score": 65,
   "grade": "B",
-  "nodes": 11,
-  "edges": 11,
+  "nodes": 12,
+  "edges": 12,
   "tools": [
    "Sayari",
    "Tavily",
@@ -25,7 +25,9 @@
    "Boris Livshits",
    "Advanced Web Services",
    "Strandway, LLC"
-  ]
+  ],
+  "money_status": "blocked",
+  "headline": "Russian military procurement routed through UK LLPs and a New York shell"
  },
  {
   "id": "rsf-gold",
@@ -34,8 +36,8 @@
   "root": "AL ZUMOROUD AND AL YAQOOT GOLD & JEWELLERS TRADING L.L.C.",
   "score": 88,
   "grade": "A",
-  "nodes": 20,
-  "edges": 28,
+  "nodes": 21,
+  "edges": 29,
   "tools": [
    "Sayari",
    "Tradeverifyd",
@@ -62,7 +64,9 @@
    "Mazin Gamareldin Mohamed Fadlalla",
    "Abdelrahim Hamdan Dagalo",
    "Alkhaleej Bank Co Ltd"
-  ]
+  ],
+  "money_status": "blocked",
+  "headline": "One sanctioned shareholder behind five UAE trading companies: the front-company cluster financing the RSF"
  },
  {
   "id": "feeding-our-future",
@@ -71,8 +75,8 @@
   "root": "Feeding Our Future",
   "score": 82,
   "grade": "A",
-  "nodes": 10,
-  "edges": 8,
+  "nodes": 11,
+  "edges": 9,
   "tools": [
    "Sayari",
    "Tavily"
@@ -88,7 +92,9 @@
    "Abdiaziz Farah",
    "Mohamed I Ismail",
    "Mohamed Jama Ismail"
-  ]
+  ],
+  "money_status": "paid",
+  "headline": "Public money straight into shell sites: new entities claiming thousands of meals within days of forming"
  },
  {
   "id": "meroe-gold",
@@ -97,8 +103,8 @@
   "root": "Meroe Gold",
   "score": 92,
   "grade": "A",
-  "nodes": 8,
-  "edges": 7,
+  "nodes": 14,
+  "edges": 14,
   "tools": [
    "Sayari",
    "Tavily"
@@ -111,8 +117,15 @@
    "Al-Solag Mining Company Ltd",
    "Andrey Sergeyevich Mandel",
    "Broker Expert LLC",
-   "OOO DM"
-  ]
+   "OOO DM",
+   "AO Perspektiva",
+   "AO Delta (St Petersburg)",
+   "Lyubov Dmitriyevna Vashkevich",
+   "Yevgeniy Viktorovich Prigozhin",
+   "Megaline, JSC Delta"
+  ],
+  "money_status": "none",
+  "headline": "Two ownership hops from a Sudanese gold mine to Prigozhin, with Russian trading partners who supplied it"
  },
  {
   "id": "amarvel",
@@ -121,8 +134,8 @@
   "root": "Hubei Amarvel Biotech Co., Ltd.",
   "score": 78,
   "grade": "B",
-  "nodes": 8,
-  "edges": 7,
+  "nodes": 9,
+  "edges": 8,
   "tools": [
    "Sayari",
    "Tavily"
@@ -136,7 +149,9 @@
    "Unnamed US company (Acuris C2068572)",
    "Unnamed US company (Acuris C2068565)",
    "Unnamed US company (Acuris C2068560)"
-  ]
+  ],
+  "money_status": "none",
+  "headline": "A Chinese precursor seller tied to 11 unnamed US companies: the front-entity pattern for fentanyl inputs"
  },
  {
   "id": "samidoun",
@@ -145,8 +160,8 @@
   "root": "Samidoun Palestinian Prisoner Solidarity Network",
   "score": 90,
   "grade": "A",
-  "nodes": 12,
-  "edges": 11,
+  "nodes": 13,
+  "edges": 12,
   "tools": [
    "Sayari",
    "Tavily"
@@ -164,7 +179,9 @@
    "Hamas incl. Izz al-Din al-Qassam Brigades",
    "Masar Badil",
    "Jaldia Abubakra Aueda"
-  ]
+  ],
+  "money_status": "none",
+  "headline": "A registered not-for-profit whose leadership and affiliations run to three designated terrorist organisations"
  },
  {
   "id": "hoshine",
@@ -173,8 +190,8 @@
   "root": "Hoshine Silicon Industry Co., Ltd.",
   "score": 85,
   "grade": "A",
-  "nodes": 7,
-  "edges": 6,
+  "nodes": 17,
+  "edges": 16,
   "tools": [
    "Sayari",
    "Tavily"
@@ -186,8 +203,19 @@
    "Xinjiang East Hoshine Silicon (新疆东部合盛硅业)",
    "Heihe Hoshine Silicon (黑河合盛硅业)",
    "Shipment EXDO621061075 (CN → US)",
-   "Shipment 35752147 (CN → BR)"
-  ]
+   "Shipment 35752147 (CN → BR)",
+   "Zavod DK Orisil (TOV)",
+   "Graha Pertiwi Mandiri",
+   "OOO Sinotekh",
+   "Roxane Co., Ltd.",
+   "Sarana Luasmaju Kimia",
+   "OOO Unilever Rus",
+   "Unilever Brasil Industrial Ltda",
+   "Unilever Manufacturera S de RL de CV",
+   "OOO Oriental Bridge"
+  ],
+  "money_status": "potential",
+  "headline": "Sanctions redirected the flow rather than stopping it: forced-labour silicon stopped going to the US and went to Russia and other intermediaries"
  },
  {
   "id": "palantir",
@@ -196,8 +224,8 @@
   "root": "Palantir Technologies Inc.",
   "score": 8,
   "grade": "A",
-  "nodes": 1,
-  "edges": 0,
+  "nodes": 2,
+  "edges": 1,
   "tools": [
    "Sayari",
    "Tradeverifyd",
@@ -205,6 +233,8 @@
   ],
   "entities": [
    "Palantir Technologies Inc."
-  ]
+  ],
+  "money_status": "paid",
+  "headline": "Clean control: $5.34B in federal contracts, fully disclosed ownership, no risk paths"
  }
 ]

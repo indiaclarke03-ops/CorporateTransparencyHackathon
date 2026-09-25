@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import ForceGraph2D, { type ForceGraphMethods, type LinkObject, type NodeObject } from 'react-force-graph-2d'
 import type { Investigation, InvestigationEdge, InvestigationNode } from '@/lib/types'
-import { NODE_TYPE_META, RELATIONSHIP_META, SEVERITY_COLOR, maxSeverity, severityRank } from '@/lib/graph-style'
+import { MONEY_STATUS, NODE_TYPE_META, RELATIONSHIP_META, SEVERITY_COLOR, maxSeverity, severityRank } from '@/lib/graph-style'
 
 type GNode = NodeObject<InvestigationNode>
 type GLink = LinkObject<InvestigationNode, InvestigationEdge & { edge: InvestigationEdge }>
@@ -46,7 +46,8 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
 
   const graphData = useMemo(
     () => ({
-      nodes: investigation.nodes.map((n) => ({ ...n })) as GNode[],
+      // Pin the public-money node on the left so money reads left to right into the network.
+      nodes: investigation.nodes.map((n) => (n.id === 'public-money' ? { ...n, fx: -320, fy: 0 } : { ...n })) as GNode[],
       links: investigation.edges.map((e) => ({ ...e, edge: e })) as GLink[],
     }),
     [investigation],
@@ -87,6 +88,28 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
               ctx.stroke()
             }
 
+            if (node.type === 'public_money') {
+              // The entry point: a large $ tile, coloured by what happened to the money.
+              const st = MONEY_STATUS[node.details?.money_status ?? 'none']
+              const R = 16
+              ctx.beginPath()
+              ctx.roundRect(x - R, y - R, R * 2, R * 2, 6)
+              ctx.fillStyle = st.color
+              ctx.fill()
+              ctx.font = `800 ${R * 1.3}px ${fontFamily}`
+              ctx.textAlign = 'center'
+              ctx.textBaseline = 'middle'
+              ctx.fillStyle = '#1b130f'
+              ctx.fillText('$', x, y + 1)
+              ctx.font = `700 ${Math.max(11 / scale, 3)}px ${fontFamily}`
+              ctx.textBaseline = 'top'
+              ctx.fillStyle = st.color
+              ctx.fillText(st.label.toUpperCase(), x, y + R + 4)
+              ctx.fillStyle = '#f7e9d7'
+              ctx.fillText(node.label.length > 44 ? node.label.slice(0, 42) + '…' : node.label, x, y + R + 4 + Math.max(13 / scale, 3.5))
+              return
+            }
+
             ctx.beginPath()
             ctx.arc(x, y, r, 0, Math.PI * 2)
             ctx.fillStyle = NODE_TYPE_META[node.type]?.color ?? '#c9ad93'
@@ -111,9 +134,12 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
             ctx.fillStyle = color
             ctx.fill()
           }}
-          linkColor={(l) => RELATIONSHIP_META[l.relationship_type]?.color ?? '#c9ad93'}
-          linkWidth={(l) => (l.edge === selectedEdge || l.edge === hoverEdge ? 4 : 2)}
-          linkLineDash={(l) => (RELATIONSHIP_META[l.relationship_type]?.dashed ? [4, 3] : null)}
+          linkColor={(l) => (l.money_status ? MONEY_STATUS[l.money_status].color : RELATIONSHIP_META[l.relationship_type]?.color ?? '#c9ad93')}
+          linkWidth={(l) => (l.edge === selectedEdge || l.edge === hoverEdge ? 5 : l.money_status ? 4 : l.shipments ? Math.min(1.5 + l.shipments / 40, 6) : 2)}
+          linkLineDash={(l) => ((l.money_status ? MONEY_STATUS[l.money_status].dashed : RELATIONSHIP_META[l.relationship_type]?.dashed) ? [4, 3] : null)}
+          linkDirectionalParticles={(l) => (l.money_status === 'paid' || l.money_status === 'potential' ? 4 : l.shipments ? 2 : 0)}
+          linkDirectionalParticleWidth={3}
+          linkDirectionalParticleColor={(l) => (l.money_status ? MONEY_STATUS[l.money_status].color : '#d98c3f')}
           linkDirectionalArrowLength={6}
           linkDirectionalArrowRelPos={0.9}
           linkCanvasObjectMode={() => 'after'}
@@ -122,8 +148,8 @@ export function InvestigationGraph({ investigation, selectedNodeId, selectedEdge
             const s = link.source as GNode
             const t = link.target as GNode
             if (typeof s !== 'object' || typeof t !== 'object' || scale < 0.6) return
-            const meta = RELATIONSHIP_META[link.relationship_type]
-            const text = link.ownership_percentage != null ? `${meta?.label ?? ''} ${Math.round(link.ownership_percentage)}%` : meta?.label ?? ''
+            const meta = link.money_status ? MONEY_STATUS[link.money_status] : RELATIONSHIP_META[link.relationship_type]
+            const text = link.shipments ? `${link.shipments} shipments` : link.ownership_percentage != null ? `${meta?.label ?? ''} ${Math.round(link.ownership_percentage)}%` : meta?.label ?? ''
             const x = ((s.x ?? 0) + (t.x ?? 0)) / 2
             const y = ((s.y ?? 0) + (t.y ?? 0)) / 2
             const fontSize = Math.max(8 / scale, 2)

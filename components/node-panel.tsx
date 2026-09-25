@@ -1,11 +1,37 @@
 import { ChevronDown, ExternalLink, X } from 'lucide-react'
 import type { InvestigationNode, NodeDetails, SayariPassThrough } from '@/lib/types'
 import Link from 'next/link'
-import { NODE_TYPE_META, SEVERITY_CLASS, formatMatchKey } from '@/lib/graph-style'
+import { MONEY_STATUS, NODE_TYPE_META, SEVERITY_CLASS, formatMatchKey } from '@/lib/graph-style'
 import { cn } from '@/lib/utils'
 
 export function NodePanel({ node, onClose }: { node: InvestigationNode; onClose: () => void }) {
   const meta = NODE_TYPE_META[node.type]
+
+  if (node.type === 'public_money') {
+    const st = MONEY_STATUS[node.details?.money_status ?? 'none']
+    return (
+      <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex flex-col gap-1">
+            <span className="text-xs font-bold uppercase tracking-wide" style={{ color: st.color }}>Public money · {st.label}</span>
+            <h2 className="font-heading text-xl font-semibold text-balance">{node.label}</h2>
+          </div>
+          <CloseButton onClose={onClose} />
+        </div>
+        <p className="rounded-2xl bg-muted p-3 text-sm leading-relaxed">{node.details?.money_text}</p>
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          This is where the tool starts: federal spending data (USAspending.gov awards, SAM.gov registrations and exclusions). The graph then follows
+          ownership, officers and trade outward from the entity the money reaches. Green means money was paid, red means the entity is barred, amber
+          dashed means exposure through suppliers, and grey dashed means we screened and found no awards.
+        </p>
+        {node.details?.sayari_url && (
+          <a href={node.details.sayari_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 break-all text-xs font-semibold text-accent hover:underline">
+            <ExternalLink className="size-3 shrink-0" /> {node.details.sayari_url}
+          </a>
+        )}
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">

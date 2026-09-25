@@ -1,4 +1,4 @@
-import { NODE_TYPE_META, RELATIONSHIP_META, SEVERITY_COLOR } from '@/lib/graph-style'
+import { MONEY_STATUS, NODE_TYPE_META, RELATIONSHIP_META, SEVERITY_COLOR } from '@/lib/graph-style'
 
 export function GraphLegend() {
   return (
@@ -15,6 +15,15 @@ export function GraphLegend() {
           <span className="size-3 rounded-full border-2" style={{ borderColor: SEVERITY_COLOR.CRITICAL }} aria-hidden="true" />
           Sanctioned ring
         </span>
+      </div>
+      <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+        <span className="font-bold text-foreground">$ Public money</span>
+        {Object.entries(MONEY_STATUS).map(([k, m]) => (
+          <span key={k} className="flex items-center gap-1.5">
+            <span className={`w-5 border-t-4 ${m.dashed ? 'border-dashed' : ''}`} style={{ borderColor: m.color }} aria-hidden="true" />
+            {m.label}
+          </span>
+        ))}
       </div>
       <div className="flex flex-wrap gap-x-4 gap-y-1.5">
         <span className="font-bold text-foreground">Links (arrow = direction)</span>

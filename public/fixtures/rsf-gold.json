@@ -23,9 +23,43 @@
    "Tradeverifyd",
    "Tavily"
   ],
-  "public_money": "No USAspending awards found; SAM.gov exclusion record present (Tradeverifyd annotation)."
+  "public_money": "No USAspending awards found; SAM.gov exclusion record present (Tradeverifyd annotation).",
+  "insights": {
+   "headline": "One sanctioned shareholder behind five UAE trading companies: the front-company cluster financing the RSF",
+   "findings": [
+    "Abu Dharr Ahmmed (OFAC SDN 52511) is a shareholder of AZ Gold, Capital Tap General Trading, Creative Python and Al Jil Alqadem.",
+    "Capital Tap Holding owns Capital Tap General Trading, Capital Tab Management Consultancy and Horizon Advanced Solutions. All are sanctioned.",
+    "RSF leaders Algoney Hamdan Dagalo and Abdelrahim Hamdan Dagalo are linked to the same companies, as is Sudan's Alkhaleej Bank.",
+    "The companies were incorporated between 2016 and 2020 and describe themselves as general trading: generic purposes that can front for any goods.",
+    "Tradeverifyd scores AZ Gold High (258), with OFAC Sudan and SAM.gov exclusion annotations."
+   ],
+   "implications": [
+    "Designating one company is not enough. The shared shareholder and holding company let the network keep trading through siblings.",
+    "A SAM.gov exclusion means this network has already touched US procurement screening. Name-only screening misses the siblings.",
+    "Arms and gold typology: gold exported from RSF-held areas can be sold through Dubai trading fronts, and the proceeds fund procurement."
+   ],
+   "next_steps": [
+    "Screen every company registered at the same Dubai addresses",
+    "Check USAspending subawards for UAE general-trading vendors"
+   ]
+  },
+  "money_status": "blocked"
  },
  "nodes": [
+  {
+   "id": "public-money",
+   "label": "SAM.gov: excluded from federal awards",
+   "type": "public_money",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": null,
+   "details": {
+    "money_status": "blocked",
+    "money_text": "US SAM Procurement Exclusions annotation (Tradeverifyd); 0 awards found",
+    "sayari_url": "https://www.opensanctions.org/datasets/us_sam_exclusions/"
+   }
+  },
   {
    "id": "RoWARA0BHg-GoWvDJFBOSg",
    "label": "AL ZUMOROUD AND AL YAQOOT GOLD & JEWELLERS TRADING L.L.C.",
@@ -1453,6 +1487,16 @@
   }
  ],
  "edges": [
+  {
+   "source": "public-money",
+   "target": "RoWARA0BHg-GoWvDJFBOSg",
+   "relationship_type": "PUBLIC_MONEY",
+   "ownership_percentage": null,
+   "provenance_ref": "https://www.opensanctions.org/datasets/us_sam_exclusions/",
+   "label": "US SAM Procurement Exclusions annotation (Tradeverifyd); 0 awards found",
+   "money_status": "blocked",
+   "source_authority": "USAspending / SAM.gov"
+  },
   {
    "source": "sAgA0QVKr-gjEAqoJvf0zg",
    "target": "RoWARA0BHg-GoWvDJFBOSg",

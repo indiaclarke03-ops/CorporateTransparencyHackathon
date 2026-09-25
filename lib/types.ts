@@ -8,6 +8,7 @@ export type NodeType =
   | 'facilitator'
   | 'associated_person'
   | 'related_company'
+  | 'public_money'
 
 export type Severity = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW'
 
@@ -20,6 +21,7 @@ export type RelationshipType =
   | 'ACTING_ON_BEHALF_OF'
   | 'OWNS_OR_CONTROLS'
   | 'LINKED_TO'
+  | 'PUBLIC_MONEY'
 
 export interface RiskSignal {
   signal_name: string
@@ -74,6 +76,8 @@ export interface NodeDetails {
   sayari_sources?: string[]
   trade_count?: { sent: number; received: number }
   relationship_summary?: Record<string, number>
+  money_status?: MoneyStatus
+  money_text?: string
   risk_flag_count?: number
   tradeverifyd?: {
     entity_id?: string
@@ -99,6 +103,17 @@ export interface InvestigationEdge {
   label?: string
   sayari_relationship?: string
   former?: boolean
+  money_status?: MoneyStatus
+  shipments?: number
+}
+
+export type MoneyStatus = 'paid' | 'blocked' | 'potential' | 'none'
+
+export interface CaseInsights {
+  headline: string
+  findings: string[]
+  implications: string[]
+  next_steps: string[]
 }
 
 export interface AuditStep {
@@ -131,6 +146,8 @@ export interface CaseMeta {
   tools_used: string[]
   public_money: string
   sources: { id: string; name: string; url: string; publisher?: string | null }[]
+  insights?: CaseInsights | null
+  money_status?: MoneyStatus
 }
 
 export interface CaseIndexEntry {
@@ -144,4 +161,6 @@ export interface CaseIndexEntry {
   edges: number
   tools: string[]
   entities: string[]
+  money_status: MoneyStatus
+  headline?: string | null
 }

@@ -28,9 +28,40 @@
    "Sayari",
    "Tavily"
   ],
-  "public_money": "Federal Child Nutrition Program funds via Minnesota Department of Education (per DOJ)."
+  "public_money": "Federal Child Nutrition Program funds via Minnesota Department of Education (per DOJ).",
+  "insights": {
+   "headline": "Public money straight into shell sites: new entities claiming thousands of meals within days of forming",
+   "findings": [
+    "Feeding Our Future sponsored federally funded child-nutrition sites. DOJ proved a $250M fraud, and its founder was sentenced to 500 months.",
+    "Site operators such as Empire Cuisine And Market were incorporated in April 2020, weeks into the pandemic relief programmes.",
+    "Sayari shows each operator with only 2–3 organisers or co-owners: thin, newly formed entities."
+   ],
+   "implications": [
+    "The registration-to-award gap signal would have caught these: entities formed in 2020 billing for large meal counts immediately.",
+    "The sponsor acts as a pass-through. Inspectors general need to see sponsor → site → bank links, not just the prime recipient."
+   ],
+   "next_steps": [
+    "Pull the other site operators' registration dates",
+    "Match site addresses for mass-registration clusters"
+   ]
+  },
+  "money_status": "paid"
  },
  "nodes": [
+  {
+   "id": "public-money",
+   "label": "Federal Child Nutrition Program (USDA, via Minnesota Dept. of Education)",
+   "type": "public_money",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": null,
+   "details": {
+    "money_status": "paid",
+    "money_text": "Paid as a sponsor of child-nutrition sites; DOJ proved $250M was obtained by fraud",
+    "sayari_url": "https://www.justice.gov/opa/pr/feeding-our-future-ringleader-sentenced-500-months"
+   }
+  },
   {
    "id": "S2sKpLjtsHqnJMTy6mwuTw",
    "label": "Feeding Our Future",
@@ -420,6 +451,17 @@
   }
  ],
  "edges": [
+  {
+   "source": "public-money",
+   "target": "S2sKpLjtsHqnJMTy6mwuTw",
+   "relationship_type": "PUBLIC_MONEY",
+   "ownership_percentage": null,
+   "provenance_ref": "https://www.justice.gov/opa/pr/feeding-our-future-ringleader-sentenced-500-months",
+   "label": "Paid as a sponsor of child-nutrition sites; DOJ proved $250M was obtained by fraud",
+   "money_status": "paid",
+   "source_id": "S48",
+   "source_authority": "USAspending / SAM.gov"
+  },
   {
    "source": "vK0aiIhJJwVd08t_CQU5Kw",
    "target": "S2sKpLjtsHqnJMTy6mwuTw",

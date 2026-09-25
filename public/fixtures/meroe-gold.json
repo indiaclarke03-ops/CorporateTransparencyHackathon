@@ -1,0 +1,547 @@
+{
+ "investigation_summary": {
+  "root_recipient": "Meroe Gold",
+  "composite_risk_score": 92,
+  "confidence_rating": "A",
+  "primary_typology": "Gold",
+  "executive_rationale": "A Sudanese gold-mining company designated by OFAC in 2020 as part of Yevgeniy Prigozhin's network. Sayari shows it as a subsidiary of Russia's M Invest, directed by a sanctioned Russian national, linked to the Wagner Group, and supplied by Broker Expert, which Treasury says moved cash for Prigozhin's enterprise. It shows gold used as a laundering and financing channel.[^S43][^S44][^S37]"
+ },
+ "case": {
+  "id": "meroe-gold",
+  "title": "Meroe Gold (Wagner gold mining in Sudan)",
+  "root_id": "QHJrvNcC2wwsmBUZi45D2A",
+  "sources": [
+   {
+    "id": "S43",
+    "name": "Treasury press release SM1058: Prigozhin sanctions-evasion network in Sudan, incl. Meroe Gold (15 Jul 2020)",
+    "url": "https://home.treasury.gov/news/press-releases/sm1058",
+    "publisher": "U.S. Department of the Treasury"
+   },
+   {
+    "id": "S44",
+    "name": "Treasury press release JY2164: companies advancing Russian malign activities in Africa (Broker Expert supplied Meroe Gold)",
+    "url": "https://home.treasury.gov/news/press-releases/jy2164",
+    "publisher": "U.S. Department of the Treasury"
+   },
+   {
+    "id": "S37",
+    "name": "Treasury press release JY1581: illicit gold companies funding the Wagner Group, including Midas Ressources SARLU",
+    "url": "https://home.treasury.gov/news/press-releases/jy1581",
+    "publisher": "U.S. Department of the Treasury"
+   }
+  ],
+  "tools_used": [
+   "Sayari",
+   "Tavily"
+  ],
+  "public_money": "None: foreign mining company. Used as a validation case for gold-sector designations."
+ },
+ "nodes": [
+  {
+   "id": "QHJrvNcC2wwsmBUZi45D2A",
+   "label": "Meroe Gold",
+   "type": "sanctioned_entity",
+   "jurisdiction": "SDN",
+   "entity_confidence": "A",
+   "risk_signals": [
+    {
+     "signal_name": "Designated by OFAC as part of Prigozhin's sanctions-evasion network in Sudan",
+     "severity": "CRITICAL",
+     "provenance_source": "Treasury press release (found with Tavily)",
+     "evidence_record": "https://home.treasury.gov/news/press-releases/sm1058",
+     "source_id": "S43",
+     "source_authority": "U.S. Department of the Treasury"
+    },
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/QHJrvNcC2wwsmBUZi45D2A",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the EU sanctions list",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/QHJrvNcC2wwsmBUZi45D2A",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On the UK sanctions list",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/QHJrvNcC2wwsmBUZi45D2A",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "OFAC 50% rule: owned 50%+ by blocked persons",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/QHJrvNcC2wwsmBUZi45D2A",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Owned by a sanctioned entity",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/QHJrvNcC2wwsmBUZi45D2A",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Recent organised-crime adverse media",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/QHJrvNcC2wwsmBUZi45D2A",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": false,
+    "closed": false,
+    "degree": null,
+    "relationship_count": {
+     "has_director": 1,
+     "linked_to": 8,
+     "subsidiary_of": 1
+    },
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/QHJrvNcC2wwsmBUZi45D2A",
+    "entity_kind": "company",
+    "countries": [
+     "SDN"
+    ],
+    "aliases": [
+     "Al-Solag Mining Company",
+     "Alsolage",
+     "Sullag"
+    ],
+    "addresses": [
+     "Al-jref Gharb Plot 134, Blok 1h, Khartoum, Sudan",
+     "Al-'Abdiya, River Nile State, Sudan"
+    ],
+    "identifiers": [
+     {
+      "type": "usa_ofac_sdn_number",
+      "value": "29107"
+     },
+     {
+      "type": "eu_sanction_rn",
+      "value": "EU.9785.79"
+     },
+     {
+      "type": "gbr_uk_sanctions_id",
+      "value": "SUD0013"
+     },
+     {
+      "type": "fra_asset_freeze_id",
+      "value": "6446"
+     }
+    ],
+    "company_type": "CO",
+    "business_purpose": [
+     "Mining of other non-ferrous metal ores"
+    ],
+    "sayari_sources": [
+     "EU Financial Sanctions List",
+     "UK Consolidated Sanctions List",
+     "Acuris Risk Intelligence"
+    ],
+    "trade_count": {
+     "sent": 0,
+     "received": 0
+    },
+    "relationship_summary": {
+     "has_director": 1,
+     "linked_to": 8,
+     "subsidiary_of": 1
+    },
+    "risk_flag_count": 6
+   }
+  },
+  {
+   "id": "_YvD5i5TDV4_YJ7y4d8soQ",
+   "label": "M Invest, OOO",
+   "type": "sanctioned_entity",
+   "jurisdiction": "RUS",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/_YvD5i5TDV4_YJ7y4d8soQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "OFAC 50% rule: owned 50%+ by blocked persons",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/_YvD5i5TDV4_YJ7y4d8soQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/_YvD5i5TDV4_YJ7y4d8soQ",
+    "entity_kind": "company",
+    "countries": [
+     "RUS",
+     "SDN"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "OMfwSqlTL1Xq0RVNuUMzOQ",
+   "label": "Mikhail Sergeyevich Potepkin",
+   "type": "sanctioned_entity",
+   "jurisdiction": "SDN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/OMfwSqlTL1Xq0RVNuUMzOQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/OMfwSqlTL1Xq0RVNuUMzOQ",
+    "entity_kind": "person",
+    "countries": [
+     "SDN",
+     "RUS"
+    ],
+    "risk_flag_count": 1
+   }
+  },
+  {
+   "id": "eIH4qbprY44E_tvedRi0QQ",
+   "label": "Wagner Group",
+   "type": "sanctioned_entity",
+   "jurisdiction": "RUS",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/eIH4qbprY44E_tvedRi0QQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On an export-control list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/eIH4qbprY44E_tvedRi0QQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/eIH4qbprY44E_tvedRi0QQ",
+    "entity_kind": "company",
+    "countries": [
+     "RUS",
+     "SDN",
+     "MLI"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "eAywSQEVuk32YOdaRMWfMg",
+   "label": "Al-Solag Mining Company Ltd",
+   "type": "sanctioned_entity",
+   "jurisdiction": "RUS",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On the UK sanctions list",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/eAywSQEVuk32YOdaRMWfMg",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On Canada's sanctions list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/eAywSQEVuk32YOdaRMWfMg",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/eAywSQEVuk32YOdaRMWfMg",
+    "entity_kind": "company",
+    "countries": [
+     "RUS",
+     "SDN"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "YiVasIW7ik0tQ5wRaP9d3g",
+   "label": "Andrey Sergeyevich Mandel",
+   "type": "sanctioned_entity",
+   "jurisdiction": "RUS",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/YiVasIW7ik0tQ5wRaP9d3g",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/YiVasIW7ik0tQ5wRaP9d3g",
+    "entity_kind": "person",
+    "countries": [
+     "RUS",
+     "SDN"
+    ],
+    "risk_flag_count": 1
+   }
+  },
+  {
+   "id": "5KAdnYVYxtHIeLfVeG6XQQ",
+   "label": "Broker Expert LLC",
+   "type": "sanctioned_entity",
+   "jurisdiction": "RUS",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/5KAdnYVYxtHIeLfVeG6XQQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Treasury: Broker Expert supplied U.S.-designated Meroe Gold and moved cash for Prigozhin's enterprise",
+     "severity": "HIGH",
+     "provenance_source": "Treasury press release",
+     "evidence_record": "https://home.treasury.gov/news/press-releases/jy2164",
+     "source_id": "S44",
+     "source_authority": "U.S. Department of the Treasury"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/5KAdnYVYxtHIeLfVeG6XQQ",
+    "entity_kind": "company",
+    "countries": [
+     "RUS"
+    ],
+    "risk_flag_count": 1
+   }
+  },
+  {
+   "id": "CNYKORUtrtGPdruPiicUYw",
+   "label": "OOO DM",
+   "type": "sanctioned_entity",
+   "jurisdiction": "RUS",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/CNYKORUtrtGPdruPiicUYw",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/CNYKORUtrtGPdruPiicUYw",
+    "entity_kind": "company",
+    "countries": [
+     "RUS"
+    ],
+    "risk_flag_count": 1
+   }
+  }
+ ],
+ "edges": [
+  {
+   "source": "_YvD5i5TDV4_YJ7y4d8soQ",
+   "target": "QHJrvNcC2wwsmBUZi45D2A",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/QHJrvNcC2wwsmBUZi45D2A",
+   "label": "M Invest is the parent of Meroe Gold",
+   "sayari_relationship": "subsidiary_of",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "OMfwSqlTL1Xq0RVNuUMzOQ",
+   "target": "QHJrvNcC2wwsmBUZi45D2A",
+   "relationship_type": "OFFICER_DIRECTOR",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/QHJrvNcC2wwsmBUZi45D2A",
+   "label": "Mikhail Sergeyevich Potepkin is a Director of Meroe Gold Co. Ltd.",
+   "sayari_relationship": "has_director",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "eIH4qbprY44E_tvedRi0QQ",
+   "target": "QHJrvNcC2wwsmBUZi45D2A",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/QHJrvNcC2wwsmBUZi45D2A",
+   "label": "The Wagner Group is linked to Meroe Gold Co. Ltd.",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "eAywSQEVuk32YOdaRMWfMg",
+   "target": "QHJrvNcC2wwsmBUZi45D2A",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/QHJrvNcC2wwsmBUZi45D2A",
+   "label": "Al-Solag Mining Company Ltd is linked to Meroe Gold Co. Ltd.",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "YiVasIW7ik0tQ5wRaP9d3g",
+   "target": "QHJrvNcC2wwsmBUZi45D2A",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/QHJrvNcC2wwsmBUZi45D2A",
+   "label": "Andrey Sergeyevich Mandel is Linked to Meroe Gold Co. Ltd.",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "5KAdnYVYxtHIeLfVeG6XQQ",
+   "target": "QHJrvNcC2wwsmBUZi45D2A",
+   "relationship_type": "SUPPLY_CHAIN_SHIPMENT",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/QHJrvNcC2wwsmBUZi45D2A",
+   "label": "Former trading partner of Meroe Gold",
+   "sayari_relationship": "linked_to",
+   "former": true,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "CNYKORUtrtGPdruPiicUYw",
+   "target": "QHJrvNcC2wwsmBUZi45D2A",
+   "relationship_type": "SUPPLY_CHAIN_SHIPMENT",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/QHJrvNcC2wwsmBUZi45D2A",
+   "label": "Former trading partner of Meroe Gold",
+   "sayari_relationship": "linked_to",
+   "former": true,
+   "source_authority": "Sayari"
+  }
+ ],
+ "audit_trail": [
+  {
+   "step": 1,
+   "source": "Sayari",
+   "query_executed": "search_entities + get_entity_profile Meroe Gold (live MCP, 25 Sep 2026)",
+   "records_matched": 10
+  },
+  {
+   "step": 2,
+   "source": "Tavily",
+   "query_executed": "Treasury Wagner/Meroe Gold press releases",
+   "records_matched": 3
+  },
+  {
+   "step": 3,
+   "source": "Tradeverifyd",
+   "query_executed": "not retrieved in this pass (connector token rejected 25 Sep 2026)",
+   "records_matched": 0
+  }
+ ]
+}

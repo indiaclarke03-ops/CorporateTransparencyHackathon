@@ -1,0 +1,519 @@
+{
+ "investigation_summary": {
+  "root_recipient": "Hubei Amarvel Biotech Co., Ltd.",
+  "composite_risk_score": 78,
+  "confidence_rating": "B",
+  "primary_typology": "Fentanyl Precursors",
+  "executive_rationale": "A Chinese chemical supplier named in Sayari's law-enforcement records alongside three individuals and 11 unnamed US companies, the pattern of a precursor seller using US front entities. A DOJ (M.D. Fla.) release on indicted China-based chemical companies was found with Tavily; we have its title only, so the grade is B until the release is read. FinCEN's advisory sets out the red flags.[^S47][^S40][^S39]"
+ },
+ "case": {
+  "id": "amarvel",
+  "title": "Hubei Amarvel Biotech (fentanyl precursors)",
+  "root_id": "yre7QJIV48_qZndIue1DyA",
+  "sources": [
+   {
+    "id": "S47",
+    "name": "USAO M.D. Fla.: China-based chemical manufacturing companies and employees indicted for alleged fentanyl precursor distribution (title only)",
+    "url": "https://www.justice.gov/usao-mdfl/pr/china-based-chemical-manufacturing-companies-and-employees-indicted-alleged-fentanyl-0",
+    "publisher": "U.S. Department of Justice"
+   },
+   {
+    "id": "S40",
+    "name": "FinCEN Supplemental Advisory on fentanyl-related illicit finance",
+    "url": "https://www.fincen.gov/system/files/advisory/2024-06-20/FinCEN-Supplemental-Advisory-on-Fentanyl-508C.pdf",
+    "publisher": "Financial Crimes Enforcement Network"
+   },
+   {
+    "id": "S39",
+    "name": "Treasury press release SB0272: Los Chapitos fentanyl precursor supply network",
+    "url": "https://home.treasury.gov/news/press-releases/sb0272",
+    "publisher": "U.S. Department of the Treasury"
+   }
+  ],
+  "tools_used": [
+   "Sayari",
+   "Tavily"
+  ],
+  "public_money": "None found. Front companies are US-registered, so SAM.gov and USAspending checks are the next step."
+ },
+ "nodes": [
+  {
+   "id": "yre7QJIV48_qZndIue1DyA",
+   "label": "Hubei Amarvel Biotech Co., Ltd.",
+   "type": "shell_intermediary",
+   "jurisdiction": "CHN",
+   "entity_confidence": "A",
+   "risk_signals": [
+    {
+     "signal_name": "China-based chemical companies and employees indicted for fentanyl precursor distribution (DOJ, M.D. Fla.)",
+     "severity": "CRITICAL",
+     "provenance_source": "DOJ press release (found with Tavily; title only)",
+     "evidence_record": "https://www.justice.gov/usao-mdfl/pr/china-based-chemical-manufacturing-companies-and-employees-indicted-alleged-fentanyl-0",
+     "source_id": "S47",
+     "source_authority": "U.S. Department of Justice"
+    },
+    {
+     "signal_name": "No street address or registry identifier on record: thin real-world footprint",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari get_entity_profile",
+     "evidence_record": "https://graph.sayari.com/resource/entity/yre7QJIV48_qZndIue1DyA",
+     "source_authority": "Sayari"
+    },
+    {
+     "signal_name": "Subject of a law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/yre7QJIV48_qZndIue1DyA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Recent law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/yre7QJIV48_qZndIue1DyA",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": false,
+    "degree": null,
+    "relationship_count": {
+     "linked_to": 15
+    },
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/yre7QJIV48_qZndIue1DyA",
+    "entity_kind": "company",
+    "countries": [
+     "CHN"
+    ],
+    "aliases": [
+     "AmarvelBio"
+    ],
+    "addresses": [
+     "China (no street address on record)"
+    ],
+    "identifiers": [
+     {
+      "type": "xxx_acuris_id",
+      "value": "C1741431"
+     }
+    ],
+    "company_type": "CO LTD",
+    "sayari_sources": [
+     "Acuris Risk Intelligence - Entities & Relationships",
+     "Acuris Risk Intelligence - Risk Information and Articles"
+    ],
+    "trade_count": {
+     "sent": 0,
+     "received": 0
+    },
+    "relationship_summary": {
+     "linked_to": 15
+    },
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "VuM5_39bXPK47ev7YwEuCw",
+   "label": "Qingzhou Wang",
+   "type": "associated_person",
+   "jurisdiction": "CHN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Subject of a law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/VuM5_39bXPK47ev7YwEuCw",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Recent law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/VuM5_39bXPK47ev7YwEuCw",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/VuM5_39bXPK47ev7YwEuCw",
+    "entity_kind": "person",
+    "countries": [
+     "CHN",
+     "USA"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "deMhpxhuksGO6NkTxClQ9Q",
+   "label": "Yiyi Chen",
+   "type": "associated_person",
+   "jurisdiction": "CHN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Subject of a law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/deMhpxhuksGO6NkTxClQ9Q",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Recent law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/deMhpxhuksGO6NkTxClQ9Q",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/deMhpxhuksGO6NkTxClQ9Q",
+    "entity_kind": "person",
+    "countries": [
+     "CHN",
+     "USA"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "QufR2aSnkKCCp9i6OIgR3A",
+   "label": "Er Yang",
+   "type": "associated_person",
+   "jurisdiction": "CHN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Subject of a law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/QufR2aSnkKCCp9i6OIgR3A",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Recent law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/QufR2aSnkKCCp9i6OIgR3A",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/QufR2aSnkKCCp9i6OIgR3A",
+    "entity_kind": "person",
+    "countries": [
+     "CHN"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "3PgusiIli-ZIqMaz0TZ-bA",
+   "label": "Unnamed US company (Acuris C2068561)",
+   "type": "related_company",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Subject of a law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/3PgusiIli-ZIqMaz0TZ-bA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Recent law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/3PgusiIli-ZIqMaz0TZ-bA",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/3PgusiIli-ZIqMaz0TZ-bA",
+    "entity_kind": "company",
+    "countries": [
+     "USA"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "CVMkeBQNcBXS088OucpD3A",
+   "label": "Unnamed US company (Acuris C2068572)",
+   "type": "related_company",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Subject of a law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/CVMkeBQNcBXS088OucpD3A",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Recent law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/CVMkeBQNcBXS088OucpD3A",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/CVMkeBQNcBXS088OucpD3A",
+    "entity_kind": "company",
+    "countries": [
+     "USA"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "umedBzLDC2_mj2cYhiAxBg",
+   "label": "Unnamed US company (Acuris C2068565)",
+   "type": "related_company",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Subject of a law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/umedBzLDC2_mj2cYhiAxBg",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Recent law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/umedBzLDC2_mj2cYhiAxBg",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/umedBzLDC2_mj2cYhiAxBg",
+    "entity_kind": "company",
+    "countries": [
+     "USA"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "9M1BTzgazB7qjTk7xIsnSQ",
+   "label": "Unnamed US company (Acuris C2068560)",
+   "type": "related_company",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Subject of a law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/9M1BTzgazB7qjTk7xIsnSQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Recent law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/9M1BTzgazB7qjTk7xIsnSQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/9M1BTzgazB7qjTk7xIsnSQ",
+    "entity_kind": "company",
+    "countries": [
+     "USA"
+    ],
+    "risk_flag_count": 2
+   }
+  }
+ ],
+ "edges": [
+  {
+   "source": "VuM5_39bXPK47ev7YwEuCw",
+   "target": "yre7QJIV48_qZndIue1DyA",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/yre7QJIV48_qZndIue1DyA",
+   "label": "Qingzhou Wang is linked to Hubei Amarvel Biotech (law-enforcement record)",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "deMhpxhuksGO6NkTxClQ9Q",
+   "target": "yre7QJIV48_qZndIue1DyA",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/yre7QJIV48_qZndIue1DyA",
+   "label": "Yiyi Chen is linked to Hubei Amarvel Biotech (law-enforcement record)",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "QufR2aSnkKCCp9i6OIgR3A",
+   "target": "yre7QJIV48_qZndIue1DyA",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/yre7QJIV48_qZndIue1DyA",
+   "label": "Er Yang is linked to Hubei Amarvel Biotech (law-enforcement record)",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "3PgusiIli-ZIqMaz0TZ-bA",
+   "target": "yre7QJIV48_qZndIue1DyA",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/yre7QJIV48_qZndIue1DyA",
+   "label": "Unnamed US company linked in the same law-enforcement record",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "CVMkeBQNcBXS088OucpD3A",
+   "target": "yre7QJIV48_qZndIue1DyA",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/yre7QJIV48_qZndIue1DyA",
+   "label": "Unnamed US company linked in the same law-enforcement record",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "umedBzLDC2_mj2cYhiAxBg",
+   "target": "yre7QJIV48_qZndIue1DyA",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/yre7QJIV48_qZndIue1DyA",
+   "label": "Unnamed US company linked in the same law-enforcement record",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "9M1BTzgazB7qjTk7xIsnSQ",
+   "target": "yre7QJIV48_qZndIue1DyA",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/yre7QJIV48_qZndIue1DyA",
+   "label": "Unnamed US company linked in the same law-enforcement record",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  }
+ ],
+ "audit_trail": [
+  {
+   "step": 1,
+   "source": "Sayari",
+   "query_executed": "search_entities + get_entity_profile + traverse_network depth 1 (live MCP, 25 Sep 2026)",
+   "records_matched": 15
+  },
+  {
+   "step": 2,
+   "source": "Tavily",
+   "query_executed": "DOJ fentanyl precursor indictment search",
+   "records_matched": 3
+  },
+  {
+   "step": 3,
+   "source": "Tradeverifyd",
+   "query_executed": "not retrieved in this pass (connector token rejected 25 Sep 2026)",
+   "records_matched": 0
+  }
+ ]
+}

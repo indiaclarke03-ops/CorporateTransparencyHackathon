@@ -6,6 +6,8 @@ export type NodeType =
   | 'transshipment_hub'
   | 'address_hub'
   | 'facilitator'
+  | 'associated_person'
+  | 'related_company'
 
 export type Severity = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW'
 
@@ -54,6 +56,34 @@ export interface InvestigationNode {
   entity_confidence: string | null
   risk_signals: RiskSignal[]
   sayari_pass_through: SayariPassThrough | null
+  details?: NodeDetails
+}
+
+/** Extra entity facts copied from Sayari / Tradeverifyd records (scripts/build_cases.py). */
+export interface NodeDetails {
+  sayari_url?: string
+  entity_kind?: string
+  countries?: string[]
+  aliases?: string[]
+  addresses?: string[]
+  identifiers?: { type: string; value: string }[]
+  registration_date?: string
+  company_type?: string
+  status?: string
+  business_purpose?: string[]
+  sayari_sources?: string[]
+  trade_count?: { sent: number; received: number }
+  relationship_summary?: Record<string, number>
+  risk_flag_count?: number
+  tradeverifyd?: {
+    entity_id?: string
+    name?: string
+    aliases?: string[]
+    score?: number
+    score_level?: string
+    annotations?: { name: string; description?: string; url?: string }[]
+    trade_relationships?: number
+  }
 }
 
 export interface InvestigationEdge {
@@ -65,6 +95,10 @@ export interface InvestigationEdge {
   match_keys?: MatchKey[]
   source_id?: string
   source_authority?: string
+  /** The relationship exactly as the source states it */
+  label?: string
+  sayari_relationship?: string
+  former?: boolean
 }
 
 export interface AuditStep {
@@ -87,4 +121,27 @@ export interface Investigation {
   nodes: InvestigationNode[]
   edges: InvestigationEdge[]
   audit_trail: AuditStep[]
+  case?: CaseMeta
+}
+
+export interface CaseMeta {
+  id: string
+  title: string
+  root_id: string
+  tools_used: string[]
+  public_money: string
+  sources: { id: string; name: string; url: string; publisher?: string | null }[]
+}
+
+export interface CaseIndexEntry {
+  id: string
+  title: string
+  typology: string
+  root: string
+  score: number
+  grade: string
+  nodes: number
+  edges: number
+  tools: string[]
+  entities: string[]
 }

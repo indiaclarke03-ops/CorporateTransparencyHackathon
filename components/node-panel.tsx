@@ -1,5 +1,5 @@
 import { ChevronDown, ExternalLink, X } from 'lucide-react'
-import type { InvestigationNode, SayariPassThrough } from '@/lib/types'
+import type { InvestigationNode, NodeDetails, SayariPassThrough } from '@/lib/types'
 import Link from 'next/link'
 import { NODE_TYPE_META, SEVERITY_CLASS, formatMatchKey } from '@/lib/graph-style'
 import { cn } from '@/lib/utils'
@@ -21,9 +21,13 @@ export function NodePanel({ node, onClose }: { node: InvestigationNode; onClose:
       </div>
 
       <dl className="grid grid-cols-2 gap-2">
-        <Stat label="Jurisdiction" value={node.jurisdiction ?? '—'} />
+        <Stat label="Jurisdiction" value={node.details?.countries?.join(', ') || node.jurisdiction || '—'} />
         <Stat label="Entity confidence" value={node.entity_confidence ?? '—'} />
+        {node.details?.registration_date && <Stat label="Registered" value={node.details.registration_date} />}
+        {node.details?.trade_count && <Stat label="Shipments sent / received" value={`${node.details.trade_count.sent} / ${node.details.trade_count.received}`} />}
       </dl>
+
+      {node.details && <DetailsBlock d={node.details} />}
 
       <section className="flex flex-col gap-2">
         <h3 className="font-heading text-sm font-semibold">Risk signals ({node.risk_signals.length})</h3>
@@ -80,6 +84,68 @@ export function NodePanel({ node, onClose }: { node: InvestigationNode; onClose:
   )
 }
 
+function DetailsBlock({ d }: { d: NodeDetails }) {
+  const tv = d.tradeverifyd
+  return (
+    <section className="flex flex-col gap-3">
+      {d.sayari_url && (
+        <a href={d.sayari_url} target="_blank" rel="noopener noreferrer"
+          className="flex w-fit items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-bold text-accent-foreground hover:brightness-110">
+          <ExternalLink className="size-3.5" aria-hidden="true" /> Open the record in Sayari Graph
+        </a>
+      )}
+      <Facts label="Identifiers" items={(d.identifiers ?? []).map((i) => `${i.type.replace(/_/g, ' ')}: ${i.value}`)} mono />
+      <Facts label="Registered addresses" items={d.addresses ?? []} />
+      <Facts label="Also known as" items={d.aliases ?? []} />
+      {(d.company_type || d.status) && (
+        <p className="text-xs text-muted-foreground">
+          {d.company_type && <>Company type: <strong className="text-foreground">{d.company_type}</strong></>}
+          {d.company_type && d.status && ' · '}
+          {d.status && <>Status: <strong className="text-foreground">{d.status}</strong></>}
+        </p>
+      )}
+      <Facts label="Stated business" items={d.business_purpose ?? []} />
+      {d.relationship_summary && (
+        <ChipList label="Relationships in Sayari (all, not just those drawn)" items={Object.entries(d.relationship_summary).map(([k, v]) => `${k.replace(/_/g, ' ')}: ${v}`)} />
+      )}
+      {tv && (
+        <div className="flex flex-col gap-1.5 rounded-2xl bg-muted p-3">
+          <p className="font-heading text-sm font-semibold">
+            Tradeverifyd {tv.score != null && <span className="text-accent">score {tv.score} ({tv.score_level})</span>}
+          </p>
+          {tv.name && <p className="text-xs text-muted-foreground">Matched as &ldquo;{tv.name}&rdquo; · {tv.trade_relationships ?? 0} trade relationships on record</p>}
+          <ul className="flex flex-col gap-1">
+            {(tv.annotations ?? []).map((a) => (
+              <li key={a.name} className="text-xs">
+                <strong>{a.name}</strong>{a.description ? `: ${a.description}` : ''}
+                {a.url && <> · <a href={a.url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">source</a></>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <Facts label="Sayari drew this from" items={d.sayari_sources ?? []} />
+      {d.risk_flag_count != null && d.risk_flag_count > 0 && (
+        <p className="text-xs text-muted-foreground">Sayari lists {d.risk_flag_count} risk flags on this record; the main ones are shown as signals below.</p>
+      )}
+    </section>
+  )
+}
+
+function Facts({ label, items, mono }: { label: string; items: string[]; mono?: boolean }) {
+  if (!items.length) return null
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="text-xs text-muted-foreground">{label}</span>
+      <ul className="flex flex-col gap-0.5">
+        {items.map((it) => (
+          <li key={it} className={cn('break-words text-xs', mono && 'font-mono text-[11px]')}>{it}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 function SayariBlock({ data }: { data: SayariPassThrough | null }) {
   if (!data) {
     return <p className="rounded-2xl bg-muted p-3 text-sm text-muted-foreground">No Sayari pass-through data.</p>
@@ -87,7 +153,7 @@ function SayariBlock({ data }: { data: SayariPassThrough | null }) {
   const fmt = (v: boolean | number | null) => (v === null ? 'null' : String(v))
 
   return (
-    <details className="group rounded-2xl bg-muted p-3" open>
+    <details className="group rounded-2xl bg-muted p-3">
       <summary className="flex cursor-pointer list-none items-center justify-between font-heading text-sm font-semibold">
         Sayari pass-through
         <ChevronDown className="size-4 transition group-open:rotate-180" aria-hidden="true" />

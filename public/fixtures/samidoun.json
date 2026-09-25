@@ -1,0 +1,772 @@
+{
+ "investigation_summary": {
+  "root_recipient": "Samidoun Palestinian Prisoner Solidarity Network",
+  "composite_risk_score": 90,
+  "confidence_rating": "A",
+  "primary_typology": "Humanitarian Front",
+  "executive_rationale": "A Canadian not-for-profit, also registered at UK Companies House, that OFAC designated in October 2024 as a sham charity acting as an international fundraiser for the PFLP. Sayari links it to the PFLP as parent and to Hamas, Masar Badil and SDGT-listed individuals, and records it at a mass-registration address. This is the FATF Recommendation 8 risk: a humanitarian label over a terrorist-finance channel.[^S34][^S35]"
+ },
+ "case": {
+  "id": "samidoun",
+  "title": "Samidoun (sham charity for the PFLP)",
+  "root_id": "OUoSxNzYidNtzc0gtXxRMQ",
+  "sources": [
+   {
+    "id": "S34",
+    "name": "Treasury press release JY2646: Samidoun designated as a sham charity for the PFLP",
+    "url": "https://home.treasury.gov/news/press-releases/jy2646",
+    "publisher": "U.S. Department of the Treasury"
+   },
+   {
+    "id": "S35",
+    "name": "Treasury press release SB0162: sham overseas charity networks funding Hamas and the PFLP",
+    "url": "https://home.treasury.gov/news/press-releases/sb0162",
+    "publisher": "U.S. Department of the Treasury"
+   }
+  ],
+  "tools_used": [
+   "Sayari",
+   "Tavily"
+  ],
+  "public_money": "No USAspending awards; nonprofit (Canada CRA account 774927545RC0001)."
+ },
+ "nodes": [
+  {
+   "id": "OUoSxNzYidNtzc0gtXxRMQ",
+   "label": "Samidoun Palestinian Prisoner Solidarity Network",
+   "type": "sanctioned_entity",
+   "jurisdiction": "CAN",
+   "entity_confidence": "A",
+   "risk_signals": [
+    {
+     "signal_name": "Designated by OFAC as a sham charity fundraising for the PFLP (joint action with Canada)",
+     "severity": "CRITICAL",
+     "provenance_source": "Treasury press release (found with Tavily)",
+     "evidence_record": "https://home.treasury.gov/news/press-releases/jy2646",
+     "source_id": "S34",
+     "source_authority": "U.S. Department of the Treasury"
+    },
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "OFAC Specially Designated Global Terrorist",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "On Israel's counter-terror financing list",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Controlled by an OFAC SDN",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "OFAC 50% rule: owned 50%+ by blocked persons",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Recent law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Registered at a mass-registration address",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": false,
+    "closed": false,
+    "degree": null,
+    "relationship_count": {
+     "has_manager": 5,
+     "has_director": 6,
+     "subsidiary_of": 1,
+     "linked_to": 8
+    },
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+    "entity_kind": "company",
+    "countries": [
+     "CAN",
+     "GBR"
+    ],
+    "aliases": [
+     "Samidoun",
+     "Hirak",
+     "The Samidoun Palestinian Prisoner Solidarity Network"
+    ],
+    "addresses": [
+     "Vancouver, British Columbia, CA",
+     "London, United Kingdom"
+    ],
+    "identifiers": [
+     {
+      "type": "usa_ofac_sdn_number",
+      "value": "47582"
+     },
+     {
+      "type": "uk_company_number",
+      "value": "13885242"
+     },
+     {
+      "type": "can_corporation_number",
+      "value": "1279374-1"
+     },
+     {
+      "type": "can_cra_program_account_number",
+      "value": "774927545RC0001"
+     }
+    ],
+    "registration_date": "2011",
+    "company_type": "Non-Soliciting (Canadian not-for-profit)",
+    "status": "closed 2026-03-27 (UK registry)",
+    "business_purpose": [
+     "Main advocate for the release of Palestinian prisoners.",
+     "Television programming and broadcasting activities"
+    ],
+    "sayari_sources": [
+     "USA Treasury OFAC SDN List",
+     "UK Corporate Registry",
+     "Israel NBCTF Designation List",
+     "OpenSanctions"
+    ],
+    "trade_count": {
+     "sent": 0,
+     "received": 0
+    },
+    "relationship_summary": {
+     "has_manager": 5,
+     "has_director": 6,
+     "subsidiary_of": 1,
+     "linked_to": 8
+    },
+    "risk_flag_count": 7
+   }
+  },
+  {
+   "id": "jMzsf620xw_EUsPl44BrOA",
+   "label": "Popular Front for the Liberation of Palestine",
+   "type": "sanctioned_entity",
+   "jurisdiction": "LBN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/jMzsf620xw_EUsPl44BrOA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "US Foreign Terrorist Organization",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/jMzsf620xw_EUsPl44BrOA",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/jMzsf620xw_EUsPl44BrOA",
+    "entity_kind": "company",
+    "countries": [
+     "LBN",
+     "PSE",
+     "SYR"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "pWopbce9qJZqXsXo3ZygNA",
+   "label": "Khaled Barakat",
+   "type": "sanctioned_entity",
+   "jurisdiction": "PSE",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/pWopbce9qJZqXsXo3ZygNA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "OFAC Specially Designated Global Terrorist",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/pWopbce9qJZqXsXo3ZygNA",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/pWopbce9qJZqXsXo3ZygNA",
+    "entity_kind": "person",
+    "countries": [
+     "PSE",
+     "CAN"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "4el6ycVF-48dZ8acNi3sGA",
+   "label": "Charlotte Kates",
+   "type": "associated_person",
+   "jurisdiction": "CAN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/4el6ycVF-48dZ8acNi3sGA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Registered at a mass-registration address",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/4el6ycVF-48dZ8acNi3sGA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Subject of a law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/4el6ycVF-48dZ8acNi3sGA",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/4el6ycVF-48dZ8acNi3sGA",
+    "entity_kind": "person",
+    "countries": [
+     "CAN",
+     "GBR"
+    ],
+    "risk_flag_count": 3
+   }
+  },
+  {
+   "id": "nprSKQqKvFqbRsJ0MDr55Q",
+   "label": "Joe Catron",
+   "type": "associated_person",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/nprSKQqKvFqbRsJ0MDr55Q",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/nprSKQqKvFqbRsJ0MDr55Q",
+    "entity_kind": "person",
+    "countries": [
+     "USA",
+     "CAN"
+    ],
+    "risk_flag_count": 1
+   }
+  },
+  {
+   "id": "5BV1AiZRyv2gJeetbg-Dng",
+   "label": "Mohammed Khatib (manager record)",
+   "type": "associated_person",
+   "jurisdiction": "PSE",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/5BV1AiZRyv2gJeetbg-Dng",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/5BV1AiZRyv2gJeetbg-Dng",
+    "entity_kind": "person",
+    "countries": [
+     "PSE"
+    ],
+    "risk_flag_count": 1
+   }
+  },
+  {
+   "id": "Enfdt0f2Jl0EZ_RAPj0W0A",
+   "label": "Thomas Hofland",
+   "type": "associated_person",
+   "jurisdiction": "CAN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/Enfdt0f2Jl0EZ_RAPj0W0A",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/Enfdt0f2Jl0EZ_RAPj0W0A",
+    "entity_kind": "person",
+    "countries": [
+     "CAN"
+    ],
+    "risk_flag_count": 1
+   }
+  },
+  {
+   "id": "Uvypwh1VW598oAKln67dcw",
+   "label": "Dave Diewert",
+   "type": "associated_person",
+   "jurisdiction": "CAN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/Uvypwh1VW598oAKln67dcw",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/Uvypwh1VW598oAKln67dcw",
+    "entity_kind": "person",
+    "countries": [
+     "CAN"
+    ],
+    "risk_flag_count": 1
+   }
+  },
+  {
+   "id": "joJIKL7EaTwXgL83pC4lMg",
+   "label": "Mohammed Khatib (SDGT record)",
+   "type": "sanctioned_entity",
+   "jurisdiction": "LBN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/joJIKL7EaTwXgL83pC4lMg",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "OFAC Specially Designated Global Terrorist",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/joJIKL7EaTwXgL83pC4lMg",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/joJIKL7EaTwXgL83pC4lMg",
+    "entity_kind": "person",
+    "countries": [
+     "LBN",
+     "BEL",
+     "PSE"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "SPnw_fz3en484IKikz_-hQ",
+   "label": "Hamas incl. Izz al-Din al-Qassam Brigades",
+   "type": "sanctioned_entity",
+   "jurisdiction": "SYR",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/SPnw_fz3en484IKikz_-hQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "US Foreign Terrorist Organization",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/SPnw_fz3en484IKikz_-hQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/SPnw_fz3en484IKikz_-hQ",
+    "entity_kind": "company",
+    "countries": [
+     "SYR",
+     "IRN",
+     "LBN"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "Q-2ZtlIwyYGRgDADYGfocA",
+   "label": "Masar Badil",
+   "type": "sanctioned_entity",
+   "jurisdiction": "BEL",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/Q-2ZtlIwyYGRgDADYGfocA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "OFAC Specially Designated Global Terrorist",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/Q-2ZtlIwyYGRgDADYGfocA",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/Q-2ZtlIwyYGRgDADYGfocA",
+    "entity_kind": "company",
+    "countries": [
+     "BEL",
+     "ESP",
+     "DEU",
+     "CAN"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "i1N7JuvZdNKgkc4wyFjF6w",
+   "label": "Jaldia Abubakra Aueda",
+   "type": "sanctioned_entity",
+   "jurisdiction": "ESP",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On the OFAC SDN List",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/i1N7JuvZdNKgkc4wyFjF6w",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "OFAC Specially Designated Global Terrorist",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/i1N7JuvZdNKgkc4wyFjF6w",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": true,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/i1N7JuvZdNKgkc4wyFjF6w",
+    "entity_kind": "person",
+    "countries": [
+     "ESP"
+    ],
+    "risk_flag_count": 2
+   }
+  }
+ ],
+ "edges": [
+  {
+   "source": "jMzsf620xw_EUsPl44BrOA",
+   "target": "OUoSxNzYidNtzc0gtXxRMQ",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+   "label": "Popular Front for the Liberation of Palestine is the parent of Samidoun Palestinian Prisoner Solidarity Network",
+   "sayari_relationship": "subsidiary_of",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "pWopbce9qJZqXsXo3ZygNA",
+   "target": "OUoSxNzYidNtzc0gtXxRMQ",
+   "relationship_type": "OFFICER_DIRECTOR",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+   "label": "Khaled Barakat is a Manager of Samidoun",
+   "sayari_relationship": "has_manager",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "4el6ycVF-48dZ8acNi3sGA",
+   "target": "OUoSxNzYidNtzc0gtXxRMQ",
+   "relationship_type": "OFFICER_DIRECTOR",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+   "label": "Charlotte Kates is a Manager of Samidoun",
+   "sayari_relationship": "has_manager",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "nprSKQqKvFqbRsJ0MDr55Q",
+   "target": "OUoSxNzYidNtzc0gtXxRMQ",
+   "relationship_type": "OFFICER_DIRECTOR",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+   "label": "Joe Catron is a Manager of Samidoun",
+   "sayari_relationship": "has_manager",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "5BV1AiZRyv2gJeetbg-Dng",
+   "target": "OUoSxNzYidNtzc0gtXxRMQ",
+   "relationship_type": "OFFICER_DIRECTOR",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+   "label": "Mohammed Khatib is a Manager of Samidoun",
+   "sayari_relationship": "has_manager",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "Enfdt0f2Jl0EZ_RAPj0W0A",
+   "target": "OUoSxNzYidNtzc0gtXxRMQ",
+   "relationship_type": "OFFICER_DIRECTOR",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+   "label": "Director",
+   "sayari_relationship": "has_director",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "Uvypwh1VW598oAKln67dcw",
+   "target": "OUoSxNzYidNtzc0gtXxRMQ",
+   "relationship_type": "OFFICER_DIRECTOR",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+   "label": "Dave Diewert is a director of Samidoun Palestinian Prisoner Solidarity Network",
+   "sayari_relationship": "has_director",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "joJIKL7EaTwXgL83pC4lMg",
+   "target": "OUoSxNzYidNtzc0gtXxRMQ",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+   "label": "Mohammed Khatib is Linked to Samidoun",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "SPnw_fz3en484IKikz_-hQ",
+   "target": "OUoSxNzYidNtzc0gtXxRMQ",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+   "label": "Samidoun is an affiliate of Hamas",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "Q-2ZtlIwyYGRgDADYGfocA",
+   "target": "OUoSxNzYidNtzc0gtXxRMQ",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+   "label": "Masar Badil is linked to Samidoun Palestinian Prisoner Solidarity Network",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "i1N7JuvZdNKgkc4wyFjF6w",
+   "target": "OUoSxNzYidNtzc0gtXxRMQ",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/OUoSxNzYidNtzc0gtXxRMQ",
+   "label": "Jaldia Abubakra Aueda is Linked to Samidoun",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  }
+ ],
+ "audit_trail": [
+  {
+   "step": 1,
+   "source": "Sayari",
+   "query_executed": "search_entities + get_entity_profile Samidoun (live MCP, 25 Sep 2026)",
+   "records_matched": 20
+  },
+  {
+   "step": 2,
+   "source": "Tavily",
+   "query_executed": "Treasury Samidoun designation release",
+   "records_matched": 3
+  },
+  {
+   "step": 3,
+   "source": "Tradeverifyd",
+   "query_executed": "not retrieved in this pass (connector token rejected 25 Sep 2026)",
+   "records_matched": 0
+  }
+ ]
+}

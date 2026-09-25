@@ -1,0 +1,480 @@
+{
+ "investigation_summary": {
+  "root_recipient": "Hoshine Silicon Industry Co., Ltd.",
+  "composite_risk_score": 85,
+  "confidence_rating": "A",
+  "primary_typology": "Xinjiang & Critical Minerals",
+  "executive_rationale": "China's largest silicon-metal producer. CBP issued a Withhold Release Order on its silica-based products after finding forced-labour indicators, and its Shanshan (Xinjiang) subsidiary is on the UFLPA Entity List. Sayari shows 100% ownership of Xinjiang subsidiaries and 854 outbound shipments, including to the United States. This is critical-minerals supply-chain exposure a federal buyer could inherit through a supplier.[^S45][^S46][^S41]"
+ },
+ "case": {
+  "id": "hoshine",
+  "title": "Hoshine Silicon (Xinjiang forced labour, critical minerals)",
+  "root_id": "1XuabHffKPzSurnyE-YlvA",
+  "sources": [
+   {
+    "id": "S45",
+    "name": "CBP: DHS issues Withhold Release Order on silica-based products made by Hoshine Silicon (Jun 2021)",
+    "url": "https://www.cbp.gov/newsroom/national-media-release/department-homeland-security-issues-withhold-release-order-silica",
+    "publisher": "U.S. Customs and Border Protection"
+   },
+   {
+    "id": "S46",
+    "name": "DHS: UFLPA Entity List (Hoshine Silicon Industry (Shanshan) Co., Ltd. and subsidiaries, effective 21 Jun 2022)",
+    "url": "https://www.dhs.gov/uflpa-entity-list",
+    "publisher": "U.S. Department of Homeland Security"
+   },
+   {
+    "id": "S41",
+    "name": "DHS: addition of 37 PRC-based companies to the UFLPA Entity List",
+    "url": "https://www.dhs.gov/news/2025/01/14/dhs-announces-addition-37-prc-based-companies-uflpa-entity-list",
+    "publisher": "U.S. Department of Homeland Security"
+   }
+  ],
+  "tools_used": [
+   "Sayari",
+   "Tavily"
+  ],
+  "public_money": "Supplier-tier exposure: US imports of silicon products (Sayari shipment CN → US)."
+ },
+ "nodes": [
+  {
+   "id": "1XuabHffKPzSurnyE-YlvA",
+   "label": "Hoshine Silicon Industry Co., Ltd.",
+   "type": "shell_intermediary",
+   "jurisdiction": "CHN",
+   "entity_confidence": "A",
+   "risk_signals": [
+    {
+     "signal_name": "CBP Withhold Release Order on silica-based products (forced-labour indicators found)",
+     "severity": "CRITICAL",
+     "provenance_source": "CBP press release (found with Tavily)",
+     "evidence_record": "https://www.cbp.gov/newsroom/national-media-release/department-homeland-security-issues-withhold-release-order-silica",
+     "source_id": "S45",
+     "source_authority": "U.S. Customs and Border Protection"
+    },
+    {
+     "signal_name": "Shanshan subsidiary and subsidiaries on the UFLPA Entity List since 21 Jun 2022",
+     "severity": "CRITICAL",
+     "provenance_source": "DHS UFLPA Entity List (found with Tavily)",
+     "evidence_record": "https://www.dhs.gov/uflpa-entity-list",
+     "source_id": "S46",
+     "source_authority": "U.S. Department of Homeland Security"
+    },
+    {
+     "signal_name": "854 outbound shipments in Sayari trade data, including to the US",
+     "severity": "HIGH",
+     "provenance_source": "Sayari trade_count",
+     "evidence_record": "https://graph.sayari.com/resource/entity/1XuabHffKPzSurnyE-YlvA",
+     "source_authority": "Sayari trade data"
+    },
+    {
+     "signal_name": "On the UFLPA Entity List (Xinjiang forced labour)",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/1XuabHffKPzSurnyE-YlvA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Owns a UFLPA-listed entity",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/1XuabHffKPzSurnyE-YlvA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Subject to a CBP Withhold Release Order",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/1XuabHffKPzSurnyE-YlvA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Subject of a regulatory action",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/1XuabHffKPzSurnyE-YlvA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "One hop from a sanctioned party",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/1XuabHffKPzSurnyE-YlvA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "One hop from a state-owned enterprise",
+     "severity": "LOW",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/1XuabHffKPzSurnyE-YlvA",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": false,
+    "degree": null,
+    "relationship_count": {
+     "shareholder_of": 59,
+     "has_shareholder": 67,
+     "ships_to": 124,
+     "carrier_of": 34,
+     "has_director": 20
+    },
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/1XuabHffKPzSurnyE-YlvA",
+    "entity_kind": "company",
+    "countries": [
+     "CHN"
+    ],
+    "aliases": [
+     "浙江合盛硅业有限公司",
+     "Hoshine Silicon Industries Co Ltd"
+    ],
+    "addresses": [
+     "23-24F, Suite A, Hengyuan Square, No.1988, North 3rd Ring Road East, Cixi, Ningbo, China"
+    ],
+    "identifiers": [
+     {
+      "type": "cn_unified_social_credit_code",
+      "value": "913304007782903872"
+     },
+     {
+      "type": "lei",
+      "value": "300300RQV6XQFC4OVX72"
+     },
+     {
+      "type": "cn_importexport_code",
+      "value": "3300778290387"
+     }
+    ],
+    "registration_date": "2005-08-10",
+    "company_type": "CO LTD",
+    "status": "active (2026-07-28)",
+    "business_purpose": [
+     "Organic silicon compounds, trichlorosilane, industrial silicon (silicon metal) wholesale"
+    ],
+    "sayari_sources": [
+     "USA CBP Withhold Release Orders and Findings List",
+     "China Company Directory",
+     "China MOFCOM Foreign Investment Directory"
+    ],
+    "trade_count": {
+     "sent": 854,
+     "received": 1
+    },
+    "relationship_summary": {
+     "shareholder_of": 59,
+     "has_shareholder": 67,
+     "ships_to": 124,
+     "carrier_of": 34,
+     "has_director": 20
+    },
+    "risk_flag_count": 6
+   }
+  },
+  {
+   "id": "xEY0aKglS5OcZb8QHzMZUQ",
+   "label": "Ningbo Hoshine Group Co., Ltd. (宁波合盛集团)",
+   "type": "related_company",
+   "jurisdiction": "CHN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Controlled by a mass business registrant",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/xEY0aKglS5OcZb8QHzMZUQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Owns a UFLPA-listed entity",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/xEY0aKglS5OcZb8QHzMZUQ",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/xEY0aKglS5OcZb8QHzMZUQ",
+    "entity_kind": "company",
+    "countries": [
+     "CHN"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "zx8g4oJszeZt7qfh5G1toA",
+   "label": "Hoshine Silicon (Shanshan) Co. (合盛硅业（鄯善）)",
+   "type": "related_company",
+   "jurisdiction": "CHN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "On the UFLPA Entity List (Xinjiang forced labour)",
+     "severity": "CRITICAL",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/zx8g4oJszeZt7qfh5G1toA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Operations located in Xinjiang (geospatial)",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/zx8g4oJszeZt7qfh5G1toA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Recent law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/zx8g4oJszeZt7qfh5G1toA",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/zx8g4oJszeZt7qfh5G1toA",
+    "entity_kind": "company",
+    "countries": [
+     "CHN"
+    ],
+    "risk_flag_count": 3
+   }
+  },
+  {
+   "id": "xgDZKtkv00Wd5WtVOeW2Tg",
+   "label": "Xinjiang East Hoshine Silicon (新疆东部合盛硅业)",
+   "type": "related_company",
+   "jurisdiction": "CHN",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Operations located in Xinjiang (geospatial)",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/xgDZKtkv00Wd5WtVOeW2Tg",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/xgDZKtkv00Wd5WtVOeW2Tg",
+    "entity_kind": "company",
+    "countries": [
+     "CHN"
+    ],
+    "risk_flag_count": 1
+   }
+  },
+  {
+   "id": "xt6Wy_7uMRKHvTSF973e3g",
+   "label": "Heihe Hoshine Silicon (黑河合盛硅业)",
+   "type": "related_company",
+   "jurisdiction": "CHN",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/xt6Wy_7uMRKHvTSF973e3g",
+    "entity_kind": "company",
+    "countries": [
+     "CHN"
+    ],
+    "risk_flag_count": 0
+   }
+  },
+  {
+   "id": "ugfX4h2imqo-l6FkXrXLMg",
+   "label": "Shipment EXDO621061075 (CN → US)",
+   "type": "transshipment_hub",
+   "jurisdiction": "CHN",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": {
+    "sanctioned": null,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/ugfX4h2imqo-l6FkXrXLMg",
+    "entity_kind": "shipment",
+    "countries": [
+     "CHN",
+     "USA"
+    ],
+    "risk_flag_count": 0
+   }
+  },
+  {
+   "id": "zmIofgPAJUrQogBt9FEoQQ",
+   "label": "Shipment 35752147 (CN → BR)",
+   "type": "transshipment_hub",
+   "jurisdiction": "CHN",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": {
+    "sanctioned": null,
+    "pep": null,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/zmIofgPAJUrQogBt9FEoQQ",
+    "entity_kind": "shipment",
+    "countries": [
+     "CHN",
+     "BRA"
+    ],
+    "risk_flag_count": 0
+   }
+  }
+ ],
+ "edges": [
+  {
+   "source": "xEY0aKglS5OcZb8QHzMZUQ",
+   "target": "1XuabHffKPzSurnyE-YlvA",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": 46.24,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/1XuabHffKPzSurnyE-YlvA",
+   "label": "Ningbo Hoshine Group Co., Ltd. (宁波合盛集团) is a shareholder of Hoshine Silicon Industry Co., Ltd.",
+   "sayari_relationship": "has_shareholder",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "1XuabHffKPzSurnyE-YlvA",
+   "target": "zx8g4oJszeZt7qfh5G1toA",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": 100,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/1XuabHffKPzSurnyE-YlvA",
+   "label": "Hoshine Silicon (Shanshan) Co. (合盛硅业（鄯善）) is a shareholder of Hoshine Silicon Industry Co., Ltd.",
+   "sayari_relationship": "shareholder_of",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "1XuabHffKPzSurnyE-YlvA",
+   "target": "xgDZKtkv00Wd5WtVOeW2Tg",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": 100,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/1XuabHffKPzSurnyE-YlvA",
+   "label": "Xinjiang East Hoshine Silicon (新疆东部合盛硅业) is a shareholder of Hoshine Silicon Industry Co., Ltd.",
+   "sayari_relationship": "shareholder_of",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "1XuabHffKPzSurnyE-YlvA",
+   "target": "xt6Wy_7uMRKHvTSF973e3g",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": 100,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/1XuabHffKPzSurnyE-YlvA",
+   "label": "Heihe Hoshine Silicon (黑河合盛硅业) is a shareholder of Hoshine Silicon Industry Co., Ltd.",
+   "sayari_relationship": "shareholder_of",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "1XuabHffKPzSurnyE-YlvA",
+   "target": "ugfX4h2imqo-l6FkXrXLMg",
+   "relationship_type": "SUPPLY_CHAIN_SHIPMENT",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/1XuabHffKPzSurnyE-YlvA",
+   "label": "Shipment EXDO621061075 (CN → US) carried a shipment for Hoshine Silicon Industry Co., Ltd.",
+   "sayari_relationship": "carrier_of",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "1XuabHffKPzSurnyE-YlvA",
+   "target": "zmIofgPAJUrQogBt9FEoQQ",
+   "relationship_type": "SUPPLY_CHAIN_SHIPMENT",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/1XuabHffKPzSurnyE-YlvA",
+   "label": "Shipment 35752147 (CN → BR) carried a shipment for Hoshine Silicon Industry Co., Ltd.",
+   "sayari_relationship": "carrier_of",
+   "former": false,
+   "source_authority": "Sayari"
+  }
+ ],
+ "audit_trail": [
+  {
+   "step": 1,
+   "source": "Sayari",
+   "query_executed": "search_entities + get_entity_profile Hoshine (live MCP, 25 Sep 2026)",
+   "records_matched": 8
+  },
+  {
+   "step": 2,
+   "source": "Tavily",
+   "query_executed": "CBP WRO and DHS UFLPA Entity List",
+   "records_matched": 3
+  },
+  {
+   "step": 3,
+   "source": "Tradeverifyd",
+   "query_executed": "not retrieved in this pass (connector token rejected 25 Sep 2026)",
+   "records_matched": 0
+  }
+ ]
+}

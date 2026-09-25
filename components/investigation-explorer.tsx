@@ -1,16 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import useSWR from 'swr'
 import Link from 'next/link'
-import { Leaf, Route, ScrollText } from 'lucide-react'
-import {
-  INVESTIGATION_OPTIONS,
-  fetchInvestigation,
-  resolveInvestigationUrl,
-  type InvestigationId,
-} from '@/lib/investigations'
+import { Info, Leaf, Route, ScrollText, Search } from 'lucide-react'
+import { CASES, fetchInvestigation, resolveInvestigationUrl, type InvestigationId } from '@/lib/investigations'
 import type { InvestigationEdge } from '@/lib/types'
 import { SummaryBar } from './summary-bar'
 import { NodePanel } from './node-panel'
@@ -26,11 +21,36 @@ const InvestigationGraph = dynamic(() => import('./investigation-graph').then((m
 type Selection = { kind: 'node'; id: string } | { kind: 'edge'; edge: InvestigationEdge } | null
 
 export function InvestigationExplorer() {
-  const [investigationId, setInvestigationId] = useState<InvestigationId>('serniya')
+  const [investigationId, setInvestigationId] = useState<InvestigationId>(CASES[0]?.id ?? 'serniya')
   const [selection, setSelection] = useState<Selection>(null)
   const [auditOpen, setAuditOpen] = useState(false)
+  const [query, setQuery] = useState('')
+  const [pendingLabel, setPendingLabel] = useState<string | null>(null)
 
   const { data, error, isLoading } = useSWR(resolveInvestigationUrl(investigationId), fetchInvestigation)
+
+  // Search every entity in every case, so a reviewer can start from a name instead of a case.
+  const hits = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    if (q.length < 2) return []
+    return CASES.flatMap((c) =>
+      [c.title, ...c.entities].filter((e) => e.toLowerCase().includes(q)).map((e) => ({ caseId: c.id, caseTitle: c.title, typology: c.typology, entity: e })),
+    ).slice(0, 12)
+  }, [query])
+
+  const openCase = (id: string, label: string | null = null) => {
+    setInvestigationId(id)
+    setSelection(null)
+    setPendingLabel(label)
+    setQuery('')
+  }
+
+  useEffect(() => {
+    if (!data || !pendingLabel) return
+    const n = data.nodes.find((x) => x.label === pendingLabel)
+    if (n) setSelection({ kind: 'node', id: n.id })
+    setPendingLabel(null)
+  }, [data, pendingLabel])
 
   const selectedNode = selection?.kind === 'node' ? data?.nodes.find((n) => n.id === selection.id) : undefined
   const nodeLabel = (id: string) => data?.nodes.find((n) => n.id === id)?.label ?? id
@@ -48,25 +68,35 @@ export function InvestigationExplorer() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <label htmlFor="investigation" className="sr-only">
-            Investigation
-          </label>
-          <select
-            id="investigation"
-            value={investigationId}
-            onChange={(e) => {
-              setInvestigationId(e.target.value as InvestigationId)
-              setSelection(null)
-            }}
-            className="h-10 rounded-full border border-border bg-card px-4 text-sm font-semibold text-card-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative">
+            <label className="flex h-10 w-64 items-center gap-2 rounded-full border border-border bg-card px-4 text-sm">
+              <Search className="size-4 text-muted-foreground" aria-hidden="true" />
+              <span className="sr-only">Search entities across all cases</span>
+              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search companies, people…"
+                className="w-full bg-transparent outline-none placeholder:text-muted-foreground" />
+            </label>
+            {hits.length > 0 && (
+              <ul className="absolute right-0 z-20 mt-2 max-h-80 w-80 overflow-y-auto rounded-2xl border border-border bg-card p-1.5 shadow-xl">
+                {hits.map((h) => (
+                  <li key={h.caseId + h.entity}>
+                    <button type="button" onClick={() => openCase(h.caseId, h.entity === h.caseTitle ? null : h.entity)}
+                      className="flex w-full flex-col items-start rounded-xl px-3 py-2 text-left hover:bg-muted">
+                      <span className="text-sm font-semibold">{h.entity}</span>
+                      <span className="text-xs text-muted-foreground">{h.typology} · {h.caseTitle}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <Link
+            href="/about"
+            className="flex h-10 items-center gap-2 rounded-full border border-border px-4 text-sm font-bold text-foreground transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            {INVESTIGATION_OPTIONS.map((o) => (
-              <option key={o.id} value={o.id}>
-                {o.label}
-              </option>
-            ))}
-          </select>
+            <Info className="size-4" aria-hidden="true" />
+            About
+          </Link>
           <Link
             href="/traceability"
             className="flex h-10 items-center gap-2 rounded-full border border-accent px-4 text-sm font-bold text-accent transition hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -93,12 +123,26 @@ export function InvestigationExplorer() {
         </p>
       )}
 
-      {data && <SummaryBar summary={data.investigation_summary} />}
+      <nav aria-label="Cases by typology" className="flex gap-2 overflow-x-auto pb-1">
+        {CASES.map((c) => (
+          <button key={c.id} type="button" onClick={() => openCase(c.id)} aria-pressed={c.id === investigationId}
+            className={`flex w-56 shrink-0 flex-col gap-1 rounded-2xl border p-3 text-left transition ${c.id === investigationId ? 'border-accent bg-card' : 'border-border bg-card/60 hover:border-accent/60'}`}>
+            <span className="text-[11px] font-bold uppercase tracking-wide text-accent">{c.typology}</span>
+            <span className="line-clamp-2 text-sm font-semibold leading-snug">{c.title}</span>
+            <span className="text-xs text-muted-foreground">
+              Score {c.score} · Grade {c.grade} · {c.nodes} entities · {c.edges} links
+            </span>
+            <span className="text-[11px] text-muted-foreground">{c.tools.join(' · ')}</span>
+          </button>
+        ))}
+      </nav>
+
+      {data && <SummaryBar summary={data.investigation_summary} caseMeta={data.case} />}
 
       <main className="flex flex-1 flex-col gap-4 lg:flex-row">
         <section
           aria-label="Investigation graph"
-          className="relative flex min-h-[420px] flex-1 flex-col overflow-hidden rounded-3xl border border-border bg-card"
+          className="relative flex min-h-[640px] flex-1 flex-col overflow-hidden rounded-3xl border border-border bg-card"
         >
           {isLoading || !data ? (
             <GraphPlaceholder text="Raking up the graph..." />
@@ -129,7 +173,8 @@ export function InvestigationExplorer() {
               <Leaf className="leaf-sway size-10 text-accent" aria-hidden="true" />
               <p className="font-heading text-lg">Pick a leaf, any leaf</p>
               <p className="text-sm leading-relaxed text-muted-foreground">
-                Click a node to see its risk signals and Sayari data, or click a connection to see how two entities are linked.
+                Click a node to see its identifiers, addresses, risk signals and sources, or click a connection to see how two entities are
+                linked, in the source&apos;s own words.
               </p>
             </div>
           )}

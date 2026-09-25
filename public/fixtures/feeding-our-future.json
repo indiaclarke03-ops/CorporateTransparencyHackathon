@@ -1,0 +1,532 @@
+{
+ "investigation_summary": {
+  "root_recipient": "Feeding Our Future",
+  "composite_risk_score": 82,
+  "confidence_rating": "A",
+  "primary_typology": "Pandemic Loan Fraud",
+  "executive_rationale": "A Minnesota nonprofit that sponsored federally funded child-nutrition sites. DOJ proved at trial that sites under its sponsorship claimed to serve thousands of meals within days of forming, and its founder was sentenced to 500 months. Empire Cuisine And Market, registered in April 2020, is a linked site operator in the same pilot seed set. This is public money reaching shells directly.[^S48][^S42]"
+ },
+ "case": {
+  "id": "feeding-our-future",
+  "title": "Feeding Our Future (Minnesota child-nutrition fraud)",
+  "root_id": "S2sKpLjtsHqnJMTy6mwuTw",
+  "sources": [
+   {
+    "id": "S48",
+    "name": "DOJ: Feeding Our Future ringleader sentenced to 500 months ($250M child nutrition program fraud)",
+    "url": "https://www.justice.gov/opa/pr/feeding-our-future-ringleader-sentenced-500-months",
+    "publisher": "U.S. Department of Justice"
+   },
+   {
+    "id": "S42",
+    "name": "DOJ: co-founder of a PPP lender service provider sentenced for $65M COVID-19 relief fraud",
+    "url": "https://www.justice.gov/opa/pr/co-founder-paycheck-protection-program-lender-service-provider-sentenced-64m-covid-19-relief",
+    "publisher": "U.S. Department of Justice"
+   }
+  ],
+  "tools_used": [
+   "Sayari",
+   "Tavily"
+  ],
+  "public_money": "Federal Child Nutrition Program funds via Minnesota Department of Education (per DOJ)."
+ },
+ "nodes": [
+  {
+   "id": "S2sKpLjtsHqnJMTy6mwuTw",
+   "label": "Feeding Our Future",
+   "type": "public_recipient",
+   "jurisdiction": "USA",
+   "entity_confidence": "A",
+   "risk_signals": [
+    {
+     "signal_name": "Sponsor of federally funded child nutrition sites; founder sentenced to 500 months for a $250M fraud",
+     "severity": "CRITICAL",
+     "provenance_source": "DOJ press release (found with Tavily)",
+     "evidence_record": "https://www.justice.gov/opa/pr/feeding-our-future-ringleader-sentenced-500-months",
+     "source_id": "S48",
+     "source_authority": "U.S. Department of Justice"
+    },
+    {
+     "signal_name": "Sites claimed to feed thousands of children within days or weeks of forming (registration-to-award gap)",
+     "severity": "HIGH",
+     "provenance_source": "DOJ press release",
+     "evidence_record": "https://www.justice.gov/opa/pr/feeding-our-future-ringleader-sentenced-500-months",
+     "source_id": "S48",
+     "source_authority": "U.S. Department of Justice"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": false,
+    "degree": null,
+    "relationship_count": {
+     "linked_to": 3,
+     "has_officer": 2
+    },
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/S2sKpLjtsHqnJMTy6mwuTw",
+    "entity_kind": "company",
+    "countries": [
+     "USA"
+    ],
+    "addresses": [
+     "c/o Legal for Good PLLC, 5353 Gamble Dr., Suite 320, St. Louis Park, MN, 55416, USA"
+    ],
+    "identifiers": [
+     {
+      "type": "usa_mn_master_id",
+      "value": "81d2eea8-0aa5-e611-816f-00155d01c56d"
+     },
+     {
+      "type": "usa_mn_filing_number",
+      "value": "913838800020"
+     }
+    ],
+    "registration_date": "2016-11-07",
+    "company_type": "Nonprofit Corporation (Domestic)",
+    "status": "status='active' date='2026-01-01'",
+    "sayari_sources": [
+     "USA Minnesota Secretary of State"
+    ],
+    "trade_count": {
+     "sent": 0,
+     "received": 0
+    },
+    "relationship_summary": {
+     "linked_to": 3,
+     "has_officer": 2
+    },
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "vK0aiIhJJwVd08t_CQU5Kw",
+   "label": "Ali Egal",
+   "type": "associated_person",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/vK0aiIhJJwVd08t_CQU5Kw",
+    "entity_kind": "person",
+    "countries": [
+     "USA"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "iLE7boLmAt5eNqOtX-iFtg",
+   "label": "Aimee Marie Bock",
+   "type": "associated_person",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/iLE7boLmAt5eNqOtX-iFtg",
+    "entity_kind": "person",
+    "countries": [
+     "USA"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "YsMyTsIKOgiALhcYin5haw",
+   "label": "Kara Lomen",
+   "type": "associated_person",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/YsMyTsIKOgiALhcYin5haw",
+    "entity_kind": "person",
+    "countries": [
+     "USA"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "Qt_vpBymWPnfA8gGc8nWcQ",
+   "label": "Aimee Bock",
+   "type": "associated_person",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/Qt_vpBymWPnfA8gGc8nWcQ",
+    "entity_kind": "person",
+    "countries": [
+     "USA"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "5egGszBscNflAQWGp1S6NA",
+   "label": "Christine Twait",
+   "type": "associated_person",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/5egGszBscNflAQWGp1S6NA",
+    "entity_kind": "person",
+    "countries": [
+     "USA"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "DtI-nSSPD00ZgUxoSFxKuA",
+   "label": "Empire Cuisine And Market LLC",
+   "type": "public_recipient",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Subject of a law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/DtI-nSSPD00ZgUxoSFxKuA",
+     "source_authority": "Sayari (aggregating official lists)"
+    },
+    {
+     "signal_name": "Incorporated 1 Apr 2020, at the start of pandemic relief programmes (recent incorporation)",
+     "severity": "MEDIUM",
+     "provenance_source": "Sayari registry record",
+     "evidence_record": "https://graph.sayari.com/resource/entity/DtI-nSSPD00ZgUxoSFxKuA",
+     "source_authority": "Minnesota registry via Sayari"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": true,
+    "degree": null,
+    "relationship_count": {
+     "has_shareholder": 1,
+     "linked_to": 2
+    },
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/DtI-nSSPD00ZgUxoSFxKuA",
+    "entity_kind": "company",
+    "countries": [
+     "USA"
+    ],
+    "aliases": [
+     "Empire Cuisine & Market LLC"
+    ],
+    "addresses": [
+     "13825 Edgewood Ave S, Savage, MN, 55378, USA"
+    ],
+    "identifiers": [
+     {
+      "type": "xxx_acuris_id",
+      "value": "C1576133"
+     },
+     {
+      "type": "usa_mn_filing_number",
+      "value": "1151747200022"
+     },
+     {
+      "type": "usa_mn_master_id",
+      "value": "523fe7f6-5474-ea11-9197-00155d32b905"
+     },
+     {
+      "type": "unknown",
+      "value": "1151747200022"
+     },
+     {
+      "type": "unknown",
+      "value": "523fe7f6-5474-ea11-9197-00155d32b905"
+     }
+    ],
+    "registration_date": "2020-04-01",
+    "company_type": "LLC",
+    "status": "status='inactive' date=None",
+    "sayari_sources": [
+     "USA Minnesota Secretary of State",
+     "Acuris Risk Intelligence - Entities & Relationships (3rd Party Data)",
+     "Acuris Risk Intelligence - Risk Information and Articles (3rd Party Data)"
+    ],
+    "trade_count": {
+     "sent": 0,
+     "received": 0
+    },
+    "relationship_summary": {
+     "has_shareholder": 1,
+     "linked_to": 2
+    },
+    "risk_flag_count": 4
+   }
+  },
+  {
+   "id": "z2hpWM3nOio_DPmvVPhARA",
+   "label": "Abdiaziz Farah",
+   "type": "associated_person",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/z2hpWM3nOio_DPmvVPhARA",
+    "entity_kind": "person",
+    "countries": [
+     "USA"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "K6oyk8iuv60HWijlZoO2-A",
+   "label": "Mohamed I Ismail",
+   "type": "associated_person",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/K6oyk8iuv60HWijlZoO2-A",
+    "entity_kind": "person",
+    "countries": [
+     "USA"
+    ],
+    "risk_flag_count": 2
+   }
+  },
+  {
+   "id": "-IjrK5KmW3Xjsi_599Sung",
+   "label": "Mohamed Jama Ismail",
+   "type": "associated_person",
+   "jurisdiction": "USA",
+   "entity_confidence": null,
+   "risk_signals": [
+    {
+     "signal_name": "Subject of a law-enforcement action",
+     "severity": "HIGH",
+     "provenance_source": "Sayari risk flags",
+     "evidence_record": "https://graph.sayari.com/resource/entity/-IjrK5KmW3Xjsi_599Sung",
+     "source_authority": "Sayari (aggregating official lists)"
+    }
+   ],
+   "sayari_pass_through": {
+    "sanctioned": false,
+    "pep": false,
+    "closed": null,
+    "degree": null,
+    "relationship_count": {},
+    "shares": [],
+    "position": [],
+    "possibly_same_as": [],
+    "match_keys": []
+   },
+   "details": {
+    "sayari_url": "https://graph.sayari.com/resource/entity/-IjrK5KmW3Xjsi_599Sung",
+    "entity_kind": "person",
+    "countries": [
+     "USA"
+    ],
+    "risk_flag_count": 4
+   }
+  }
+ ],
+ "edges": [
+  {
+   "source": "vK0aiIhJJwVd08t_CQU5Kw",
+   "target": "S2sKpLjtsHqnJMTy6mwuTw",
+   "relationship_type": "OFFICER_DIRECTOR",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/S2sKpLjtsHqnJMTy6mwuTw",
+   "label": "President",
+   "sayari_relationship": "has_officer",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "iLE7boLmAt5eNqOtX-iFtg",
+   "target": "S2sKpLjtsHqnJMTy6mwuTw",
+   "relationship_type": "OFFICER_DIRECTOR",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/S2sKpLjtsHqnJMTy6mwuTw",
+   "label": "President",
+   "sayari_relationship": "has_officer",
+   "former": true,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "YsMyTsIKOgiALhcYin5haw",
+   "target": "S2sKpLjtsHqnJMTy6mwuTw",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/S2sKpLjtsHqnJMTy6mwuTw",
+   "label": "Incorporator",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "Qt_vpBymWPnfA8gGc8nWcQ",
+   "target": "S2sKpLjtsHqnJMTy6mwuTw",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/S2sKpLjtsHqnJMTy6mwuTw",
+   "label": "Incorporator",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "5egGszBscNflAQWGp1S6NA",
+   "target": "S2sKpLjtsHqnJMTy6mwuTw",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/S2sKpLjtsHqnJMTy6mwuTw",
+   "label": "Incorporator",
+   "sayari_relationship": "linked_to",
+   "former": false,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "z2hpWM3nOio_DPmvVPhARA",
+   "target": "DtI-nSSPD00ZgUxoSFxKuA",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/DtI-nSSPD00ZgUxoSFxKuA",
+   "label": "Organizer",
+   "sayari_relationship": "linked_to",
+   "former": true,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "K6oyk8iuv60HWijlZoO2-A",
+   "target": "DtI-nSSPD00ZgUxoSFxKuA",
+   "relationship_type": "LINKED_TO",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/DtI-nSSPD00ZgUxoSFxKuA",
+   "label": "Organizer",
+   "sayari_relationship": "linked_to",
+   "former": true,
+   "source_authority": "Sayari"
+  },
+  {
+   "source": "-IjrK5KmW3Xjsi_599Sung",
+   "target": "DtI-nSSPD00ZgUxoSFxKuA",
+   "relationship_type": "OWNS_OR_CONTROLS",
+   "ownership_percentage": null,
+   "provenance_ref": "https://graph.sayari.com/resource/entity/DtI-nSSPD00ZgUxoSFxKuA",
+   "label": "Mohamed Jama Ismail is a co-owner of Empire Cuisine & Market LLC",
+   "sayari_relationship": "has_shareholder",
+   "former": true,
+   "source_authority": "Sayari"
+  }
+ ],
+ "audit_trail": [
+  {
+   "step": 1,
+   "source": "Sayari",
+   "query_executed": "get_entity_profile Feeding Our Future, Empire Cuisine (recorded)",
+   "records_matched": 2
+  },
+  {
+   "step": 2,
+   "source": "Tavily",
+   "query_executed": "DOJ Feeding Our Future sentencing release",
+   "records_matched": 1
+  },
+  {
+   "step": 3,
+   "source": "Tradeverifyd",
+   "query_executed": "not retrieved in this pass (connector token rejected 25 Sep 2026)",
+   "records_matched": 0
+  }
+ ]
+}

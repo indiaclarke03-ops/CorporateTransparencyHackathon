@@ -1,0 +1,210 @@
+[
+ {
+  "id": "serniya",
+  "title": "Serniya Engineering (Russian military procurement)",
+  "typology": "Russia Sanctions Evasion",
+  "root": "UNRESOLVED - no SAM.gov federal award or UEI identified in public record for this network; case study uses OFAC/DOJ export-control action, not a traced public procurement dollar",
+  "score": 65,
+  "grade": "B",
+  "nodes": 11,
+  "edges": 11,
+  "tools": [
+   "Sayari",
+   "Tavily",
+   "USAspending"
+  ],
+  "entities": [
+   "OOO Serniya Engineering",
+   "OOO Sertal",
+   "OOO Robin Treid",
+   "Majory LLP",
+   "Photon Pro LLP",
+   "Invention Bridge SL",
+   "Yevgeniy Aleksandrovich Grinin",
+   "Anton Alekseevich Krugovov",
+   "Boris Livshits",
+   "Advanced Web Services",
+   "Strandway, LLC"
+  ]
+ },
+ {
+  "id": "rsf-gold",
+  "title": "AZ Gold and the RSF trading network (UAE)",
+  "typology": "Sudan / UAE Arms & Gold",
+  "root": "AL ZUMOROUD AND AL YAQOOT GOLD & JEWELLERS TRADING L.L.C.",
+  "score": 88,
+  "grade": "A",
+  "nodes": 20,
+  "edges": 28,
+  "tools": [
+   "Sayari",
+   "Tradeverifyd",
+   "Tavily"
+  ],
+  "entities": [
+   "AL ZUMOROUD AND AL YAQOOT GOLD & JEWELLERS TRADING L.L.C.",
+   "Abu Dharr Abdul Nabi Habiballa AHMMED",
+   "Algoney Hamdan Daglo Musa",
+   "Capital Tap Holding L.L.C.",
+   "Prodigious Real Estate Management Supervision Services",
+   "Capital Tap General Trading L.L.C.",
+   "Creative Python L.L.C.",
+   "AL JIL ALQADEM GENERAL TRADING L.L.C.",
+   "Naser Helal Abdullah Hammadi",
+   "Eslam Badruddine Mohammed Abdullah",
+   "Islam Mahmoud",
+   "Christy Hanna",
+   "CAPITAL TAB MANAGEMENT CONSULTANCY LIMITED LIABILITY COMPANY",
+   "HORIZON ADVANCED SOLUTIONS GENERAL TRADING - LLC SO",
+   "Anas Jannoud",
+   "Islam Badredine Mohammed Abdullah",
+   "Abdulraheem Hamdan Mossa",
+   "Mazin Gamareldin Mohamed Fadlalla",
+   "Abdelrahim Hamdan Dagalo",
+   "Alkhaleej Bank Co Ltd"
+  ]
+ },
+ {
+  "id": "feeding-our-future",
+  "title": "Feeding Our Future (Minnesota child-nutrition fraud)",
+  "typology": "Pandemic Loan Fraud",
+  "root": "Feeding Our Future",
+  "score": 82,
+  "grade": "A",
+  "nodes": 10,
+  "edges": 8,
+  "tools": [
+   "Sayari",
+   "Tavily"
+  ],
+  "entities": [
+   "Feeding Our Future",
+   "Ali Egal",
+   "Aimee Marie Bock",
+   "Kara Lomen",
+   "Aimee Bock",
+   "Christine Twait",
+   "Empire Cuisine And Market LLC",
+   "Abdiaziz Farah",
+   "Mohamed I Ismail",
+   "Mohamed Jama Ismail"
+  ]
+ },
+ {
+  "id": "meroe-gold",
+  "title": "Meroe Gold (Wagner gold mining in Sudan)",
+  "typology": "Gold",
+  "root": "Meroe Gold",
+  "score": 92,
+  "grade": "A",
+  "nodes": 8,
+  "edges": 7,
+  "tools": [
+   "Sayari",
+   "Tavily"
+  ],
+  "entities": [
+   "Meroe Gold",
+   "M Invest, OOO",
+   "Mikhail Sergeyevich Potepkin",
+   "Wagner Group",
+   "Al-Solag Mining Company Ltd",
+   "Andrey Sergeyevich Mandel",
+   "Broker Expert LLC",
+   "OOO DM"
+  ]
+ },
+ {
+  "id": "amarvel",
+  "title": "Hubei Amarvel Biotech (fentanyl precursors)",
+  "typology": "Fentanyl Precursors",
+  "root": "Hubei Amarvel Biotech Co., Ltd.",
+  "score": 78,
+  "grade": "B",
+  "nodes": 8,
+  "edges": 7,
+  "tools": [
+   "Sayari",
+   "Tavily"
+  ],
+  "entities": [
+   "Hubei Amarvel Biotech Co., Ltd.",
+   "Qingzhou Wang",
+   "Yiyi Chen",
+   "Er Yang",
+   "Unnamed US company (Acuris C2068561)",
+   "Unnamed US company (Acuris C2068572)",
+   "Unnamed US company (Acuris C2068565)",
+   "Unnamed US company (Acuris C2068560)"
+  ]
+ },
+ {
+  "id": "samidoun",
+  "title": "Samidoun (sham charity for the PFLP)",
+  "typology": "Humanitarian Front",
+  "root": "Samidoun Palestinian Prisoner Solidarity Network",
+  "score": 90,
+  "grade": "A",
+  "nodes": 12,
+  "edges": 11,
+  "tools": [
+   "Sayari",
+   "Tavily"
+  ],
+  "entities": [
+   "Samidoun Palestinian Prisoner Solidarity Network",
+   "Popular Front for the Liberation of Palestine",
+   "Khaled Barakat",
+   "Charlotte Kates",
+   "Joe Catron",
+   "Mohammed Khatib (manager record)",
+   "Thomas Hofland",
+   "Dave Diewert",
+   "Mohammed Khatib (SDGT record)",
+   "Hamas incl. Izz al-Din al-Qassam Brigades",
+   "Masar Badil",
+   "Jaldia Abubakra Aueda"
+  ]
+ },
+ {
+  "id": "hoshine",
+  "title": "Hoshine Silicon (Xinjiang forced labour, critical minerals)",
+  "typology": "Xinjiang & Critical Minerals",
+  "root": "Hoshine Silicon Industry Co., Ltd.",
+  "score": 85,
+  "grade": "A",
+  "nodes": 7,
+  "edges": 6,
+  "tools": [
+   "Sayari",
+   "Tavily"
+  ],
+  "entities": [
+   "Hoshine Silicon Industry Co., Ltd.",
+   "Ningbo Hoshine Group Co., Ltd. (宁波合盛集团)",
+   "Hoshine Silicon (Shanshan) Co. (合盛硅业（鄯善）)",
+   "Xinjiang East Hoshine Silicon (新疆东部合盛硅业)",
+   "Heihe Hoshine Silicon (黑河合盛硅业)",
+   "Shipment EXDO621061075 (CN → US)",
+   "Shipment 35752147 (CN → BR)"
+  ]
+ },
+ {
+  "id": "palantir",
+  "title": "Palantir Technologies (clean control)",
+  "typology": "Control (no material risk)",
+  "root": "Palantir Technologies Inc.",
+  "score": 8,
+  "grade": "A",
+  "nodes": 1,
+  "edges": 0,
+  "tools": [
+   "Sayari",
+   "Tradeverifyd",
+   "USAspending"
+  ],
+  "entities": [
+   "Palantir Technologies Inc."
+  ]
+ }
+]

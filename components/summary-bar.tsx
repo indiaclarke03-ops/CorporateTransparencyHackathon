@@ -1,9 +1,10 @@
 import { ChevronDown } from 'lucide-react'
-import type { InvestigationSummary } from '@/lib/types'
+import type { CaseMeta, InvestigationSummary } from '@/lib/types'
+import { Inline } from './traceability/ui'
 import { confidenceClass, scoreColor } from '@/lib/graph-style'
 import { cn } from '@/lib/utils'
 
-export function SummaryBar({ summary }: { summary: InvestigationSummary }) {
+export function SummaryBar({ summary, caseMeta }: { summary: InvestigationSummary; caseMeta?: CaseMeta }) {
   const score = Math.max(0, Math.min(100, summary.composite_risk_score))
 
   return (
@@ -31,13 +32,33 @@ export function SummaryBar({ summary }: { summary: InvestigationSummary }) {
           </h2>
           <span className="rounded-full bg-muted px-3 py-1 text-xs font-bold text-accent">{summary.primary_typology}</span>
         </div>
-        <details className="group rounded-2xl bg-muted px-4 py-2">
+        <details className="group rounded-2xl bg-muted px-4 py-2" open>
           <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-sm font-semibold">
             Executive rationale
             <ChevronDown className="size-4 transition group-open:rotate-180" aria-hidden="true" />
           </summary>
-          <p className="pt-2 text-sm leading-relaxed text-muted-foreground text-pretty">{summary.executive_rationale}</p>
+          <p className="pt-2 text-sm leading-relaxed text-muted-foreground text-pretty"><Inline text={summary.executive_rationale} /></p>
         </details>
+        {caseMeta && (
+          <div className="flex flex-col gap-1.5 text-xs text-muted-foreground">
+            <p>
+              <strong className="text-foreground">Tools used:</strong> {caseMeta.tools_used.join(', ')}
+              {' · '}
+              <strong className="text-foreground">Public money:</strong> {caseMeta.public_money}
+            </p>
+            <ul className="flex flex-wrap gap-1.5">
+              {caseMeta.sources.map((s) => (
+                <li key={s.id}>
+                  <a href={s.url} target="_blank" rel="noopener noreferrer" title={s.name}
+                    className="inline-flex max-w-xs items-center gap-1 truncate rounded-full bg-background px-2 py-0.5 ring-1 ring-border hover:ring-accent">
+                    <span className="font-mono font-bold text-accent">{s.id}</span>
+                    <span className="truncate">{s.publisher ?? new URL(s.url).hostname}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </section>
   )

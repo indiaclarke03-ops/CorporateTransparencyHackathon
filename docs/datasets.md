@@ -23,7 +23,7 @@ Rules used:
 | # | Dataset | Grain | Status |
 |---|---|---|---|
 | 0 | `source_records` | One raw response | Ready (foundation for everything) |
-| 1 | `seed_awards` | One federal award in the seed sector | Ready (seed not yet defined, 2b) |
+| 1 | `seed_awards` | One federal award or PPP loan in a seed typology | Ready (seed defined in `config/datasets.yaml`) |
 | 2 | `award_competition` *(new)* | One award checked for competition | Ready |
 | 3 | `subawards` *(new)* | One reported first-tier subaward | Ready |
 | 4 | `entities` | One resolved company or person | Partly blocked (B25) |
@@ -65,7 +65,7 @@ Rules used:
 - **Fields:** `Award ID`, `Recipient Name`, `Recipient UEI`, `Award Amount`, `Awarding Agency`, `Start Date`, `End Date`, `NAICS`, `PSC`, `generated_internal_id`.
 - **Grain:** one award in the seed sector and date range.
 - **Refresh:** per build run.
-- **Status:** ready, waiting for the seed definition (Task 2b).
+- **Status:** ready. The seed is defined in `config/datasets.yaml`: 25 pilot companies across the seven typologies in `config/typologies.yaml`, FY2020–FY2026. Every filter code was checked against live USAspending data. PPP loan rows (assistance listing 59.073) come back without a Recipient UEI, so pandemic seeds match at grade B at most.
 
 ## 2. `award_competition` *(new)*
 

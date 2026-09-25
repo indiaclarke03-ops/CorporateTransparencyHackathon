@@ -1,0 +1,199 @@
+# Dataset build configuration (Task 2b).
+#
+# Defines the seed (which federal-money recipients to investigate) and the call budgets
+# that the dataset jobs in apps/api/jobs/datasets/ must respect. Dataset definitions are in
+# docs/datasets.md; call order is in docs/call-budget.md.
+#
+# Every filter below uses a USAspending parameter documented in
+# docs/vendor/usaspending/search_spending_by_award.md, and every code was checked against
+# live USAspending data on 25 September 2026 (award counts and code descriptions below come
+# from those responses, not from memory).
+#
+# Typology keys match config/typologies.yaml (spec §9.5). The seed only decides where to
+# look. It does not label any company with a typology; that comes from signals (spec §9.5).
+
+version: 0.1
+config_version: datasets-0.1-2026-09-25
+
+# ---------------------------------------------------------------------------------------
+# Date range
+# FY2020 to FY2026 (1 October 2019 to 30 September 2026). Covers the pandemic loan
+# programmes (2020-2021), the post-February-2022 Russia export-control and sanctions
+# period, and the 2023-2025 RSF, UFLPA and critical-mineral actions in the typology
+# validation cases. USAspending search accepts dates from 2007-10-01.
+# ---------------------------------------------------------------------------------------
+date_range:
+  start_date: "2019-10-01"
+  end_date: "2026-09-30"
+
+# ---------------------------------------------------------------------------------------
+# Seed size
+# Pilot of 25 companies, spread across the seven typologies. Increase only after the pilot
+# quality report (Task 2f step 3) has been reviewed.
+# ---------------------------------------------------------------------------------------
+seed:
+  pilot_size: 25
+  random_seed: 20260925          # fixed so the draw is reproducible
+  selection: random_within_size_bands
+  size_bands_usd:                # same bands as docs/control-rows-guide.md, so small and
+    - [25000, 250000]            # young firms are not crowded out by large primes
+    - [250000, 2500000]
+    - [2500000, 50000000]
+  exclude:
+    - reason: already in the false-positive control sample
+      source: research/control_candidates.csv
+      match_on: recipient_uei
+    - reason: already a validation or backtest case
+      source: research/ground_truth_entities.csv
+      match_on: recipient_uei
+  one_award_per_recipient: true  # a recipient drawn twice counts once
+
+  typologies:
+
+    russia_sanctions_evasion:
+      seed_count: 5
+      award_type_codes: [A, B, C, D]
+      naics_codes: ["423690", "334515", "334413"]
+      verified:
+        "423690": {description: "OTHER ELECTRONIC PARTS AND EQUIPMENT MERCHANT WHOLESALERS", awards_fy2020_fy2026: 1845}
+        "334515": {description: "INSTRUMENT MANUFACTURING FOR MEASURING AND TESTING ELECTRICITY AND ELECTRICAL SIGNALS", awards_fy2020_fy2026: 24637}
+        "334413": {description: "SEMICONDUCTOR AND RELATED DEVICE MANUFACTURING", awards_fy2020_fy2026: 19803}
+      why: >-
+        Distributors and makers of electronic components and test instruments: the goods the
+        Serniya network procured (Keithley instruments, semiconductors). Wholesalers
+        (423690) are where new intermediaries appear.
+
+    xinjiang_critical_minerals:
+      seed_count: 4
+      award_type_codes: [A, B, C, D]
+      naics_codes: ["331410", "335910", "325180"]
+      verified:
+        "331410": {description: "NONFERROUS METAL (EXCEPT ALUMINUM) SMELTING AND REFINING", awards_fy2020_fy2026: 2455}
+        "335910": {description: "BATTERY MANUFACTURING", awards_fy2020_fy2026: 15173}
+        "325180": {description: "OTHER BASIC INORGANIC CHEMICAL MANUFACTURING", awards_fy2020_fy2026: 2318}
+      also_checked:
+        psc "9650": {description: "NONFERROUS BASE METAL REFINERY AND INTERMEDIATE FORMS", awards_fy2020_fy2026: 101, note: "too few to sample from; kept as a filter option"}
+        psc "6140": {description: "BATTERIES, RECHARGEABLE", awards_fy2020_fy2026: 94545, note: "mostly routine battery purchases; not used"}
+      why: >-
+        Battery-materials and critical-mineral supply chains (cobalt, graphite, rare earths)
+        with UFLPA and forced-labour exposure.
+
+    fentanyl_precursors:
+      seed_count: 3
+      award_type_codes: [A, B, C, D]
+      naics_codes: ["424690", "325199"]
+      verified:
+        "424690": {description: "OTHER CHEMICAL AND ALLIED PRODUCTS MERCHANT WHOLESALERS", awards_fy2020_fy2026: 1385}
+        "325199": {description: "ALL OTHER BASIC ORGANIC CHEMICAL MANUFACTURING", awards_fy2020_fy2026: 2533}
+      rejected:
+        psc "6810": {description: "CHEMICALS", awards_fy2020_fy2026: 110950, reason: "too broad (largest awards are paper mills)"}
+      why: >-
+        Chemical wholesalers and basic-organic-chemical makers: the sector where precursor
+        front companies operate. The precursor HS code list is still to be verified (B30).
+
+    gold:
+      seed_count: 3
+      award_type_codes: [A, B, C, D]
+      naics_codes: ["423940"]
+      verified:
+        "423940": {description: "JEWELRY, WATCH, PRECIOUS STONE, AND PRECIOUS METAL MERCHANT WHOLESALERS", awards_fy2020_fy2026: 2593}
+      also_checked:
+        psc "9660": {description: "PRECIOUS METALS PRIMARY FORMS", awards_fy2020_fy2026: 4023}
+      rejected:
+        naics "212220": {description: "GOLD ORE AND SILVER ORE MINING", awards_fy2020_fy2026: 1, reason: "only one award in the window"}
+      exclude_recipient_name_contains: ["BANK"]   # the largest awards are banks selling bullion to the Treasury; they are not the target
+      why: Precious-metal traders, the channel used by Wagner-linked and UAE gold networks.
+
+    sudan_uae_arms_gold:
+      seed_count: 3
+      award_type_codes: [A, B, C, D]
+      recipient_locations: [{country: "ARE"}]
+      verified:
+        recipient_country_ARE: {awards_fy2020_fy2026: 62281}
+      why: >-
+        Federal contracts to UAE-based recipients: the jurisdiction of the RSF-linked companies
+        and AZ Gold (appendix A.1). Most are routine base-support contracts, so the draw is
+        random within size bands.
+
+    pandemic_loan_fraud:
+      seed_count: 4
+      award_type_codes: ["07", "08"]              # loans
+      program_numbers: ["59.073"]                 # confirmed in live rows: "PAYCHECK PROTECTION LOAN PROGRAM (PPP)"
+      agencies: [{type: awarding, tier: toptier, name: "Small Business Administration"}]
+      date_range_override: {start_date: "2020-04-01", end_date: "2021-12-31"}
+      fields: ["Award ID", "Recipient Name", "Recipient UEI", "Loan Value", "Issued Date", "CFDA Number", "Assistance Listings"]
+      size_bands_usd: [[150000, 2000000], [2000000, 10000000]]   # loan values; skips the smallest loans
+      verified:
+        sba_loans_2020_2021: {awards: 16657022}
+      identity_warning: >-
+        PPP loan rows returned no Recipient UEI in the 25 Sep 2026 sample, so pandemic seeds
+        can only be matched by name and address: grade B at best (spec §7.1), never
+        auto-merged.
+      why: Direct public money with public recipient data; DOJ and SBA OIG PPP prosecutions.
+
+    humanitarian_fronts:
+      seed_count: 3
+      award_type_codes: [A, B, C, D]
+      agencies: [{type: awarding, tier: toptier, name: "Agency for International Development"}]
+      recipient_type_names: ["nonprofit"]
+      verified:
+        usaid_contracts_to_nonprofits: {awards_fy2020_fy2026: 1096}
+        usaid_contracts_all: {awards_fy2020_fy2026: 15677}
+      scope_note: >-
+        Contracts only. Grants are out of scope for v1 (spec §1.4). The nonprofit signals NP1
+        and NP2 need IRS 990 fields that are not confirmed yet (B32), so these seeds will
+        mostly show "not assessable" for NP signals.
+      why: Nonprofits receiving federal contracts; sham charities are a FATF Recommendation 8 risk area.
+
+# ---------------------------------------------------------------------------------------
+# Connected companies
+# Summary calls only (docs/call-budget.md). Reduced from the default 25 to 10 per seed for
+# the pilot, to keep within budget.
+# ---------------------------------------------------------------------------------------
+connected:
+  max_per_seed: 10
+  max_hops: 2
+  order: closest_first
+
+# ---------------------------------------------------------------------------------------
+# Call budgets for the pilot run (25 seeds). Jobs stop cleanly when a limit is reached and
+# resume from where they stopped without repeating calls (Task 2c). Per-seed figures come
+# from docs/call-budget.md with K=5 largest awards, L=5 shortest paths, and 10 connected
+# companies.
+# ---------------------------------------------------------------------------------------
+budgets:
+  sayari:
+    per_seed: 16
+    per_connected_company: 1
+    total: 700             # 25 x 16 = 400 seed + 25 x 10 = 250 connected + reference lookups
+    note: REST credentials not yet issued (B25); pilot runs in replay mode until then
+  usaspending:
+    per_seed: 11
+    per_connected_company: 1   # award-count check, only if a UEI is present
+    seed_draw: 100             # paging for the random draw across 7 typologies
+    total: 650
+    note: free, no key; retry with backoff on 502/504
+  sam_gov:
+    per_seed: 2
+    daily_limit: 10            # without a SAM.gov role (B22)
+    total: 50
+    note: at 10 per day the pilot needs 5 days of SAM calls; Sayari's SAM sources are used meanwhile
+  tradeverifyd:
+    per_seed: 7
+    total: 200
+    note: MCP only; rate limits unknown (B1)
+  tavily:
+    per_seed: 3
+    total: 100
+  gleif:
+    per_seed: 1                # only when the entity has an LEI
+    total: 25
+  federal_register:
+    total: 30                  # news_items official lane, not per seed
+  consolidated_screening_list:
+    downloads_per_day: 1       # official_list_entries; no key
+
+run_limits:
+  max_runtime_minutes: 180
+  stop_on_budget: true
+  resume: true

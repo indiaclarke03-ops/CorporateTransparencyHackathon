@@ -2,7 +2,7 @@
 
 **Purpose:** Add control rows to `research/ground_truth_entities.csv` so the scoring engine can be tested for false positives. The fixture set had 9 positives and 0 controls; the target was at least 9 controls (1:1).
 
-**Status (25 September 2026):** 30 candidates drawn, all 30 screened, **21 controls appended** (all grade C; see Section 7). The candidates and every screen result are in `research/control_candidates.csv`.
+**Status (25 September 2026):** 30 candidates drawn, all 30 screened, **22 controls appended** (all grade C; see Section 7). The candidates and every screen result are in `research/control_candidates.csv`.
 
 ---
 
@@ -75,13 +75,13 @@ The script is [`scripts/sample_controls.py`](../scripts/sample_controls.py). Run
 
 | Outcome | Count | Candidates |
 |---|---|---|
-| Appended as controls | 21 | 6 in the $25K–$250K band, 10 in $250K–$2.5M, 5 in $2.5M–$50M |
+| Appended as controls | 22 | 6 in the $25K–$250K band, 10 in $250K–$2.5M, 6 in $2.5M–$50M |
 | Dropped: Sayari enforcement flag on the entity | 4 | Illumina, AmerisourceBergen Drug Corp, GlobalFoundries U.S. 2, Paragon Systems |
-| Dropped: DOJ resolution since Sept. 2021 | 3 | Roche Diagnostics ($12.5M False Claims Act), Raytheon Company ($8.4M False Claims Act), Lockheed Martin Corporation ($29.74M False Claims Act) |
-| Pending | 2 | Leidos, SAIC: a justice.gov release about a $450,000 contractor settlement came up for both and could not be read. Open it in a browser (link in `screen_notes`), then mark each row `clear` or `hit` and rerun the append |
+| Dropped: DOJ resolution since Sept. 2021 | 4 | Roche Diagnostics ($12.5M False Claims Act), Raytheon Company ($8.4M False Claims Act), Lockheed Martin Corporation ($29.74M False Claims Act), SAIC ($450,000 breach-of-contract settlement, 3 Oct 2024) |
+| Pending | 0 | Leidos and SAIC were pending on one unreadable DOJ release; it names SAIC (checked in a browser), so SAIC was dropped and Leidos appended |
 
 **Open steps:**
 
 1. **SAM exclusions** were not checked for any row, so every control is grade C. Check each UEI on sam.gov (Search → Exclusions), or with the Exclusions API, and change `sam_exclusions_check` to `clear`. A personal key without a SAM.gov role allows only 10 requests a day. Rows already appended must then have their grade edited in `ground_truth_entities.csv` by hand.
 2. **Identity not confirmed** in Sayari for 4 controls: BAE Systems Technology Solutions & Services, Castro & Company, Nammo Perry, and Northrop Grumman Systems. Their Sayari check is `not_checked`.
-3. **Hard negatives worth watching.** Several controls carry flags the scoring engine could misread: `mass_address_usage` (GAP Solutions, Meridian, The Craddock Group, HPI Federal, ECS Federal), `sanctioned_adjacent` (Hardwire), and a parent with a regulatory action (ECS Federal). These controls must still score Low or Moderate.
+3. **Hard negatives worth watching.** Several controls carry flags the scoring engine could misread: `mass_address_usage` (GAP Solutions, Meridian, The Craddock Group, HPI Federal, ECS Federal, Leidos), `sanctioned_adjacent` (Hardwire), and a parent with a regulatory action (ECS Federal). These controls must still score Low or Moderate.
